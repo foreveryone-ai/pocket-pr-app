@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-2 bg-primary">
       <div className="p-5">
-        Welcome to <b>PocketPR</b>. Sign-In to get started.
+        Welcome to <b>PocketPR</b>.
       </div>
 
       <button className="btn" onClick={handleDashboard}>
