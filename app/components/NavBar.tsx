@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import { UserButton, SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
-import { SignIn } from "@clerk/clerk-react";
 
 const NavBar = () => {
   const router = useRouter();
