@@ -1,0 +1,105 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+    provider     = "mysql"
+    url          = env("DATABASE_URL")
+    relationMode = "prisma"
+}
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+model Users {
+    id                  String   @id @default(cuid())
+    createdAt           DateTime @default(now())
+    google_id           String?  @unique
+    name                String?
+    email               String   @unique
+    image_url           String?
+    youtube_channel_id  String?
+    sender              Messages[]
+    videos              Videos[]
+    prompts             Prompts[]
+}
+
+model Videos {
+    id                  String   @id @default(cuid())
+    createdAt           DateTime @default(now())
+    video_id            String   @unique
+    title               String
+    description         String
+    published_at        DateTime
+    thumbnail_url       String
+    channel_id          String
+    channel_title       String
+    user_id             String
+    user                Users    @relation(fields: [user_id], references: [id]) 
+    comments            Comments[]
+    conversation        Conversation?
+
+    @@index([user_id])
+}
+
+model Conversation {
+    id                  String   @id @default(cuid())
+    createdAt           DateTime @default(now())
+    video_id            String   @unique 
+    video               Videos   @relation(fields: [video_id], references: [id])
+    messages            Messages[]
+
+    @@index([video_id])
+}
+
+model Messages {
+    id                  String   @id @default(cuid())
+    createdAt           DateTime @default(now())
+    content             String
+    sender_id           String   @unique 
+    sender              Users    @relation(fields: [sender_id], references: [id]) 
+    conversation_id     String
+    conversation        Conversation @relation(fields: [conversation_id], references: [id]) 
+
+    @@index([sender_id])
+    @@index([conversation_id])
+}
+
+model Comments {
+    id                  String   @id @default(cuid())
+    createdAt           DateTime @default(now())        
+    comment_id          String   @unique
+    text_display        String
+    like_count          Int
+    published_at        DateTime
+    video_id            String
+    video               Videos   @relation(fields: [video_id], references: [id]) 
+    sentiment           String
+    replies             Replies[]
+
+    @@index([video_id])
+}
+
+model Replies {
+    id                  String   @id @default(cuid())
+    createdAt           DateTime @default(now())
+    reply_id            String   @unique
+    text_display        String
+    like_count          Int
+    published_at        DateTime
+    comment_id          String
+    comment             Comments @relation(fields: [comment_id], references: [id]) 
+    sentiment           String
+
+    @@index([comment_id])
+}
+
+model Prompts {
+    id                  String   @id @default(cuid())
+    createdAt           DateTime @default(now())
+    prompt_text         String
+    user_id             String
+    user                Users    @relation(fields: [user_id], references: [id])
+
+    @@index([user_id])
+}
