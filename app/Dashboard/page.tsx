@@ -10,9 +10,8 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <UserButton />
-      <div>Hello, {user.firstName}. Welcome to PocketPR.</div>
+    <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-primary">
+      <div className="p-5">Hello, {user.firstName}. Welcome to PocketPR.</div>
     </main>
   );
 }

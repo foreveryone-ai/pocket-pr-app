@@ -8,8 +8,9 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div>Welcome to PocketPR. Sign-In to get started.</div>
+    <main className="flex min-h-screen flex-col items-center justify-center p-2 bg-primary">
+      <div className="p-5">Welcome to PocketPR. Sign-In to get started.</div>
+
       <button className="btn" onClick={handleDashboard}>
         Sign-In
       </button>
