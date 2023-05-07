@@ -15,7 +15,7 @@ const NavBar = () => {
   return (
     <div className="navbar bg-primary">
       <div className="navbar-start">
-        <div className="dropdown">
+        {/* <div className="dropdown">
           <label tabIndex={0} className="btn btn-ghost btn-circle">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -39,10 +39,10 @@ const NavBar = () => {
             <li>
               <button onClick={handleDashboardRoute}>Dashboard</button>
             </li>
-            {/* <li><a>About</a></li>
-            <li><a>Contact</a></li> */}
+            <li><a>About</a></li>
+            <li><a>Contact</a></li>
           </ul>
-        </div>
+        </div> */}
       </div>
       <div className="navbar-center">
         <button
@@ -53,12 +53,12 @@ const NavBar = () => {
         </button>
       </div>
       <div className="navbar-end pr-3">
-        <SignedIn>
+        {/* <SignedIn>
           <UserButton />
         </SignedIn>
         <SignedOut>
           <SignInButton />
-        </SignedOut>
+        </SignedOut> */}
       </div>
     </div>
   );
