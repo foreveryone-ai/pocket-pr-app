@@ -22,7 +22,7 @@ export default function Home() {
         <div className="hero-content text-center text-neutral-content">
           <div className="max-w-md">
             <h1 className="mb-5 text-5xl font-bold">
-              Turn down the <i>noise</i> & turn <u>feedback</u> into <b>fame</b>
+              Silence the <i>noise</i> and turn <u>feedback</u> into <b>fame</b>
               .
             </h1>
             <p className="mb-6 text-lg">
