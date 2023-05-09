@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^4.17.1",
-    "@googleapis/youtube": "^9.0.0",
     "@prisma/client": "^4.13.0",
     "@types/node": "20.1.0",
     "@types/react": "18.2.6",
