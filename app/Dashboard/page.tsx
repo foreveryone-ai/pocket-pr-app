@@ -1,13 +1,18 @@
-import { auth, currentUser } from "@clerk/nextjs";
+"use client";
 
-export default async function Home() {
-  const { userId } = auth();
-  const user = await currentUser();
+import { useUser } from "@clerk/nextjs";
+
+export default function Home() {
+  const { isLoaded, isSignedIn, user } = useUser();
+
+  if (!isLoaded || !isSignedIn) {
+    return null;
+  }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-primary-content">
       <div className="p-5">
-        Hello, {user?.firstName}. Welcome to <b>PocketPR</b>.
+        Hello, {user.firstName}. Welcome to <b>PocketPR</b>.
       </div>
     </main>
   );
