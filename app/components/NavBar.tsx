@@ -1,17 +1,7 @@
-"use client";
-
-import { useRouter } from "next/navigation";
 import { UserButton, SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
+import Link from "next/link";
 
 const NavBar = () => {
-  const router = useRouter();
-  const handleHomeRoute = () => {
-    router.push("/");
-  };
-  const handleDashboardRoute = () => {
-    router.push("/dashboard");
-  };
-
   return (
     <div className="navbar bg-secondary">
       <div className="navbar-start">
@@ -37,7 +27,7 @@ const NavBar = () => {
             className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-secondary rounded-box w-52"
           >
             <li>
-              <button onClick={handleDashboardRoute}>Dashboard</button>
+              <Link href="/dashboard">Dashboard</Link>
             </li>
             <li>
               <a>About</a>
@@ -49,12 +39,9 @@ const NavBar = () => {
         </div>
       </div>
       <div className="navbar-center">
-        <button
-          className="btn btn-ghost normal-case text-xl"
-          onClick={handleHomeRoute}
-        >
+        <Link href="/" className="btn btn-ghost normal-case text-xl">
           Pocket<b>PR</b>
-        </button>
+        </Link>
       </div>
       <div className="navbar-end pr-3">
         <SignedIn>
