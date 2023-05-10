@@ -1,12 +1,6 @@
-"use client";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Home() {
-  const router = useRouter();
-  const handleDashboard = () => {
-    router.push("/dashboard");
-  };
-
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-2 bg-secondary">
       <div
@@ -28,9 +22,9 @@ export default function Home() {
               making to maximize your bottom line.
             </p>
 
-            <button className="btn" onClick={handleDashboard}>
+            <Link className="btn" href="/dashboard">
               Sign-In
-            </button>
+            </Link>
           </div>
         </div>
       </div>
