@@ -6,7 +6,7 @@ import NavBar from "./components/NavBar";
 const publicSans = Public_Sans({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Pocket-PR App",
+  title: "PocketPR",
   description: "Created by ForEveryone.AI",
 };
 
