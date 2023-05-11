@@ -1,4 +1,5 @@
 import { auth, currentUser } from "@clerk/nextjs";
+import { Clerk } from "@clerk/clerk-sdk-node";
 
 export default async function Home() {
   const { userId } = auth();
