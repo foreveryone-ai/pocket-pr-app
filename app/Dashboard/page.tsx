@@ -1,8 +1,60 @@
 import { auth, currentUser } from "@clerk/nextjs";
 
+import { google } from "googleapis";
+// TODO: refactor, move this to lib
+// get the OAuth token from clerk
+async function getOAuthData(userId: string, provider: string) {
+  const res = await fetch(
+    `https://api.clerk.com/v1/users/${userId}/oauth_access_tokens/${provider}`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
+      },
+    }
+  );
+  const data = await res.json();
+  return data;
+}
+
+
 export default async function Home() {
+  // can probably remove user, but keep userId
   const { userId } = auth();
   const user = await currentUser();
+  // create placeholders and update after recieving google token
+  let userOAuth, yt, chList;
+
+  // if the call to clerk was successfull, get the oauth token from google
+  // create the youtube client with the token recieved from clerk
+  if (userId) {
+    userOAuth = await getOAuthData(userId, "oauth_google");
+
+    console.log(userOAuth[0].token);
+
+    yt = google.youtube({
+      version: "v3",
+      headers: {
+        Authorization: `Bearer ${userOAuth[0].token}`,
+      },
+    });
+  }
+  // if the client was successfully created, get at most 5 channels from the
+  // user account
+  if (yt) {
+    chList = await yt.channels.list({
+      part: ["id", "contentDetails"],
+      mine: true,
+      maxResults: 5,
+    });
+  }
+
+  console.log("userOAuth: ", userOAuth);
+  console.log("all channels: ", chList?.data.items);
+  // make a list of all channelIds that were returned
+  console.log(
+    "all channel Ids: ",
+    chList?.data.items?.map((item) => item.id)
+  );
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-primary-content">
