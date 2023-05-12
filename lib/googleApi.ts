@@ -11,4 +11,4 @@ async function getOAuthData(userId: string, provider: string) {
   return data;
 }
 
-export default getOAuthData;
+export { getOAuthData };
