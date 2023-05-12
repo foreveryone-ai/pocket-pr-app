@@ -1,3 +1,6 @@
+
+import { google } from "googleapis";
+
 async function getOAuthData(userId: string, provider: string) {
   const res = await fetch(
     `https://api.clerk.com/v1/users/${userId}/oauth_access_tokens/${provider}`,
@@ -11,4 +14,5 @@ async function getOAuthData(userId: string, provider: string) {
   return data;
 }
 
-export { getOAuthData };
+export { google, getOAuthData };
+
