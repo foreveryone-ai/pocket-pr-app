@@ -3,19 +3,7 @@ import { auth, currentUser } from "@clerk/nextjs";
 import { google } from "googleapis";
 // TODO: refactor, move this to lib
 // get the OAuth token from clerk
-async function getOAuthData(userId: string, provider: string) {
-  const res = await fetch(
-    `https://api.clerk.com/v1/users/${userId}/oauth_access_tokens/${provider}`,
-    {
-      headers: {
-        Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
-      },
-    }
-  );
-  const data = await res.json();
-  return data;
-}
-
+import { getOAuthData } from "@/lib/googleApi";
 
 export default async function Home() {
   // can probably remove user, but keep userId
