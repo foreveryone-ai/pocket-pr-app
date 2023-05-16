@@ -41,16 +41,28 @@ export default async function Home() {
       maxResults: 5,
     });
 
-    // commentsOneVideo = await yt.commentThreads.list({
-    //   part: ["snippet", "replies", "id"],
-    //   allThreadsRelatedToChannelId: chList.data.items ? chList?.data.items[0] as string : "",
-    //   textFormat: "plainText",
-    //   maxResults: 5,
-    // });
+    try {
+      commentsOneVideo = await yt.commentThreads.list({
+        part: ["id", "snippet", "replies"],
+        videoId: "foKcZsIfxYs",
+      });
+    } catch (error) {
+      console.error(error);
+    }
+
+    // try {
+    //   commentsOneVideo = await yt.commentThreads.list({
+    //     part: ["snippet"],
+    //     videoId: "jmW0yimS0S8",
+    //     maxResults: 5,
+    //   });
+    // } catch (error) {
+    //   console.error(error);
+    //   throw Error("Problem getting comment thread");
+    // }
   }
 
-  // console.log("userOAuth: ", userOAuth);
-  // console.log("all channels: ", chList?.data.items);
+  // console.log(commentsOneVideo);
   // make a list of all channelIds that were returned
   console.log(
     "all channel Ids: ",
