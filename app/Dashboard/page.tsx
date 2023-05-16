@@ -42,24 +42,34 @@ export default async function Home() {
     });
 
     try {
-      commentsOneVideo = await yt.commentThreads.list({
-        part: ["id", "snippet", "replies"],
-        videoId: "foKcZsIfxYs",
-      });
+      const myVideoId = "foKcZsIfxYs";
+      const res = await fetch(
+        `https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&videoId=${myVideoId}&key=${process.env.GOOGLE_API}`,
+        {
+          headers: {
+            Accept: "application/json",
+          },
+        }
+      );
+      const commentsOneVideo = await res.json();
+      if (commentsOneVideo) {
+        commentsOneVideo.items.map((item) =>
+          console.log(item.replies.comments)
+        );
+      }
     } catch (error) {
       console.error(error);
     }
 
     // try {
     //   commentsOneVideo = await yt.commentThreads.list({
-    //     part: ["snippet"],
-    //     videoId: "jmW0yimS0S8",
-    //     maxResults: 5,
+    //     part: ["id", "snippet", "replies"],
+    //     videoId: "foKcZsIfxYs"
     //   });
     // } catch (error) {
     //   console.error(error);
-    //   throw Error("Problem getting comment thread");
-    // }
+    //   throw Error ("Error getting comments");
+    // };
   }
 
   // console.log(commentsOneVideo);
