@@ -53,6 +53,9 @@ export default async function Home() {
       );
       const commentsOneVideo = await res.json();
       if (commentsOneVideo) {
+        {
+          /* @ts-expect-error implicit any */
+        }
         commentsOneVideo.items.map((item) =>
           console.log(item.replies.comments)
         );
