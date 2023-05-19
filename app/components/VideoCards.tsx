@@ -13,7 +13,7 @@ export default function VideoCard({
   imageUrl,
 }: VideoCardProps) {
   return (
-    <div key={key} className="card bg-slate-200 text-black">
+    <div key={key} className="card bg-slate-200 text-black w-96">
       <figure>
         <Image
           width={200}
