@@ -15,9 +15,8 @@ async function getOAuthData(userId: string, provider: string) {
 
 async function getCommentsFromVideo(videoId: string) {
   try {
-    const myVideoId = "foKcZsIfxYs";
     const res = await fetch(
-      `https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&videoId=${myVideoId}&key=${process.env.GOOGLE_API}`,
+      `https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&videoId=${videoId}&key=${process.env.GOOGLE_API}`,
       {
         headers: {
           Accept: "application/json",
