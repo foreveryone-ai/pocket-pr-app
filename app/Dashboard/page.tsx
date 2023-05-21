@@ -52,6 +52,9 @@ export default async function Home() {
   //console.log("data for channel Id ", idList && idList[0]);
 
   const videos = recentVideos?.data.items?.map((item) => item);
+  console.log(
+    videos?.forEach((video) => console.log(video.snippet?.thumbnails))
+  );
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-primary-content">
@@ -66,7 +69,9 @@ export default async function Home() {
                 key={i}
                 title={video.snippet?.title as string}
                 description={video.snippet?.description as string}
-                imageUrl="/flowers.jpg"
+                imageUrl={video.snippet?.thumbnails?.default?.url as string}
+                width={video.snippet?.thumbnails?.default?.width as number}
+                height={video.snippet?.thumbnails?.default?.height as number}
               />
             ))
           : "no videos found"}
