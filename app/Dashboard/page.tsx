@@ -1,9 +1,9 @@
+import VideoCard from "@/app/components/VideoCards";
 import { auth, currentUser } from "@clerk/nextjs";
 // TODO: refactor, move this to lib
 // get the OAuth token from clerk
 
-import { getOAuthData, google } from "@/lib/googleApi";
-
+import { getOAuthData, google, getCommentsFromVideo } from "@/lib/googleApi";
 
 export default async function Home() {
   // can probably remove user, but keep userId
@@ -15,16 +15,21 @@ export default async function Home() {
   // if the call to clerk was successfull, get the oauth token from google
   // create the youtube client with the token recieved from clerk
   if (userId) {
-    userOAuth = await getOAuthData(userId, "oauth_google");
-
-    console.log(userOAuth[0].token);
-
+    try {
+      userOAuth = await getOAuthData(userId, "oauth_google");
+    } catch (error) {
+      throw new Error("no oauth found");
+    }
+  }
+  try {
     yt = google.youtube({
       version: "v3",
       headers: {
         Authorization: `Bearer ${userOAuth[0].token}`,
       },
     });
+  } catch (error) {
+    throw new Error("no auth token");
   }
   // if the client was successfully created, get at most 5 channels from the
   // user account
@@ -42,54 +47,36 @@ export default async function Home() {
       type: ["video"],
       maxResults: 5,
     });
-
-    try {
-      const myVideoId = "foKcZsIfxYs";
-      const res = await fetch(
-        `https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&videoId=${myVideoId}&key=${process.env.GOOGLE_API}`,
-        {
-          headers: {
-            Accept: "application/json",
-          },
-        }
-      );
-      const commentsOneVideo = await res.json();
-      if (commentsOneVideo) {
-        // TODO: FIX THIS
-        commentsOneVideo.items.map((item: any) =>
-          console.log(item.replies.comments)
-        );
-      }
-    } catch (error) {
-      console.error(error);
-    }
-
-    // try {
-    //   commentsOneVideo = await yt.commentThreads.list({
-    //     part: ["id", "snippet", "replies"],
-    //     videoId: "foKcZsIfxYs"
-    //   });
-    // } catch (error) {
-    //   console.error(error);
-    //   throw Error ("Error getting comments");
-    // };
   }
-
-  // console.log(commentsOneVideo);
   // make a list of all channelIds that were returned
+  const idList = chList?.data.items?.map((item) => item.id);
+  // view channel data
+  //console.log("data for channel Id ", idList && idList[0]);
+
+  const videos = recentVideos?.data.items?.map((item) => item);
   console.log(
-    "all channel Ids: ",
-    chList?.data.items?.map((item) => item.id)
+    videos?.forEach((video) => console.log(video.snippet?.thumbnails))
   );
-  console.log(
-    "videos returned from search... ",
-    recentVideos?.data.items?.map((item) => item)
-  );
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-primary-content">
       <div className="p-5">
         Hello, {user?.firstName}. Welcome to <b>PocketPR</b>. Your user ID is{" "}
         {userId}.
+      </div>
+      <div>
+        {videos
+          ? videos.map((video, i) => (
+              <VideoCard
+                key={i}
+                title={video.snippet?.title as string}
+                description={video.snippet?.description as string}
+                imageUrl={video.snippet?.thumbnails?.default?.url as string}
+                width={video.snippet?.thumbnails?.default?.width as number}
+                height={video.snippet?.thumbnails?.default?.height as number}
+              />
+            ))
+          : "no videos found"}
       </div>
     </main>
   );
