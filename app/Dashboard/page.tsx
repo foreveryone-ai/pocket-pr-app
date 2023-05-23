@@ -2,7 +2,9 @@ import VideoCard from "@/app/components/VideoCards";
 import { auth, currentUser } from "@clerk/nextjs";
 // TODO: refactor, move this to lib
 // get the OAuth token from clerk
+
 import { getOAuthData, google, getCommentsFromVideo } from "@/lib/googleApi";
+
 export default async function Home() {
   // can probably remove user, but keep userId
   const { userId } = auth();
