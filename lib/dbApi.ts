@@ -20,7 +20,15 @@ export async function createUser(
   youtubeChannelId: string
 ) {
   try {
-    const hi = "hi";
+    const newUser = await supabase.from("users").insert({
+      id: userId,
+      google_id: googleId,
+      name,
+      email,
+      image_url: imageUrl,
+      youtube_channel_id: youtubeChannelId,
+    });
+    return newUser;
   } catch (error) {
     console.error(error);
   }
