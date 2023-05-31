@@ -1,5 +1,4 @@
-import { db } from "./prismaClient";
-
+import { supabase } from "./supabaseClient";
 // id                  String   @id @default(cuid())
 // createdAt           DateTime @default(now())
 // google_id           String?  @unique
@@ -12,13 +11,19 @@ import { db } from "./prismaClient";
 // prompts             Prompts[]
 
 // create user on sign up or sign in
-export async function createUser(userId: string, googleId: string) {
-  db.users.create({
-    data: {
-      id: userId,
-      google_id: googleId,
-    },
-  });
+export async function createUser(
+  userId: string,
+  googleId: string,
+  name: string,
+  email: string,
+  imageUrl: string,
+  youtubeChannelId: string
+) {
+  try {
+    const hi = "hi";
+  } catch (error) {
+    console.error(error);
+  }
 }
 // store all videos
 // store all comments
