@@ -4,6 +4,12 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
+        hostname: "i9.ytimg.com",
+        port: "",
+        pathname: "/vi/**",
+      },
+      {
+        protocol: "https",
         hostname: "i.ytimg.com",
         port: "",
         pathname: "/vi/**",
