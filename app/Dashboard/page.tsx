@@ -1,3 +1,4 @@
+import { createUser } from "@/lib/supabaseClient";
 import VideoCard from "@/app/components/VideoCards";
 import { auth, currentUser } from "@clerk/nextjs";
 // get the OAuth token from clerk
@@ -5,9 +6,10 @@ import { auth, currentUser } from "@clerk/nextjs";
 import { getOAuthData, google, getCommentsFromVideo } from "@/lib/googleApi";
 
 export default async function Home() {
-  // can probably remove user, but keep userId
-  const { userId } = auth();
+  const { userId, getToken } = auth();
   const user = await currentUser();
+  const token = await getToken({ template: "supabase" });
+
   // create placeholders and update after recieving google token
   let userOAuth, yt, chList, recentVideos, commentsOneVideo;
 
@@ -17,7 +19,7 @@ export default async function Home() {
     try {
       userOAuth = await getOAuthData(userId, "oauth_google");
     } catch (error) {
-      throw new Error("no oauth found");
+      console.error("no oauth found ", error);
     }
   }
   try {
@@ -50,12 +52,31 @@ export default async function Home() {
   // make a list of all channelIds that were returned
   const idList = chList?.data.items?.map((item) => item.id);
   // view channel data
-  //console.log("data for channel Id ", idList && idList[0]);
+  console.log("data for channel Id ", idList && idList[0]);
 
   const videos = recentVideos?.data.items?.map((item) => item);
   console.log(
     videos?.forEach((video) => console.log(video.snippet?.thumbnails))
   );
+
+  // TODO: store/update DB
+  if (token && userId && user?.firstName) {
+    try {
+      const dbUser = await createUser(
+        token,
+        userId,
+        user?.id,
+        user?.firstName,
+        user?.emailAddresses[0].emailAddress,
+        user?.profileImageUrl,
+        idList && idList.length > 0 ? (idList[0] as string) : ""
+      );
+      console.log("create user status: ", dbUser);
+      //console.log("user: ", user);
+    } catch (error) {
+      console.error("error on create user: ", error);
+    }
+  }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-primary-content">

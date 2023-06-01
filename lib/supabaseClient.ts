@@ -1,7 +1,56 @@
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY as string;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
-export default supabase;
+export function createServerDbClient(accessToken?: string) {
+  return createClient(supabaseUrl as string, supabaseKey as string, {
+    db: {
+      schema: "public",
+    },
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+    },
+    global: {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    },
+  });
+}
+
+export async function createUser(
+  authToken: string,
+  userId: string,
+  googleId: string,
+  name: string,
+  email: string,
+  imageUrl: string,
+  youtubeChannelId: string
+) {
+  try {
+    // auth token is here ...
+    // console.log("auth token: ", authToken);
+    const db = createServerDbClient(authToken);
+    // console.log("db object: ", db);
+
+    const newUser = await db
+      .from("Users")
+      .upsert({
+        id: userId,
+        google_id: googleId,
+        name,
+        email,
+        image_url: imageUrl,
+        youtube_channel_id: youtubeChannelId,
+      })
+      .select();
+
+    console.log("newUser: ", newUser);
+    return newUser.status; // 201
+  } catch (error) {
+    console.error(error);
+    return 400;
+  }
+}
