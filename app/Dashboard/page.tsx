@@ -45,7 +45,7 @@ export default async function Home() {
       forMine: true,
       part: ["snippet"],
       type: ["video"],
-      maxResults: 5,
+      maxResults: 20,
     });
   }
   // make a list of all channelIds that were returned
@@ -64,16 +64,15 @@ export default async function Home() {
         Hello, {user?.firstName}. Welcome to <b>PocketPR</b>. Your user ID is{" "}
         {userId}.
       </div>
-      <div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
         {videos
           ? videos.map((video, i) => (
               <VideoCard
                 key={i}
                 title={video.snippet?.title as string}
-                description={video.snippet?.description as string}
-                imageUrl={video.snippet?.thumbnails?.default?.url as string}
-                width={video.snippet?.thumbnails?.default?.width as number}
-                height={video.snippet?.thumbnails?.default?.height as number}
+                imageUrl={video.snippet?.thumbnails?.maxres?.url as string}
+                width={video.snippet?.thumbnails?.maxres?.width as number}
+                height={video.snippet?.thumbnails?.maxres?.height as number}
               />
             ))
           : "no videos found"}

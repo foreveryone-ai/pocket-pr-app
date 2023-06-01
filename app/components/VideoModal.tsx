@@ -1,12 +1,13 @@
-export function VideoModal() {
+type VideoModalProps = {
+  buttonText: string;
+};
+
+export function VideoModal({ buttonText }: VideoModalProps) {
   return (
-    <div>
-      {" "}
-      {/* The button to open modal */}
+    <div className="flex items-center justify-center h-full">
       <label htmlFor="my-modal-6" className="btn">
-        open modal
+        {buttonText}
       </label>
-      {/* Put this part before </body> tag */}
       <input type="checkbox" id="my-modal-6" className="modal-toggle" />
       <div className="modal modal-bottom sm:modal-middle">
         <div className="modal-box">
