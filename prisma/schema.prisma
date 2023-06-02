@@ -15,6 +15,12 @@ model Users {
     id                  String   @id @default(cuid())
     createdAt           DateTime @default(now())
     google_id           String?  @unique
+    twitter_id          String?  @unique
+    instagram_id        String?  @unique
+    linkedin_id         String?  @unique
+    twitch_id           String?  @unique
+    discord_id          String?  @unique
+    facebook_id         String?  @unique
     name                String?
     email               String   @unique
     image_url           String?
