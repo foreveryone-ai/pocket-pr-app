@@ -1,4 +1,3 @@
-
 import { google } from "googleapis";
 
 async function getOAuthData(userId: string, provider: string) {
@@ -14,7 +13,6 @@ async function getOAuthData(userId: string, provider: string) {
   return data;
 }
 
-
 async function getCommentsFromVideo(videoId: string) {
   try {
     const res = await fetch(
@@ -25,6 +23,8 @@ async function getCommentsFromVideo(videoId: string) {
         },
       }
     );
+    console.log("got response...");
+    console.log(res);
     const commentsOneVideo = await res.json();
     if (commentsOneVideo) {
       // TODO: FIX THIS
@@ -38,4 +38,3 @@ async function getCommentsFromVideo(videoId: string) {
 }
 
 export { google, getOAuthData, getCommentsFromVideo };
-

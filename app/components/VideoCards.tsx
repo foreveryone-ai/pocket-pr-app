@@ -3,13 +3,19 @@ import { VideoModal } from "./VideoModal";
 
 type VideoCardProps = {
   key: number;
+  videoId: string;
   title: string;
   imageUrl: string;
   width: number;
   height: number;
 };
 
-export default function VideoCard({ key, title, imageUrl }: VideoCardProps) {
+export default function VideoCard({
+  key,
+  title,
+  imageUrl,
+  videoId,
+}: VideoCardProps) {
   return (
     <div
       key={key}
@@ -20,7 +26,7 @@ export default function VideoCard({ key, title, imageUrl }: VideoCardProps) {
         <Image width={1280} height={720} src={imageUrl} alt={title} />
       </figure>
       <div className="absolute inset-0 flex items-center justify-center">
-        <VideoModal buttonText={title} />
+        <VideoModal buttonText={title} videoId={videoId} />
       </div>
     </div>
   );

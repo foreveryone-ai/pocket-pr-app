@@ -1,8 +1,17 @@
+"use client";
+import { getCommentsFromVideo } from "@/lib/googleApi";
+
 type VideoModalProps = {
   buttonText: string;
+  videoId: string;
 };
 
-export function VideoModal({ buttonText }: VideoModalProps) {
+export function VideoModal({ buttonText, videoId }: VideoModalProps) {
+  const handleComments = async () => {
+    console.log("handle comments! videoId: ", videoId);
+    //   await getCommentsFromVideo(videoId)
+  };
+
   return (
     <div className="flex items-center justify-center h-full">
       <label htmlFor="my-modal-6" className="btn">
@@ -13,11 +22,15 @@ export function VideoModal({ buttonText }: VideoModalProps) {
         <div className="modal-box">
           <h3 className="font-bold text-lg">Continue?</h3>
           <p className="py-4">
-            By clicking "proceed", you grant PocketPR permission to analyze the
-            comments on this video.
+            By clicking &quot;proceed&quot;, you grant PocketPR permission to
+            analyze the comments on this video.
           </p>
           <div className="modal-action">
-            <label htmlFor="my-modal-6" className="btn">
+            <label
+              onClick={handleComments}
+              htmlFor="my-modal-6"
+              className="btn"
+            >
               Proceed
             </label>
           </div>

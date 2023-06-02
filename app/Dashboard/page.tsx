@@ -55,9 +55,7 @@ export default async function Home() {
   console.log("data for channel Id ", idList && idList[0]);
 
   const videos = recentVideos?.data.items?.map((item) => item);
-  console.log(
-    videos?.forEach((video) => console.log(video.snippet?.thumbnails))
-  );
+  console.log(videos?.forEach((video) => console.log(video.id?.videoId)));
 
   // TODO: store/update DB
   if (token && userId && user?.firstName) {
@@ -74,7 +72,7 @@ export default async function Home() {
       console.log("create user status: ", dbUser);
       //console.log("user: ", user);
     } catch (error) {
-      console.error("error on create user: ", error);
+      //console.error("error on create user: ", error);
     }
   }
 
@@ -88,6 +86,7 @@ export default async function Home() {
           ? videos.map((video, i) => (
               <VideoCard
                 key={i}
+                videoId={video.id?.videoId as string}
                 title={video.snippet?.title as string}
                 imageUrl={video.snippet?.thumbnails?.maxres?.url as string}
                 width={video.snippet?.thumbnails?.maxres?.width as number}
