@@ -46,7 +46,7 @@ export default async function Home() {
       forMine: true,
       part: ["snippet"],
       type: ["video"],
-      maxResults: 20,
+      maxResults: 50,
     });
   }
   // make a list of all channelIds that were returned
@@ -78,9 +78,7 @@ export default async function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-primary-content">
-      <div className="p-5">
-        Hello, {user?.firstName}. Welcome to <b>PocketPR</b>.
-      </div>
+      <div className="p-5">Hello, {user?.firstName}. Welcome to back!</div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
         {videos
           ? videos.map((video, i) => (
