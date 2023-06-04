@@ -19,13 +19,19 @@ export default function VideoCard({
   return (
     <div
       key={key}
-      className="relative bg-slate-200 text-black w-full"
+      className="relative bg-slate-200 text-black w-full rounded-2xl"
       style={{ paddingBottom: "56.25%" }}
     >
-      <figure className="m-0 absolute inset-0">
-        <Image width={1280} height={720} src={imageUrl} alt={title} />
+      <figure className="m-0 absolute inset-0 rounded-2xl">
+        <Image
+          width={1280}
+          height={720}
+          src={imageUrl}
+          alt={title}
+          className="rounded-2xl"
+        />
       </figure>
-      <div className="absolute inset-0 flex items-center justify-center">
+      <div className="absolute inset-0 flex items-center justify-center rounded-2xl">
         <VideoModal buttonText={title} videoId={videoId} />
       </div>
     </div>

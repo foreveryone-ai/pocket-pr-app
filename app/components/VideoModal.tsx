@@ -14,7 +14,7 @@ export function VideoModal({ buttonText, videoId }: VideoModalProps) {
 
   return (
     <div className="flex items-center justify-center h-full">
-      <label htmlFor="my-modal-6" className="btn">
+      <label htmlFor="my-modal-6" className="btn btn-secondary">
         {buttonText}
       </label>
       <input type="checkbox" id="my-modal-6" className="modal-toggle" />
