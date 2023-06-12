@@ -13,28 +13,4 @@ async function getOAuthData(userId: string, provider: string) {
   return data;
 }
 
-async function getCommentsFromVideo(videoId: string) {
-  try {
-    const res = await fetch(
-      `https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&videoId=${videoId}&key=${process.env.GOOGLE_API}`,
-      {
-        headers: {
-          Accept: "application/json",
-        },
-      }
-    );
-    console.log("got response...");
-    console.log(res);
-    const commentsOneVideo = await res.json();
-    if (commentsOneVideo) {
-      // TODO: FIX THIS
-      commentsOneVideo.items.map((item: any) =>
-        console.log(item.replies.comments)
-      );
-    }
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-export { google, getOAuthData, getCommentsFromVideo };
+export { google, getOAuthData };

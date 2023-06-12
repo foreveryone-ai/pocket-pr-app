@@ -3,7 +3,7 @@ import VideoCard from "@/app/components/VideoCards";
 import { auth, currentUser } from "@clerk/nextjs";
 // get the OAuth token from clerk
 
-import { getOAuthData, google, getCommentsFromVideo } from "@/lib/googleApi";
+import { getOAuthData, google } from "@/lib/googleApi";
 
 export default async function Home() {
   const { userId, getToken } = auth();
@@ -57,7 +57,6 @@ export default async function Home() {
   const videos = recentVideos?.data.items?.map((item) => item);
   console.log(videos?.forEach((video) => console.log(video.id?.videoId)));
 
-  // TODO: store/update DB
   if (token && userId && user?.firstName) {
     try {
       const dbUser = await createUser(

@@ -31,9 +31,7 @@ export async function createUser(
 ) {
   try {
     // auth token is here ...
-    // console.log("auth token: ", authToken);
     const db = createServerDbClient(authToken);
-    // console.log("db object: ", db);
 
     const newUser = await db
       .from("Users")

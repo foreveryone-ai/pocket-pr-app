@@ -1,5 +1,6 @@
 "use client";
-import { getCommentsFromVideo } from "@/lib/googleApi";
+
+import { getVideo } from "@/lib/api";
 
 type VideoModalProps = {
   buttonText: string;
@@ -9,7 +10,7 @@ type VideoModalProps = {
 export function VideoModal({ buttonText, videoId }: VideoModalProps) {
   const handleComments = async () => {
     console.log("handle comments! videoId: ", videoId);
-    //   await getCommentsFromVideo(videoId)
+    const data = await getVideo(videoId);
   };
 
   return (
