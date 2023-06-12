@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { VideoModal } from "./VideoModal";
+import Link from "next/link";
 
 type VideoCardProps = {
   key: number;
@@ -32,7 +33,12 @@ export default function VideoCard({
         />
       </figure>
       <div className="absolute inset-0 flex items-center justify-center rounded-2xl">
-        <VideoModal buttonText={title} videoId={videoId} />
+        <Link
+          className="bg-secondary text-white"
+          href={`/dashboard/${videoId}`}
+        >
+          {title}
+        </Link>
       </div>
     </div>
   );
