@@ -45,7 +45,7 @@ export async function createUser(
       })
       .select();
 
-    console.log("newUser: ", newUser);
+    //console.log("newUser: ", newUser);
     return newUser.status; // 201
   } catch (error) {
     console.error(error);
@@ -53,28 +53,25 @@ export async function createUser(
   }
 }
 
+export type StoreOrUpdateParams = {
+  id: string;
+  video_id: string;
+  title: string;
+  description: string;
+  published_at: string;
+  thumbnail_url: string;
+  channel_title: string;
+  channel_id: string;
+  user_id: string;
+};
+
 export async function storeOrUpdateVideo(
   authToken: string,
-  video_id: string,
-  title: string,
-  published_at: string,
-  thumbnail_url: string,
-  channel_id: string,
-  user_id: string
+  video: StoreOrUpdateParams[]
 ) {
   const db = createServerDbClient(authToken);
 
-  const { data, error } = await db
-    .from("Videos")
-    .upsert({
-      video_id,
-      title,
-      published_at,
-      thumbnail_url,
-      channel_id,
-      user_id,
-    })
-    .select();
+  const { data, error } = await db.from("Videos").upsert(video).select();
 
   if (data) {
     return data;
