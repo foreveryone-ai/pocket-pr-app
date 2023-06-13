@@ -1,4 +1,5 @@
-import { createUser } from "@/lib/supabaseClient";
+import { createUser, storeOrUpdateVideo } from "@/lib/supabaseClient";
+import type { StoreOrUpdateParams } from "@/lib/supabaseClient";
 import VideoCard from "@/app/components/VideoCards";
 import { auth, currentUser } from "@clerk/nextjs";
 // get the OAuth token from clerk
@@ -54,8 +55,39 @@ export default async function Home() {
   // view channel data
   console.log("data for channel Id ", idList && idList[0]);
 
+  const videosToStore: StoreOrUpdateParams[] = [];
+
   const videos = recentVideos?.data.items?.map((item) => item);
-  console.log(videos?.forEach((video) => console.log(video.id?.videoId)));
+  videos?.forEach((video) => {
+    const vidObj: StoreOrUpdateParams = {
+      id: video.id?.videoId as string,
+      video_id: video.id?.videoId as string,
+      title: video.snippet?.title as string,
+      description: video.snippet?.description as string,
+      published_at: video.snippet?.publishedAt as string,
+      thumbnail_url: (video.snippet?.thumbnails?.maxres?.url as string) || "",
+      channel_title: video.snippet?.title as string,
+      channel_id: video.snippet?.channelId as string,
+      user_id: userId as string,
+    };
+
+    videosToStore.push(vidObj);
+
+    // console.log("video id: ");
+    // console.log(video.id?.videoId);
+    // console.log("channel id ");
+    // console.log(video.snippet?.channelId);
+    // console.log("title: ");
+    // console.log(video.snippet?.title);
+    // console.log("description");
+    // console.log(video.snippet?.description);
+    // console.log("thumbnail url: ");
+    // console.log(video.snippet?.thumbnails?.maxres?.url);
+    // console.log("Channel title: ");
+    // console.log(video.snippet?.channelTitle);
+    // console.log("User Id: ");
+    // console.log(userId);
+  });
 
   if (token && userId && user?.firstName) {
     try {
@@ -69,7 +101,9 @@ export default async function Home() {
         idList && idList.length > 0 ? (idList[0] as string) : ""
       );
       console.log("create user status: ", dbUser);
-      //console.log("user: ", user);
+
+      const dbVideos = await storeOrUpdateVideo(token, videosToStore);
+      console.log("dbVideos: ", dbVideos);
     } catch (error) {
       //console.error("error on create user: ", error);
     }

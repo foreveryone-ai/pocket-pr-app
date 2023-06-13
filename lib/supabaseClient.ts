@@ -45,10 +45,37 @@ export async function createUser(
       })
       .select();
 
-    console.log("newUser: ", newUser);
+    //console.log("newUser: ", newUser);
     return newUser.status; // 201
   } catch (error) {
     console.error(error);
     return 400;
+  }
+}
+
+export type StoreOrUpdateParams = {
+  id: string;
+  video_id: string;
+  title: string;
+  description: string;
+  published_at: string;
+  thumbnail_url: string;
+  channel_title: string;
+  channel_id: string;
+  user_id: string;
+};
+
+export async function storeOrUpdateVideo(
+  authToken: string,
+  video: StoreOrUpdateParams[]
+) {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db.from("Videos").upsert(video).select();
+
+  if (data) {
+    return data;
+  } else {
+    return error;
   }
 }

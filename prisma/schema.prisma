@@ -33,6 +33,7 @@ model Users {
 model Videos {
     id                  String   @id @default(cuid())
     createdAt           DateTime @default(now())
+    // add update at
     video_id            String   @unique
     title               String
     description         String
@@ -74,6 +75,7 @@ model Messages {
 model Comments {
     id                  String   @id @default(cuid())
     createdAt           DateTime @default(now())        
+    // add update at
     comment_id          String   @unique
     text_display        String
     like_count          Int
@@ -89,6 +91,7 @@ model Comments {
 model Replies {
     id                  String   @id @default(cuid())
     createdAt           DateTime @default(now())
+    // add update at
     reply_id            String   @unique
     text_display        String
     like_count          Int
