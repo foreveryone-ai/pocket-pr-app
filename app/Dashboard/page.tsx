@@ -1,4 +1,4 @@
-import { createUser } from "@/lib/supabaseClient";
+import { createUser, storeOrUpdateVideo } from "@/lib/supabaseClient";
 import VideoCard from "@/app/components/VideoCards";
 import { auth, currentUser } from "@clerk/nextjs";
 // get the OAuth token from clerk
@@ -55,7 +55,18 @@ export default async function Home() {
   console.log("data for channel Id ", idList && idList[0]);
 
   const videos = recentVideos?.data.items?.map((item) => item);
-  console.log(videos?.forEach((video) => console.log(video.id?.videoId)));
+  videos?.forEach((video) => {
+    console.log("video id: ");
+    console.log(video.id?.videoId);
+    console.log("channel id ");
+    console.log(video.id?.channelId);
+    console.log("title: ");
+    console.log(video.snippet?.title);
+    console.log("description");
+    console.log(video.snippet?.description);
+    console.log("thumbnail url: ");
+    console.log(video.snippet?.thumbnails?.maxres?.url);
+  });
 
   if (token && userId && user?.firstName) {
     try {

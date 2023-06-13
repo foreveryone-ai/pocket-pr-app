@@ -52,3 +52,33 @@ export async function createUser(
     return 400;
   }
 }
+
+export async function storeOrUpdateVideo(
+  authToken: string,
+  video_id: string,
+  title: string,
+  published_at: string,
+  thumbnail_url: string,
+  channel_id: string,
+  user_id: string
+) {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db
+    .from("Videos")
+    .upsert({
+      video_id,
+      title,
+      published_at,
+      thumbnail_url,
+      channel_id,
+      user_id,
+    })
+    .select();
+
+  if (data) {
+    return data;
+  } else {
+    return error;
+  }
+}

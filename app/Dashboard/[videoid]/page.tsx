@@ -17,7 +17,6 @@ export default async function Video({
     const commentsOneVideo = await res.json();
     console.log(commentsOneVideo);
     if (commentsOneVideo) {
-      // TODO: get type for item
       for (let item of commentsOneVideo.items) {
         commentsAndReplies.push(
           item.snippet.topLevelComment.snippet.textDisplay
