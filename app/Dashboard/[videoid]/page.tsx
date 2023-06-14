@@ -1,13 +1,19 @@
-import type {
-  StoreAllCommentsParams,
-  StoreAllRepliesParams,
+import {
+  storeAllComments,
+  storeAllReplies,
+  type StoreAllCommentsParams,
+  type StoreAllRepliesParams,
 } from "@/lib/supabaseClient";
+import { auth } from "@clerk/nextjs";
 
 export default async function Video({
   params,
 }: {
   params: { videoid: string };
 }) {
+  const { userId, getToken } = auth();
+  const token = await getToken({ template: "supabase" });
+
   let commentsAndReplies = [];
   try {
     const res = await fetch(
@@ -41,6 +47,7 @@ export default async function Video({
             .authorDisplayName as string,
           author_image_url: item.snippet.topLevelComment.snippet
             .authorProfileImageUrl as string,
+          updatedAt: new Date(),
         });
         if (item.replies) {
           for (let reply of item.replies) {
@@ -56,10 +63,13 @@ export default async function Video({
                 .authorDisplayName as string,
               author_image_url: reply.comments.snippet
                 .authorProfileImageUrl as string,
+              updatedAt: new Date(),
             });
           }
         }
       }
+      await storeAllComments(token as string, commentsArr);
+      await storeAllReplies(token as string, repliesArr);
     }
   } catch (error) {
     console.error(error);

@@ -63,6 +63,7 @@ export default async function Home() {
       id: video.id?.videoId as string,
       video_id: video.id?.videoId as string,
       title: video.snippet?.title as string,
+      updatedAt: new Date(),
       description: video.snippet?.description as string,
       published_at: video.snippet?.publishedAt as string,
       thumbnail_url: (video.snippet?.thumbnails?.maxres?.url as string) || "",

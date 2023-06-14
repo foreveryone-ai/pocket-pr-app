@@ -38,6 +38,7 @@ export async function createUser(
       .upsert({
         id: userId,
         google_id: googleId,
+        updatedAt: new Date(),
         name,
         email,
         image_url: imageUrl,
@@ -56,6 +57,7 @@ export async function createUser(
 export type StoreOrUpdateParams = {
   id: string;
   video_id: string;
+  updatedAt: Date;
   title: string;
   description: string;
   published_at: string;
@@ -84,6 +86,7 @@ export type StoreAllCommentsParams = {
   id: string;
   comment_id: string;
   text_display: string;
+  updatedAt: Date;
   like_count: number;
   published_at: Date;
   video_id: string;
@@ -93,7 +96,7 @@ export type StoreAllCommentsParams = {
 
 export async function storeAllComments(
   authToken: string,
-  allComments: StoreAllCommentsParams
+  allComments: StoreAllCommentsParams[]
 ) {
   const db = createServerDbClient(authToken);
 
@@ -113,6 +116,7 @@ export type StoreAllRepliesParams = {
   id: string;
   reply_id: string;
   text_display: string;
+  updatedAt: Date;
   like_count: number;
   author_display_name: string;
   author_image_url: string;
@@ -122,7 +126,7 @@ export type StoreAllRepliesParams = {
 
 export async function storeAllReplies(
   authToken: string,
-  allReplies: StoreAllRepliesParams
+  allReplies: StoreAllRepliesParams[]
 ) {
   const db = createServerDbClient(authToken);
 
