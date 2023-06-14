@@ -72,21 +72,6 @@ export default async function Home() {
     };
 
     videosToStore.push(vidObj);
-
-    // console.log("video id: ");
-    // console.log(video.id?.videoId);
-    // console.log("channel id ");
-    // console.log(video.snippet?.channelId);
-    // console.log("title: ");
-    // console.log(video.snippet?.title);
-    // console.log("description");
-    // console.log(video.snippet?.description);
-    // console.log("thumbnail url: ");
-    // console.log(video.snippet?.thumbnails?.maxres?.url);
-    // console.log("Channel title: ");
-    // console.log(video.snippet?.channelTitle);
-    // console.log("User Id: ");
-    // console.log(userId);
   });
 
   if (token && userId && user?.firstName) {

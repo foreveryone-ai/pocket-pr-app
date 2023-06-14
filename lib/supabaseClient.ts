@@ -79,17 +79,6 @@ export async function storeOrUpdateVideo(
     return error;
   }
 }
-// id                  String   @id @default(cuid())
-// createdAt           DateTime @default(now())
-// // add update at
-// comment_id          String   @unique
-// text_display        String
-// like_count          Int
-// published_at        DateTime
-// video_id            String
-// video               Videos   @relation(fields: [video_id], references: [id])
-// sentiment           String
-// replies             Replies[]
 
 export type StoreAllCommentsParams = {
   id: string;
@@ -99,10 +88,49 @@ export type StoreAllCommentsParams = {
   published_at: Date;
   video_id: string;
   author_display_name: string;
-  author_profile_url: string;
+  author_image_url: string;
 };
 
 export async function storeAllComments(
   authToken: string,
   allComments: StoreAllCommentsParams
-) {}
+) {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db
+    .from("Comments")
+    .upsert(allComments)
+    .select();
+
+  if (data) {
+    return data;
+  } else {
+    return error;
+  }
+}
+
+export type StoreAllRepliesParams = {
+  id: string;
+  reply_id: string;
+  text_display: string;
+  like_count: number;
+  author_display_name: string;
+  author_image_url: string;
+  published_at: Date;
+  comment_id: string;
+};
+
+export async function storeAllReplies(
+  authToken: string,
+  allReplies: StoreAllRepliesParams
+) {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db.from("Replies").upsert(allReplies).select();
+
+  if (data) {
+    return data;
+  } else {
+    return error;
+  }
+}
