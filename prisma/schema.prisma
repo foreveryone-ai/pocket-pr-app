@@ -75,6 +75,12 @@ model Messages {
     @@index([conversation_id])
 }
 
+enum SENTIMENT {
+    POSITIVE
+    NEGATIVE
+    NEUTRAL
+}
+
 model Comments {
     id                  String   @id @default(cuid())
     createdAt           DateTime @default(now())        
@@ -84,8 +90,10 @@ model Comments {
     like_count          Int
     published_at        DateTime
     video_id            String
+    author_display_name String
+    author_image_url    String
     video               Videos   @relation(fields: [video_id], references: [id]) 
-    sentiment           String
+    sentiment           SENTIMENT?
     replies             Replies[]
 
     @@index([video_id])
