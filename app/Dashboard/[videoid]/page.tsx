@@ -17,7 +17,7 @@ export default async function Video({
   let commentsAndReplies = [];
   try {
     const res = await fetch(
-      `https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&videoId=${params.videoid}&key=${process.env.GOOGLE_API}`,
+      `https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&videoId=${params.videoid}&key=${process.env.GOOGLE_API}&maxResults=100`,
       {
         headers: {
           Accept: "application/json",
@@ -26,7 +26,7 @@ export default async function Video({
     );
     console.log("got response...");
     const commentsOneVideo = await res.json();
-    console.log(commentsOneVideo);
+    console.log("next page token: ", commentsOneVideo.nextPageToken);
     if (commentsOneVideo) {
       const commentsArr: StoreAllCommentsParams[] = [];
       const repliesArr: StoreAllRepliesParams[] = [];
