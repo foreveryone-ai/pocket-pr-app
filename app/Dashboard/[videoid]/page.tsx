@@ -50,19 +50,17 @@ export default async function Video({
           updatedAt: new Date(),
         });
         if (item.replies) {
-          for (let reply of item.replies) {
-            commentsAndReplies.push(reply.comments.textDisplay);
+          for (let reply of item.replies.comments) {
+            commentsAndReplies.push(reply.snippet.textDisplay);
             repliesArr.push({
-              id: reply.comments.id as string,
-              reply_id: reply.comments.id as string,
-              text_display: reply.comments.textDisplay as string,
-              like_count: reply.comments.likeCount as number,
-              published_at: reply.comments.publishedAt as Date,
+              id: reply.id as string,
+              reply_id: reply.id as string,
+              text_display: reply.snippet.textDisplay as string,
+              like_count: reply.snippet.likeCount as number,
+              published_at: reply.snippet.publishedAt as Date,
               comment_id: item.snippet.topLevelComment.id as string,
-              author_display_name: reply.comments.snippet
-                .authorDisplayName as string,
-              author_image_url: reply.comments.snippet
-                .authorProfileImageUrl as string,
+              author_display_name: reply.snippet.authorDisplayName as string,
+              author_image_url: reply.snippet.authorProfileImageUrl as string,
               updatedAt: new Date(),
             });
           }
