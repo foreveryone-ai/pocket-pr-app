@@ -63,6 +63,7 @@ export default async function Home() {
       id: video.id?.videoId as string,
       video_id: video.id?.videoId as string,
       title: video.snippet?.title as string,
+      updatedAt: new Date(),
       description: video.snippet?.description as string,
       published_at: video.snippet?.publishedAt as string,
       thumbnail_url: (video.snippet?.thumbnails?.maxres?.url as string) || "",
@@ -72,21 +73,6 @@ export default async function Home() {
     };
 
     videosToStore.push(vidObj);
-
-    // console.log("video id: ");
-    // console.log(video.id?.videoId);
-    // console.log("channel id ");
-    // console.log(video.snippet?.channelId);
-    // console.log("title: ");
-    // console.log(video.snippet?.title);
-    // console.log("description");
-    // console.log(video.snippet?.description);
-    // console.log("thumbnail url: ");
-    // console.log(video.snippet?.thumbnails?.maxres?.url);
-    // console.log("Channel title: ");
-    // console.log(video.snippet?.channelTitle);
-    // console.log("User Id: ");
-    // console.log(userId);
   });
 
   if (token && userId && user?.firstName) {

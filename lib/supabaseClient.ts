@@ -38,6 +38,7 @@ export async function createUser(
       .upsert({
         id: userId,
         google_id: googleId,
+        updatedAt: new Date(),
         name,
         email,
         image_url: imageUrl,
@@ -56,6 +57,7 @@ export async function createUser(
 export type StoreOrUpdateParams = {
   id: string;
   video_id: string;
+  updatedAt: Date;
   title: string;
   description: string;
   published_at: string;
@@ -72,6 +74,63 @@ export async function storeOrUpdateVideo(
   const db = createServerDbClient(authToken);
 
   const { data, error } = await db.from("Videos").upsert(video).select();
+
+  if (data) {
+    return data;
+  } else {
+    return error;
+  }
+}
+
+export type StoreAllCommentsParams = {
+  id: string;
+  comment_id: string;
+  text_display: string;
+  updatedAt: Date;
+  like_count: number;
+  published_at: Date;
+  video_id: string;
+  author_display_name: string;
+  author_image_url: string;
+};
+
+export async function storeAllComments(
+  authToken: string,
+  allComments: StoreAllCommentsParams[]
+) {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db
+    .from("Comments")
+    .upsert(allComments)
+    .select();
+
+  if (data) {
+    return data;
+  } else {
+    return error;
+  }
+}
+
+export type StoreAllRepliesParams = {
+  id: string;
+  reply_id: string;
+  text_display: string;
+  updatedAt: Date;
+  like_count: number;
+  author_display_name: string;
+  author_image_url: string;
+  published_at: Date;
+  comment_id: string;
+};
+
+export async function storeAllReplies(
+  authToken: string,
+  allReplies: StoreAllRepliesParams[]
+) {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db.from("Replies").upsert(allReplies).select();
 
   if (data) {
     return data;
