@@ -79,3 +79,30 @@ export async function storeOrUpdateVideo(
     return error;
   }
 }
+// id                  String   @id @default(cuid())
+// createdAt           DateTime @default(now())
+// // add update at
+// comment_id          String   @unique
+// text_display        String
+// like_count          Int
+// published_at        DateTime
+// video_id            String
+// video               Videos   @relation(fields: [video_id], references: [id])
+// sentiment           String
+// replies             Replies[]
+
+export type StoreAllCommentsParams = {
+  id: string;
+  comment_id: string;
+  text_display: string;
+  like_count: number;
+  published_at: Date;
+  video_id: string;
+  author_display_name: string;
+  author_profile_url: string;
+};
+
+export async function storeAllComments(
+  authToken: string,
+  allComments: StoreAllCommentsParams
+) {}
