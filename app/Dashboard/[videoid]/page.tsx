@@ -11,10 +11,10 @@ export default async function Video({
 }: {
   params: { videoid: string };
 }) {
-  const { userId, getToken } = auth();
+  const { /*userId*/ getToken } = auth();
   const token = await getToken({ template: "supabase" });
 
-  let commentsAndReplies = [];
+  const commentsAndReplies = [];
   try {
     let failSafe = 2;
     let nextPage: string | undefined;
@@ -48,7 +48,7 @@ export default async function Video({
       console.log("got response...");
       const commentsOneVideo = await res.json();
       console.log("nextPage token: ", commentsOneVideo.nextPageToken);
-      if (commentsOneVideo.nextPageToken === undefined) {
+      if (!commentsOneVideo.nextPageToken) {
         morePages = false;
         nextPage = "";
       } else {
