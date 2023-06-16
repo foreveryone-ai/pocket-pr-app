@@ -34,7 +34,7 @@ export default function VideoCard({
       </figure>
       <div className="absolute inset-0 flex items-center justify-center rounded-2xl">
         <Link
-          className="bg-secondary text-white"
+          className="btn btn-secondary text-white"
           href={`/dashboard/${videoId}`}
         >
           {title}
