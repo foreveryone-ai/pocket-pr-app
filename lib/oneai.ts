@@ -9,5 +9,6 @@ export async function getSentiments(text: string[]) {
   console.log(output);
   for (let o of output.outputs) {
     console.log(o.output);
+    // sentiment is found at output.outputs.output.value ex. NEG, POS
   }
 }
