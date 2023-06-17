@@ -1,8 +1,12 @@
+import { getSentiments } from "@/lib/oneai";
 import {
   storeAllComments,
   storeAllReplies,
   type StoreAllCommentsParams,
   type StoreAllRepliesParams,
+  getComments,
+  type CommentsResponseSuccess,
+  type CommentsResponseError,
 } from "@/lib/supabaseClient";
 import { auth } from "@clerk/nextjs";
 
@@ -14,15 +18,19 @@ export default async function Video({
   const { /*userId*/ getToken } = auth();
   const token = await getToken({ template: "supabase" });
 
+  // this will hold all comments and replies in memory...
   const commentsAndReplies = [];
   try {
+    // avoid infinite loop for you tube api calls
     let failSafe = 2;
     let nextPage: string | undefined;
     let res;
     let morePages = true;
+    // keep fetching more comments and replies while there is a nextPage token found in the response
     while (failSafe > 0 && morePages) {
       failSafe--;
       console.log("failSafe: ", failSafe);
+      // this should always fire to start
       if (nextPage === "" || nextPage === undefined) {
         console.log("no next page");
         res = await fetch(
@@ -33,6 +41,7 @@ export default async function Video({
             },
           }
         );
+        // this should happen if there are more pages
       } else {
         console.log("getting next page...");
         res = await fetch(
@@ -48,13 +57,16 @@ export default async function Video({
       console.log("got response...");
       const commentsOneVideo = await res.json();
       console.log("nextPage token: ", commentsOneVideo.nextPageToken);
+      // make this the last loop if there is not nextPageToken
       if (!commentsOneVideo.nextPageToken) {
         morePages = false;
         nextPage = "";
       } else {
+        // otherwise set the new token for the next page
         nextPage = commentsOneVideo.nextPageToken;
       }
       console.log("morePages is: ", morePages);
+      // store everything in the array at the top and in the database
       if (commentsOneVideo) {
         const commentsArr: StoreAllCommentsParams[] = [];
         const repliesArr: StoreAllRepliesParams[] = [];
@@ -103,12 +115,33 @@ export default async function Video({
     console.error(error);
   }
 
+  // fetch comments from database
+  const { data, error } = await getComments(
+    token as string,
+    params.videoid as string
+  );
+  if (data) {
+    console.log("get all comments: ", data);
+  } else {
+    console.error(error);
+  }
+
+  // from oneai
+  try {
+    await getSentiments([
+      "watching the Mom of the Year award being presented to Michelle Duggar and all the praise for her and Jim Bob part now in January 2022 really hits different lmao",
+      "The white supremacy runs very clearly in American evangelicalism. I&#39;m reading a really good book called Unsettling Truths by Mark Charles and Soong-Chan Rah and I&#39;m learning so much. It&#39;s about the ongoing dehumanizing legacy of the doctrine of discovery. I&#39;m so glad for you and everyone else who stands up for love and stands against bigotry and homophobia and all the other phobias.",
+    ]);
+  } catch (error) {
+    console.error("unable to get sentiments 😭", error);
+  }
+
   return (
     <section>
       <h1>video id: {params.videoid}</h1>
       <div>
-        {commentsAndReplies &&
-          commentsAndReplies.map((text, i) => <p key={i}>{text}</p>)}
+        {/* {commentsAndReplies &&
+          commentsAndReplies.map((text, i) => <p key={i}>{text}</p>)} */}
       </div>
     </section>
   );

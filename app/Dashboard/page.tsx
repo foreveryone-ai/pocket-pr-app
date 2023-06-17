@@ -89,7 +89,6 @@ export default async function Home() {
       console.log("create user status: ", dbUser);
 
       const dbVideos = await storeOrUpdateVideo(token, videosToStore);
-      console.log("dbVideos: ", dbVideos);
     } catch (error) {
       //console.error("error on create user: ", error);
     }
