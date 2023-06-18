@@ -138,3 +138,27 @@ export async function storeAllReplies(
     return error;
   }
 }
+
+export async function getComments(authToken: string, videoId: string) {
+  const db = createServerDbClient(authToken);
+
+  return await db.from("Comments").select().eq(`video_id`, videoId);
+}
+
+type CommentsResponse = Awaited<ReturnType<typeof getComments>>;
+export type CommentsResponseSuccess = CommentsResponse["data"];
+export type CommentsResponseError = CommentsResponse["error"];
+
+// id                  String   @id @default(cuid())
+// createdAt           DateTime @default(now())
+// updatedAt           DateTime @updatedAt
+// comment_id          String   @unique
+// text_display        String
+// like_count          Int
+// published_at        DateTime
+// video_id            String
+// author_display_name String
+// author_image_url    String
+// video               Videos   @relation(fields: [video_id], references: [id])
+// sentiment           SENTIMENT?
+// replies             Replies[]
