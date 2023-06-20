@@ -140,8 +140,8 @@ export default async function Video({
     <section>
       <h1>video id: {params.videoid}</h1>
       <div>
-        {/* {commentsAndReplies &&
-          commentsAndReplies.map((text, i) => <p key={i}>{text}</p>)} */}
+        {commentsAndReplies &&
+          commentsAndReplies.map((text, i) => <p key={i}>{text}</p>)}
       </div>
     </section>
   );
