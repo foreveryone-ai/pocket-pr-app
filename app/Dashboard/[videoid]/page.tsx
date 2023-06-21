@@ -2,9 +2,11 @@ import { getSentiments } from "@/lib/oneai";
 import {
   storeAllComments,
   storeAllReplies,
+  storeCaptions,
   type StoreAllCommentsParams,
   type StoreAllRepliesParams,
   getComments,
+  type StoreCaptionsParams,
   type CommentsResponseSuccess,
   type CommentsResponseError,
 } from "@/lib/supabaseClient";
@@ -21,6 +23,8 @@ export default async function Video({
   // this will hold all comments and replies in memory...
   const commentsAndReplies = [];
   try {
+    // avoid infinite loop for you tube api calls
+
     // avoid infinite loop for you tube api calls
     let failSafe = 2;
     let nextPage: string | undefined;
@@ -126,6 +130,33 @@ export default async function Video({
     console.error(error);
   }
 
+  let captionsArr: StoreCaptionsParams[] = [];
+  // fetch captions from YouTube API
+  try {
+    const res = await fetch(
+      `https://youtube.googleapis.com/youtube/v3/captions?part=snippet&videoId=${params.videoid}&key=${process.env.GOOGLE_API}`,
+      {
+        headers: {
+          Accept: "application/json",
+        },
+      }
+    );
+    const captions = await res.json();
+    if (captions.items) {
+      console.log("got captions response...");
+      captionsArr: captions.items.map((caption: any) => ({
+        id: caption.id,
+        video_id: params.videoid,
+        language: caption.snippet.language,
+        name: caption.snippet.name,
+        updatedAt: new Date(),
+      }));
+      await storeCaptions(token as string, captionsArr);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+
   // from oneai
   try {
     await getSentiments([
@@ -142,6 +173,14 @@ export default async function Video({
       <div>
         {commentsAndReplies &&
           commentsAndReplies.map((text, i) => <p key={i}>{text}</p>)}
+      </div>
+      <div>
+        {captionsArr &&
+          captionsArr.map((caption, i) => (
+            <div key={i}>
+              <h3>{caption.captions}</h3>
+            </div>
+          ))}
       </div>
     </section>
   );
