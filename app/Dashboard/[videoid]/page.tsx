@@ -10,15 +10,38 @@ import {
   type CommentsResponseSuccess,
   type CommentsResponseError,
 } from "@/lib/supabaseClient";
-import { auth } from "@clerk/nextjs";
+import { auth, currentUser } from "@clerk/nextjs";
+
+import { getOAuthData, google } from "@/lib/googleApi";
 
 export default async function Video({
   params,
 }: {
   params: { videoid: string };
 }) {
-  const { /*userId*/ getToken } = auth();
+  const { userId, getToken } = auth();
   const token = await getToken({ template: "supabase" });
+  const user = await currentUser();
+
+  let userOAuth, yt;
+
+  if (userId) {
+    try {
+      userOAuth = await getOAuthData(userId, "oauth_google");
+    } catch (error) {
+      console.error("no oauth found ", error);
+    }
+  }
+  try {
+    yt = google.youtube({
+      version: "v3",
+      headers: {
+        Authorization: `Bearer ${userOAuth[0].token}`,
+      },
+    });
+  } catch (error) {
+    throw new Error("no auth token");
+  }
 
   // this will hold all comments and replies in memory...
   const commentsAndReplies = [];
@@ -143,14 +166,30 @@ export default async function Video({
     );
     const captions = await res.json();
     if (captions.items) {
-      console.log("got captions response...");
-      captionsArr: captions.items.map((caption: any) => ({
-        id: caption.id,
-        video_id: params.videoid,
-        language: caption.snippet.language,
-        name: caption.snippet.name,
-        updatedAt: new Date(),
-      }));
+      console.log("got captions id...");
+      for (let caption of captions.items) {
+        console.log(caption.id);
+        const captionRes = await fetch(
+          `https://youtube.googleapis.com/youtube/v3/captions/${caption.id}?key=${process.env.GOOGLE_API}`,
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${userOAuth[0].token}`,
+            },
+          }
+        );
+        const captionText = await captionRes.text();
+        console.log(captionText);
+        console.error(captionRes.status, captionRes.statusText);
+        captionsArr.push({
+          id: caption.id,
+          video_id: params.videoid,
+          language: caption.snippet.language,
+          name: caption.snippet.name,
+          text: captionText,
+          updatedAt: new Date(),
+        });
+      }
       await storeCaptions(token as string, captionsArr);
     }
   } catch (error) {
@@ -158,14 +197,14 @@ export default async function Video({
   }
 
   // from oneai
-  try {
-    await getSentiments([
-      "watching the Mom of the Year award being presented to Michelle Duggar and all the praise for her and Jim Bob part now in January 2022 really hits different lmao",
-      "The white supremacy runs very clearly in American evangelicalism. I&#39;m reading a really good book called Unsettling Truths by Mark Charles and Soong-Chan Rah and I&#39;m learning so much. It&#39;s about the ongoing dehumanizing legacy of the doctrine of discovery. I&#39;m so glad for you and everyone else who stands up for love and stands against bigotry and homophobia and all the other phobias.",
-    ]);
-  } catch (error) {
-    console.error("unable to get sentiments 😭", error);
-  }
+  // try {
+  //   await getSentiments([
+  //     "watching the Mom of the Year award being presented to Michelle Duggar and all the praise for her and Jim Bob part now in January 2022 really hits different lmao",
+  //     "The white supremacy runs very clearly in American evangelicalism. I&#39;m reading a really good book called Unsettling Truths by Mark Charles and Soong-Chan Rah and I&#39;m learning so much. It&#39;s about the ongoing dehumanizing legacy of the doctrine of discovery. I&#39;m so glad for you and everyone else who stands up for love and stands against bigotry and homophobia and all the other phobias.",
+  //   ]);
+  // } catch (error) {
+  //   console.error("unable to get sentiments 😭", error);
+  // }
 
   return (
     <section>
@@ -178,7 +217,7 @@ export default async function Video({
         {captionsArr &&
           captionsArr.map((caption, i) => (
             <div key={i}>
-              <h3>{caption.captions}</h3>
+              <h3>{caption.text}</h3>
             </div>
           ))}
       </div>

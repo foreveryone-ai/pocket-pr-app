@@ -168,7 +168,8 @@ export type StoreCaptionsParams = {
   video_id: string;
   updatedAt: Date;
   language: string;
-  captions: string;
+  text: string;
+  name: string;
 };
 
 export async function storeCaptions(
