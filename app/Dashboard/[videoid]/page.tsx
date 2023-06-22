@@ -144,28 +144,32 @@ export default async function Video({
     const captions = await res.json();
     if (captions.items) {
       console.log("got captions response...");
-      captionsArr: captions.items.map((caption: any) => ({
-        id: caption.id,
-        video_id: params.videoid,
-        language: caption.snippet.language,
-        name: caption.snippet.name,
-        updatedAt: new Date(),
-      }));
-      await storeCaptions(token as string, captionsArr);
+      console.log(captions);
+      for (let snippet of captions.items) {
+        console.log(snippet);
+      }
+      // captionsArr = captions.items.map((caption: any) => ({
+      //   id: caption.id,
+      //   video_id: params.videoid,
+      //   language: caption.snippet.language,
+      //   name: caption.snippet.name,
+      //   updatedAt: new Date(),
+      // }));
+      //await storeCaptions(token as string, captionsArr);
     }
   } catch (error) {
     console.error(error);
   }
 
   // from oneai
-  try {
-    await getSentiments([
-      "watching the Mom of the Year award being presented to Michelle Duggar and all the praise for her and Jim Bob part now in January 2022 really hits different lmao",
-      "The white supremacy runs very clearly in American evangelicalism. I&#39;m reading a really good book called Unsettling Truths by Mark Charles and Soong-Chan Rah and I&#39;m learning so much. It&#39;s about the ongoing dehumanizing legacy of the doctrine of discovery. I&#39;m so glad for you and everyone else who stands up for love and stands against bigotry and homophobia and all the other phobias.",
-    ]);
-  } catch (error) {
-    console.error("unable to get sentiments 😭", error);
-  }
+  // try {
+  //   await getSentiments([
+  //     "watching the Mom of the Year award being presented to Michelle Duggar and all the praise for her and Jim Bob part now in January 2022 really hits different lmao",
+  //     "The white supremacy runs very clearly in American evangelicalism. I&#39;m reading a really good book called Unsettling Truths by Mark Charles and Soong-Chan Rah and I&#39;m learning so much. It&#39;s about the ongoing dehumanizing legacy of the doctrine of discovery. I&#39;m so glad for you and everyone else who stands up for love and stands against bigotry and homophobia and all the other phobias.",
+  //   ]);
+  // } catch (error) {
+  //   console.error("unable to get sentiments 😭", error);
+  // }
 
   return (
     <section>
