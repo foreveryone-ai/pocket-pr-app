@@ -32,11 +32,12 @@ export default async function Video({
       console.error("no oauth found ", error);
     }
   }
+  console.log(userOAuth);
   try {
     yt = google.youtube({
       version: "v3",
       headers: {
-        Authorization: `Bearer ${userOAuth[0].token}`,
+        Authorization: `Bearer ${userOAuth.token}`,
       },
     });
   } catch (error) {
