@@ -1,4 +1,4 @@
-import { getSentiments } from "@/lib/oneai";
+import { getModels } from "@/lib/openai";
 import {
   storeAllComments,
   storeAllReplies,
@@ -126,15 +126,11 @@ export default async function Video({
     console.error(error);
   }
 
-  // from oneai
-  try {
-    await getSentiments([
-      "watching the Mom of the Year award being presented to Michelle Duggar and all the praise for her and Jim Bob part now in January 2022 really hits different lmao",
-      "The white supremacy runs very clearly in American evangelicalism. I&#39;m reading a really good book called Unsettling Truths by Mark Charles and Soong-Chan Rah and I&#39;m learning so much. It&#39;s about the ongoing dehumanizing legacy of the doctrine of discovery. I&#39;m so glad for you and everyone else who stands up for love and stands against bigotry and homophobia and all the other phobias.",
-    ]);
-  } catch (error) {
-    console.error("unable to get sentiments 😭", error);
-  }
+  // TODO: get sentiment from comments and replies:
+  await getModels();
+  // TODO: get summary of captions
+  // TODO: get summary of replies
+  // TODO: more details? line of advice?
 
   return (
     <section>
