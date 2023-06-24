@@ -1,4 +1,4 @@
-import { getModels } from "@/lib/openai";
+import { getSentiment } from "@/lib/openai";
 import {
   storeAllComments,
   storeAllReplies,
@@ -116,18 +116,22 @@ export default async function Video({
   }
 
   // fetch comments from database
+  const commentsForSentament = [];
   const { data, error } = await getComments(
     token as string,
     params.videoid as string
   );
   if (data) {
-    console.log("get all comments: ", data);
+    for (let comment of data) {
+      commentsForSentament.push(comment.text_display);
+    }
   } else {
     console.error(error);
   }
 
   // TODO: get sentiment from comments and replies:
-  await getModels();
+  console.log(commentsAndReplies.join("\n"));
+  await getSentiment(commentsForSentament.join("\n") || "Hello");
   // TODO: get summary of captions
   // TODO: get summary of replies
   // TODO: more details? line of advice?
