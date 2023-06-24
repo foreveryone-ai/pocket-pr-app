@@ -1,4 +1,4 @@
-import { getSentiment } from "@/lib/openai";
+import { getSentiment, getVideoSummary } from "@/lib/openai";
 import {
   storeAllComments,
   storeAllReplies,
@@ -131,8 +131,9 @@ export default async function Video({
 
   // TODO: get sentiment from comments and replies:
   console.log(commentsAndReplies.join("\n"));
-  await getSentiment(commentsForSentament.join("\n") || "Hello");
+  //await getSentiment(commentsForSentament.join("\n") || "Hello");
   // TODO: get summary of captions
+  await getVideoSummary(commentsForSentament.join("\n"));
   // TODO: get summary of replies
   // TODO: more details? line of advice?
 
