@@ -12,7 +12,7 @@ import {
 } from "@/lib/supabaseClient";
 import { auth, currentUser } from "@clerk/nextjs";
 
-import { getOAuthData, google } from "@/lib/googleApi";
+import { getOAuthData } from "@/lib/googleApi";
 
 export default async function Video({
   params,
@@ -23,7 +23,7 @@ export default async function Video({
   const token = await getToken({ template: "supabase" });
   const user = await currentUser();
 
-  let userOAuth, yt;
+  let userOAuth;
 
   if (userId) {
     try {
@@ -33,22 +33,10 @@ export default async function Video({
     }
   }
   console.log(userOAuth);
-  try {
-    yt = google.youtube({
-      version: "v3",
-      headers: {
-        Authorization: `Bearer ${userOAuth.token}`,
-      },
-    });
-  } catch (error) {
-    throw new Error("no auth token");
-  }
 
   // this will hold all comments and replies in memory...
   const commentsAndReplies = [];
   try {
-    // avoid infinite loop for you tube api calls
-
     // avoid infinite loop for you tube api calls
     let failSafe = 2;
     let nextPage: string | undefined;
