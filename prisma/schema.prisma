@@ -46,6 +46,7 @@ model Videos {
     user                Users    @relation(fields: [user_id], references: [id]) 
     comments            Comments[]
     conversation        Conversation?
+    captions            Captions[]
 
     @@index([user_id])
 }
@@ -125,4 +126,15 @@ model Prompts {
     user                Users    @relation(fields: [user_id], references: [id])
 
     @@index([user_id])
+}
+
+model Captions {
+    id                  String  @id @default(cuid()) 
+    captions            String
+    language            String
+    updatedAt           DateTime @updatedAt
+    video_id            String 
+    video               Videos      @relation(fields: [video_id], references: [id])
+
+    @@index([video_id])
 }

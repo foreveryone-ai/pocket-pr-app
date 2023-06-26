@@ -162,3 +162,27 @@ export type CommentsResponseError = CommentsResponse["error"];
 // video               Videos   @relation(fields: [video_id], references: [id])
 // sentiment           SENTIMENT?
 // replies             Replies[]
+
+export type StoreCaptionsParams = {
+  id: string;
+  video_id: string;
+  updatedAt: Date;
+  language: string;
+  text: string;
+  name: string;
+};
+
+export async function storeCaptions(
+  authToken: string,
+  captions: StoreCaptionsParams[]
+) {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db.from("Captions").upsert(captions).select();
+
+  if (data) {
+    return data;
+  } else {
+    return error;
+  }
+}
