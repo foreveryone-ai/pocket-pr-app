@@ -152,7 +152,17 @@ export default async function Video({
   await getVideoSummary(commentsForSentament.join("\n"));
   // TODO: get summary of replies
   // TODO: more details? line of advice?
+  function removeTimestamps(caption: string): string {
+    // Regular expression to match the timestamp pattern
+    const timestampRegex =
+      /\d{1,2}:\d{1,2}:\d{1,2}\.\d{3},\d{1,2}:\d{1,2}:\d{1,2}\.\d{3}/g;
+
+    // Replace timestamps with an empty string
+    return caption.replace(timestampRegex, "").trim();
+  }
+
   let captionsArr: StoreCaptionsParams[] = [];
+
   // fetch captions from YouTube API
   try {
     const res = await fetch(
@@ -177,7 +187,9 @@ export default async function Video({
             },
           }
         );
-        const captionText = await captionRes.text();
+        let captionText = await captionRes.text();
+        // Remove timestamps from captionText
+        captionText = removeTimestamps(captionText);
         console.log(captionText);
         console.error(captionRes.status, captionRes.statusText);
         captionsArr.push({
