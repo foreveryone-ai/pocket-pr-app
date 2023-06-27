@@ -166,10 +166,9 @@ export type CommentsResponseError = CommentsResponse["error"];
 export type StoreCaptionsParams = {
   id: string;
   video_id: string;
+  captions: string;
   updatedAt: Date;
   language: string;
-  text: string;
-  name: string;
 };
 
 export async function storeCaptions(
