@@ -21,6 +21,24 @@ export async function getSentiment(text: string) {
   console.log(completion.data.choices[0].message);
 }
 
+export async function getReport(text: string) {
+  const completion = await openai.createChatCompletion({
+    model: "gpt-3.5-turbo",
+    messages: [
+      {
+        role: "system",
+        content:
+          "Based on the YouTube video comments separated by '\n' and the following subtitles of the YouTube video, delimited by '\n', return an analytical report on the comment section in relation to the topic of and content discussed in the YouTube video subtitles. The report should take note of repeated sentiments and opinions expressed, as well as constructive criticism and feedback. Most importantly, any sign of conflict, distrust, or anger towards the YouTube creator who posted the video should be highlighted and summarized. Finally, give the YouTube creator a few suggestions on what types of videos their audience wants to see more, and how the creator might navigate any conflict, distrust, tension or anger that their audience feels towards them.",
+      },
+      {
+        role: "user",
+        content: text,
+      },
+    ],
+  });
+  console.log(completion.data.choices[0].message);
+}
+
 export async function getVideoSummary(text: string) {
   const completion = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
