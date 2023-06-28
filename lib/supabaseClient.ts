@@ -149,20 +149,6 @@ type CommentsResponse = Awaited<ReturnType<typeof getComments>>;
 export type CommentsResponseSuccess = CommentsResponse["data"];
 export type CommentsResponseError = CommentsResponse["error"];
 
-// id                  String   @id @default(cuid())
-// createdAt           DateTime @default(now())
-// updatedAt           DateTime @updatedAt
-// comment_id          String   @unique
-// text_display        String
-// like_count          Int
-// published_at        DateTime
-// video_id            String
-// author_display_name String
-// author_image_url    String
-// video               Videos   @relation(fields: [video_id], references: [id])
-// sentiment           SENTIMENT?
-// replies             Replies[]
-
 export type StoreCaptionsParams = {
   id: string;
   video_id: string;
@@ -185,4 +171,10 @@ export async function storeCaptions(
   } else {
     return error;
   }
+}
+
+export async function getVideos(authToken: string, channel_id: string) {
+  const db = createServerDbClient(authToken);
+
+  return await db.from("Videos").select().eq(`channel_id`, channel_id);
 }
