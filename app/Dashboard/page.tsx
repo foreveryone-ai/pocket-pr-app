@@ -1,4 +1,8 @@
-import { createUser, storeOrUpdateVideo } from "@/lib/supabaseClient";
+import {
+  createUser,
+  getVideos,
+  storeOrUpdateVideo,
+} from "@/lib/supabaseClient";
 import type { StoreOrUpdateParams } from "@/lib/supabaseClient";
 import VideoCard from "@/app/components/VideoCards";
 import { auth, currentUser } from "@clerk/nextjs";
@@ -12,7 +16,7 @@ export default async function Home() {
   const token = await getToken({ template: "supabase" });
 
   // create placeholders and update after recieving google token
-  let userOAuth, yt, chList, recentVideos, commentsOneVideo;
+  let userOAuth, yt, chList, recentVideos, commentsOneVideo, videos;
 
   // if the call to clerk was successfull, get the oauth token from google
   // create the youtube client with the token recieved from clerk
@@ -42,71 +46,82 @@ export default async function Home() {
       maxResults: 5,
     });
     // even unlisted ones at the moment!!
-    recentVideos = await yt.search.list({
-      order: "date",
-      forMine: true,
-      part: ["snippet"],
-      type: ["video"],
-      maxResults: 50,
-    });
+    // recentVideos = await yt.search.list({
+    //   order: "date",
+    //   forMine: true,
+    //   part: ["snippet"],
+    //   type: ["video"],
+    //   maxResults: 50,
+    // });
   }
   // make a list of all channelIds that were returned
   const idList = chList?.data.items?.map((item) => item.id);
   // view channel data
   console.log("data for channel Id ", idList && idList[0]);
 
-  const videosToStore: StoreOrUpdateParams[] = [];
-
-  const videos = recentVideos?.data.items?.map((item) => item);
-  videos?.forEach((video) => {
-    const vidObj: StoreOrUpdateParams = {
-      id: video.id?.videoId as string,
-      video_id: video.id?.videoId as string,
-      title: video.snippet?.title as string,
-      updatedAt: new Date(),
-      description: video.snippet?.description as string,
-      published_at: video.snippet?.publishedAt as string,
-      thumbnail_url: (video.snippet?.thumbnails?.maxres?.url as string) || "",
-      channel_title: video.snippet?.title as string,
-      channel_id: video.snippet?.channelId as string,
-      user_id: userId as string,
-    };
-
-    videosToStore.push(vidObj);
-  });
-
-  if (token && userId && user?.firstName) {
-    try {
-      const dbUser = await createUser(
-        token,
-        userId,
-        user?.id,
-        user?.firstName,
-        user?.emailAddresses[0].emailAddress,
-        user?.profileImageUrl,
-        idList && idList.length > 0 ? (idList[0] as string) : ""
-      );
-      console.log("create user status: ", dbUser);
-
-      const dbVideos = await storeOrUpdateVideo(token, videosToStore);
-    } catch (error) {
-      //console.error("error on create user: ", error);
-    }
+  try {
+    videos = await getVideos(token as string, (idList[0] as string) || "");
+    console.log("video data: ", videos.data);
+  } catch (error) {
+    console.error(error);
   }
+
+  // TODO: move this to the sign up area
+  // const videosToStore: StoreOrUpdateParams[] = [];
+
+  // const videos = recentVideos?.data.items?.map((item) => item);
+  // videos?.forEach((video) => {
+  //   const vidObj: StoreOrUpdateParams = {
+  //     id: video.id?.videoId as string,
+  //     video_id: video.id?.videoId as string,
+  //     title: video.snippet?.title as string,
+  //     updatedAt: new Date(),
+  //     description: video.snippet?.description as string,
+  //     published_at: video.snippet?.publishedAt as string,
+  //     thumbnail_url: (video.snippet?.thumbnails?.maxres?.url as string) || "",
+  //     channel_title: video.snippet?.title as string,
+  //     channel_id: video.snippet?.channelId as string,
+  //     user_id: userId as string,
+  //   };
+
+  //   videosToStore.push(vidObj);
+  // });
+
+  // TODO: move create user to sign up area
+
+  // if (token && userId && user?.firstName) {
+  //   try {
+  //     const dbUser = await createUser(
+  //       token,
+  //       userId,
+  //       user?.id,
+  //       user?.firstName,
+  //       user?.emailAddresses[0].emailAddress,
+  //       user?.profileImageUrl,
+  //       idList && idList.length > 0 ? (idList[0] as string) : ""
+  //     );
+  //     console.log("create user status: ", dbUser);
+
+  //     const dbVideos = await storeOrUpdateVideo(token, videosToStore);
+  //   } catch (error) {
+  //     //console.error("error on create user: ", error);
+  //   }
+  // }
 
   return (
     <main className="flex min-h-screen flex-col items-center text-black justify-center p-10 bg-primary-content">
       <div className="p-5">Hello, {user?.firstName}. Welcome back!</div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
         {videos
-          ? videos.map((video, i) => (
+          ? videos.data.map((video, i) => (
               <VideoCard
                 key={i}
-                videoId={video.id?.videoId as string}
-                title={video.snippet?.title as string}
-                imageUrl={video.snippet?.thumbnails?.maxres?.url as string}
-                width={video.snippet?.thumbnails?.maxres?.width as number}
-                height={video.snippet?.thumbnails?.maxres?.height as number}
+                videoId={video.id as string}
+                title={video.title as string}
+                imageUrl={video.thumbnail_url as string}
+                //TODO: store this in database
+                width={1280}
+                height={720}
               />
             ))
           : "no videos found"}
