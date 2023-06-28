@@ -177,3 +177,9 @@ export async function getVideos(authToken: string, channel_id: string) {
 
   return await db.from("Videos").select().eq(`channel_id`, channel_id);
 }
+
+export async function getChannelId(authToken: string, user_id: string) {
+  const db = createServerDbClient(authToken);
+
+  return await db.from("Users").select(`youtube_channel_id`).eq(`id`, user_id);
+}

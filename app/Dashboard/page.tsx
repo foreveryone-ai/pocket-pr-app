@@ -2,6 +2,7 @@ import {
   createUser,
   getVideos,
   storeOrUpdateVideo,
+  getChannelId,
 } from "@/lib/supabaseClient";
 import type { StoreOrUpdateParams } from "@/lib/supabaseClient";
 import VideoCard from "@/app/components/VideoCards";
@@ -9,6 +10,7 @@ import { auth, currentUser } from "@clerk/nextjs";
 // get the OAuth token from clerk
 
 import { getOAuthData, google } from "@/lib/googleApi";
+import { stringify } from "querystring";
 
 export default async function Home() {
   const { userId, getToken } = auth();
@@ -16,55 +18,73 @@ export default async function Home() {
   const token = await getToken({ template: "supabase" });
 
   // create placeholders and update after recieving google token
-  let userOAuth, yt, chList, recentVideos, commentsOneVideo, videos;
+  let userOAuth, yt, chList, recentVideos, commentsOneVideo, videos, channelId;
 
-  // if the call to clerk was successfull, get the oauth token from google
-  // create the youtube client with the token recieved from clerk
-  if (userId) {
+  if (userId && token) {
     try {
-      userOAuth = await getOAuthData(userId, "oauth_google");
+      // userOAuth = await getOAuthData(userId, "oauth_google");
+      const response = await getChannelId(token as string, userId as string);
+      console.log("getChannelId response: ", response);
+      if (response.data && response.data.length > 0) {
+        channelId = response.data[0].youtube_channel_id; // Extract channelId from response data
+      }
     } catch (error) {
-      console.error("no oauth found ", error);
+      console.error("no oauth found or failed to get channelId ", error);
     }
   }
+  console.log("channelId: ", channelId);
   try {
-    yt = google.youtube({
-      version: "v3",
-      headers: {
-        Authorization: `Bearer ${userOAuth[0].token}`,
-      },
-    });
-  } catch (error) {
-    throw new Error("no auth token");
-  }
-  // if the client was successfully created, get at most 5 channels from the
-  // user account
-  if (yt) {
-    chList = await yt.channels.list({
-      part: ["id", "contentDetails"],
-      mine: true,
-      maxResults: 5,
-    });
-    // even unlisted ones at the moment!!
-    // recentVideos = await yt.search.list({
-    //   order: "date",
-    //   forMine: true,
-    //   part: ["snippet"],
-    //   type: ["video"],
-    //   maxResults: 50,
-    // });
-  }
-  // make a list of all channelIds that were returned
-  const idList = chList?.data.items?.map((item) => item.id);
-  // view channel data
-  console.log("data for channel Id ", idList && idList[0]);
-
-  try {
-    videos = await getVideos(token as string, (idList[0] as string) || "");
+    videos = await getVideos(token as string, (channelId as any) || "");
     console.log("video data: ", videos.data);
   } catch (error) {
     console.error(error);
   }
+
+  // if (userId) {
+  //   try {
+  //     userOAuth = await getOAuthData(userId, "oauth_google");
+  //   } catch (error) {
+  //     console.error("no oauth found ", error);
+  //   }
+  // }
+  // try {
+  //   yt = google.youtube({
+  //     version: "v3",
+  //     headers: {
+  //       Authorization: `Bearer ${userOAuth[0].token}`,
+  //     },
+  //   });
+  // } catch (error) {
+  //   throw new Error("no auth token");
+  // }
+
+  // if (yt) {
+  //   chList = await yt.channels.list({
+  //     part: ["id", "contentDetails"],
+  //     mine: true,
+  //     maxResults: 5,
+  //   });
+
+  // even unlisted ones at the moment!!
+  // recentVideos = await yt.search.list({
+  //   order: "date",
+  //   forMine: true,
+  //   part: ["snippet"],
+  //   type: ["video"],
+  //   maxResults: 50,
+  // });
+  // }
+  // make a list of all channelIds that were returned
+  // const idList = chList?.data.items?.map((item) => item.id);
+  // // view channel data
+  // console.log("data for channel Id ", idList && idList[0]);
+
+  // try {
+  //   videos = await getVideos(token as string, (idList && idList[0] as string) || "");
+  //   console.log("video data: ", videos.data);
+  // } catch (error) {
+  //   console.error(error);
+  // }
 
   // TODO: move this to the sign up area
   // const videosToStore: StoreOrUpdateParams[] = [];
@@ -113,7 +133,7 @@ export default async function Home() {
       <div className="p-5">Hello, {user?.firstName}. Welcome back!</div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
         {videos
-          ? videos.data.map((video, i) => (
+          ? videos?.data?.map((video, i) => (
               <VideoCard
                 key={i}
                 videoId={video.id as string}
