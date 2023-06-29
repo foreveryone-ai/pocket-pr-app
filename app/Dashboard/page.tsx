@@ -60,7 +60,10 @@ export default async function Home() {
   console.log("data for channel Id ", idList && idList[0]);
 
   try {
-    videos = await getVideos(token as string, (idList[0] as string) || "");
+    videos = await getVideos(
+      token as string,
+      (idList && (idList[0] as string)) || ""
+    );
     console.log("video data: ", videos.data);
   } catch (error) {
     console.error(error);
@@ -113,7 +116,7 @@ export default async function Home() {
       <div className="p-5">Hello, {user?.firstName}. Welcome back!</div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
         {videos
-          ? videos.data.map((video, i) => (
+          ? videos.data?.map((video, i) => (
               <VideoCard
                 key={i}
                 videoId={video.id as string}
