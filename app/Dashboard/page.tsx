@@ -16,7 +16,7 @@ export default async function Home() {
   console.log(userId);
   const user = await currentUser();
   const token = await getToken({ template: "supabase" });
-  console.log("current user: ", user);
+  //console.log("current user: ", user);
 
   // create placeholders and update after recieving google token
   let userOAuth,
