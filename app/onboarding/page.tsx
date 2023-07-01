@@ -1,3 +1,11 @@
+import UpdateDatabase from "../components/UpdateDatabase";
+
 export default function Onboarding() {
-  return <div>This is where we onboard new people!</div>;
+  return (
+    <section>
+      <div>
+        <UpdateDatabase />
+      </div>
+    </section>
+  );
 }
