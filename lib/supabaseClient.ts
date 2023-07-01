@@ -3,7 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
 
-export function createServerDbClient(accessToken?: string) {
+function createServerDbClient(accessToken?: string) {
   return createClient(supabaseUrl as string, supabaseKey as string, {
     db: {
       schema: "public",
@@ -26,8 +26,7 @@ export async function createUser(
   googleId: string,
   name: string,
   email: string,
-  imageUrl: string,
-  youtubeChannelId: string
+  imageUrl: string
 ) {
   try {
     // auth token is here ...
@@ -42,12 +41,37 @@ export async function createUser(
         name,
         email,
         image_url: imageUrl,
-        youtube_channel_id: youtubeChannelId,
       })
       .select();
 
     //console.log("newUser: ", newUser);
     return newUser.status; // 201
+  } catch (error) {
+    console.error(error);
+    return 400;
+  }
+}
+
+export async function storeChannelId(
+  authToken: string,
+  user_id: string,
+  youtube_channel_id: string
+) {
+  try {
+    // auth token is here ...
+    const db = createServerDbClient(authToken);
+
+    const updatedUser = await db
+      .from("Users")
+      .upsert({
+        id: user_id,
+        youtube_channel_id,
+        updatedAt: new Date(),
+      })
+      .select();
+
+    //console.log("newUser: ", newUser);
+    return updatedUser.status; // 201
   } catch (error) {
     console.error(error);
     return 400;
