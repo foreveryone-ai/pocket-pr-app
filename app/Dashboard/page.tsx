@@ -1,5 +1,6 @@
 import {
   createUser,
+  getChannelId,
   getVideos,
   storeOrUpdateVideo,
 } from "@/lib/supabaseClient";
@@ -12,59 +13,66 @@ import { getOAuthData, google } from "@/lib/googleApi";
 
 export default async function Home() {
   const { userId, getToken } = auth();
+  console.log(userId);
   const user = await currentUser();
   const token = await getToken({ template: "supabase" });
+  console.log("current user: ", user);
 
   // create placeholders and update after recieving google token
   let userOAuth, yt, chList, recentVideos, commentsOneVideo, videos;
 
   // if the call to clerk was successfull, get the oauth token from google
   // create the youtube client with the token recieved from clerk
-  if (userId) {
-    try {
-      userOAuth = await getOAuthData(userId, "oauth_google");
-    } catch (error) {
-      console.error("no oauth found ", error);
-    }
-  }
-  try {
-    yt = google.youtube({
-      version: "v3",
-      headers: {
-        Authorization: `Bearer ${userOAuth[0].token}`,
-      },
-    });
-  } catch (error) {
-    throw new Error("no auth token");
-  }
+  // if (userId) {
+  //   try {
+  //     userOAuth = await getOAuthData(userId, "oauth_google");
+  //   } catch (error) {
+  //     console.error("no oauth found ", error);
+  //   }
+  // }
+  // try {
+  //   yt = google.youtube({
+  //     version: "v3",
+  //     headers: {
+  //       Authorization: `Bearer ${userOAuth[0].token}`,
+  //     },
+  //   });
+  // } catch (error) {
+  //   throw new Error("no auth token");
+  // }
   // if the client was successfully created, get at most 5 channels from the
   // user account
-  if (yt) {
-    chList = await yt.channels.list({
-      part: ["id", "contentDetails"],
-      mine: true,
-      maxResults: 5,
-    });
-    // even unlisted ones at the moment!!
-    // recentVideos = await yt.search.list({
-    //   order: "date",
-    //   forMine: true,
-    //   part: ["snippet"],
-    //   type: ["video"],
-    //   maxResults: 50,
-    // });
-  }
+  // if (yt) {
+  //   chList = await yt.channels.list({
+  //     part: ["id", "contentDetails"],
+  //     mine: true,
+  //     maxResults: 5,
+  //   });
+  // even unlisted ones at the moment!!
+  // recentVideos = await yt.search.list({
+  //   order: "date",
+  //   forMine: true,
+  //   part: ["snippet"],
+  //   type: ["video"],
+  //   maxResults: 50,
+  // });
+  //}
   // make a list of all channelIds that were returned
-  const idList = chList?.data.items?.map((item) => item.id);
+  const { youtube_channel_id } = (
+    await getChannelId(token as string, userId as string)
+  ).data[0];
+  console.log("ch id res: ", youtube_channel_id);
+
+  //const idList = chList?.data.items?.map((item) => item.id);
   // view channel data
-  console.log("data for channel Id ", idList && idList[0]);
+  //console.log("data for channel Id ", idList && idList[0]);
 
   try {
     videos = await getVideos(
       token as string,
-      (idList && (idList[0] as string)) || ""
+      (youtube_channel_id as string) || ""
     );
-    console.log("video data: ", videos.data);
+    //console.log("video data: ", videos.data);
   } catch (error) {
     console.error(error);
   }

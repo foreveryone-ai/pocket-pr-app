@@ -172,6 +172,12 @@ export async function storeCaptions(
   }
 }
 
+export async function getChannelId(authToken: string, user_id: string) {
+  const db = createServerDbClient(authToken);
+
+  return await db.from("Users").select().eq(`id`, user_id);
+}
+
 export async function getVideos(authToken: string, channel_id: string) {
   const db = createServerDbClient(authToken);
 
