@@ -16,10 +16,16 @@ export default async function Home() {
   console.log(userId);
   const user = await currentUser();
   const token = await getToken({ template: "supabase" });
-  console.log("current user: ", user);
+  //console.log("current user: ", user);
 
   // create placeholders and update after recieving google token
-  let userOAuth, yt, chList, recentVideos, commentsOneVideo, videos;
+  let userOAuth,
+    yt,
+    chList,
+    recentVideos,
+    commentsOneVideo,
+    videos,
+    youtube_channel_id;
 
   // if the call to clerk was successfull, get the oauth token from google
   // create the youtube client with the token recieved from clerk
@@ -58,10 +64,13 @@ export default async function Home() {
   // });
   //}
   // make a list of all channelIds that were returned
-  const { youtube_channel_id } = (
-    await getChannelId(token as string, userId as string)
-  ).data[0];
-  console.log("ch id res: ", youtube_channel_id);
+  try {
+    const user = await getChannelId(token as string, userId as string);
+    youtube_channel_id = user?.data && user.data[0];
+    console.log("ch id: ", youtube_channel_id);
+  } catch (error) {
+    console.error("error on get channel id.. ", error);
+  }
 
   //const idList = chList?.data.items?.map((item) => item.id);
   // view channel data
@@ -70,7 +79,7 @@ export default async function Home() {
   try {
     videos = await getVideos(
       token as string,
-      (youtube_channel_id as string) || ""
+      (youtube_channel_id as unknown as string) || ""
     );
     //console.log("video data: ", videos.data);
   } catch (error) {
