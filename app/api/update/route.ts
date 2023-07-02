@@ -337,6 +337,11 @@ export async function GET(
     // } catch (error) {
     //   console.error("unable to get sentiments 😭", error);
     // }
+
+    if (!params.videoid) {
+      throw new Error("Video ID is not provided");
+    }
+
     return NextResponse.json({ userId });
   } catch (Error) {
     console.log(Error);
