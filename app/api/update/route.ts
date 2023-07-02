@@ -8,13 +8,19 @@ import {
   getVideos,
   storeOrUpdateVideo,
 } from "@/lib/supabaseClient";
+import { GoogleApis } from "googleapis";
 
 export async function GET(request: Request) {
   const { userId, getToken } = auth();
   const user = await currentUser();
   const token = await getToken({ template: "supabase" });
   // create placeholders and update after recieving google token
-  let userOAuth, yt, chList, recentVideos, commentsOneVideo, youtube_channel_id;
+  let userOAuth,
+    yt,
+    chList,
+    userVideos: any[] = [],
+    commentsOneVideo,
+    youtube_channel_id;
 
   // if the call to clerk was successfull, get the oauth token from google
   // create the youtube client with the token recieved from clerk
@@ -43,43 +49,70 @@ export async function GET(request: Request) {
       mine: true,
       maxResults: 5,
     });
-    //even unlisted ones at the moment!!
-    recentVideos = await yt.search.list({
-      order: "date",
-      forMine: true,
-      part: ["snippet"],
-      type: ["video"],
-      maxResults: 50,
+    const idList = chList?.data.items?.map((item) => item.id) || new Array(0);
+    youtube_channel_id = idList.length > 0 ? idList[0] : "";
+    console.log(youtube_channel_id, "youtube channel id");
+    const playlistResponse = await yt.channels.list({
+      part: ["contentDetails"],
+      id: youtube_channel_id,
     });
+    // TODO: playlistItemsResponse might not exist
+    const playlistID =
+      //@ts-expect-error
+      playlistResponse.data.items[0].contentDetails.relatedPlaylists.uploads;
+
+    // Step 3: Retrieve the videos in the "uploads" playlist
+    const videos: any[] = [];
+    let nextPageToken: string | null | undefined;
+    do {
+      const playlistItemsResponse = await yt.playlistItems.list({
+        part: ["snippet"],
+        playlistId: playlistID,
+        maxResults: 50,
+        pageToken: nextPageToken as string | undefined,
+      });
+      // TODO: playlistItemsResponse might not exist
+      videos.push(
+        //@ts-expect-error
+        ...playlistItemsResponse.data.items.map((item) => item.snippet)
+      );
+      nextPageToken = playlistItemsResponse.data.nextPageToken;
+    } while (nextPageToken);
+
+    // Print the video titles
+    const videosToStore: StoreOrUpdateParams[] = [];
+
+    for (const video of videos) {
+      const vidObj: StoreOrUpdateParams = {
+        id: video.resourceId.videoId as string,
+        video_id: video.resourceId.videoId as string,
+        title: video.title as string,
+        updatedAt: new Date(),
+        description: video.description as string,
+        published_at: video.publishedAt as string,
+        thumbnail_url: (video.thumbnails.standard.url as string) || "",
+        channel_title: video.channelTitle as string,
+        channel_id: video.channelId as string,
+        user_id: userId as string,
+      };
+      videosToStore.push(vidObj);
+    }
+    console.log("videos to store ", videosToStore);
+    if (token && videosToStore) {
+      try {
+        await storeOrUpdateVideo(token, videosToStore);
+      } catch (error) {
+        console.error(error);
+      }
+    }
   }
 
-  const idList = chList?.data.items?.map((item) => item.id) || new Array(0);
-  youtube_channel_id = idList.length > 0 ? idList[0] : "";
+  //await storeChannelId(token as string, userId as string,  youtube_channel_id);
 
-  await storeChannelId(token as string, userId as string, youtube_channel_id);
+  // const videos = userVideos?.data.items?.map((item) => item);
+  // videos?.forEach((video) => {
 
-  const videosToStore: StoreOrUpdateParams[] = [];
+  // });
 
-  const videos = recentVideos?.data.items?.map((item) => item);
-  videos?.forEach((video) => {
-    const vidObj: StoreOrUpdateParams = {
-      id: video.id?.videoId as string,
-      video_id: video.id?.videoId as string,
-      title: video.snippet?.title as string,
-      updatedAt: new Date(),
-      description: video.snippet?.description as string,
-      published_at: video.snippet?.publishedAt as string,
-      thumbnail_url: (video.snippet?.thumbnails?.maxres?.url as string) || "",
-      channel_title: video.snippet?.title as string,
-      channel_id: video.snippet?.channelId as string,
-      user_id: userId as string,
-    };
-
-    videosToStore.push(vidObj);
-  });
-
-  if (token && videosToStore) {
-    await storeOrUpdateVideo(token, videosToStore);
-  }
   return NextResponse.json({ userId });
 }
