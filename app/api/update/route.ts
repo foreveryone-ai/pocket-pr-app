@@ -1,8 +1,6 @@
 import {
   StoreOrUpdateParams,
   storeChannelId,
-  getChannelId,
-  getVideos,
   storeOrUpdateVideo,
   storeAllComments,
   storeAllReplies,
@@ -78,6 +76,18 @@ export async function GET(
     const idList = chList?.data.items?.map((item) => item.id) || new Array(0);
     youtube_channel_id = idList.length > 0 ? idList[0] : "";
     console.log(youtube_channel_id, "youtube channel id");
+    // if the channel id was found, store it in the database
+    if (youtube_channel_id) {
+      try {
+        await storeChannelId(
+          token as string,
+          userId as string,
+          youtube_channel_id
+        );
+      } catch (error) {
+        console.error("Error storing the channel ID: ", error);
+      }
+    }
     const playlistResponse = await yt.channels.list({
       part: ["contentDetails"],
       id: youtube_channel_id,
@@ -270,14 +280,6 @@ export async function GET(
       } else {
         console.error(error);
       }
-
-      // TODO: get sentiment from comments and replies:
-      // console.log(commentsAndReplies.join("\n"));
-      //await getSentiment(commentsForSentament.join("\n") || "Hello");
-      // TODO: get summary of captions
-      // await getVideoSummary(commentsForSentament.join("\n"));
-      // TODO: get summary of replies
-      // TODO: more details? line of advice?
     }
 
     let captionsArr: StoreCaptionsParams[] = [];
@@ -327,16 +329,6 @@ export async function GET(
     } finally {
       console.log("done");
     }
-
-    // from oneai
-    // try {
-    //   await getSentiments([
-    //     "watching the Mom of the Year award being presented to Michelle Duggar and all the praise for her and Jim Bob part now in January 2022 really hits different lmao",
-    //     "The white supremacy runs very clearly in American evangelicalism. I&#39;m reading a really good book called Unsettling Truths by Mark Charles and Soong-Chan Rah and I&#39;m learning so much. It&#39;s about the ongoing dehumanizing legacy of the doctrine of discovery. I&#39;m so glad for you and everyone else who stands up for love and stands against bigotry and homophobia and all the other phobias.",
-    //   ]);
-    // } catch (error) {
-    //   console.error("unable to get sentiments 😭", error);
-    // }
 
     if (!params.videoid) {
       throw new Error("Video ID is not provided");
