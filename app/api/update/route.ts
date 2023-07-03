@@ -263,9 +263,6 @@ export async function GET(
           await storeAllReplies(token as string, repliesArr);
         }
       }
-      // } catch (error) {
-      //   console.error(error);
-      // }
 
       // fetch comments from database
       const commentsForSentament = [];
@@ -338,11 +335,4 @@ export async function GET(
   } catch (Error) {
     console.log(Error);
   }
-
-  //await storeChannelId(token as string, userId as string,  youtube_channel_id);
-
-  // const videos = userVideos?.data.items?.map((item) => item);
-  // videos?.forEach((video) => {
-
-  // });
 }
