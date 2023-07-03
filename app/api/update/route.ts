@@ -40,11 +40,7 @@ export async function GET(
   // const user = await currentUser();
   const token = await getToken({ template: "supabase" });
   // create placeholders and update after recieving google token
-  let userOAuth,
-    yt,
-    chList,
-    userVideos: any[] = [],
-    youtube_channel_id;
+  let userOAuth, yt, chList, youtube_channel_id;
 
   // if the call to clerk was successfull, get the oauth token from google
   // create the youtube client with the token recieved from clerk
