@@ -63,14 +63,14 @@ export async function storeChannelId(
 
     const updatedUser = await db
       .from("Users")
-      .upsert({
-        id: user_id,
+      .update({
         youtube_channel_id,
         updatedAt: new Date(),
       })
+      .match({ id: user_id })
       .select();
 
-    //console.log("newUser: ", newUser);
+    console.log("updated user: ", updatedUser);
     return updatedUser.status; // 201
   } catch (error) {
     console.error(error);
