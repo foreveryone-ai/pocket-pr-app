@@ -169,6 +169,12 @@ export async function getComments(authToken: string, videoId: string) {
   return await db.from("Comments").select().eq(`video_id`, videoId);
 }
 
+export async function getCaptions(authToken: string, videoId: string) {
+  const db = createServerDbClient(authToken);
+
+  return await db.from("Captions").select().eq(`video_id`, videoId);
+}
+
 type CommentsResponse = Awaited<ReturnType<typeof getComments>>;
 export type CommentsResponseSuccess = CommentsResponse["data"];
 export type CommentsResponseError = CommentsResponse["error"];

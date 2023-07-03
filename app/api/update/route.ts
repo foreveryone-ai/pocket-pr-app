@@ -1,25 +1,49 @@
-import { StoreOrUpdateParams } from "@/lib/supabaseClient";
+import {
+  StoreOrUpdateParams,
+  storeChannelId,
+  storeOrUpdateVideo,
+  storeAllComments,
+  storeAllReplies,
+  getComments,
+  storeCaptions,
+  StoreAllCommentsParams,
+  StoreAllRepliesParams,
+  StoreCaptionsParams,
+} from "@/lib/supabaseClient";
 import { auth, currentUser } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import { getOAuthData, google } from "@/lib/googleApi";
-import {
-  storeChannelId,
-  getChannelId,
-  getVideos,
-  storeOrUpdateVideo,
-} from "@/lib/supabaseClient";
 import { GoogleApis } from "googleapis";
 
-export async function GET(request: Request) {
+interface params {
+  videoid: string;
+}
+
+function removeTimestamps(caption: string): string {
+  // Regular expression to match the timestamp pattern
+  const timestampRegex =
+    /\d{1,2}:\d{1,2}:\d{1,2}\.\d{3},\d{1,2}:\d{1,2}:\d{1,2}\.\d{3}/g;
+
+  // Replace timestamps with an empty string
+  return caption.replace(timestampRegex, "").trim();
+}
+
+export async function GET(
+  request: Request,
+  {
+    params,
+  }: {
+    params: { videoid: string };
+  }
+) {
   const { userId, getToken } = auth();
-  const user = await currentUser();
+  // const user = await currentUser();
   const token = await getToken({ template: "supabase" });
   // create placeholders and update after recieving google token
   let userOAuth,
     yt,
     chList,
     userVideos: any[] = [],
-    commentsOneVideo,
     youtube_channel_id;
 
   // if the call to clerk was successfull, get the oauth token from google
@@ -52,6 +76,18 @@ export async function GET(request: Request) {
     const idList = chList?.data.items?.map((item) => item.id) || new Array(0);
     youtube_channel_id = idList.length > 0 ? idList[0] : "";
     console.log(youtube_channel_id, "youtube channel id");
+    // if the channel id was found, store it in the database
+    if (youtube_channel_id) {
+      try {
+        await storeChannelId(
+          token as string,
+          userId as string,
+          youtube_channel_id
+        );
+      } catch (error) {
+        console.error("Error storing the channel ID: ", error);
+      }
+    }
     const playlistResponse = await yt.channels.list({
       part: ["contentDetails"],
       id: youtube_channel_id,
@@ -107,12 +143,196 @@ export async function GET(request: Request) {
     }
   }
 
-  //await storeChannelId(token as string, userId as string,  youtube_channel_id);
+  if (userId) {
+    try {
+      userOAuth = await getOAuthData(userId, "oauth_google");
+    } catch (error) {
+      console.error("no oauth found ", error);
+    }
+  }
+  console.log(userOAuth);
 
-  // const videos = userVideos?.data.items?.map((item) => item);
-  // videos?.forEach((video) => {
+  // this will hold all comments and replies in memory...
+  const commentsAndReplies = [];
+  try {
+    // avoid infinite loop for you tube api calls
+    let failSafe = 10;
+    let nextPage: string | undefined;
+    let res;
+    let morePages = true;
+    // keep fetching more comments and replies while there is a nextPage token found in the response
+    while (failSafe > 0 && nextPage !== "" && morePages) {
+      failSafe--;
+      console.log("failSafe: ", failSafe);
+      console.log("Before request: ", morePages, nextPage, failSafe); // Added this line
 
-  // });
+      // this should always fire to start
+      if (nextPage === "" || nextPage === undefined) {
+        console.log("no next page");
+        res = await fetch(
+          `https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&videoId=${params.videoid}&key=${process.env.GOOGLE_API}&maxResults=100`,
+          {
+            headers: {
+              Accept: "application/json",
+            },
+          }
+        );
+        console.log("got response...");
+        const commentsOneVideo = await res.json();
+        console.log("nextPage token: ", commentsOneVideo.nextPageToken);
+        // make this the last loop if there is not nextPageToken
+        if (!commentsOneVideo.nextPageToken) {
+          morePages = false;
+          nextPage = "";
+        } else {
+          // otherwise set the new token for the next page
+          nextPage = commentsOneVideo.nextPageToken;
+        }
+        console.log("morePages is: ", morePages);
+        // store everything in the array at the top and in the database
+        if (commentsOneVideo) {
+          // your code to process commentsOneVideo
+        }
+      } else if (nextPage !== "" && typeof nextPage !== "undefined") {
+        console.log("NextPage:", nextPage);
+        console.log("getting next page...");
+        res = await fetch(
+          `https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&videoId=${params.videoid}&key=${process.env.GOOGLE_API}&maxResults=100&pageToken=${nextPage}`,
+          {
+            headers: {
+              Accept: "application/json",
+            },
+          }
+        );
+        console.log("got response...");
+        const commentsOneVideo = await res.json();
+        console.log("nextPage token: ", commentsOneVideo.nextPageToken);
+        // make this the last loop if there is not nextPageToken
+        if (!commentsOneVideo.nextPageToken) {
+          morePages = false;
+          nextPage = "";
+        } else {
+          // otherwise set the new token for the next page
+          nextPage = commentsOneVideo.nextPageToken;
+        }
+        console.log("morePages is: ", morePages);
+        // store everything in the array at the top and in the database
+        if (commentsOneVideo) {
+          const commentsArr: StoreAllCommentsParams[] = [];
+          const repliesArr: StoreAllRepliesParams[] = [];
+          for (let item of commentsOneVideo.items) {
+            commentsAndReplies.push(
+              item.snippet.topLevelComment.snippet.textDisplay
+            );
+            commentsArr.push({
+              id: item.snippet.topLevelComment.id as string,
+              comment_id: item.snippet.topLevelComment.id as string,
+              text_display: item.snippet.topLevelComment.snippet
+                .textDisplay as string,
+              like_count: item.snippet.topLevelComment.snippet
+                .likeCount as number,
+              published_at: item.snippet.topLevelComment.snippet
+                .publishedAt as Date,
+              video_id: item.snippet.topLevelComment.snippet.videoId as string,
+              author_display_name: item.snippet.topLevelComment.snippet
+                .authorDisplayName as string,
+              author_image_url: item.snippet.topLevelComment.snippet
+                .authorProfileImageUrl as string,
+              updatedAt: new Date(),
+            });
+            if (item.replies) {
+              for (let reply of item.replies.comments) {
+                commentsAndReplies.push(reply.snippet.textDisplay);
+                repliesArr.push({
+                  id: reply.id as string,
+                  reply_id: reply.id as string,
+                  text_display: reply.snippet.textDisplay as string,
+                  like_count: reply.snippet.likeCount as number,
+                  published_at: reply.snippet.publishedAt as Date,
+                  comment_id: item.snippet.topLevelComment.id as string,
+                  author_display_name: reply.snippet
+                    .authorDisplayName as string,
+                  author_image_url: reply.snippet
+                    .authorProfileImageUrl as string,
+                  updatedAt: new Date(),
+                });
+              }
+            }
+          }
+          await storeAllComments(token as string, commentsArr);
+          await storeAllReplies(token as string, repliesArr);
+        }
+      }
 
-  return NextResponse.json({ userId });
+      // fetch comments from database
+      const commentsForSentament = [];
+      const { data, error } = await getComments(
+        token as string,
+        params.videoid as string
+      );
+      if (data) {
+        for (let comment of data) {
+          commentsForSentament.push(comment.text_display);
+        }
+      } else {
+        console.error(error);
+      }
+    }
+
+    let captionsArr: StoreCaptionsParams[] = [];
+
+    // fetch captions from YouTube API
+    try {
+      const res = await fetch(
+        `https://youtube.googleapis.com/youtube/v3/captions?part=snippet&videoId=${params.videoid}&key=${process.env.GOOGLE_API}`,
+        {
+          headers: {
+            Accept: "application/json",
+          },
+        }
+      );
+      const captions = await res.json();
+      if (captions.items) {
+        console.log("got captions id...");
+        for (let caption of captions.items) {
+          console.log(caption.id);
+          const captionRes = await fetch(
+            `https://youtube.googleapis.com/youtube/v3/captions/${caption.id}?key=${process.env.GOOGLE_API}`,
+            {
+              headers: {
+                Accept: "application/json",
+                Authorization: `Bearer ${userOAuth[0].token}`,
+              },
+            }
+          );
+          let captionText = await captionRes.text();
+
+          // Remove timestamps from captionText
+          captionText = removeTimestamps(captionText);
+
+          console.error(captionRes.status, captionRes.statusText);
+          captionsArr.push({
+            id: caption.id as string,
+            video_id: params.videoid as string,
+            language: caption.snippet.language as string,
+            captions: captionText as string,
+            updatedAt: new Date(),
+          });
+        }
+        await storeCaptions(token as string, captionsArr);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      console.log("done");
+    }
+
+    if (!params.videoid) {
+      throw new Error("Video ID is not provided");
+    }
+
+    return NextResponse.json({ userId });
+  } catch (Error) {
+    console.log(Error);
+  }
 }
