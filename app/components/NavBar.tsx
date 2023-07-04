@@ -1,9 +1,10 @@
 import { UserButton, SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import Link from "next/link";
+import Image from "next/image";
 
 const NavBar = () => {
   return (
-    <div className="navbar bg-secondary">
+    <div className="navbar bg-base">
       <div className="navbar-start">
         <div className="dropdown">
           <label tabIndex={0} className="btn btn-ghost btn-circle">
@@ -38,9 +39,10 @@ const NavBar = () => {
           </ul>
         </div>
       </div>
-      <div className="navbar-center">
-        <Link href="/" className="btn btn-ghost normal-case text-xl">
-          Pocket<b>PR</b>
+      <div className="navbar-center pb-7">
+        <Link href="/" className="btn btn-ghost normal-case text-2xl">
+          <Image src="/pandaLogo.png" alt="panda logo" width={70} height={70} />
+          <b>panda</b>
         </Link>
       </div>
       <div className="navbar-end pr-3">
