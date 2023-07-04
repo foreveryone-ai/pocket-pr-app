@@ -136,6 +136,7 @@ export async function GET() {
     }
   }
   console.log(userOAuth);
+  return NextResponse.json({ userId });
 
   // this will hold all comments and replies in memory...
   // const commentsAndReplies = [];
