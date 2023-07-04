@@ -1,5 +1,5 @@
+import VideoCommentsCaptionsButton from "./VideoCommentsCaptionsButton";
 import Image from "next/image";
-import { VideoModal } from "./VideoModal";
 import Link from "next/link";
 
 type VideoCardProps = {
@@ -37,6 +37,7 @@ export default function VideoCard({
         />
       </figure>
       <div className="absolute inset-0 flex items-center justify-center rounded-2xl">
+        <VideoCommentsCaptionsButton />
         <Link
           className="btn btn-secondary text-white"
           href={`/dashboard/${videoId}`}
