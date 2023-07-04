@@ -1,31 +1,40 @@
 import Link from "next/link";
+import Image from "next/image";
+import { SignedIn, SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-2 bg-secondary">
-      <div
-        className="hero min-h-screen"
-        // style={{
-        //   backgroundImage: `url("https://images.unsplash.com/photo-1610337673044-720471f83677?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1072&q=80")`,
-        // }}
-      >
-        <div className="hero-overlay bg-opacity-75"></div>
-        <div className="hero-content text-center text-neutral-content">
-          <div className="max-w-md">
-            <h1 className="mb-5 text-5xl font-bold">
-              Silence the <i className="text-pink-300">noise</i> and turn{" "}
-              <u className="text-pink-400">feedback</u> into{" "}
-              <b className="text-pink-600">fame</b>.
-            </h1>
-            <p className="mb-6 text-lg">
-              PocketPR analyzes digital interactions to create a robust
-              understanding of your public image in order to guide your decision
-              making to maximize your bottom line.
-            </p>
+    <main>
+      <div className="flex min-h-screen flex-col items-center justify-center bg-base">
+        <div className="hero min-h-screen">
+          <div className="hero-content  text-center">
+            <div className="max-w-5xl bg-base">
+              <h2 className="text-secondary pb-10">
+                <u>
+                  We are currently onboarding YouTube creators into our beta
+                  release.
+                </u>
+              </h2>
+              <h1 className="mb-10 text-5xl pb-10 text-white font-black">
+                Let's turn your <i>feedback</i> into <u>fame.</u>
+              </h1>
+              <SignedIn>
+                <Link href="/dashboard" className="btn btn-ghost">
+                  Dashboard
+                </Link>
+              </SignedIn>
 
-            <Link className="btn" href="/dashboard">
-              Sign-In
-            </Link>
+              <SignedOut>
+                <div>
+                  <SignUpButton>
+                    <div className="btn btn-base mr-4">Sign Up</div>
+                  </SignUpButton>
+                  <SignInButton>
+                    <div className="btn btn-ghost ml-4">Sign In</div>
+                  </SignInButton>
+                </div>
+              </SignedOut>
+            </div>
           </div>
         </div>
       </div>
