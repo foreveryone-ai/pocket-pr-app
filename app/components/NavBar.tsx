@@ -1,5 +1,6 @@
 import { UserButton, SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import Link from "next/link";
+import Image from "next/image";
 
 const NavBar = () => {
   return (
@@ -40,7 +41,8 @@ const NavBar = () => {
       </div>
       <div className="navbar-center">
         <Link href="/" className="btn btn-ghost normal-case text-xl">
-          Pocket<b>PR</b>
+          <Image src="/pandaLogo.png" alt="panda logo" width={50} height={50} />
+          <b>panda</b>
         </Link>
       </div>
       <div className="navbar-end pr-3">
