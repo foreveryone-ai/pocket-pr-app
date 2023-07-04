@@ -10,13 +10,13 @@ export default function Home() {
           <div className="hero-content  text-center">
             <div className="max-w-5xl bg-base">
               <h2 className="text-secondary pb-10">
-                <i>
+                <u>
                   We are currently onboarding YouTube creators into our beta
-                  release
-                </i>
+                  release.
+                </u>
               </h2>
               <h1 className="mb-10 text-5xl pb-10 text-white font-black">
-                let's turn your <i>feedback</i> into <u>fame</u>
+                Let's turn your <i>feedback</i> into <u>fame.</u>
               </h1>
               <SignedIn>
                 <Link href="/dashboard" className="btn btn-ghost">
