@@ -18,7 +18,7 @@ export async function GET(request: Request, context: Params) {
   if (userId && token) {
     userOAuth = await getOAuthData(userId, "oauth_google");
     if (userOAuth) {
-      gapi = new GoogleApi(token, userOAuth);
+      gapi = new GoogleApi(token, userOAuth[0].token);
     } else {
       console.error("no userOauth found");
     }

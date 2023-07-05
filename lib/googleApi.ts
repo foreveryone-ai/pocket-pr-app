@@ -22,6 +22,9 @@ export class GoogleApi {
   constructor(token: string, userOauth: string) {
     this.token = token;
     this.userOAuth = userOauth;
+    console.log(
+      `gapi object created with token: ${token} and userOauth: ${userOauth}`
+    );
   }
 
   async getCaptions(videoId: string) {
@@ -46,6 +49,7 @@ export class GoogleApi {
             {
               headers: {
                 Accept: "application/json",
+                //TODO: 401 unauthorized here
                 Authorization: `Bearer ${this.userOAuth}`,
               },
             }
