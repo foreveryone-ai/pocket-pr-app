@@ -12,21 +12,22 @@ import {
 } from "@/lib/supabaseClient";
 import { auth, currentUser } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
-import { getOAuthData, google } from "@/lib/googleApi";
-import { GoogleApis } from "googleapis";
+import { GoogleApi, getOAuthData } from "@/lib/googleApi";
+import { GoogleApis, google } from "googleapis";
 
 export async function GET() {
   const { userId, getToken } = auth();
   // const user = await currentUser();
   const token = await getToken({ template: "supabase" });
   // create placeholders and update after recieving google token
-  let userOAuth, yt, chList, youtube_channel_id;
+  let userOAuth, yt, chList, youtube_channel_id, gapi;
 
   // if the call to clerk was successfull, get the oauth token from google
   // create the youtube client with the token recieved from clerk
-  if (userId) {
+  if (userId && token) {
     try {
       userOAuth = await getOAuthData(userId, "oauth_google");
+      gapi = new GoogleApi(token, userOAuth);
     } catch (error) {
       console.error("no oauth found ", error);
     }
