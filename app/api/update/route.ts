@@ -15,15 +15,6 @@ import { NextResponse } from "next/server";
 import { getOAuthData, google } from "@/lib/googleApi";
 import { GoogleApis } from "googleapis";
 
-function removeTimestamps(caption: string): string {
-  // Regular expression to match the timestamp pattern
-  const timestampRegex =
-    /\d{1,2}:\d{1,2}:\d{1,2}\.\d{3},\d{1,2}:\d{1,2}:\d{1,2}\.\d{3}/g;
-
-  // Replace timestamps with an empty string
-  return caption.replace(timestampRegex, "").trim();
-}
-
 export async function GET() {
   const { userId, getToken } = auth();
   // const user = await currentUser();
