@@ -13,7 +13,6 @@ export async function POST(req: NextRequest) {
 
       // Convert the JSON data to URL parameters
       const formData = new URLSearchParams(body).toString();
-      console.log(formData);
 
       // Send the data to the google scripts api endpoint
       const response = await fetch(
