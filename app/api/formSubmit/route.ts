@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
 
       // Send the data to the google scripts api endpoint
       const response = await fetch(
-        "https://script.google.com/macros/s/AKfycbzwXBinvCWlespYmjxHrt1ioxoHDK_vl4CBAA6eMPodmQlrqotdDj7td7VbELyyfwjx/exec",
+        "https://script.google.com/macros/s/AKfycbyuQkqQaSIBv6ilviaIJBLExF_26wdzzbpjzGDW2SZ7yjikItSP0DpP-nCaVVK9A3R8/exec",
         {
           method: "POST",
           headers,
