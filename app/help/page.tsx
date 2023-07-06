@@ -16,7 +16,7 @@ export default function Home() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    const response = await fetch("/api/formSubmit", {
+    const response = await fetch("/api/form-submit", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -44,27 +44,25 @@ export default function Home() {
 
   return (
     <main className="flex flex-col min-h-screen items-center text-black justify-start pt-20 pb-5 bg-primary-content">
-      
-        <div className="mx-auto grid max-w-7xl grid-cols-1 lg:grid-cols-2">
-          <div className="relative sm:pt-32 lg:static lg:px-8 lg:py-48">
-            <div className="mx-auto max-w-xl lg:mx-0 lg:max-w-lg">
-             
-              <h2 className="text-3xl font-bold tracking-tight text-white">
-                Get in touch
-              </h2>
-              <p className="mt-6 text-lg leading-8 text-white">
-                Fill out our contact form and one of our founders will get back
-                to you ASAP! Alternatively, you can add join our Discord server
-                and ask questions there.
-              </p>
-            </div>
-            <div className="text-accent py-5 justify-center">
-              <Link href="https://discord.gg/KxhbkGpV">
-                <u>Join our Discord server today!</u>
-              </Link>
-            </div>
+      <div className="mx-auto grid max-w-7xl grid-cols-1 lg:grid-cols-2">
+        <div className="relative sm:pt-32 lg:static lg:px-8 lg:py-48">
+          <div className="mx-auto max-w-xl lg:mx-0 lg:max-w-lg">
+            <h2 className="text-3xl font-bold tracking-tight text-white">
+              Get in touch
+            </h2>
+            <p className="mt-6 text-lg leading-8 text-white">
+              Fill out our contact form and one of our founders will get back to
+              you ASAP! Alternatively, you can add join our Discord server and
+              ask questions there.
+            </p>
           </div>
-          <div className="card bg-white">
+          <div className="text-accent py-5 justify-center">
+            <Link href="https://discord.gg/KxhbkGpV">
+              <u>Join our Discord server today!</u>
+            </Link>
+          </div>
+        </div>
+        <div className="card bg-white">
           <form
             action="#"
             method="POST"
@@ -174,31 +172,57 @@ export default function Home() {
         </div>
       </div>
 
-      {successAlert && 
-      <div className="alert shadow-lg">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-info shrink-0 w-6 h-6">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-        </svg>
-        <div>
-          <h3 className="font-bold">Success!</h3>
-          <div className="text-xs">Thank you for your message!</div>
+      {successAlert && (
+        <div className="alert shadow-lg">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            className="stroke-info shrink-0 w-6 h-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+          <div>
+            <h3 className="font-bold">Success!</h3>
+            <div className="text-xs">Thank you for your message!</div>
+          </div>
+          <button onClick={() => setSuccessAlert(false)} className="btn btn-sm">
+            Close
+          </button>
         </div>
-        <button onClick={() => setSuccessAlert(false)} className="btn btn-sm">Close</button>
-      </div>
-    }
+      )}
 
-    {errorAlert && 
-      <div className="alert shadow-lg">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-info shrink-0 w-6 h-6">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-        </svg>
-        <div>
-          <h3 className="font-bold">Error!</h3>
-          <div className="text-xs">There was an issue submitting your form, please try again.</div>
+      {errorAlert && (
+        <div className="alert shadow-lg">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            className="stroke-info shrink-0 w-6 h-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+          <div>
+            <h3 className="font-bold">Error!</h3>
+            <div className="text-xs">
+              There was an issue submitting your form, please try again.
+            </div>
+          </div>
+          <button onClick={() => setErrorAlert(false)} className="btn btn-sm">
+            Close
+          </button>
         </div>
-        <button onClick={() => setErrorAlert(false)} className="btn btn-sm">Close</button>
-      </div>
-    }
+      )}
     </main>
   );
 }
