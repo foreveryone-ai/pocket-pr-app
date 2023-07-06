@@ -19,10 +19,10 @@ export default function Home() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        firstName,
-        lastName,
+        first_name: firstName,
+        last_name: lastName,
         email,
-        phoneNumber,
+        phone_number: phoneNumber,
         message,
       }),
     });

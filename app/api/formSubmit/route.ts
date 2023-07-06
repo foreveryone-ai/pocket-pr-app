@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
 
       // Send the data to the google scripts api endpoint
       const response = await fetch(
-        "https://script.google.com/macros/s/AKfycbxJ1MN11xlp8hT_UxMlTtcwzwjnvItmJCNXnEfJwtaDz7b0RNfbxi5l29PCZJ4OhS8o/exec",
+        "https://script.google.com/macros/s/AKfycbzwXBinvCWlespYmjxHrt1ioxoHDK_vl4CBAA6eMPodmQlrqotdDj7td7VbELyyfwjx/exec",
         {
           method: "POST",
           headers,
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     } catch (error) {
       // Return a 500 Internal Server Error response
       return new NextResponse(
-        JSON.stringify({ message: "Error submitting form" }),
+        JSON.stringify({ message: "Error submitting form", error }),
         { status: 500 }
       );
     }
