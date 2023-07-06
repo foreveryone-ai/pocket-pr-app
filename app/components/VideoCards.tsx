@@ -36,10 +36,10 @@ export default function VideoCard({
           className="rounded-2xl object-cover"
         />
       </figure>
-      <div className="absolute inset-0 flex items-center justify-center rounded-2xl">
+      <div className="absolute inset-0 flex flex-col-reverse items-start justify-start rounded-2xl">
         <VideoCommentsCaptionsButton videoId={videoId} />
         <Link
-          className="btn glass btn-outline text-black"
+          className="btn glass btn-outline text-slate-300"
           href={`/dashboard/${videoId}`}
         >
           {truncateTitle(title)}

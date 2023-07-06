@@ -11,7 +11,10 @@ export default function VideoCommentsCaptionsButton({
     console.log(await res.json());
   };
   return (
-    <button className="btn" onClick={handleUpdate}>
+    <button
+      className="btn glass btn-outline text-slate-300"
+      onClick={handleUpdate}
+    >
       update
     </button>
   );

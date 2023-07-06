@@ -90,6 +90,7 @@ export class GoogleApi {
     let morePages = true;
     // keep fetching more comments and replies while there is a nextPage token found in the response
     while (failSafe > 0 && nextPage !== "" && morePages) {
+      let commentsOneVideo;
       times++;
       failSafe--;
       console.log("failSafe: ", failSafe);
@@ -107,10 +108,11 @@ export class GoogleApi {
           }
         );
         console.log("got response...");
-        const commentsOneVideo = await res.json();
+        commentsOneVideo = await res.json();
         console.log("nextPage token: ", commentsOneVideo.nextPageToken);
         // make this the last loop if there is not nextPageToken
         if (!commentsOneVideo.nextPageToken) {
+          console.log("ending loop...");
           morePages = false;
           nextPage = "";
         } else {
@@ -131,7 +133,7 @@ export class GoogleApi {
           }
         );
         console.log("got response...");
-        const commentsOneVideo = await res.json();
+        commentsOneVideo = await res.json();
         console.log("nextPage token: ", commentsOneVideo.nextPageToken);
         // make this the last loop if there is not nextPageToken
         if (!commentsOneVideo.nextPageToken) {
@@ -142,53 +144,51 @@ export class GoogleApi {
           nextPage = commentsOneVideo.nextPageToken;
         }
         console.log("morePages is: ", morePages);
+      }
 
-        // store everything in the array at the top and in the database
-        if (commentsOneVideo) {
-          const commentsArr: StoreAllCommentsParams[] = [];
-          const repliesArr: StoreAllRepliesParams[] = [];
-          console.log(commentsOneVideo.items.length);
-          for (let item of commentsOneVideo.items) {
-            commentsArr.push({
-              id: item.snippet.topLevelComment.id as string,
-              comment_id: item.snippet.topLevelComment.id as string,
-              text_display: item.snippet.topLevelComment.snippet
-                .textDisplay as string,
-              like_count: item.snippet.topLevelComment.snippet
-                .likeCount as number,
-              published_at: item.snippet.topLevelComment.snippet
-                .publishedAt as Date,
-              video_id: item.snippet.topLevelComment.snippet.videoId as string,
-              author_display_name: item.snippet.topLevelComment.snippet
-                .authorDisplayName as string,
-              author_image_url: item.snippet.topLevelComment.snippet
-                .authorProfileImageUrl as string,
-              updatedAt: new Date(),
-            });
-            if (item.replies) {
-              for (let reply of item.replies.comments) {
-                repliesArr.push({
-                  id: reply.id as string,
-                  reply_id: reply.id as string,
-                  text_display: reply.snippet.textDisplay as string,
-                  like_count: reply.snippet.likeCount as number,
-                  published_at: reply.snippet.publishedAt as Date,
-                  comment_id: item.snippet.topLevelComment.id as string,
-                  author_display_name: reply.snippet
-                    .authorDisplayName as string,
-                  author_image_url: reply.snippet
-                    .authorProfileImageUrl as string,
-                  updatedAt: new Date(),
-                });
-              }
+      // store everything in the array at the top and in the database
+      if (commentsOneVideo) {
+        const commentsArr: StoreAllCommentsParams[] = [];
+        const repliesArr: StoreAllRepliesParams[] = [];
+        console.log(commentsOneVideo.items.length);
+        for (let item of commentsOneVideo.items) {
+          commentsArr.push({
+            id: item.snippet.topLevelComment.id as string,
+            comment_id: item.snippet.topLevelComment.id as string,
+            text_display: item.snippet.topLevelComment.snippet
+              .textDisplay as string,
+            like_count: item.snippet.topLevelComment.snippet
+              .likeCount as number,
+            published_at: item.snippet.topLevelComment.snippet
+              .publishedAt as Date,
+            video_id: item.snippet.topLevelComment.snippet.videoId as string,
+            author_display_name: item.snippet.topLevelComment.snippet
+              .authorDisplayName as string,
+            author_image_url: item.snippet.topLevelComment.snippet
+              .authorProfileImageUrl as string,
+            updatedAt: new Date(),
+          });
+          if (item.replies) {
+            for (let reply of item.replies.comments) {
+              repliesArr.push({
+                id: reply.id as string,
+                reply_id: reply.id as string,
+                text_display: reply.snippet.textDisplay as string,
+                like_count: reply.snippet.likeCount as number,
+                published_at: reply.snippet.publishedAt as Date,
+                comment_id: item.snippet.topLevelComment.id as string,
+                author_display_name: reply.snippet.authorDisplayName as string,
+                author_image_url: reply.snippet.authorProfileImageUrl as string,
+                updatedAt: new Date(),
+              });
             }
           }
-          console.log("storing to database", times);
-          console.log(commentsArr.length);
-          console.log(repliesArr.length);
-          await storeAllComments(token as string, commentsArr);
-          await storeAllReplies(token as string, repliesArr);
         }
+        console.log("storing to database", times);
+        console.log(commentsArr.length);
+        console.log(repliesArr.length);
+        await storeAllComments(token as string, commentsArr);
+        await storeAllReplies(token as string, repliesArr);
       }
     }
   }
