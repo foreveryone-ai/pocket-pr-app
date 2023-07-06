@@ -39,7 +39,7 @@ export default function VideoCard({
       <div className="absolute inset-0 flex items-center justify-center rounded-2xl">
         <VideoCommentsCaptionsButton videoId={videoId} />
         <Link
-          className="btn btn-secondary text-white"
+          className="btn glass btn-outline text-black"
           href={`/dashboard/${videoId}`}
         >
           {truncateTitle(title)}
