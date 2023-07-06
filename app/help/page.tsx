@@ -40,69 +40,33 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center text-black justify-start px-10 pt-20 pb-10 bg-primary-content">
-      <div className="relative isolate bg-white">
+    <main className="flex flex-col min-h-screen items-center text-black justify-start pt-20 pb-5 bg-primary-content">
+      
         <div className="mx-auto grid max-w-7xl grid-cols-1 lg:grid-cols-2">
-          <div className="relative px-6 pb-20 pt-24 sm:pt-32 lg:static lg:px-8 lg:py-48">
+          <div className="relative sm:pt-32 lg:static lg:px-8 lg:py-48">
             <div className="mx-auto max-w-xl lg:mx-0 lg:max-w-lg">
-              <div className="absolute inset-y-0 left-0 -z-10 w-full overflow-hidden bg-gray-100 ring-1 ring-gray-900/10 lg:w-1/2">
-                <svg
-                  className="absolute inset-0 h-full w-full stroke-gray-200 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
-                  aria-hidden="true"
-                >
-                  <defs>
-                    <pattern
-                      id="83fd4e5a-9d52-42fc-97b6-718e5d7ee527"
-                      width={200}
-                      height={200}
-                      x="100%"
-                      y={-1}
-                      patternUnits="userSpaceOnUse"
-                    >
-                      <path d="M130 200V.5M.5 .5H200" fill="none" />
-                    </pattern>
-                  </defs>
-                  <rect
-                    width="100%"
-                    height="100%"
-                    strokeWidth={0}
-                    fill="white"
-                  />
-                  <svg
-                    x="100%"
-                    y={-1}
-                    className="overflow-visible fill-gray-50"
-                  >
-                    <path d="M-470.5 0h201v201h-201Z" strokeWidth={0} />
-                  </svg>
-                  <rect
-                    width="100%"
-                    height="100%"
-                    strokeWidth={0}
-                    fill="url(#83fd4e5a-9d52-42fc-97b6-718e5d7ee527)"
-                  />
-                </svg>
-              </div>
-              <h2 className="text-3xl font-bold tracking-tight text-gray-900">
+             
+              <h2 className="text-3xl font-bold tracking-tight text-white">
                 Get in touch
               </h2>
-              <p className="mt-6 text-lg leading-8 text-gray-600">
+              <p className="mt-6 text-lg leading-8 text-white">
                 Fill out our contact form and one of our founders will get back
                 to you ASAP! Alternatively, you can add join our Discord server
                 and ask questions there.
               </p>
             </div>
-            <div className="pt-20 pb-20 justify-center">
+            <div className="text-accent py-5 justify-center">
               <Link href="https://discord.gg/KxhbkGpV">
-                Join our Discord server today!
+                <u>Join our Discord server today!</u>
               </Link>
             </div>
           </div>
+          <div className="card bg-white">
           <form
             action="#"
             method="POST"
             onSubmit={handleSubmit}
-            className="px-6 pb-24 pt-20 sm:pb-32 lg:px-8 lg:py-48"
+            className="px-6 pb-24 pt-20 sm:pb-32 lg:px-8 lg:py-20"
           >
             <div className="mx-auto max-w-xl lg:mr-0 lg:max-w-lg">
               <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
@@ -197,7 +161,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="mt-8 flex justify-end">
+              <div className="mt-8 flex justify-center">
                 <button type="submit" className="btn btn-primary">
                   Send message
                 </button>
