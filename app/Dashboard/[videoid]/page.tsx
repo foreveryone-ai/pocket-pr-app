@@ -44,10 +44,6 @@ export default async function Video({
   }
   console.log(userOAuth);
 
-  // this will hold all comments and replies in memory...
-  const commentsAndReplies = [];
-  // ... (Your other code remains unchanged)
-
   // Fetch comments from database
   try {
     const commentsAndReplies = [];
@@ -93,8 +89,9 @@ export default async function Video({
       <section>
         <h1>video id: {params.videoid}</h1>
         <div>
-          {commentsAndReplies &&
-            commentsAndReplies.map((text, i) => <p key={i}>{text}</p>)}
+          {commentsAndReplies
+            ? commentsAndReplies.map((text, i) => <p key={i}>{text}</p>)
+            : "no comments or replies in db"}
         </div>
         <div>
           {captionsArr &&
