@@ -44,10 +44,6 @@ export default async function Video({
   }
   console.log(userOAuth);
 
-  // this will hold all comments and replies in memory...
-  const commentsAndReplies = [];
-  // ... (Your other code remains unchanged)
-
   // Fetch comments from database
   try {
     const commentsAndReplies = [];

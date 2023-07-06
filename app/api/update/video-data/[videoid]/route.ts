@@ -1,3 +1,4 @@
+import ClerkErrorHandler from "@/lib/error-handlers/clerkErrorHandler";
 import { getCaptions } from "@/lib/supabaseClient";
 import { auth, currentUser } from "@clerk/nextjs";
 import { getOAuthData, GoogleApi } from "@/lib/googleApi";
@@ -9,35 +10,50 @@ type Params = {
   };
 };
 export async function GET(request: Request, context: Params) {
-  let userOAuth, gapi;
+  let userOAuth;
   const params = context.params;
   const { userId, getToken } = auth();
   // const user = await currentUser();
   const token = await getToken({ template: "supabase" });
 
   if (userId && token) {
+    console.log("getting Oauth for google");
     userOAuth = await getOAuthData(userId, "oauth_google");
-    if (userOAuth) {
-      gapi = new GoogleApi(token, userOAuth[0].token);
-    } else {
-      console.error("no userOauth found");
+    console.log("userOAuth", userOAuth);
+    if (
+      userOAuth.errors &&
+      userOAuth?.errors[0].code === "oauth_missing_refresh_token"
+    ) {
+      console.error("Cannot refresh OAuth access token");
+      ClerkErrorHandler.missingRefreshToken();
     }
   } else {
     console.error("no userId or token found");
   }
   // check to see if captions are in database
-  const captionsRes = await getCaptions(token as string, params.videoid);
+  const captionsRes = await getCaptions(
+    token as string,
+    params.videoid as string
+  );
   console.log("caption response", captionsRes);
   if (captionsRes.data?.length === 0) {
     console.log("There are no captions for this video.");
-    //TODO: call google for captions
-    await gapi?.getCaptions(params.videoid);
-  } else if (captionsRes.data && captionsRes.data?.length > 0) {
+    if (token && params.videoid && userOAuth) {
+      await GoogleApi.getCaptions(
+        token as string,
+        params.videoid as string,
+        userOAuth[0].token as string
+      );
+    }
+  } else if (captionsRes.data && captionsRes.data[0].captions) {
     console.log("Already have captions!");
-    //TODO: call supabase for captions
   } else {
     console.error("There was an error getting captions from the DB");
     //TODO: handle error
   }
+
+  //TODO: get comments and replies
+  GoogleApi.getCommentsAndCaptions(token as string, params.videoid as string);
+
   return NextResponse.json({ message: "yay! from update/video-data" });
 }
