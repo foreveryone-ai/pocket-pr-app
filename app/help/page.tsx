@@ -1,0 +1,53 @@
+import { getChannelId, getVideos } from "@/lib/supabaseClient";
+import VideoCard from "@/app/components/VideoCards";
+import { auth, currentUser } from "@clerk/nextjs";
+// get the OAuth token from clerk
+export default async function Home() {
+  const { userId, getToken } = auth();
+  console.log(userId);
+  const user = await currentUser();
+  const token = await getToken({ template: "supabase" });
+
+  // create placeholders and update after recieving google token
+  let videos, youtube_channel_id;
+
+  try {
+    const user = await getChannelId(token as string, userId as string);
+    youtube_channel_id = user?.data && user.data[0].youtube_channel_id;
+    console.log("ch id: ", youtube_channel_id);
+  } catch (error) {
+    console.error("error on get channel id.. ", error);
+  }
+
+  try {
+    videos = await getVideos(
+      token as string,
+      (youtube_channel_id as unknown as string) || ""
+    );
+  } catch (error) {
+    console.error(error);
+  }
+
+  return (
+    <main className="flex min-h-screen flex-col items-center text-black justify-start px-10 pb-10 bg-primary-content">
+      <div className="p-5 font-bold text-white">
+        Hello, {user?.firstName}. Welcome back!
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12 w-full px-4  md:px-8 lg:px-10 xl:px-20 2xl:px-32">
+        {videos
+          ? videos.data?.map((video, i) => (
+              <VideoCard
+                key={i}
+                videoId={video.id as string}
+                title={video.title as string}
+                imageUrl={video.thumbnail_url as string}
+                //TODO: store this in database
+                width={640}
+                height={480}
+              />
+            ))
+          : "no videos found"}
+      </div>
+    </main>
+  );
+}
