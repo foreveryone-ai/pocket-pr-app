@@ -10,6 +10,9 @@ export default function Home() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [message, setMessage] = useState("");
 
+  const [successAlert, setSuccessAlert] = useState(false);
+  const [errorAlert, setErrorAlert] = useState(false);
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
@@ -33,9 +36,9 @@ export default function Home() {
       setEmail("");
       setPhoneNumber("");
       setMessage("");
-      alert("Thank you for your message!");
+      setSuccessAlert(true);
     } else {
-      alert("There was an issue submitting your form, please try again.");
+      setErrorAlert(true);
     }
   }
 
@@ -171,11 +174,31 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="toast">
-        <div className="alert alert-info">
-          <span>Hey,it looks like you need help! We got you.</span>
+      {successAlert && 
+      <div className="alert shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-info shrink-0 w-6 h-6">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <div>
+          <h3 className="font-bold">Success!</h3>
+          <div className="text-xs">Thank you for your message!</div>
         </div>
+        <button onClick={() => setSuccessAlert(false)} className="btn btn-sm">Close</button>
       </div>
+    }
+
+    {errorAlert && 
+      <div className="alert shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-info shrink-0 w-6 h-6">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <div>
+          <h3 className="font-bold">Error!</h3>
+          <div className="text-xs">There was an issue submitting your form, please try again.</div>
+        </div>
+        <button onClick={() => setErrorAlert(false)} className="btn btn-sm">Close</button>
+      </div>
+    }
     </main>
   );
 }
