@@ -16,7 +16,7 @@ export default function Home() {
                 </u>
               </h2>
               <h1 className="mb-10 text-5xl pb-10 text-white font-black">
-                Let's turn your <i>feedback</i> into <u>fame.</u>
+                Let&apos;s turn your <i>feedback</i> into <u>fame.</u>
               </h1>
               <SignedIn>
                 <Link href="/dashboard" className="btn btn-ghost">

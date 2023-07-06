@@ -6,7 +6,7 @@ export default function UpdateDatabase() {
     console.log(await res.json());
   };
   return (
-    <button onClick={handleUpdate} className="btn">
+    <button onClick={handleUpdate} className="btn glass btn-outline text-black">
       update database
     </button>
   );
