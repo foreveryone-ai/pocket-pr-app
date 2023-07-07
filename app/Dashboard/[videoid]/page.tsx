@@ -15,19 +15,10 @@ import { auth, currentUser } from "@clerk/nextjs";
 
 import { getOAuthData } from "@/lib/googleApi";
 
-function removeTimestamps(caption: string): string {
-  // Regular expression to match the timestamp pattern
-  const timestampRegex =
-    /\d{1,2}:\d{1,2}:\d{1,2}\.\d{3},\d{1,2}:\d{1,2}:\d{1,2}\.\d{3}/g;
-
-  // Replace timestamps with an empty string
-  return caption.replace(timestampRegex, "").trim();
-}
-
 export default async function Video({
   params,
 }: {
-  params: { videoid: string };
+  params: { videoid: string; page?: string };
 }) {
   const { userId, getToken } = auth();
   const token = await getToken({ template: "supabase" });
