@@ -228,6 +228,8 @@ type SmallComment = Pick<
   "comment_id" | "text_display" | "like_count" | "author_display_name"
 >;
 
+// TODO: add a type for the batches
+// This class has methods to preprocess an array of comment objects. The preprocessComments method takes an optional minChars parameter, filters the comments by length, creates batches of comments, and returns and array of SmallComment objects. The SmallComment objects are created by mapping the Comment objects to a smaller set of properties.
 class PreProcessorA {
   comments: Comment[];
   smallComments: SmallComment[];
