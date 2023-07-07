@@ -213,3 +213,7 @@ export async function getVideos(authToken: string, channel_id: string) {
 
   return await db.from("Videos").select().eq(`channel_id`, channel_id);
 }
+
+class PreProcessorA {
+  //TODO: methods for the first step of preprocessing.
+}

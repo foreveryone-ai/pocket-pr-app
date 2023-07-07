@@ -6,6 +6,14 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
+class OpenaiPreProcessor {
+  //TODO: implement methods for sentiment analysis, keyword extraction, and summarization
+}
+
+class OpenaiProcessor {
+  //TODO: implement final call for analysis to openai.
+}
+
 export async function getSentiment(text: string) {
   const completion = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
