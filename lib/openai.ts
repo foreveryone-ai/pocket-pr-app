@@ -8,6 +8,8 @@ const openai = new OpenAIApi(configuration);
 
 export class OpenaiPreProcessor {
   //TODO: implement methods for sentiment analysis, keyword extraction, and summarization
+  // function that will conditionally get a summary of the captions if it is past a certain length.
+
   async getSentiment(text: string) {
     const completion = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
