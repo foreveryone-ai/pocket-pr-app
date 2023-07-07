@@ -214,6 +214,85 @@ export async function getVideos(authToken: string, channel_id: string) {
   return await db.from("Videos").select().eq(`channel_id`, channel_id);
 }
 
+// Stage A Pre-Processing -- Draft 1 -- 2021-07-21
+
+type Comment = {
+  comment_id: string;
+  text_display: string;
+  like_count: number;
+  author_display_name: string;
+};
+
+type SmallComment = Pick<
+  Comment,
+  "comment_id" | "text_display" | "like_count" | "author_display_name"
+>;
+
 class PreProcessorA {
-  //TODO: methods for the first step of preprocessing.
+  comments: Comment[];
+  smallComments: SmallComment[];
+  batchSize: number;
+
+  constructor(comments: Comment[], batchSize = 20) {
+    this.comments = comments;
+    this.smallComments = [];
+    this.batchSize = batchSize;
+  }
+
+  createSmallCommentsArray() {
+    this.smallComments = this.comments.map(
+      ({ comment_id, text_display, like_count, author_display_name }) => ({
+        comment_id,
+        text_display,
+        like_count,
+        author_display_name,
+      })
+    );
+  }
+
+  filterCommentsByLength(minChars: number) {
+    this.smallComments = this.smallComments.filter(
+      (comment) => comment.text_display.length >= minChars
+    );
+  }
+
+  createBatches(): SmallComment[][] {
+    const batches = [];
+    for (let i = 0; i < this.smallComments.length; i += this.batchSize) {
+      const batch = this.smallComments.slice(i, i + this.batchSize);
+      batches.push(batch);
+    }
+    return batches;
+  }
+
+  preprocessComments(minChars = 3): SmallComment[][] {
+    this.createSmallCommentsArray();
+    this.filterCommentsByLength(minChars);
+    return this.createBatches();
+  }
+}
+
+export async function getAndPreprocessComments(
+  authToken: string,
+  videoId: string
+) {
+  // Fetch comments from the database
+  const db = createServerDbClient(authToken);
+  const commentsResponse = await db
+    .from("Comments")
+    .select()
+    .eq(`video_id`, videoId);
+
+  if (commentsResponse.error) {
+    console.error(commentsResponse.error);
+    return;
+  }
+
+  const comments = commentsResponse.data as Comment[];
+
+  // Preprocess comments
+  const preprocessor = new PreProcessorA(comments);
+  const batches = preprocessor.preprocessComments();
+
+  return batches;
 }
