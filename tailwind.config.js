@@ -12,6 +12,9 @@ module.exports = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      backgroundColor: {
+        "ll-panda": "rgb(122,217,248)",
+      },
     },
   },
   plugins: [require("daisyui"), require("@tailwindcss/forms")],

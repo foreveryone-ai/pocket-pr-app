@@ -208,6 +208,11 @@ export async function getChannelId(authToken: string, user_id: string) {
   return await db.from("Users").select().eq(`id`, user_id);
 }
 
+export async function getVideo(authToken: string, videoId: string) {
+  const db = createServerDbClient(authToken);
+  return await db.from("Videos").select().eq("id", videoId);
+}
+
 export async function getVideos(authToken: string, channel_id: string) {
   const db = createServerDbClient(authToken);
 
