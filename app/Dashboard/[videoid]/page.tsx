@@ -143,15 +143,15 @@ export default async function Video({
     }
 
     return (
-      <section className="bg-primary-content md:grid md:grid-cols-3 md:gap-8 md:flex-none flex flex-col grid-cols-none gap-0">
+      <section className="bg-primary-content md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-8 md:flex-none flex flex-col grid-cols-none gap-0">
         <div
           id="left-side"
-          className="artboard md:phone-3 phone-1 bg-base-content flex flex-col justify-evenly"
+          className="artboard md:phone-3 sm:phone-1 bg-base-content flex flex-col justify-evenly items-center py-4"
         >
           <h1 className="text-xl text-center">
             {vidData ? vidData[0].title : vidError}
           </h1>
-          <div className="p-4">
+          <div className="p-4 md:w-[400px] sm:w-[300px] w-[260px]">
             <Image
               src={vidData ? vidData[0].thumbnail_url : vidError}
               alt="thumbnail"
@@ -177,7 +177,7 @@ export default async function Video({
           </div>
         </div>
 
-        <section className="flex flex-col justify-evenly">
+        <section className="flex flex-col justify-evenly items-center gap-12 py-12">
           {mockCategoriesMiddle.map((item, i) => (
             <div
               key={i}
@@ -194,11 +194,11 @@ export default async function Video({
           ))}
         </section>
 
-        <section className="flex flex-col justify-evenly">
+        <section className="md:-order-1 lg:order-last flex flex-col justify-evenly items-center gap-12 pb-12">
           {mockCategoriesRight.map((item, i) => (
             <div
               key={i}
-              className="collapse bg-[#7AD9F8] opacity-80 text-black text-center"
+              className="md:w-full w-[280px] collapse bg-[#7AD9F8] opacity-80 text-black text-center"
             >
               <input type="checkbox" className="w-full" />
               <div className="collapse-title text-xl font-medium">
