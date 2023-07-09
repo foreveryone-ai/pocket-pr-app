@@ -30,7 +30,7 @@ export default async function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center text-black justify-start px-20 pt-20 pb-10 bg-primary-content">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12 w-full px-4  md:px-8 lg:px-10 xl:px-20 2xl:px-32">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12 w-[280px] sm:px-4  md:px-8 lg:px-10 xl:px-20 2xl:px-32">
         {videos
           ? videos.data?.map((video, i) => (
               <VideoCard
@@ -45,11 +45,12 @@ export default async function Home() {
             ))
           : "no videos found"}
       </div>
+      {/*       
       <div className="toast">
         <div className="alert alert-info">
           <span> Hello, {user?.firstName}. Welcome back!</span>
         </div>
-      </div>
+      </div> */}
     </main>
   );
 }
