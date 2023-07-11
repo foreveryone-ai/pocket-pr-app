@@ -23,7 +23,11 @@
     "paths": {
       "@/*": ["./*"],
       // trying to see if this gets rid of module not found error
-      "@/lib/*": ["./lib/*"]
+      "@/lib/*": ["./lib/*"],
+      "@/components/*": ["./components/*"],
+      "@/styles/*": ["./styles/*"],
+      "@/prisma/*": ["./prisma/*"],
+      "@/helpers/*": ["./helpers/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
