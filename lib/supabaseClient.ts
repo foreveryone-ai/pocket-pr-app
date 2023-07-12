@@ -272,7 +272,6 @@ export class PreProcessorA {
       );
       batches.push(batch);
     }
-    console.log("batches were created!!", batches);
     return batches;
   }
 
