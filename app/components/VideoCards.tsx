@@ -21,11 +21,12 @@ export default function VideoCard({
   const truncateTitle = (title: string, limit: number = 25) => {
     return title.length > limit ? `${title.substring(0, limit)}...` : title;
   };
+  console.log(imageUrl);
 
   return (
     <div
       key={key}
-      className="relative bg-slate-200 text-black w-full rounded-2xl aspect-[4/3]"
+      className="relative bg-slate-200 text-black w-[280px] sm:w-[250px] md:w-[220px] lg:w-[250px] rounded-2xl aspect-[4/3]"
     >
       <figure className="m-0 absolute inset-0 rounded-2xl">
         <Image
