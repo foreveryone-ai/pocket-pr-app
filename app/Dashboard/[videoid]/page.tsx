@@ -11,6 +11,7 @@ import {
   type StoreCaptionsParams,
   type CommentsResponseSuccess,
   type CommentsResponseError,
+  getAndPreprocessComments,
 } from "@/lib/supabaseClient";
 import { auth, currentUser } from "@clerk/nextjs";
 
@@ -141,6 +142,8 @@ export default async function Video({
     } else {
       console.error(captionsError);
     }
+
+    getAndPreprocessComments(token as string, params.videoid);
 
     return (
       <section className="bg-primary-content md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-8 md:flex-none flex flex-col grid-cols-none gap-0">
