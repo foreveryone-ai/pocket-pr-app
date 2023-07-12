@@ -221,7 +221,7 @@ export async function getVideos(authToken: string, channel_id: string) {
 
 // Stage A Pre-Processing -- Draft 1 -- 2021-07-21
 
-type Comment = {
+export type Comment = {
   comment_id: string;
   text_display: string;
   like_count: number;
@@ -235,7 +235,7 @@ type SmallComment = Pick<
 
 // TODO: add a type for the batches
 // This class has methods to preprocess an array of comment objects. The preprocessComments method takes an optional minChars parameter, filters the comments by length, creates batches of comments, and returns and array of SmallComment objects. The SmallComment objects are created by mapping the Comment objects to a smaller set of properties.
-class PreProcessorA {
+export class PreProcessorA {
   comments: Comment[];
   smallComments: SmallComment[];
   batchSize: number;
@@ -281,29 +281,4 @@ class PreProcessorA {
     this.filterCommentsByLength(minChars);
     return this.createBatches();
   }
-}
-
-export async function getAndPreprocessComments(
-  authToken: string,
-  videoId: string
-) {
-  // Fetch comments from the database
-  const db = createServerDbClient(authToken);
-  const commentsResponse = await db
-    .from("Comments")
-    .select()
-    .eq(`video_id`, videoId);
-
-  if (commentsResponse.error) {
-    console.error(commentsResponse.error);
-    return;
-  }
-
-  const comments = commentsResponse.data as Comment[];
-
-  // Preprocess comments
-  const preprocessor = new PreProcessorA(comments);
-  const batches = preprocessor.preprocessComments();
-
-  return batches;
 }
