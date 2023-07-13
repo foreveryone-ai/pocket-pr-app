@@ -30,7 +30,7 @@ export default async function Video({
   const token = await getToken({ template: "supabase" });
   const user = await currentUser();
 
-  let userOAuth;
+  let userOAuth, pocketChain;
 
   if (userId) {
     try {
@@ -151,20 +151,23 @@ export default async function Video({
     const batches = preprocessor.preprocessComments();
     console.log("batches created...");
     console.log("captionsData...");
-    if (captionsData) {
+    if (captionsData && batches) {
       //console.log((captionsData[0].captions as string).replace(/\n/, ""));
-      console.log("sending the PocketChain...");
-      const pocketChain = new PocketChain(
+      console.log("sending to PocketChain...");
+      pocketChain = new PocketChain(
         (captionsData[0].captions as string).replace(/\n/, ""),
         batches
       );
       await pocketChain.summarizeCaptions();
       try {
         console.log("processing comments...");
-        await pocketChain.processComments();
+        await pocketChain?.processComments();
       } catch (error) {
         console.error(error);
       }
+    } else {
+      console.log("no captions and/or comments found");
+      return <div>no captions and/or comments found</div>;
     }
 
     return (

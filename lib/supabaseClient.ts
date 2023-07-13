@@ -240,7 +240,7 @@ export class PreProcessorA {
   smallComments: SmallComment[];
   batchSize: number;
 
-  constructor(comments: Comment[], batchSize = 20) {
+  constructor(comments: Comment[], batchSize = 10) {
     this.comments = comments;
     this.smallComments = [];
     this.batchSize = batchSize;

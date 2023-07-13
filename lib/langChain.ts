@@ -1,3 +1,5 @@
+import path from "path";
+import * as fs from "fs";
 import { z } from "zod";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import {
@@ -11,6 +13,7 @@ import { loadSummarizationChain } from "langchain/chains";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { Document } from "langchain/document";
 import type { SmallComment } from "./supabaseClient";
+import { util } from "prettier";
 
 export class PocketChain {
   captions: string;
@@ -99,16 +102,29 @@ export class PocketChain {
       llm,
     });
     console.log("entering for loop to send batches...");
+    let counter = 0;
     for (let list of this.batches) {
       // create documents based on a batch
-      console.log("in for loop!");
+      counter++;
+      console.log("in for loop no. " + counter + "/" + this.batches.length);
+
       try {
         const response = await jsonChain.call({
           // try adding {} around the input_text, or at the end
           input_text: JSON.stringify(list),
           captions: this.captions,
         });
-        console.log(response);
+        // const pathToOutput = path.join(__dirname, "out.txt");
+        // fs.appendFile(
+        //   pathToOutput,
+        //   JSON.stringify(response, null, 2),
+        //   (err: NodeJS.ErrnoException | null) => {
+        //     if (err) throw err;
+        //     console.log("Data appended to file");
+        //   }
+        // );
+
+        console.log(JSON.stringify(list));
         console.log(JSON.stringify(response, null, 2));
       } catch (error) {
         console.error("hit catch!!");
@@ -117,28 +133,3 @@ export class PocketChain {
     }
   }
 }
-
-// I would like to pass an array of objects based on the following format
-
-// [
-//   {
-//     "id": "an id number",
-//     "text": "a comment",
-//   },
-//   {
-//     "id": "an id number",
-//     "text": "a comment",
-//   }
-// ]
-
-// for each object, I would like to have sentiment, and summary returned as a JSON output. The output should be similar to the structure below.
-
-// [
-//   {
-//     "id": "the comment id number",
-//     "sentiment": "POSITIVE",
-//     "summary": "a summary of the text that was passed in"
-//   }
-// ]
-
-// How can I use langchain to accomplish this?
