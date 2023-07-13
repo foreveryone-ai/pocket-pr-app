@@ -152,13 +152,19 @@ export default async function Video({
     console.log("batches created...");
     console.log("captionsData...");
     if (captionsData) {
-      console.log((captionsData[0].captions as string).replace(/\n/, ""));
+      //console.log((captionsData[0].captions as string).replace(/\n/, ""));
       console.log("sending the PocketChain...");
       const pocketChain = new PocketChain(
         (captionsData[0].captions as string).replace(/\n/, ""),
         batches
       );
       await pocketChain.summarizeCaptions();
+      try {
+        console.log("processing comments...");
+        await pocketChain.processComments();
+      } catch (error) {
+        console.error(error);
+      }
     }
 
     return (
