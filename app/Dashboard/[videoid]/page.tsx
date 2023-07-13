@@ -13,11 +13,13 @@ import {
   type StoreCaptionsParams,
   type CommentsResponseSuccess,
   type CommentsResponseError,
+  SmallComment,
 } from "@/lib/supabaseClient";
 import { auth, currentUser } from "@clerk/nextjs";
 
 import { getOAuthData } from "@/lib/googleApi";
 import { FC } from "react";
+import { PocketChain } from "@/lib/langChain";
 
 export default async function Video({
   params,
@@ -147,7 +149,17 @@ export default async function Video({
     // Preprocess comments
     const preprocessor = new PreProcessorA(commentsData as Comment[]);
     const batches = preprocessor.preprocessComments();
-    console.log(batches);
+    console.log("batches created...");
+    console.log("captionsData...");
+    if (captionsData) {
+      console.log((captionsData[0].captions as string).replace(/\n/, ""));
+      console.log("sending the PocketChain...");
+      const pocketChain = new PocketChain(
+        (captionsData[0].captions as string).replace(/\n/, ""),
+        batches
+      );
+      await pocketChain.summarizeCaptions();
+    }
 
     return (
       <section className="bg-primary-content md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-8 md:flex-none flex flex-col grid-cols-none gap-0">

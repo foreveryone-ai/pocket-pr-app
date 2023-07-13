@@ -1,18 +1,19 @@
 import { OpenAI } from "langchain/llms/openai";
-import { loadQAMapReduceChain } from "langchain/chains";
+import { loadSummarizationChain } from "langchain/chains";
+import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { Document } from "langchain/document";
-import type Comment from "postcss/lib/comment";
+import type { SmallComment } from "./supabaseClient";
 
-class PocketChain {
+export class PocketChain {
   captions: string;
-  batches: Comment[][];
+  batches: SmallComment[][];
 
-  constructor(videoCaptions: string, commentBatches: Comment[][]) {
+  constructor(videoCaptions: string, commentBatches: SmallComment[][]) {
     this.captions = videoCaptions;
     this.batches = commentBatches;
   }
   async summarizeCaptions() {
-    // TODO: created the class here to set the maxConcurrency property
+    // created the class here to set the maxConcurrency property
     const model = new OpenAI({
       openAIApiKey: process.env.OPENAI_API_KEY,
       temperature: 0,
@@ -20,11 +21,17 @@ class PocketChain {
       maxConcurrency: 10,
       maxTokens: 2000,
     });
-    const summaryChain = loadQAMapReduceChain(model);
-    const docs = [new Document({ pageContent: this.captions })];
-    const summaryRes = await summaryChain.call({
-      input_documents: docs,
-      question: "Summarize the documents provided",
+    const text_splitter = new RecursiveCharacterTextSplitter({
+      chunkSize: 1000,
     });
+    const docs = await text_splitter.createDocuments([this.captions]);
+    const chain = loadSummarizationChain(model, {
+      type: "map_reduce",
+      returnIntermediateSteps: true,
+    });
+    const res = await chain.call({
+      input_documents: docs,
+    });
+    console.log({ res });
   }
 }

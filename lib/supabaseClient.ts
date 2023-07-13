@@ -228,7 +228,7 @@ export type Comment = {
   author_display_name: string;
 };
 
-type SmallComment = Pick<
+export type SmallComment = Pick<
   Comment,
   "comment_id" | "text_display" | "like_count" | "author_display_name"
 >;
