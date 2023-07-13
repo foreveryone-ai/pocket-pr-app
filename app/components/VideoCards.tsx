@@ -21,7 +21,6 @@ export default function VideoCard({
   const truncateTitle = (title: string, limit: number = 25) => {
     return title.length > limit ? `${title.substring(0, limit)}...` : title;
   };
-  console.log(imageUrl);
 
   return (
     <div

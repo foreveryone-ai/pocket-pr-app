@@ -30,7 +30,7 @@ export default async function Video({
   const token = await getToken({ template: "supabase" });
   const user = await currentUser();
 
-  let userOAuth, pocketChain;
+  let userOAuth, pocketChain, batches, preprocessor;
 
   if (userId) {
     try {
@@ -147,12 +147,15 @@ export default async function Video({
     }
 
     // Preprocess comments
-    const preprocessor = new PreProcessorA(commentsData as Comment[]);
-    const batches = preprocessor.preprocessComments();
-    console.log("batches created...");
-    console.log("captionsData...");
-    if (captionsData && batches) {
-      //console.log((captionsData[0].captions as string).replace(/\n/, ""));
+    if (commentsData && commentsData.length > 0) {
+      console.log(commentsData);
+      preprocessor = new PreProcessorA(commentsData as Comment[]);
+      batches = preprocessor.preprocessComments();
+      console.log("batches created...");
+      console.log("captionsData...");
+    }
+    if (captionsData && captionsData.length > 0 && batches) {
+      console.log(captionsData);
       console.log("sending to PocketChain...");
       pocketChain = new PocketChain(
         (captionsData[0].captions as string).replace(/\n/, ""),
