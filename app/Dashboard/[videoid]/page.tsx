@@ -14,6 +14,7 @@ import {
   type CommentsResponseSuccess,
   type CommentsResponseError,
   SmallComment,
+  storeCaptionsSummary,
 } from "@/lib/supabaseClient";
 import { auth, currentUser } from "@clerk/nextjs";
 
@@ -30,7 +31,7 @@ export default async function Video({
   const token = await getToken({ template: "supabase" });
   const user = await currentUser();
 
-  let userOAuth, pocketChain, batches, preprocessor;
+  let userOAuth, pocketChain, batches, preprocessor, capSummary;
 
   if (userId) {
     try {
@@ -148,20 +149,34 @@ export default async function Video({
 
     // Preprocess comments
     if (commentsData && commentsData.length > 0) {
-      console.log(commentsData);
       preprocessor = new PreProcessorA(commentsData as Comment[]);
       batches = preprocessor.preprocessComments();
       console.log("batches created...");
       console.log("captionsData...");
     }
     if (captionsData && captionsData.length > 0 && batches) {
-      console.log(captionsData);
       console.log("sending to PocketChain...");
       pocketChain = new PocketChain(
         (captionsData[0].captions as string).replace(/\n/, ""),
         batches
       );
-      await pocketChain.summarizeCaptions();
+      try {
+        capSummary = await pocketChain.summarizeCaptions();
+        try {
+          // store in db
+          await storeCaptionsSummary(
+            token as string,
+            captionsData[0].captions as string,
+            capSummary && capSummary.res.text
+          );
+        } catch (error) {
+          console.error("unable to store caption summary in db");
+          console.error(error);
+        }
+      } catch (error) {
+        console.error("unable to get caption summary");
+        console.error(error);
+      }
       try {
         console.log("processing comments...");
         await pocketChain?.processComments();

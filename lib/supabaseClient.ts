@@ -219,6 +219,30 @@ export async function getVideos(authToken: string, channel_id: string) {
   return await db.from("Videos").select().eq(`channel_id`, channel_id);
 }
 
+export async function storeCaptionsSummary(
+  authToken: string,
+  caption_id: string,
+  summaryText: string
+) {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db
+    .from("CaptionSummary")
+    .insert({
+      summaryText,
+      caption_id,
+    })
+    .select();
+
+  if (data) {
+    console.log("returning data from storeCaptionsSummary");
+    return data;
+  } else {
+    console.error("error on storeCaptionsSummary");
+    return error;
+  }
+}
+
 // Stage A Pre-Processing -- Draft 1 -- 2021-07-21
 
 export type Comment = {

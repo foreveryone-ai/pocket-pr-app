@@ -45,6 +45,7 @@ export class PocketChain {
         input_documents: docs,
       });
       console.log({ res });
+      return { res };
     } catch (error) {
       console.error("error on summarize captions!");
       console.error(error);
