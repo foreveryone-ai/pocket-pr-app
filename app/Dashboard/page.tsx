@@ -14,7 +14,7 @@ export default async function Home() {
   try {
     const user = await getChannelId(token as string, userId as string);
     youtube_channel_id = user?.data && user.data[0].youtube_channel_id;
-    console.log("ch id: ", youtube_channel_id);
+    //console.log("ch id: ", youtube_channel_id);
   } catch (error) {
     console.error("error on get channel id.. ", error);
   }

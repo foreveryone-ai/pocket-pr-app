@@ -219,6 +219,65 @@ export async function getVideos(authToken: string, channel_id: string) {
   return await db.from("Videos").select().eq(`channel_id`, channel_id);
 }
 
-class PreProcessorA {
-  //TODO: methods for the first step of preprocessing.
+// Stage A Pre-Processing -- Draft 1 -- 2021-07-21
+
+export type Comment = {
+  comment_id: string;
+  text_display: string;
+  like_count: number;
+  author_display_name: string;
+};
+
+export type SmallComment = Pick<
+  Comment,
+  "comment_id" | "text_display" | "like_count" | "author_display_name"
+>;
+
+// TODO: add a type for the batches
+// This class has methods to preprocess an array of comment objects. The preprocessComments method takes an optional minChars parameter, filters the comments by length, creates batches of comments, and returns and array of SmallComment objects. The SmallComment objects are created by mapping the Comment objects to a smaller set of properties.
+export class PreProcessorA {
+  comments: Comment[];
+  smallComments: SmallComment[];
+  batchSize: number;
+
+  constructor(comments: Comment[], batchSize = 10) {
+    this.comments = comments;
+    this.smallComments = [];
+    this.batchSize = batchSize;
+  }
+
+  createSmallCommentsArray() {
+    this.smallComments = this.comments.map(
+      ({ comment_id, text_display, like_count, author_display_name }) => ({
+        comment_id,
+        text_display,
+        like_count,
+        author_display_name,
+      })
+    );
+  }
+
+  filterCommentsByLength(minChars: number) {
+    this.smallComments = this.smallComments.filter(
+      (comment) => comment.text_display.length >= minChars
+    );
+  }
+
+  createBatches(): SmallComment[][] {
+    const batches = [];
+    for (let i = 0; i < this.smallComments.length; i += this.batchSize) {
+      const batch = this.smallComments.slice(
+        i,
+        i + Math.min(this.batchSize, this.smallComments.length - 1)
+      );
+      batches.push(batch);
+    }
+    return batches;
+  }
+
+  preprocessComments(minChars = 3): SmallComment[][] {
+    this.createSmallCommentsArray();
+    this.filterCommentsByLength(minChars);
+    return this.createBatches();
+  }
 }

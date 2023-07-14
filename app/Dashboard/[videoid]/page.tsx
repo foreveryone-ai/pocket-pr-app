@@ -1,21 +1,25 @@
 import Image from "next/image";
 import {
+  PreProcessorA,
   storeAllComments,
   storeAllReplies,
   storeCaptions,
   getCaptions,
   getVideo,
+  type Comment,
   type StoreAllCommentsParams,
   type StoreAllRepliesParams,
   getComments,
   type StoreCaptionsParams,
   type CommentsResponseSuccess,
   type CommentsResponseError,
+  SmallComment,
 } from "@/lib/supabaseClient";
 import { auth, currentUser } from "@clerk/nextjs";
 
 import { getOAuthData } from "@/lib/googleApi";
 import { FC } from "react";
+import { PocketChain } from "@/lib/langChain";
 
 export default async function Video({
   params,
@@ -26,7 +30,7 @@ export default async function Video({
   const token = await getToken({ template: "supabase" });
   const user = await currentUser();
 
-  let userOAuth;
+  let userOAuth, pocketChain, batches, preprocessor;
 
   if (userId) {
     try {
@@ -140,6 +144,33 @@ export default async function Video({
       }
     } else {
       console.error(captionsError);
+    }
+
+    // Preprocess comments
+    if (commentsData && commentsData.length > 0) {
+      console.log(commentsData);
+      preprocessor = new PreProcessorA(commentsData as Comment[]);
+      batches = preprocessor.preprocessComments();
+      console.log("batches created...");
+      console.log("captionsData...");
+    }
+    if (captionsData && captionsData.length > 0 && batches) {
+      console.log(captionsData);
+      console.log("sending to PocketChain...");
+      pocketChain = new PocketChain(
+        (captionsData[0].captions as string).replace(/\n/, ""),
+        batches
+      );
+      await pocketChain.summarizeCaptions();
+      try {
+        console.log("processing comments...");
+        await pocketChain?.processComments();
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      console.log("no captions and/or comments found");
+      return <div>no captions and/or comments found</div>;
     }
 
     return (
