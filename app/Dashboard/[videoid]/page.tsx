@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { v5 } from "uuid";
 import {
   PreProcessorA,
   storeAllComments,
@@ -162,13 +163,17 @@ export default async function Video({
       );
       try {
         capSummary = await pocketChain.summarizeCaptions();
+        console.log("captionsId: ", captionsData[0].id);
+        console.log("captions summary: ", capSummary && capSummary.res.text);
+
         try {
           // store in db
-          await storeCaptionsSummary(
+          const storeCapRes = await storeCaptionsSummary(
             token as string,
-            captionsData[0].captions as string,
+            captionsData[0].id as string,
             capSummary && capSummary.res.text
           );
+          console.log("store cap res: ", storeCapRes);
         } catch (error) {
           console.error("unable to store caption summary in db");
           console.error(error);
