@@ -16,6 +16,7 @@ import {
   type CommentsResponseError,
   SmallComment,
   storeCaptionsSummary,
+  getCommentSummary,
 } from "@/lib/supabaseClient";
 import { auth, currentUser } from "@clerk/nextjs";
 
@@ -167,6 +168,9 @@ export default async function Video({
         console.log("captions summary: ", capSummary && capSummary.res.text);
 
         try {
+          // TODO: check to see if summary is already in db
+          const { data: commentSummaryData, error: commentSummaryError } =
+            await getCommentSummary(token as string, params.videoid as string);
           // store in db
           const storeCapRes = await storeCaptionsSummary(
             token as string,

@@ -163,6 +163,11 @@ export async function storeAllReplies(
   }
 }
 
+export async function getCommentSummary(authToken: string, videoId: string) {
+  const db = createServerDbClient(authToken);
+  return await db.from("CommentSummary").select().eq(`video_id`, videoId);
+}
+
 export async function getComments(authToken: string, videoId: string) {
   const db = createServerDbClient(authToken);
 
