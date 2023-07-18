@@ -163,9 +163,20 @@ export async function storeAllReplies(
   }
 }
 
-export async function getCommentSummary(authToken: string, videoId: string) {
+export async function getCaptionSummary(authToken: string, caption_id: string) {
   const db = createServerDbClient(authToken);
-  return await db.from("CommentSummary").select().eq(`video_id`, videoId);
+  return await db.from("CaptionSummary").select().eq(`caption_id`, caption_id);
+}
+
+export async function getCommentsSummaries(
+  authToken: string,
+  commentIdArray: string[]
+) {
+  const db = createServerDbClient(authToken);
+  return await db
+    .from("CommentSummary")
+    .select()
+    .in("comment_id", commentIdArray);
 }
 
 export async function getComments(authToken: string, videoId: string) {
@@ -286,27 +297,35 @@ export class PreProcessorA {
         author_display_name,
       })
     );
+    console.log("smallComments updated...");
+    console.log(this.smallComments);
   }
 
   filterCommentsByLength(minChars: number) {
     this.smallComments = this.smallComments.filter(
       (comment) => comment.text_display.length >= minChars
     );
+    console.log("comments filtered by length...");
+    console.log(this.smallComments);
   }
 
   createBatches(): SmallComment[][] {
+    console.log("created batches...");
     const batches = [];
     for (let i = 0; i < this.smallComments.length; i += this.batchSize) {
       const batch = this.smallComments.slice(
         i,
-        i + Math.min(this.batchSize, this.smallComments.length - 1)
+        i + Math.min(this.batchSize, this.smallComments.length)
       );
       batches.push(batch);
     }
+    console.log("batches has a length of ", batches.length);
+    console.log(batches);
     return batches;
   }
 
   preprocessComments(minChars = 3): SmallComment[][] {
+    console.log("preprocessComments...");
     this.createSmallCommentsArray();
     this.filterCommentsByLength(minChars);
     return this.createBatches();

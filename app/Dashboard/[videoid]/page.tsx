@@ -2,28 +2,24 @@ import Image from "next/image";
 import { v5 } from "uuid";
 import {
   PreProcessorA,
-  storeAllComments,
-  storeAllReplies,
-  storeCaptions,
   getCaptions,
   getVideo,
   type Comment,
-  type StoreAllCommentsParams,
-  type StoreAllRepliesParams,
   getComments,
   type StoreCaptionsParams,
   type CommentsResponseSuccess,
   type CommentsResponseError,
   SmallComment,
   storeCaptionsSummary,
-  getCommentSummary,
+  getCaptionSummary,
+  getCommentsSummaries,
 } from "@/lib/supabaseClient";
 import { auth, currentUser } from "@clerk/nextjs";
 
 import { getOAuthData } from "@/lib/googleApi";
-import { FC } from "react";
 import { PocketChain } from "@/lib/langChain";
-
+// we are assuming that we have comments and captions already store in our db
+//TODO: will need an update button if captions or comments are not in db
 export default async function Video({
   params,
 }: {
@@ -31,7 +27,7 @@ export default async function Video({
 }) {
   const { userId, getToken } = auth();
   const token = await getToken({ template: "supabase" });
-  const user = await currentUser();
+  //const user = await currentUser();
 
   let userOAuth, pocketChain, batches, preprocessor, capSummary;
 
@@ -111,6 +107,7 @@ export default async function Video({
 
     //comments and replies will be stored here
     const commentsAndReplies = [];
+    const commentIds = [];
 
     // Get comments
     const { data: commentsData, error: commentsError } = await getComments(
@@ -121,6 +118,7 @@ export default async function Video({
     if (commentsData) {
       for (let comment of commentsData) {
         commentsAndReplies.push(comment.text_display);
+        commentIds.push(comment.id);
       }
     } else {
       console.error(commentsError);
@@ -135,6 +133,7 @@ export default async function Video({
       params.videoid as string
     );
 
+    // why is this here?
     if (captionsData) {
       for (let caption of captionsData) {
         captionsArr.push({
@@ -150,51 +149,87 @@ export default async function Video({
     }
 
     // Preprocess comments
-    if (commentsData && commentsData.length > 0) {
-      preprocessor = new PreProcessorA(commentsData as Comment[]);
-      batches = preprocessor.preprocessComments();
-      console.log("batches created...");
-      console.log("captionsData...");
-    }
-    if (captionsData && captionsData.length > 0 && batches) {
-      console.log("sending to PocketChain...");
-      pocketChain = new PocketChain(
-        (captionsData[0].captions as string).replace(/\n/, ""),
-        batches
-      );
-      try {
-        capSummary = await pocketChain.summarizeCaptions();
-        console.log("captionsId: ", captionsData[0].id);
-        console.log("captions summary: ", capSummary && capSummary.res.text);
-
-        try {
-          // TODO: check to see if summary is already in db
-          const { data: commentSummaryData, error: commentSummaryError } =
-            await getCommentSummary(token as string, params.videoid as string);
-          // store in db
-          const storeCapRes = await storeCaptionsSummary(
+    try {
+      const { data: commentSummaryData, error: commentSummaryError } =
+        await getCommentsSummaries(token as string, commentIds);
+      if (commentSummaryError)
+        console.error("error getting comment summary", commentSummaryError);
+      if (
+        (commentsData && commentsData.length > 0,
+        commentSummaryData && commentSummaryData.length === 0)
+      ) {
+        console.log("got commentsData and comment summaries do not exist");
+        console.log("comments data: ", commentsData);
+        preprocessor = new PreProcessorA(commentsData as Comment[]);
+        batches = preprocessor.preprocessComments();
+        console.log("batches created...");
+        console.log("captionsData...");
+      }
+      if (captionsData && captionsData.length > 0 && batches) {
+        const { data: captionSummaryData, error: captionSummaryError } =
+          await getCaptionSummary(
             token as string,
-            captionsData[0].id as string,
-            capSummary && capSummary.res.text
+            captionsData[0].id as string
           );
-          console.log("store cap res: ", storeCapRes);
+
+        if (captionSummaryError)
+          console.error(
+            "error on fetching captions summary",
+            captionSummaryError
+          );
+        // check if captions summary already exists
+        if (captionSummaryData && captionSummaryData.length > 0) {
+          console.log("already have caption summary data...");
+          console.log(captionSummaryData);
+          console.log("sending to PocketChain...");
+          pocketChain = new PocketChain(
+            captionSummaryData[0].summaryText as string,
+            batches
+          );
+        } else {
+          console.log("sending to PocketChain...");
+          pocketChain = new PocketChain(
+            (captionsData[0].captions as string).replace(/\n/, ""),
+            batches
+          );
+
+          try {
+            capSummary = await pocketChain.summarizeCaptions();
+            console.log("captionsId: ", captionsData[0].id);
+            console.log(
+              "captions summary: ",
+              capSummary && capSummary.res.text
+            );
+            try {
+              // store in db
+              const storeCapRes = await storeCaptionsSummary(
+                token as string,
+                captionsData[0].id as string,
+                capSummary && capSummary.res.text
+              );
+              console.log("store cap res: ", storeCapRes);
+            } catch (error) {
+              console.error("unable to store caption summary in db");
+              console.error(error);
+            }
+          } catch (error) {
+            console.error("unable to get caption summary");
+            console.error(error);
+          }
+        }
+        try {
+          console.log("processing comments...");
+          await pocketChain?.processComments();
         } catch (error) {
-          console.error("unable to store caption summary in db");
+          console.error("error on pocketChain.processComments()");
           console.error(error);
         }
-      } catch (error) {
-        console.error("unable to get caption summary");
-        console.error(error);
+      } else {
+        console.log("no captions and/or comments found");
+        return <div>no captions and/or comments found</div>;
       }
-      try {
-        console.log("processing comments...");
-        await pocketChain?.processComments();
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
-      console.log("no captions and/or comments found");
-      return <div>no captions and/or comments found</div>;
+    } catch (error) {
+      console.error(error);
     }
 
     return (

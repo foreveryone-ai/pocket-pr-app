@@ -16,6 +16,7 @@ import type { SmallComment } from "./supabaseClient";
 import { util } from "prettier";
 
 export class PocketChain {
+  // captions can be the OG captions or the a summary that has already been created
   captions: string;
   batches: SmallComment[][];
 
@@ -45,6 +46,8 @@ export class PocketChain {
         input_documents: docs,
       });
       console.log({ res });
+      // update summary?
+      this.captions = res && res.res.text;
       return { res };
     } catch (error) {
       console.error("error on summarize captions!");
