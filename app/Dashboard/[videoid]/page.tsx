@@ -247,6 +247,7 @@ export default async function Video({
       } else {
         //TODO: what if there are comments but no captions
         console.log("no captions and/or comments found");
+        console.log("or commments summary data already exists");
         return <div>no captions and/or comments found</div>;
       }
     } catch (error) {
