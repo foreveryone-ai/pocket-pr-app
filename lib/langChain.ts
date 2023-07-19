@@ -1,5 +1,3 @@
-import path from "path";
-import * as fs from "fs";
 import { z } from "zod";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import {
@@ -13,9 +11,9 @@ import { loadSummarizationChain } from "langchain/chains";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { Document } from "langchain/document";
 import type { SmallComment } from "./supabaseClient";
-import { util } from "prettier";
 
 export class PocketChain {
+  // captions can be the OG captions or the a summary that has already been created
   captions: string;
   batches: SmallComment[][];
 
@@ -45,6 +43,9 @@ export class PocketChain {
         input_documents: docs,
       });
       console.log({ res });
+      // update summary?
+      this.captions = res && res.res.text;
+      return { res };
     } catch (error) {
       console.error("error on summarize captions!");
       console.error(error);
@@ -103,6 +104,12 @@ export class PocketChain {
     });
     console.log("entering for loop to send batches...");
     let counter = 0;
+    let summariesToReturn: {
+      id: string;
+      sentiment: string;
+      summary: string;
+      words: [];
+    }[] = [];
     for (let list of this.batches) {
       // create documents based on a batch
       counter++;
@@ -114,22 +121,15 @@ export class PocketChain {
           input_text: JSON.stringify(list),
           captions: this.captions,
         });
-        // const pathToOutput = path.join(__dirname, "out.txt");
-        // fs.appendFile(
-        //   pathToOutput,
-        //   JSON.stringify(response, null, 2),
-        //   (err: NodeJS.ErrnoException | null) => {
-        //     if (err) throw err;
-        //     console.log("Data appended to file");
-        //   }
-        // );
-
-        console.log(JSON.stringify(list));
         console.log(JSON.stringify(response, null, 2));
+        summariesToReturn.push(response.output.comments);
       } catch (error) {
         console.error("hit catch!!");
         console.error(error);
       }
     }
+    console.log("summariesToReturn");
+    console.log(summariesToReturn);
+    return summariesToReturn.flat(1);
   }
 }
