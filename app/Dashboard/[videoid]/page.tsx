@@ -13,6 +13,7 @@ import {
   storeCaptionsSummary,
   getCaptionSummary,
   getCommentsSummaries,
+  storeCommentsSummaries,
 } from "@/lib/supabaseClient";
 import { auth, currentUser } from "@clerk/nextjs";
 
@@ -219,12 +220,32 @@ export default async function Video({
         }
         try {
           console.log("processing comments...");
-          await pocketChain?.processComments();
+          const commentsRes = await pocketChain?.processComments();
+          console.log("commentsRes.length = ", commentsRes.length);
+          if (commentsRes.length > 0) {
+            // store everything
+            // create comment summaries
+            try {
+              console.log("storing comment summaries...");
+              const commentsSummaryRes = await storeCommentsSummaries(
+                token as string,
+                commentsRes
+              );
+              console.log("comments summaries stored succesfully!");
+              console.log(commentsSummaryRes);
+
+              console.log("storing sentiment...");
+            } catch (error) {
+              console.error("error on storing comment summaries");
+              console.error(error);
+            }
+          }
         } catch (error) {
           console.error("error on pocketChain.processComments()");
           console.error(error);
         }
       } else {
+        //TODO: what if there are comments but no captions
         console.log("no captions and/or comments found");
         return <div>no captions and/or comments found</div>;
       }

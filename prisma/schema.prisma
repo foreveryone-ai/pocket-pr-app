@@ -97,7 +97,6 @@ model Comments {
     video               Videos   @relation(fields: [video_id], references: [id], onDelete: Cascade) 
     comment_summary     CommentSummary[]
     replies             Replies[]
-    sentiment           Sentiment[]
 
     @@index([video_id])
 }
@@ -139,7 +138,6 @@ model Captions {
     video_id            String 
     video               Videos      @relation(fields: [video_id], references: [id], onDelete: Cascade)
     captionsSummary     CaptionSummary[]
-    sentiment           Sentiment[]
 
     @@index([video_id])
 }
@@ -160,22 +158,9 @@ model CommentSummary {
     updatedAt           DateTime @updatedAt
     summaryText         String
     comment_id          String 
-    comment             Comments @relation(fields: [comment_id], references: [id], onDelete: Cascade)
-
-    @@index([comment_id])
-}
-
-model Sentiment {
-    id                  String  @id @default(cuid()) 
-    createdAt           DateTime @default(now())
-    updatedAt           DateTime @updatedAt
     sentiment           SENTIMENT
-    caption_id          String 
-    caption             Captions @relation(fields: [caption_id], references: [id], onDelete: Cascade)
-    comment_id          String 
     comment             Comments @relation(fields: [comment_id], references: [id], onDelete: Cascade)
 
-    @@index([caption_id])
     @@index([comment_id])
 }
 
