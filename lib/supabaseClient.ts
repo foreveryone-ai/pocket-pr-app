@@ -158,7 +158,7 @@ export async function getCommentsSentiment(authToken: string, videoId: string) {
     console.log("ids added to array: ", commentIds);
     console.log("getting comment summaries...");
     const { data: summaryData, error: summaryError } = await db
-      .from("CommentsSummary")
+      .from("CommentSummary")
       .select()
       .in("comment_id", commentIds);
     if (summaryData && summaryData.length > 0) {

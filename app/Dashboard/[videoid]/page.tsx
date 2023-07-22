@@ -46,6 +46,15 @@ export default async function Video({
     vidData,
     sentiment;
 
+  if (userId) {
+    try {
+      userOAuth = await getOAuthData(userId, "oauth_google");
+    } catch (error) {
+      console.error("no oauth found ", error);
+    }
+  }
+  console.log(userOAuth);
+
   analysis = await getAnalysis(token, params.videoid);
   if (analysis && analysis.data && analysis.data.length > 0) {
     console.log("got analysis");
@@ -250,7 +259,7 @@ export default async function Video({
     },
   ];
 
-  if (analysis && vidData) {
+  if (analysis && analysis.data && analysis.data.length > 0 && vidData) {
     return successDisplay(vidData);
   } else {
     return <>no analysis yet</>;

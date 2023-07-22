@@ -46,7 +46,7 @@ export class PocketChain {
       console.log({ res });
       // update summary?
       this.captions = res && res.res.text;
-      return { res };
+      return res.res;
     } catch (error) {
       console.error("error on summarize captions!");
       console.error(error);
