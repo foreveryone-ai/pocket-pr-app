@@ -22,8 +22,6 @@ import { auth, currentUser } from "@clerk/nextjs";
 
 import { getOAuthData } from "@/lib/googleApi";
 import { PocketChain } from "@/lib/langChain";
-import { stringify } from "querystring";
-import { Videos } from "@prisma/client";
 // we are assuming that we have comments and captions already store in our db
 //TODO: will need an update button if captions or comments are not in db
 export default async function Video({
@@ -81,7 +79,7 @@ export default async function Video({
   if (comSummary && capSummary) {
     console.log("create analysis");
     // TODO: call create analysis here
-    return <>create analysis</>;
+    //return <>create analysis</>;
     //successDisplay(vidData);
   }
 
@@ -96,6 +94,8 @@ export default async function Video({
     token as string,
     params.videoid as string
   );
+  console.log("commentsData...");
+  console.log(commentsData);
 
   if (commentsData && commentsData.length > 0) {
     for (let comment of commentsData) {
