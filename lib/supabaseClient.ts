@@ -45,7 +45,7 @@ export async function createUser(
       })
       .select();
 
-    //console.log("newUser: ", newUser);
+    console.log("newUser: ", newUser);
     return newUser.status; // 201
   } catch (error) {
     console.error(error);
@@ -119,6 +119,23 @@ export type StoreAllCommentsParams = {
   author_image_url: string;
 };
 //-------------------------------Read------------------------------------//
+export async function getAnalysis(authToken: string, video_id: string) {
+  const db = createServerDbClient(authToken);
+  return await db.from("VideoAnalysis").select().eq(`video_id`, video_id);
+}
+
+export async function getCaptionSummary(
+  authToken: string,
+  caption_id: string,
+  video_id?: string
+) {
+  const db = createServerDbClient(authToken);
+  if (video_id) {
+    return await db.from("CaptionSummary").select().eq(`video_id`, video_id);
+  }
+  return await db.from("CaptionSummary").select().eq(`caption_id`, caption_id);
+}
+
 export async function getCommentsSentiment(authToken: string, videoId: string) {
   const commentIds = [];
   const sentiment = {
@@ -212,18 +229,17 @@ export async function storeAllReplies(
   }
 }
 
-export async function getCaptionSummary(authToken: string, caption_id: string) {
-  const db = createServerDbClient(authToken);
-  return await db.from("CaptionSummary").select().eq(`caption_id`, caption_id);
-}
-
 //-------------------------------Delete------------------------------------//
 
 export async function getCommentsSummaries(
   authToken: string,
-  commentIdArray: string[]
+  commentIdArray: string[],
+  video_id?: string
 ) {
   const db = createServerDbClient(authToken);
+  if (video_id) {
+    return await db.from("CommentSummary").select().eq("video_id", video_id);
+  }
   return await db
     .from("CommentSummary")
     .select()
@@ -277,7 +293,8 @@ export async function getChannelId(authToken: string, user_id: string) {
 
 export async function getVideo(authToken: string, videoId: string) {
   const db = createServerDbClient(authToken);
-  return await db.from("Videos").select().eq("id", videoId);
+  const { data, error } = await db.from("Videos").select().eq("id", videoId);
+  return data ? data : error;
 }
 
 export async function getVideos(authToken: string, channel_id: string) {
