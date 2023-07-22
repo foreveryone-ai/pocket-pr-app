@@ -1,13 +1,14 @@
 import { z } from "zod";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import {
+  PromptTemplate,
   ChatPromptTemplate,
   SystemMessagePromptTemplate,
   HumanMessagePromptTemplate,
 } from "langchain/prompts";
 import { createStructuredOutputChainFromZod } from "langchain/chains/openai_functions";
 import { OpenAI } from "langchain/llms/openai";
-import { loadSummarizationChain } from "langchain/chains";
+import { LLMChain, loadSummarizationChain } from "langchain/chains";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { Document } from "langchain/document";
 import type { SmallComment } from "./supabaseClient";
@@ -131,5 +132,30 @@ export class PocketChain {
     console.log("summariesToReturn");
     console.log(summariesToReturn);
     return summariesToReturn.flat(1);
+  }
+  static async sentimentBreakdown(sentiment: {
+    pos: number;
+    neg: number;
+    neu: number;
+  }) {
+    console.log("start sentimentBreakdown: ", sentiment);
+    const llm = new OpenAI({
+      openAIApiKey: process.env.OPENAI_API_KEY,
+      temperature: 0.2,
+      modelName: "gpt-3.5-turbo",
+    });
+
+    const prompt = PromptTemplate.fromTemplate(
+      `You are a public relations assistant with a sense of humor that is appropriate to a professional environment. The following represents a sentiment analysis, based on You Tube comments from the user's video. Reflect on the sentiment distribution. Are the comments predominantly positive, negative, or neutral? pos: {pos}, neg: {neg}, neu: {neu}`
+    );
+
+    const formattedPrompt = await prompt.format({
+      pos: sentiment.pos,
+      neg: sentiment.neg,
+      neu: sentiment.neu,
+    });
+
+    const sentimentRes = await llm.predict(formattedPrompt);
+    console.log("sentiments response: ", sentimentRes);
   }
 }

@@ -29,6 +29,7 @@ model Users {
     sender              Messages[]
     videos              Videos[]
     prompts             Prompts[]
+    analysis            VideoAnalysis[]
 }
 
 model Videos {
@@ -48,6 +49,8 @@ model Videos {
     conversation        Conversation?
     captions            Captions[]
     analysis            VideoAnalysis[]
+    comment_summary     CommentSummary[]
+    caption_summary     CaptionSummary[]
 
     @@index([user_id])
 }
@@ -148,20 +151,26 @@ model CaptionSummary {
     summaryText         String
     caption_id          String 
     caption             Captions @relation(fields: [caption_id], references: [id], onDelete: Cascade)
+    video_id                 String 
+    video                    Videos      @relation(fields: [video_id], references: [id], onDelete: Cascade)
 
     @@index([caption_id])
+    @@index([video_id])
 }
 
 model CommentSummary {
-    id                  String  @id @default(cuid()) 
-    createdAt           DateTime @default(now())
-    updatedAt           DateTime @updatedAt
-    summaryText         String
-    comment_id          String 
-    sentiment           SENTIMENT
-    comment             Comments @relation(fields: [comment_id], references: [id], onDelete: Cascade)
+    id                       String  @id @default(cuid()) 
+    createdAt                DateTime @default(now())
+    updatedAt                DateTime @updatedAt
+    summaryText              String
+    sentiment                SENTIMENT
+    comment_id               String 
+    comment                  Comments @relation(fields: [comment_id], references: [id], onDelete: Cascade)
+    video_id                 String 
+    video                    Videos      @relation(fields: [video_id], references: [id], onDelete: Cascade)
 
     @@index([comment_id])
+    @@index([video_id])
 }
 
 model VideoAnalysis {
@@ -180,6 +189,9 @@ model VideoAnalysis {
     tone_of_communication           String
     video_id                        String 
     video                           Videos      @relation(fields: [video_id], references: [id], onDelete: Cascade)
+    user_id                         String 
+    user                            Users        @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
     @@index([video_id])
+    @@index([user_id])
 }

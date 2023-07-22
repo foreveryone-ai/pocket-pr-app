@@ -14,11 +14,13 @@ import {
   getCaptionSummary,
   getCommentsSummaries,
   storeCommentsSummaries,
+  getCommentsSentiment,
 } from "@/lib/supabaseClient";
 import { auth, currentUser } from "@clerk/nextjs";
 
 import { getOAuthData } from "@/lib/googleApi";
 import { PocketChain } from "@/lib/langChain";
+import { stringify } from "querystring";
 // we are assuming that we have comments and captions already store in our db
 //TODO: will need an update button if captions or comments are not in db
 export default async function Video({
@@ -28,18 +30,17 @@ export default async function Video({
 }) {
   const { userId, getToken } = auth();
   const token = await getToken({ template: "supabase" });
-  //const user = await currentUser();
 
   let userOAuth, pocketChain, batches, preprocessor, capSummary;
 
-  if (userId) {
-    try {
-      userOAuth = await getOAuthData(userId, "oauth_google");
-    } catch (error) {
-      console.error("no oauth found ", error);
-    }
-  }
-  console.log(userOAuth);
+  // get supabase token
+  // if (userId) {
+  //   try {
+  //     userOAuth = await getOAuthData(userId, "oauth_google");
+  //   } catch (error) {
+  //     console.error("no oauth found ", error);
+  //   }
+  // }
 
   // mock categories
   const mockCategoriesMiddle = [
@@ -97,6 +98,8 @@ export default async function Video({
         "This category analyzes the tone of communication in the video and its comments. It uses NLP to detect the tone of comments and the video itself, and provides an overview of the most common tones (e.g., angry, sarcastic, humorous). It also provides suggestions for how to adjust the tone of communication to improve the conversation.",
     },
   ];
+
+  // analysis exist?
 
   // Fetch comments from database
   try {
@@ -206,7 +209,8 @@ export default async function Video({
               const storeCapRes = await storeCaptionsSummary(
                 token as string,
                 captionsData[0].id as string,
-                capSummary && capSummary.res.text
+                capSummary && capSummary.res.text,
+                params.videoid
               );
               console.log("store cap res: ", storeCapRes);
             } catch (error) {
@@ -229,7 +233,8 @@ export default async function Video({
               console.log("storing comment summaries...");
               const commentsSummaryRes = await storeCommentsSummaries(
                 token as string,
-                commentsRes
+                commentsRes,
+                params.videoid
               );
               console.log("comments summaries stored succesfully!");
               console.log(commentsSummaryRes);
@@ -252,6 +257,13 @@ export default async function Video({
       }
     } catch (error) {
       console.error(error);
+    }
+    if (pocketChain) {
+      const sentiment = await getCommentsSentiment(
+        token as string,
+        params.videoid
+      );
+      if (sentiment) await PocketChain.sentimentBreakdown(sentiment);
     }
 
     return (
