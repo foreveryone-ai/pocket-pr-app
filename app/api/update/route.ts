@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import {
   StoreOrUpdateParams,
   storeChannelId,
@@ -130,7 +131,9 @@ export async function GET() {
   //   }
   // }
   // console.log(userOAuth);
-  return NextResponse.json({ userId });
+  redirect("/dashboard");
+
+  //return NextResponse.json({ userId });
 
   // this will hold all comments and replies in memory...
 }
