@@ -60,7 +60,7 @@ export default async function Video({
     console.log("got analysis");
     console.log(analysis);
     //TODO: return the page here, after getting the video stuff
-    const vidData = await getVideo(token as string, params.videoid as string);
+    vidData = await getVideo(token as string, params.videoid as string);
     successDisplay(vidData);
   }
 
@@ -87,8 +87,20 @@ export default async function Video({
   // if both exist, but there is not analysis, create analysis
   if (comSummary && capSummary) {
     console.log("create analysis");
-    // TODO: call create analysis here
-    //return <>create analysis</>;
+    // pass dummy params??
+    pocketChain = new PocketChain("", [
+      [
+        {
+          comment_id: "",
+          text_display: "",
+          like_count: 0,
+          author_display_name: "",
+        },
+      ],
+    ]);
+    sentiment = await getCommentsSentiment(token as string, params.videoid);
+    if (sentiment) await PocketChain.sentimentBreakdown(sentiment);
+    return <>create analysis</>;
     //successDisplay(vidData);
   }
 
