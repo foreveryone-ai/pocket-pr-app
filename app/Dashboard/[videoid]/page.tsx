@@ -31,10 +31,8 @@ export default async function Video({
 }) {
   const { userId, getToken } = auth();
   const token = await getToken({ template: "supabase" });
-
-  if (!token) {
-    redirect("/login");
-  }
+  console.log("token...");
+  console.log(token);
 
   let userOAuth,
     pocketChain,
@@ -44,6 +42,8 @@ export default async function Video({
     analysis,
     comSummary,
     vidData,
+    comData,
+    capData,
     sentiment;
 
   if (userId) {
@@ -53,168 +53,10 @@ export default async function Video({
       console.error("no oauth found ", error);
     }
   }
-  console.log(userOAuth);
 
-  analysis = await getAnalysis(token, params.videoid);
-  if (analysis && analysis.data && analysis.data.length > 0) {
-    console.log("got analysis");
-    console.log(analysis);
-    //TODO: return the page here, after getting the video stuff
-    vidData = await getVideo(token as string, params.videoid as string);
-    successDisplay(vidData);
+  if (!token) {
+    redirect("/sign-in");
   }
-
-  // Fetch comments from database
-  // get video info
-
-  // captions summary exist?
-  capSummary = await getCaptionSummary(token, "", params.videoid);
-  if (capSummary) {
-    console.log("got cap summary");
-    console.log(capSummary);
-  }
-
-  // comments summary exists?
-  const { data: comSummaryData, error: comSummaryError } =
-    await getCommentsSummaries(token, [], params.videoid);
-  if (comSummaryError) {
-    console.error(comSummaryError);
-  } else {
-    console.log("got comment summaries");
-    comSummary = comSummaryData;
-  }
-
-  // if both exist, but there is not analysis, create analysis
-  if (comSummary && capSummary) {
-    console.log("create analysis");
-    // pass dummy params??
-    pocketChain = new PocketChain("", [
-      [
-        {
-          comment_id: "",
-          text_display: "",
-          like_count: 0,
-          author_display_name: "",
-        },
-      ],
-    ]);
-    sentiment = await getCommentsSentiment(token as string, params.videoid);
-    if (sentiment) await PocketChain.sentimentBreakdown(sentiment);
-    return <>create analysis</>;
-    //successDisplay(vidData);
-  }
-
-  //-------------------- no summaries ---------------------//
-
-  //comments and replies will be stored here
-  const commentsAndReplies = [];
-  const commentIds = [];
-
-  // Get comments
-  const { data: commentsData, error: commentsError } = await getComments(
-    token as string,
-    params.videoid as string
-  );
-  console.log("commentsData...");
-  console.log(commentsData);
-
-  if (commentsData && commentsData.length > 0) {
-    for (let comment of commentsData) {
-      commentsAndReplies.push(comment.text_display);
-      commentIds.push(comment.id);
-    }
-  } else {
-    console.error(commentsError);
-    return <>{commentsError}</>;
-  }
-
-  // Fetch captions from database
-  const captionsArr: StoreCaptionsParams[] = [];
-
-  // Get captions
-  const { data: captionsData, error: captionsError } = await getCaptions(
-    token as string,
-    params.videoid as string
-  );
-
-  if (captionsData && captionsData.length > 0) {
-    captionsArr.push({
-      id: captionsData[0].id as string,
-      video_id: captionsData[0].video_id as string,
-      language: captionsData[0].language as string,
-      captions: captionsData[0].captions as string,
-      updatedAt: captionsData[0].updatedAt as Date,
-    });
-  } else {
-    console.error(captionsError);
-    return <>{captionsError}</>;
-  }
-
-  // Preprocess comments
-  if (commentsData && commentsData.length > 0) {
-    console.log("got comments data");
-    preprocessor = new PreProcessorA(commentsData as Comment[]);
-    batches = preprocessor.preprocessComments();
-    console.log("batches created...");
-    console.log("captionsData...");
-  }
-  if (batches) {
-    console.log("sending to PocketChain...");
-    pocketChain = new PocketChain(
-      (captionsData[0].captions as string).replace(/\n/, ""),
-      batches
-    );
-  }
-  if (pocketChain) {
-    try {
-      capSummary = await pocketChain.summarizeCaptions();
-      console.log("captionsId: ", captionsData[0].id);
-      console.log("captions summary: ", capSummary && capSummary.res.text);
-      try {
-        // store in db
-        const storeCapRes = await storeCaptionsSummary(
-          token as string,
-          captionsData[0].id as string,
-          capSummary && capSummary.res.text,
-          params.videoid
-        );
-        console.log("store cap res: ", storeCapRes);
-      } catch (error) {
-        console.error("unable to store caption summary in db");
-        console.error(error);
-      }
-    } catch (error) {
-      console.error("unable to get caption summary");
-      console.error(error);
-    }
-    console.log("processing comments...");
-    const commentsRes = await pocketChain.processComments();
-
-    console.log("commentsRes.length = ", commentsRes.length);
-    if (commentsRes.length > 0) {
-      // store everything
-      // create comment summaries
-      try {
-        console.log("storing comment summaries...");
-        const commentsSummaryRes = await storeCommentsSummaries(
-          token as string,
-          commentsRes,
-          params.videoid
-        );
-        console.log("comments summaries stored succesfully!");
-        console.log(commentsSummaryRes);
-
-        console.log("storing sentiment...");
-      } catch (error) {
-        console.error("error on storing comment summaries");
-        console.error(error);
-      }
-    }
-    sentiment = await getCommentsSentiment(token as string, params.videoid);
-  }
-  if (sentiment) await PocketChain.sentimentBreakdown(sentiment);
-  //TODO: create analysis
-
   const mockCategoriesMiddle = [
     {
       heading: "Sentiment Breakdown",
@@ -271,10 +113,211 @@ export default async function Video({
     },
   ];
 
-  if (analysis && analysis.data && analysis.data.length > 0 && vidData) {
-    return successDisplay(vidData);
+  analysis = await getAnalysis(token, params.videoid);
+  if (analysis && analysis.data && analysis.data.length > 0) {
+    console.log("got analysis");
+    console.log(analysis);
+    //TODO: return the page here, after getting the video stuff
+    vidData = await getVideo(token as string, params.videoid as string);
+    successDisplay(vidData);
+  }
+
+  // Fetch comments from database
+  // get video info
+
+  // captions summary exist?
+  capSummary = await getCaptionSummary(token, "", params.videoid);
+  if (capSummary && capSummary.data && capSummary.data.length > 0) {
+    console.log("got cap summary");
+    console.log(capSummary);
+  }
+
+  // comments summary exists?
+  const { data: comSummaryData, error: comSummaryError } =
+    await getCommentsSummaries(token, [], params.videoid);
+  if (comSummaryError) {
+    console.error(comSummaryError);
   } else {
-    return <>no analysis yet</>;
+    console.log("got comment summaries");
+    comSummary = comSummaryData;
+  }
+
+  // if both exist, but there is not analysis, create analysis
+  if (
+    comSummary &&
+    comSummary.length > 0 &&
+    capSummary &&
+    capSummary.data &&
+    capSummary.data.length > 0
+  ) {
+    // pass dummy params??
+    pocketChain = new PocketChain(capSummary.data[0] as unknown as string, [
+      [
+        {
+          comment_id: "",
+          text_display: "",
+          like_count: 0,
+          author_display_name: "",
+        },
+      ],
+    ]);
+    sentiment = await getCommentsSentiment(token as string, params.videoid);
+    if (sentiment) {
+      console.log("sentiment breakdown: ");
+      await PocketChain.sentimentBreakdown(sentiment);
+      console.log("emotional analysis: ");
+      console.log("create analysis");
+      return <>create analysis</>;
+      //successDisplay(vidData);
+    }
+  }
+
+  //--------------------no cap/com summaries---------------------//
+  const commentsAndReplies = [];
+  const commentIds = [];
+
+  if (!comSummary || comSummary.length === 0) {
+    console.log("no comment summaries in database");
+
+    //comments and replies will be stored here
+
+    // Get comments
+    const { data: commentsData, error: commentsError } = await getComments(
+      token as string,
+      params.videoid as string
+    );
+    console.log("commentsData...");
+    console.log(commentsData);
+
+    if (commentsData && commentsData.length > 0) {
+      console.log("comments data");
+      console.log(commentsData);
+      for (let comment of commentsData) {
+        commentsAndReplies.push(comment.text_display);
+        commentIds.push(comment.id);
+      }
+      // dumb copying going on here..
+      comData = { ...commentsData };
+      console.log("comData");
+      console.log(comData);
+    } else {
+      console.error(commentsError);
+      return <>{commentsError}</>;
+    }
+  }
+  // Fetch captions from database
+  const captionsArr: StoreCaptionsParams[] = [];
+  console.log(capSummary);
+
+  if (capSummary && capSummary.data && capSummary.data.length === 0) {
+    // Get captions
+    console.log("No capSummaries found. Fetching captions");
+    const { data: captionsData, error: captionsError } = await getCaptions(
+      token as string,
+      params.videoid as string
+    );
+
+    if (captionsData && captionsData.length > 0) {
+      console.log("got captions data...");
+      capData = [...captionsData];
+
+      captionsArr.push({
+        id: captionsData[0].id as string,
+        video_id: captionsData[0].video_id as string,
+        language: captionsData[0].language as string,
+        captions: captionsData[0].captions as string,
+        updatedAt: captionsData[0].updatedAt as Date,
+      });
+    } else {
+      console.error(captionsError);
+      return <>{captionsError}</>;
+    }
+  }
+
+  console.log("comData");
+  console.log(comData);
+  if (
+    capSummary &&
+    capSummary.data &&
+    capSummary.data.length === 0 &&
+    capData
+  ) {
+    console.log("sending to PocketChain...");
+    pocketChain = new PocketChain(
+      (capData[0].captions as string).replace(/\n/, ""),
+      [
+        [
+          {
+            comment_id: "",
+            text_display: "",
+            like_count: 0,
+            author_display_name: "",
+          },
+        ],
+      ]
+    );
+    capSummary = await pocketChain.summarizeCaptions();
+    console.log("captionsId: ", capData[0].id);
+    console.log("captions summary: ", capSummary);
+    try {
+      // store in db
+      const storeCapRes = await storeCaptionsSummary(
+        token as string,
+        capData[0].id as string,
+        capSummary && capSummary.text,
+        params.videoid
+      );
+      console.log("store cap res: ", storeCapRes);
+    } catch (error) {
+      console.error("unable to store caption summary in db");
+      console.error(error);
+    }
+    // Preprocess comments
+    if (comData && comData.length > 0) {
+      console.log("Preprocess comments...");
+      console.log("got comments data");
+      preprocessor = new PreProcessorA(comData as Comment[]);
+      batches = preprocessor.preprocessComments();
+      console.log("batches created...");
+      console.log("captionsData...");
+      pocketChain.batches = batches.map((innerArr) => [...innerArr]);
+    }
+    console.log("processing comments...");
+    const commentsRes = await pocketChain.processComments();
+
+    console.log("commentsRes.length = ", commentsRes.length);
+    if (commentsRes.length > 0) {
+      // store everything
+      // create comment summaries
+      try {
+        console.log("storing comment summaries...");
+        const commentsSummaryRes = await storeCommentsSummaries(
+          token as string,
+          commentsRes,
+          params.videoid
+        );
+        console.log("comments summaries stored succesfully!");
+        console.log(commentsSummaryRes);
+
+        console.log("storing sentiment...");
+      } catch (error) {
+        console.error("error on storing comment summaries");
+        console.error(error);
+      }
+    }
+    sentiment = await getCommentsSentiment(token as string, params.videoid);
+    console.log("sentiment breakdown: ");
+    if (sentiment) {
+      await PocketChain.sentimentBreakdown(sentiment);
+      console.log("emotional analysis: ");
+      console.log("create analysis");
+    }
+
+    if (analysis && analysis.data && analysis.data.length > 0 && vidData) {
+      return successDisplay(vidData);
+    } else {
+      return <>no analysis yet</>;
+    }
   }
 
   function successDisplay(vidData: { [x: string]: any } /** analysisData */) {

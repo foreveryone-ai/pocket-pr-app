@@ -43,10 +43,10 @@ export class PocketChain {
       const res = await chain.call({
         input_documents: docs,
       });
-      console.log({ res });
+      console.log(res);
       // update summary?
-      this.captions = res && res.res.text;
-      return res.res;
+      this.captions = res && res.text;
+      return res;
     } catch (error) {
       console.error("error on summarize captions!");
       console.error(error);
@@ -158,4 +158,5 @@ export class PocketChain {
     const sentimentRes = await llm.predict(formattedPrompt);
     console.log("sentiments response: ", sentimentRes);
   }
+  async emotionalAnalysis(sentimentBreakdown: string, commentSummaries: {}) {}
 }
