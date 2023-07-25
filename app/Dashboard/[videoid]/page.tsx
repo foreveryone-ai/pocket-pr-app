@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
 import Image from "next/image";
-import { v5 } from "uuid";
 import {
   PreProcessorA,
   getCaptions,
@@ -17,6 +16,7 @@ import {
   storeCommentsSummaries,
   getCommentsSentiment,
   getAnalysis,
+  getDataForEmotionalAnalysis,
 } from "@/lib/supabaseClient";
 import { auth, currentUser } from "@clerk/nextjs";
 
@@ -44,6 +44,7 @@ export default async function Video({
     vidData,
     comData,
     capData,
+    summariesForEmotionalAnalysis,
     sentiment;
 
   if (userId) {
@@ -164,8 +165,15 @@ export default async function Video({
     sentiment = await getCommentsSentiment(token as string, params.videoid);
     if (sentiment) {
       console.log("sentiment breakdown: ");
-      await PocketChain.sentimentBreakdown(sentiment);
+      const sentimentRes = await PocketChain.sentimentBreakdown(sentiment);
+      console.log(sentimentRes);
       console.log("emotional analysis: ");
+      const emoData = await getDataForEmotionalAnalysis(token, params.videoid);
+      if (emoData && emoData.length > 0) {
+        await pocketChain.emotionalAnalysis(sentimentRes, emoData);
+      }
+
+      //pocketChain.emotionalAnalysis(sentimentRes, )
       console.log("create analysis");
       return <>create analysis</>;
       //successDisplay(vidData);
