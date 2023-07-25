@@ -124,6 +124,38 @@ export async function getAnalysis(authToken: string, video_id: string) {
   return await db.from("VideoAnalysis").select().eq(`video_id`, video_id);
 }
 
+export async function getDataForEmotionalAnalysis(
+  authToken: string,
+  video_id: string
+) {
+  const db = createServerDbClient(authToken);
+
+  const { data: comData, error: errorData } = await getComments(
+    authToken,
+    video_id
+  );
+  const comIds = [];
+
+  if (comData && comData.length > 0) {
+    for (let com of comData) {
+      comIds.push(com.id);
+    }
+  }
+
+  const { data: comSummaryData, error: errorSummaryData } = await db
+    .from("Comments")
+    .select(
+      "author_display_name, author_image_url, like_count, CommentSummary (summaryText, sentiment)"
+    )
+    .in("id", comIds);
+
+  if (errorSummaryData) {
+    console.error(errorSummaryData);
+  } else {
+    return comSummaryData;
+  }
+}
+
 export async function getCaptionSummary(
   authToken: string,
   caption_id: string,

@@ -12,6 +12,16 @@ import { LLMChain, loadSummarizationChain } from "langchain/chains";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { Document } from "langchain/document";
 import type { SmallComment } from "./supabaseClient";
+import { SENTIMENT } from "@prisma/client";
+type EmotionalAnalysisArgs = {
+  author_display_name: string;
+  author_image_url: string;
+  like_count: number;
+  CommentSummary: {
+    summaryText: string;
+    sentiment: SENTIMENT;
+  }[];
+};
 
 export class PocketChain {
   // captions can be the OG captions or the a summary that has already been created
@@ -43,10 +53,10 @@ export class PocketChain {
       const res = await chain.call({
         input_documents: docs,
       });
-      console.log({ res });
+      console.log(res);
       // update summary?
-      this.captions = res && res.res.text;
-      return res.res;
+      this.captions = res && res.text;
+      return res;
     } catch (error) {
       console.error("error on summarize captions!");
       console.error(error);
@@ -156,6 +166,12 @@ export class PocketChain {
     });
 
     const sentimentRes = await llm.predict(formattedPrompt);
-    console.log("sentiments response: ", sentimentRes);
+    return sentimentRes;
+  }
+  async emotionalAnalysis(
+    sentimentBreakdown: string,
+    commentSummaries: EmotionalAnalysisArgs[]
+  ) {
+    console.log("getting emotional!");
   }
 }
