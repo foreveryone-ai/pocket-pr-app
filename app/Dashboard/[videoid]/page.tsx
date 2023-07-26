@@ -120,7 +120,7 @@ export default async function Video({
     console.log(analysis);
     //TODO: return the page here, after getting the video stuff
     vidData = await getVideo(token as string, params.videoid as string);
-    successDisplay(vidData);
+    successDisplay(mockCategoriesMiddle, mockCategoriesRight, vidData);
   }
 
   // Fetch comments from database
@@ -173,7 +173,6 @@ export default async function Video({
         await pocketChain.emotionalAnalysis(sentimentRes, emoData);
       }
 
-      //pocketChain.emotionalAnalysis(sentimentRes, )
       console.log("create analysis");
       return <>create analysis</>;
       //successDisplay(vidData);
@@ -205,7 +204,7 @@ export default async function Video({
         commentIds.push(comment.id);
       }
       // dumb copying going on here..
-      comData = { ...commentsData };
+      comData = commentsData.map((item) => item);
       console.log("comData");
       console.log(comData);
     } else {
@@ -280,122 +279,155 @@ export default async function Video({
       console.error("unable to store caption summary in db");
       console.error(error);
     }
-    // Preprocess comments
-    if (comData && comData.length > 0) {
-      console.log("Preprocess comments...");
-      console.log("got comments data");
-      preprocessor = new PreProcessorA(comData as Comment[]);
-      batches = preprocessor.preprocessComments();
-      console.log("batches created...");
-      console.log("captionsData...");
-      pocketChain.batches = batches.map((innerArr) => [...innerArr]);
-    }
-    console.log("processing comments...");
-    const commentsRes = await pocketChain.processComments();
+  }
+  // Preprocess comments
+  //TODO: check if pockechain is undefined
+  if (comData && comData.length > 0) {
+    console.log("Preprocess comments...");
+    console.log("got comments data");
+    preprocessor = new PreProcessorA(comData as Comment[]);
+    batches = preprocessor.preprocessComments();
+    console.log("batches created...");
+    console.log("captionsData...");
+    if (!pocketChain && capSummary) {
+      pocketChain = new PocketChain(
+        capSummary.data[0] as unknown as string,
+        batches
+      );
+      console.log("processing comments...");
+      const commentsRes = await pocketChain.processComments();
+      console.log("commentsRes.length = ", commentsRes.length);
+      if (commentsRes.length > 0) {
+        // store everything
+        // create comment summaries
+        try {
+          console.log("storing comment summaries...");
+          const commentsSummaryRes = await storeCommentsSummaries(
+            token as string,
+            commentsRes,
+            params.videoid
+          );
+          console.log("comments summaries stored succesfully!");
+          console.log(commentsSummaryRes);
 
-    console.log("commentsRes.length = ", commentsRes.length);
-    if (commentsRes.length > 0) {
-      // store everything
-      // create comment summaries
-      try {
-        console.log("storing comment summaries...");
-        const commentsSummaryRes = await storeCommentsSummaries(
-          token as string,
-          commentsRes,
-          params.videoid
-        );
-        console.log("comments summaries stored succesfully!");
-        console.log(commentsSummaryRes);
-
-        console.log("storing sentiment...");
-      } catch (error) {
-        console.error("error on storing comment summaries");
-        console.error(error);
+          console.log("storing sentiment...");
+        } catch (error) {
+          console.error("error on storing comment summaries");
+          console.error(error);
+        }
       }
     }
+  }
+
+  sentiment = await getCommentsSentiment(token as string, params.videoid);
+  console.log("sentiment breakdown: ");
+  if (sentiment) {
+    await PocketChain.sentimentBreakdown(sentiment);
+    console.log("emotional analysis: ");
+    console.log("create analysis");
+  }
+
+  if (analysis && analysis.data && analysis.data.length > 0 && vidData) {
+    return successDisplay(mockCategoriesMiddle, mockCategoriesRight, vidData);
+  } else if (
+    comSummary &&
+    comSummary.length > 0 &&
+    capSummary &&
+    capSummary.data &&
+    capSummary.data.length > 0
+  ) {
     sentiment = await getCommentsSentiment(token as string, params.videoid);
-    console.log("sentiment breakdown: ");
     if (sentiment) {
-      await PocketChain.sentimentBreakdown(sentiment);
+      console.log("sentiment breakdown: ");
+      const sentimentRes = await PocketChain.sentimentBreakdown(sentiment);
+      console.log(sentimentRes);
       console.log("emotional analysis: ");
+      const emoData = await getDataForEmotionalAnalysis(token, params.videoid);
+      if (emoData && emoData.length > 0 && pocketChain) {
+        await pocketChain.emotionalAnalysis(sentimentRes, emoData);
+      }
+
       console.log("create analysis");
+      return <>create analysis</>;
+      //successDisplay(vidData);
     }
-
-    if (analysis && analysis.data && analysis.data.length > 0 && vidData) {
-      return successDisplay(vidData);
-    } else {
-      return <>no analysis yet</>;
-    }
+  } else {
+    return <>no analysis yet</>;
   }
+}
 
-  function successDisplay(vidData: { [x: string]: any } /** analysisData */) {
-    return (
-      <section className="bg-primary-content md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-8 md:flex-none flex flex-col grid-cols-none gap-0">
-        <div
-          id="left-side"
-          className="artboard md:phone-3 sm:phone-1 bg-base-content flex flex-col justify-evenly items-center py-4"
-        >
-          <h1 className="text-xl text-center">{vidData && vidData.title}</h1>
-          <div className="p-4 md:w-[400px] sm:w-[300px] w-[260px]">
-            <Image
-              src={vidData && vidData.thumbnail_url}
-              alt="thumbnail"
-              width={640}
-              height={480}
-              className="border-2 border-gray-500"
-            />
-          </div>
-          <div className="text-ellipsis overflow-clip max-h-60 px-4">
-            To summarize your YouTube video about the controversy surrounding
-            the use of genetically modified organisms (GMOs), you presented
-            arguments from both sides of the debate. You explained that
-            proponents of GMOs argue that they can help increase crop yields,
-            reduce the use of pesticides, and create crops that are more
-            resistant to disease and drought. On the other hand, opponents of
-            GMOs argue that they can have negative effects on human health, the
-            environment, and biodiversity. You also discussed the role of
-            corporations and government in the regulation of GMOs, and called
-            for more transparency and public awareness about the use of these
-            organisms in our food supply. Overall, your video provided a
-            balanced and informative overview of this complex and controversial
-            topic.
-          </div>
+type MockCategories = { heading: string; description: string }[];
+
+function successDisplay(
+  mockCategoriesMiddle: MockCategories,
+  mockCategoriesRight: MockCategories,
+  vidData: { [x: string]: any } /** analysisData */
+) {
+  return (
+    <section className="bg-primary-content md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-8 md:flex-none flex flex-col grid-cols-none gap-0">
+      <div
+        id="left-side"
+        className="artboard md:phone-3 sm:phone-1 bg-base-content flex flex-col justify-evenly items-center py-4"
+      >
+        <h1 className="text-xl text-center">{vidData && vidData.title}</h1>
+        <div className="p-4 md:w-[400px] sm:w-[300px] w-[260px]">
+          <Image
+            src={vidData && vidData.thumbnail_url}
+            alt="thumbnail"
+            width={640}
+            height={480}
+            className="border-2 border-gray-500"
+          />
         </div>
+        <div className="text-ellipsis overflow-clip max-h-60 px-4">
+          To summarize your YouTube video about the controversy surrounding the
+          use of genetically modified organisms (GMOs), you presented arguments
+          from both sides of the debate. You explained that proponents of GMOs
+          argue that they can help increase crop yields, reduce the use of
+          pesticides, and create crops that are more resistant to disease and
+          drought. On the other hand, opponents of GMOs argue that they can have
+          negative effects on human health, the environment, and biodiversity.
+          You also discussed the role of corporations and government in the
+          regulation of GMOs, and called for more transparency and public
+          awareness about the use of these organisms in our food supply.
+          Overall, your video provided a balanced and informative overview of
+          this complex and controversial topic.
+        </div>
+      </div>
 
-        <section className="flex flex-col justify-evenly items-center gap-12 py-12">
-          {mockCategoriesMiddle.map((item, i) => (
-            <div
-              key={i}
-              className="md:w-full w-[280px] collapse bg-[#7AD9F8] opacity-80 text-black text-center"
-            >
-              <input type="checkbox" className="w-full" />
-              <div className="collapse-title text-xl font-medium">
-                {item.heading}
-              </div>
-              <div className="collapse-content ">
-                <p className="text-black">{item.description}</p>
-              </div>
+      <section className="flex flex-col justify-evenly items-center gap-12 py-12">
+        {mockCategoriesMiddle.map((item, i) => (
+          <div
+            key={i}
+            className="md:w-full w-[280px] collapse bg-[#7AD9F8] opacity-80 text-black text-center"
+          >
+            <input type="checkbox" className="w-full" />
+            <div className="collapse-title text-xl font-medium">
+              {item.heading}
             </div>
-          ))}
-        </section>
-
-        <section className="md:-order-1 lg:order-last flex flex-col justify-evenly items-center gap-12 pb-12">
-          {mockCategoriesRight.map((item, i) => (
-            <div
-              key={i}
-              className="md:w-full w-[280px] collapse bg-[#7AD9F8] opacity-80 text-black text-center"
-            >
-              <input type="checkbox" className="w-full" />
-              <div className="collapse-title text-xl font-medium">
-                {item.heading}
-              </div>
-              <div className="collapse-content ">
-                <p className="text-black">{item.description}</p>
-              </div>
+            <div className="collapse-content ">
+              <p className="text-black">{item.description}</p>
             </div>
-          ))}
-        </section>
+          </div>
+        ))}
       </section>
-    );
-  }
+
+      <section className="md:-order-1 lg:order-last flex flex-col justify-evenly items-center gap-12 pb-12">
+        {mockCategoriesRight.map((item, i) => (
+          <div
+            key={i}
+            className="md:w-full w-[280px] collapse bg-[#7AD9F8] opacity-80 text-black text-center"
+          >
+            <input type="checkbox" className="w-full" />
+            <div className="collapse-title text-xl font-medium">
+              {item.heading}
+            </div>
+            <div className="collapse-content ">
+              <p className="text-black">{item.description}</p>
+            </div>
+          </div>
+        ))}
+      </section>
+    </section>
+  );
 }
