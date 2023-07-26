@@ -93,7 +93,6 @@ export class PocketChain {
       openAIApiKey: process.env.OPENAI_API_KEY,
       temperature: 0,
       modelName: "gpt-3.5-turbo-0613",
-      // what does this mean?
     });
     console.log("llm created...");
     console.log("creating prompt...");
@@ -172,6 +171,6 @@ export class PocketChain {
     sentimentBreakdown: string,
     commentSummaries: EmotionalAnalysisArgs[]
   ) {
-    console.log("getting emotional!");
+    console.log("getting emotional analysis!");
   }
 }
