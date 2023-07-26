@@ -8,7 +8,11 @@ import {
 } from "langchain/prompts";
 import { createStructuredOutputChainFromZod } from "langchain/chains/openai_functions";
 import { OpenAI } from "langchain/llms/openai";
-import { LLMChain, loadSummarizationChain } from "langchain/chains";
+import {
+  LLMChain,
+  loadSummarizationChain,
+  loadQAMapReduceChain,
+} from "langchain/chains";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { Document } from "langchain/document";
 import type { SmallComment } from "./supabaseClient";
@@ -171,6 +175,29 @@ export class PocketChain {
     sentimentBreakdown: string,
     commentSummaries: EmotionalAnalysisArgs[]
   ) {
-    console.log("getting emotional analysis!");
+    const model = new OpenAI({ temperature: 0 });
+    const chain = loadQAMapReduceChain(model);
+    const docs = [
+      new Document({ pageContent: "harrison went to harvard" }),
+      new Document({ pageContent: "ankush went to princeton" }),
+    ];
+    for (let i = 0; i < commentSummaries.length; i++) {
+      // create batch
+      let start = i;
+      let end = i + 10;
+      let batch = commentSummaries.slice(
+        start,
+        Math.min(end, commentSummaries.length)
+      );
+      docs.push(new Document({ pageContent: batch.toString() }));
+    }
+    console.log("docs length is : ", docs.length);
+    const res = await chain.call({
+      input_documents: docs,
+      question: `Based on the sentiment analysis, videoSummary, and documents provided, can you infer any dominant emotions such as joy, sadness, anger, fear, surprise, and disgust? Provide a distribution of these emotions, if possible.
+      sentiment analysis: ${sentimentBreakdown}
+      videoSummary: ${this.captions}`,
+    });
+    console.log({ res });
   }
 }
