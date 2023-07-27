@@ -5,6 +5,7 @@ import {
   ChatPromptTemplate,
   SystemMessagePromptTemplate,
   HumanMessagePromptTemplate,
+  PipelinePromptTemplate,
 } from "langchain/prompts";
 import { createStructuredOutputChainFromZod } from "langchain/chains/openai_functions";
 import { OpenAI } from "langchain/llms/openai";
@@ -175,6 +176,22 @@ export class PocketChain {
     sentimentBreakdown: string,
     commentSummaries: EmotionalAnalysisArgs[]
   ) {
+    const model = new OpenAI({
+      openAIApiKey: process.env.OPENAI_API_KEY,
+      temperature: 0.2,
+      modelName: "gpt-3.5-turbo",
+    });
+    const docs = [];
+    for (let i = 0; i < commentSummaries.length; i++) {
+      // create batch
+      let start = i;
+      let end = i + 10;
+      let batch = commentSummaries.slice(
+        start,
+        Math.min(end, commentSummaries.length)
+      );
+      docs.push(batch);
+    }
     return;
   }
 }
