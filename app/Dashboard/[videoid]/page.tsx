@@ -200,14 +200,13 @@ export default async function Video({
       // dumb copying going on here..
       comData = commentsData.map((item) => item);
       console.log("comData length is: ", comData.length);
-    } else {
+    } else if (commentsError) {
       console.error(commentsError);
       return <>{commentsError}</>;
+    } else {
+      return <>no comments, need to hit the update button</>;
     }
-  } else {
-    return <>no comments, need to hit the update button</>;
   }
-
   const captionsArr: StoreCaptionsParams[] = [];
 
   // if there are no capSummaries, get them from db and save to
@@ -231,15 +230,14 @@ export default async function Video({
         captions: captionsData[0].captions as string,
         updatedAt: captionsData[0].updatedAt as Date,
       });
+    } else if (captionsError) {
+      throw new Error("Error getting captions from database");
     } else {
-      console.error(captionsError);
-      return <>{captionsError}</>;
+      console.log("no caption data, need to hit the update buttons");
+      return <>no caption data, need to hit the update button</>;
     }
-  } else {
-    return <>no caption data, need to hit the update button</>;
   }
 
-  console.log("comData length is: ", comData.length);
   // if there are no capSummay, but there is capData
   // send to pocketChain store capSummary in DB
   if (
