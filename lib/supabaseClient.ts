@@ -204,9 +204,9 @@ export async function getCommentsSentiment(authToken: string, videoId: string) {
           sentiment.neu++;
         }
       }
-      return sentiment;
+      return null;
     } else {
-      console.error("error getting summary data", summaryError);
+      console.log("no summary data");
       return;
     }
   } else {

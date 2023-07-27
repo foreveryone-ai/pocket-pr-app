@@ -177,10 +177,7 @@ export class PocketChain {
   ) {
     const model = new OpenAI({ temperature: 0 });
     const chain = loadQAMapReduceChain(model);
-    const docs = [
-      new Document({ pageContent: "harrison went to harvard" }),
-      new Document({ pageContent: "ankush went to princeton" }),
-    ];
+    const docs = [];
     for (let i = 0; i < commentSummaries.length; i++) {
       // create batch
       let start = i;
@@ -191,12 +188,13 @@ export class PocketChain {
       );
       docs.push(new Document({ pageContent: batch.toString() }));
     }
+
     console.log("docs length is : ", docs.length);
     const res = await chain.call({
       input_documents: docs,
       question: `Based on the sentiment analysis, videoSummary, and documents provided, can you infer any dominant emotions such as joy, sadness, anger, fear, surprise, and disgust? Provide a distribution of these emotions, if possible.
       sentiment analysis: ${sentimentBreakdown}
-      videoSummary: ${this.captions}`,
+      videoSummary: ${JSON.parse(JSON.stringify(this.captions)).summaryText}`,
     });
     console.log({ res });
   }
