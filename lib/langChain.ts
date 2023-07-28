@@ -187,6 +187,7 @@ export class PocketChain {
       temperature: 0,
     });
 
+    console.log("comsums: ", commentSummaries);
     const comSum = commentSummaries.map(
       (sum) => sum.CommentSummary.summaryText
     );
@@ -203,6 +204,8 @@ export class PocketChain {
       chunkSize: 1000,
       chunkOverlap: 200,
     });
+    console.log(comSum);
+    console.log(comSumMeta);
 
     // maybe pass in, text and metadata. metadata is an array of objects
     const docs = await textSplitter.createDocuments(comSum, comSumMeta);
