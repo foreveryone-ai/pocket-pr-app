@@ -1,3 +1,4 @@
+import type { EmotionalAnalysisArgs } from "@/lib/langChain";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import {
@@ -170,7 +171,10 @@ export default async function Video({
       console.log("emotional analysis: ");
       const emoData = await getDataForEmotionalAnalysis(token, params.videoid);
       if (emoData && emoData.length > 0) {
-        await pocketChain.emotionalAnalysis(sentimentRes, emoData);
+        await pocketChain.emotionalAnalysis(
+          sentimentRes,
+          emoData as unknown as EmotionalAnalysisArgs[]
+        );
       }
 
       console.log("create analysis");
@@ -345,7 +349,10 @@ export default async function Video({
       console.log("emotional analysis: ");
       const emoData = await getDataForEmotionalAnalysis(token, params.videoid);
       if (emoData && emoData.length > 0 && pocketChain) {
-        await pocketChain.emotionalAnalysis(sentimentRes, emoData);
+        await pocketChain.emotionalAnalysis(
+          sentimentRes,
+          emoData as unknown as EmotionalAnalysisArgs[]
+        );
       }
 
       console.log("create analysis");

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { HNSWLib } from "langchain/vectorstores/hnswlib";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import {
   PromptTemplate,
@@ -8,24 +9,27 @@ import {
   PipelinePromptTemplate,
 } from "langchain/prompts";
 import { createStructuredOutputChainFromZod } from "langchain/chains/openai_functions";
+import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { OpenAI } from "langchain/llms/openai";
 import {
   LLMChain,
   loadSummarizationChain,
   loadQAMapReduceChain,
+  loadQAStuffChain,
 } from "langchain/chains";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { Document } from "langchain/document";
 import type { SmallComment } from "./supabaseClient";
 import { SENTIMENT } from "@prisma/client";
-type EmotionalAnalysisArgs = {
+
+export type EmotionalAnalysisArgs = {
   author_display_name: string;
   author_image_url: string;
   like_count: number;
   CommentSummary: {
     summaryText: string;
     sentiment: SENTIMENT;
-  }[];
+  };
 };
 
 export class PocketChain {
@@ -176,22 +180,64 @@ export class PocketChain {
     sentimentBreakdown: string,
     commentSummaries: EmotionalAnalysisArgs[]
   ) {
+    // Initialize the LLM to use to answer the question.
     const model = new OpenAI({
       openAIApiKey: process.env.OPENAI_API_KEY,
-      temperature: 0.2,
       modelName: "gpt-3.5-turbo",
+      temperature: 0,
     });
-    const docs = [];
-    for (let i = 0; i < commentSummaries.length; i++) {
-      // create batch
-      let start = i;
-      let end = i + 10;
-      let batch = commentSummaries.slice(
-        start,
-        Math.min(end, commentSummaries.length)
-      );
-      docs.push(batch);
-    }
-    return;
+
+    const comSum = commentSummaries.map(
+      (sum) => sum.CommentSummary.summaryText
+    );
+    const comSumMeta = commentSummaries.map((obj) => ({
+      author_display_name: obj.author_display_name,
+      author_image_url: obj.author_image_url,
+    }));
+
+    console.log("comSum length: ", comSum.length);
+    console.log("comSumMeta length: ", comSumMeta.length);
+    // use chunkSize and chunkOverlap to adjust how the text is being
+    // split, it will group by \n\n then \n then " "
+    const textSplitter = new RecursiveCharacterTextSplitter({
+      chunkSize: 1000,
+      chunkOverlap: 200,
+    });
+
+    // maybe pass in, text and metadata. metadata is an array of objects
+    const docs = await textSplitter.createDocuments(comSum, comSumMeta);
+
+    console.log("docs");
+    console.log(docs);
+    // Create a vector store from the documents.
+    // may need asure key?
+    const vectorStore = await HNSWLib.fromDocuments(
+      docs,
+      new OpenAIEmbeddings({
+        openAIApiKey: process.env.OPENAI_API_KEY,
+        modelName: "text-embedding-ada-002",
+        batchSize: 512,
+      })
+    );
+
+    // Initialize a retriever wrapper around the vector store
+    const retriever = vectorStore.asRetriever();
+
+    const info = retriever.getRelevantDocuments(
+      "Find dominant emotions such as joy, sadness, anger, fear, surprise, and disgust"
+    );
+
+    // TODO: send relavent documents to openai
+    // prompt to openai
+
+    const stuffChain = loadQAStuffChain(model);
+
+    const stuffResult = await stuffChain.call({
+      inputDocuments: info,
+      question: `Based on the comment summaries and caption below, can you infer any dominant emotions such as joy, sadness, anger, fear, surprise, and disgust? Provide a distribution of these emotions, if possible.
+      [${JSON.parse(JSON.stringify(this.captions)).text_display}]`,
+    });
+
+    return stuffResult;
   }
 }
