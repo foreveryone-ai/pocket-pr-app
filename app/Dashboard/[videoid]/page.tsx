@@ -172,10 +172,7 @@ export default async function Video({
       const emoData = await getDataForEmotionalAnalysis(token, params.videoid);
       console.log("emoData ", emoData);
       if (emoData && emoData.length > 0) {
-        await pocketChain.emotionalAnalysis(
-          sentimentRes,
-          emoData as unknown as EmotionalAnalysisArgs[]
-        );
+        await pocketChain.emotionalAnalysis(sentimentRes, emoData);
       }
 
       console.log("create analysis");

@@ -158,7 +158,7 @@ export async function getDataForEmotionalAnalysis(
       author_display_name: cs.author_display_name,
       author_image_url: cs.author_image_url,
       like_count: cs.like_count,
-      CommentSummmary: cs.CommentSummary[0],
+      comment_summary: cs.CommentSummary[0],
     }));
   }
 }

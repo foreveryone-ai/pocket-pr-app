@@ -26,7 +26,7 @@ export type EmotionalAnalysisArgs = {
   author_display_name: string;
   author_image_url: string;
   like_count: number;
-  CommentSummary: {
+  comment_summary: {
     summaryText: string;
     sentiment: SENTIMENT;
   };
@@ -189,7 +189,7 @@ export class PocketChain {
 
     console.log("comsums: ", commentSummaries);
     const comSum = commentSummaries.map(
-      (sum) => sum.CommentSummary.summaryText
+      (sum) => sum.comment_summary.summaryText
     );
     const comSumMeta = commentSummaries.map((obj) => ({
       author_display_name: obj.author_display_name,
