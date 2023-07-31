@@ -152,7 +152,14 @@ export async function getDataForEmotionalAnalysis(
   if (errorSummaryData) {
     console.error(errorSummaryData);
   } else {
-    return comSummaryData;
+    console.log("comSummaryData: ", comSummaryData);
+    //TODO: Hack!!
+    return comSummaryData.map((cs) => ({
+      author_display_name: cs.author_display_name,
+      author_image_url: cs.author_image_url,
+      like_count: cs.like_count,
+      comment_summary: cs.CommentSummary[0],
+    }));
   }
 }
 
@@ -206,7 +213,7 @@ export async function getCommentsSentiment(authToken: string, videoId: string) {
       }
       return sentiment;
     } else {
-      console.error("error getting summary data", summaryError);
+      console.log("no summary data");
       return;
     }
   } else {

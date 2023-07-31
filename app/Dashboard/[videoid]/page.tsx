@@ -1,3 +1,4 @@
+import type { EmotionalAnalysisArgs } from "@/lib/langChain";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import {
@@ -56,6 +57,7 @@ export default async function Video({
   }
 
   if (!token) {
+    console.log("no token found, redirect to /sign-in");
     redirect("/sign-in");
   }
   const mockCategoriesMiddle = [
@@ -114,6 +116,7 @@ export default async function Video({
     },
   ];
 
+  // show analysis if it exists. return here.
   analysis = await getAnalysis(token, params.videoid);
   if (analysis && analysis.data && analysis.data.length > 0) {
     console.log("got analysis");
@@ -122,9 +125,6 @@ export default async function Video({
     vidData = await getVideo(token as string, params.videoid as string);
     successDisplay(mockCategoriesMiddle, mockCategoriesRight, vidData);
   }
-
-  // Fetch comments from database
-  // get video info
 
   // captions summary exist?
   capSummary = await getCaptionSummary(token, "", params.videoid);
@@ -143,7 +143,8 @@ export default async function Video({
     comSummary = comSummaryData;
   }
 
-  // if both exist, but there is not analysis, create analysis
+  // if both exist, but there is not analysis, create analysis and
+  // return
   if (
     comSummary &&
     comSummary.length > 0 &&
@@ -169,6 +170,7 @@ export default async function Video({
       console.log(sentimentRes);
       console.log("emotional analysis: ");
       const emoData = await getDataForEmotionalAnalysis(token, params.videoid);
+      console.log("emoData ", emoData);
       if (emoData && emoData.length > 0) {
         await pocketChain.emotionalAnalysis(sentimentRes, emoData);
       }
@@ -180,15 +182,14 @@ export default async function Video({
   }
 
   //--------------------no cap/com summaries---------------------//
-  const commentsAndReplies = [];
-  const commentIds = [];
 
+  // Get comments data and store in comData, otherwide comSummary already
+  // exists
   if (!comSummary || comSummary.length === 0) {
     console.log("no comment summaries in database");
 
     //comments and replies will be stored here
 
-    // Get comments
     const { data: commentsData, error: commentsError } = await getComments(
       token as string,
       params.videoid as string
@@ -198,24 +199,20 @@ export default async function Video({
 
     if (commentsData && commentsData.length > 0) {
       console.log("comments data");
-      console.log(commentsData);
-      for (let comment of commentsData) {
-        commentsAndReplies.push(comment.text_display);
-        commentIds.push(comment.id);
-      }
       // dumb copying going on here..
       comData = commentsData.map((item) => item);
-      console.log("comData");
-      console.log(comData);
-    } else {
+      console.log("comData length is: ", comData.length);
+    } else if (commentsError) {
       console.error(commentsError);
       return <>{commentsError}</>;
+    } else {
+      return <>no comments, need to hit the update button</>;
     }
   }
-  // Fetch captions from database
   const captionsArr: StoreCaptionsParams[] = [];
-  console.log(capSummary);
 
+  // if there are no capSummaries, get them from db and save to
+  // capData. Otherwise, need to update captions
   if (capSummary && capSummary.data && capSummary.data.length === 0) {
     // Get captions
     console.log("No capSummaries found. Fetching captions");
@@ -235,14 +232,16 @@ export default async function Video({
         captions: captionsData[0].captions as string,
         updatedAt: captionsData[0].updatedAt as Date,
       });
+    } else if (captionsError) {
+      throw new Error("Error getting captions from database");
     } else {
-      console.error(captionsError);
-      return <>{captionsError}</>;
+      console.log("no caption data, need to hit the update buttons");
+      return <>no caption data, need to hit the update button</>;
     }
   }
 
-  console.log("comData");
-  console.log(comData);
+  // if there are no capSummay, but there is capData
+  // send to pocketChain store capSummary in DB
   if (
     capSummary &&
     capSummary.data &&
@@ -280,8 +279,7 @@ export default async function Video({
       console.error(error);
     }
   }
-  // Preprocess comments
-  //TODO: check if pockechain is undefined
+  // if comData,
   if (comData && comData.length > 0) {
     console.log("Preprocess comments...");
     console.log("got comments data");
@@ -319,14 +317,19 @@ export default async function Video({
     }
   }
 
-  sentiment = await getCommentsSentiment(token as string, params.videoid);
-  console.log("sentiment breakdown: ");
-  if (sentiment) {
-    await PocketChain.sentimentBreakdown(sentiment);
-    console.log("emotional analysis: ");
-    console.log("create analysis");
+  // here we are back to the top. If we have comSummary, we start
+  // creating the analysis.
+  if (comSummary && comSummary.length > 0) {
+    sentiment = await getCommentsSentiment(token as string, params.videoid);
+    console.log("sentiment breakdown: ");
+    if (sentiment) {
+      await PocketChain.sentimentBreakdown(sentiment);
+      console.log("emotional analysis: ");
+      console.log("create analysis");
+    }
   }
 
+  // once the analysis is created, we call to display here
   if (analysis && analysis.data && analysis.data.length > 0 && vidData) {
     return successDisplay(mockCategoriesMiddle, mockCategoriesRight, vidData);
   } else if (
@@ -344,7 +347,10 @@ export default async function Video({
       console.log("emotional analysis: ");
       const emoData = await getDataForEmotionalAnalysis(token, params.videoid);
       if (emoData && emoData.length > 0 && pocketChain) {
-        await pocketChain.emotionalAnalysis(sentimentRes, emoData);
+        await pocketChain.emotionalAnalysis(
+          sentimentRes,
+          emoData as unknown as EmotionalAnalysisArgs[]
+        );
       }
 
       console.log("create analysis");
