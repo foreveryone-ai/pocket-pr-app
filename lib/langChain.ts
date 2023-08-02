@@ -1,5 +1,8 @@
 import { z } from "zod";
-import { HNSWLib } from "langchain/vectorstores/hnswlib";
+import { FunctionalTranslator } from "langchain/retrievers/self_query/functional";
+import { SelfQueryRetriever } from "langchain/retrievers/self_query";
+import { AttributeInfo } from "langchain/schema/query_constructor";
+import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import {
   PromptTemplate,
@@ -181,7 +184,7 @@ export class PocketChain {
     commentSummaries: EmotionalAnalysisArgs[]
   ) {
     // Initialize the LLM to use to answer the question.
-    const model = new OpenAI({
+    const llm = new OpenAI({
       openAIApiKey: process.env.OPENAI_API_KEY,
       modelName: "gpt-3.5-turbo",
       temperature: 0,
@@ -194,6 +197,8 @@ export class PocketChain {
     const comSumMeta = commentSummaries.map((obj) => ({
       author_display_name: obj.author_display_name,
       author_image_url: obj.author_image_url,
+      like_count: obj.like_count,
+      sentiment: obj.comment_summary.sentiment as string,
     }));
 
     console.log("comSum length: ", comSum.length);
@@ -212,35 +217,69 @@ export class PocketChain {
 
     console.log("docs");
     console.log(docs);
+
+    // define document attributes
+    const attributeInfo: AttributeInfo[] = [
+      {
+        name: "author_display_name",
+        description: "the screename, username, or author of the comment",
+        type: "string",
+      },
+      {
+        name: "author_image_url",
+        description: "the url for the author's profile image",
+        type: "string",
+      },
+      {
+        name: "like_count",
+        description: "the number of likes that the comment received",
+        type: "integer",
+      },
+      {
+        name: "sentiment",
+        description:
+          "the sentiment of the comment will be either POSITIVE, NEGATIVE, or NEUTRAL",
+        type: "string",
+      },
+    ];
+
+    const documentContents = "a summary of a comment on a you tube video";
     // Create a vector store from the documents.
     // may need asure key?
-    const vectorStore = await HNSWLib.fromDocuments(
+    // TODO: Replace with supabase vectore store
+    const vectorStore = await MemoryVectorStore.fromDocuments(
       docs,
-      new OpenAIEmbeddings({
-        openAIApiKey: process.env.OPENAI_API_KEY,
-        modelName: "text-embedding-ada-002",
-        batchSize: 512,
-      })
+      new OpenAIEmbeddings()
     );
 
     // Initialize a retriever wrapper around the vector store
-    const retriever = vectorStore.asRetriever();
-
-    const info = retriever.getRelevantDocuments(
-      "Find dominant emotions such as joy, sadness, anger, fear, surprise, and disgust"
-    );
-
-    // TODO: send relavent documents to openai
-    // prompt to openai
-
-    const stuffChain = loadQAStuffChain(model);
-
-    const stuffResult = await stuffChain.call({
-      inputDocuments: info,
-      question: `Based on the comment summaries and caption below, can you infer any dominant emotions such as joy, sadness, anger, fear, surprise, and disgust? Provide a distribution of these emotions, if possible.
-      [${JSON.parse(JSON.stringify(this.captions)).text_display}]`,
+    const selfQueryRetriever = await SelfQueryRetriever.fromLLM({
+      llm,
+      vectorStore,
+      documentContents,
+      attributeInfo,
+      structuredQueryTranslator: new FunctionalTranslator(),
     });
 
-    return stuffResult;
+    // query the vector store to...     👇
+    const q1 = await selfQueryRetriever.getRelevantDocuments(
+      "Which comments have a positive sentiment?"
+    );
+
+    console.log("q1", q1);
+
+    // how do we want to make the final call?
+    // one call with retrieval QA chain with promptTemplate, map_reduce, map_refine, refine?
+
+    return;
+    //const stuffChain = loadQAStuffChain(model);
+
+    // const stuffResult = await stuffChain.call({
+    //   inputDocuments: info,
+    //   question: `Based on the comment summaries and caption below, can you infer any dominant emotions such as joy, sadness, anger, fear, surprise, and disgust? Provide a distribution of these emotions, if possible.
+    //   [${JSON.parse(JSON.stringify(this.captions)).text_display}]`,
+    // });
+
+    // return stuffResult;
   }
 }
