@@ -1,10 +1,10 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 datasource db {
-    provider     = "postgresql"
-    url          = env("DATABASE_URL")
-    relationMode = "foreignKeys"
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  directUrl         = env("DIRECT_URL")
+  relationMode      = "foreignKeys"
 }
 
 generator client {
