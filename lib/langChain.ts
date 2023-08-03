@@ -1,8 +1,9 @@
 import { z } from "zod";
+import { createClient } from "@supabase/supabase-js";
 import { FunctionalTranslator } from "langchain/retrievers/self_query/functional";
 import { SelfQueryRetriever } from "langchain/retrievers/self_query";
 import { AttributeInfo } from "langchain/schema/query_constructor";
-import { MemoryVectorStore } from "langchain/vectorstores/memory";
+import { SupabaseVectorStore } from "langchain/vectorstores/supabase";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import {
   PromptTemplate,
@@ -215,8 +216,8 @@ export class PocketChain {
     // maybe pass in, text and metadata. metadata is an array of objects
     const docs = await textSplitter.createDocuments(comSum, comSumMeta);
 
-    console.log("docs");
-    console.log(docs);
+    console.log("docs length");
+    console.log(docs.length);
 
     // define document attributes
     const attributeInfo: AttributeInfo[] = [
@@ -245,11 +246,21 @@ export class PocketChain {
 
     const documentContents = "a summary of a comment on a you tube video";
     // Create a vector store from the documents.
-    // may need asure key?
-    // TODO: Replace with supabase vectore store
-    const vectorStore = await MemoryVectorStore.fromDocuments(
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!supabaseKey) throw new Error(`Expected SUPABASE_SERVICE_ROLE_KEY`);
+
+    const url = process.env.SUPABASE_URL;
+    if (!url) throw new Error(`Expected env var SUPABASE_URL`);
+
+    const client = createClient(url, supabaseKey);
+    const vectorStore = await SupabaseVectorStore.fromDocuments(
       docs,
-      new OpenAIEmbeddings()
+      new OpenAIEmbeddings(),
+      {
+        client,
+        tableName: "documents",
+        queryName: "match_documents",
+      }
     );
 
     // Initialize a retriever wrapper around the vector store
