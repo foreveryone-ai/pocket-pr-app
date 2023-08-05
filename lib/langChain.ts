@@ -27,6 +27,7 @@ import type { SmallComment } from "./supabaseClient";
 import { SENTIMENT } from "@prisma/client";
 
 export type EmotionalAnalysisArgs = {
+  video_id: string;
   author_display_name: string;
   author_image_url: string;
   like_count: number;
@@ -196,6 +197,7 @@ export class PocketChain {
       (sum) => sum.comment_summary.summaryText
     );
     const comSumMeta = commentSummaries.map((obj) => ({
+      video_id: obj.video_id,
       author_display_name: obj.author_display_name,
       author_image_url: obj.author_image_url,
       like_count: obj.like_count,
@@ -219,32 +221,6 @@ export class PocketChain {
     console.log("docs length");
     console.log(docs.length);
 
-    // define document attributes
-    const attributeInfo: AttributeInfo[] = [
-      {
-        name: "author_display_name",
-        description: "the screename, username, or author of the comment",
-        type: "string",
-      },
-      {
-        name: "author_image_url",
-        description: "the url for the author's profile image",
-        type: "string",
-      },
-      {
-        name: "like_count",
-        description: "the number of likes that the comment received",
-        type: "integer",
-      },
-      {
-        name: "sentiment",
-        description:
-          "the sentiment of the comment will be either POSITIVE, NEGATIVE, or NEUTRAL",
-        type: "string",
-      },
-    ];
-
-    const documentContents = "a summary of a comment on a you tube video";
     // Create a vector store from the documents.
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
     if (!supabaseKey) throw new Error(`Expected SUPABASE_SERVICE_ROLE_KEY`);
@@ -263,18 +239,11 @@ export class PocketChain {
       }
     );
 
-    // Initialize a retriever wrapper around the vector store
-    const selfQueryRetriever = await SelfQueryRetriever.fromLLM({
-      llm,
-      vectorStore,
-      documentContents,
-      attributeInfo,
-      structuredQueryTranslator: new FunctionalTranslator(),
-    });
-
-    // query the vector store to...     👇
-    const q1 = await selfQueryRetriever.getRelevantDocuments(
-      "Which comments have a positive sentiment?"
+    // query, k (num of docs to return), {} metadate filter
+    const q1 = await vectorStore.similaritySearch(
+      "Is anyone interested in the lecture?",
+      1,
+      { video_id: comSumMeta[0].video_id }
     );
 
     console.log("q1", q1);
@@ -283,14 +252,5 @@ export class PocketChain {
     // one call with retrieval QA chain with promptTemplate, map_reduce, map_refine, refine?
 
     return;
-    //const stuffChain = loadQAStuffChain(model);
-
-    // const stuffResult = await stuffChain.call({
-    //   inputDocuments: info,
-    //   question: `Based on the comment summaries and caption below, can you infer any dominant emotions such as joy, sadness, anger, fear, surprise, and disgust? Provide a distribution of these emotions, if possible.
-    //   [${JSON.parse(JSON.stringify(this.captions)).text_display}]`,
-    // });
-
-    // return stuffResult;
   }
 }

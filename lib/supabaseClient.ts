@@ -155,6 +155,7 @@ export async function getDataForEmotionalAnalysis(
     console.log("comSummaryData: ", comSummaryData);
     //TODO: Hack!!
     return comSummaryData.map((cs) => ({
+      video_id,
       author_display_name: cs.author_display_name,
       author_image_url: cs.author_image_url,
       like_count: cs.like_count,
