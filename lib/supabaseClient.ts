@@ -52,6 +52,46 @@ export async function createUser(
     return 400;
   }
 }
+// id                              String   @id @default(cuid())
+// createdAt                       DateTime @default(now())
+// updatedAt                       DateTime @updatedAt
+// sentiment_breakdown             String
+// emotional_analysis              String
+// conflict_detection              String
+// conflict_resolution_suggestions String
+// popular_topics                  String
+// content_suggestions             String
+// engagement_opportunities        String
+// notable_comments                String
+// influencer_identification       String
+// tone_of_communication           String
+// video_id                        String
+// video                           Videos      @relation(fields: [video_id], references: [id], onDelete: Cascade)
+// user_id                         String
+// user                            Users        @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+export async function createAnalysis(
+  authToken: string,
+  userId: string,
+  video_id: string,
+  sentimentBreakdown: string
+) {
+  const db = createServerDbClient(authToken);
+  const { data: aData, error: aError } = await db
+    .from("VideoAnalysis")
+    .insert({
+      sentimentBreakdown,
+      video_id,
+      user_id: userId,
+    })
+    .select();
+
+  if (aData) {
+    return aData;
+  } else {
+    return aError;
+  }
+}
 
 export async function storeChannelId(
   authToken: string,

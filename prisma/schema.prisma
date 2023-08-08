@@ -195,3 +195,4 @@ model VideoAnalysis {
     @@index([video_id])
     @@index([user_id])
 }
+

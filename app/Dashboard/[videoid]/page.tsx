@@ -18,6 +18,7 @@ import {
   getCommentsSentiment,
   getAnalysis,
   getDataForEmotionalAnalysis,
+  createAnalysis,
 } from "@/lib/supabaseClient";
 import { auth, currentUser } from "@clerk/nextjs";
 
@@ -123,7 +124,7 @@ export default async function Video({
     console.log(analysis);
     //TODO: return the page here, after getting the video stuff
     vidData = await getVideo(token as string, params.videoid as string);
-    successDisplay(mockCategoriesMiddle, mockCategoriesRight, vidData);
+    successDisplay(vidData);
   }
 
   // captions summary exist?
@@ -176,6 +177,15 @@ export default async function Video({
       }
 
       console.log("create analysis");
+      const analysisRes = await createAnalysis(
+        token,
+        userId as string,
+        params.videoid,
+        sentimentRes
+      );
+
+      console.log("created analysis!");
+      console.log(analysisRes);
       return <>create analysis</>;
       //successDisplay(vidData);
     }
@@ -331,7 +341,7 @@ export default async function Video({
 
   // once the analysis is created, we call to display here
   if (analysis && analysis.data && analysis.data.length > 0 && vidData) {
-    return successDisplay(mockCategoriesMiddle, mockCategoriesRight, vidData);
+    return successDisplay(vidData);
   } else if (
     comSummary &&
     comSummary.length > 0 &&
@@ -364,11 +374,7 @@ export default async function Video({
 
 type MockCategories = { heading: string; description: string }[];
 
-function successDisplay(
-  mockCategoriesMiddle: MockCategories,
-  mockCategoriesRight: MockCategories,
-  vidData: { [x: string]: any } /** analysisData */
-) {
+function successDisplay(vidData: { [x: string]: any } /** analysisData */) {
   return (
     <section className="bg-primary-content md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-8 md:flex-none flex flex-col grid-cols-none gap-0">
       <div
@@ -402,37 +408,23 @@ function successDisplay(
       </div>
 
       <section className="flex flex-col justify-evenly items-center gap-12 py-12">
-        {mockCategoriesMiddle.map((item, i) => (
-          <div
-            key={i}
-            className="md:w-full w-[280px] collapse bg-[#7AD9F8] opacity-80 text-black text-center"
-          >
-            <input type="checkbox" className="w-full" />
-            <div className="collapse-title text-xl font-medium">
-              {item.heading}
-            </div>
-            <div className="collapse-content ">
-              <p className="text-black">{item.description}</p>
-            </div>
+        <div className="md:w-full w-[280px] collapse bg-[#7AD9F8] opacity-80 text-black text-center">
+          <input type="checkbox" className="w-full" />
+          <div className="collapse-title text-xl font-medium">heading</div>
+          <div className="collapse-content ">
+            <p className="text-black">description</p>
           </div>
-        ))}
+        </div>
       </section>
 
       <section className="md:-order-1 lg:order-last flex flex-col justify-evenly items-center gap-12 pb-12">
-        {mockCategoriesRight.map((item, i) => (
-          <div
-            key={i}
-            className="md:w-full w-[280px] collapse bg-[#7AD9F8] opacity-80 text-black text-center"
-          >
-            <input type="checkbox" className="w-full" />
-            <div className="collapse-title text-xl font-medium">
-              {item.heading}
-            </div>
-            <div className="collapse-content ">
-              <p className="text-black">{item.description}</p>
-            </div>
+        <div className="md:w-full w-[280px] collapse bg-[#7AD9F8] opacity-80 text-black text-center">
+          <input type="checkbox" className="w-full" />
+          <div className="collapse-title text-xl font-medium">heading</div>
+          <div className="collapse-content ">
+            <p className="text-black">description</p>
           </div>
-        ))}
+        </div>
       </section>
     </section>
   );
