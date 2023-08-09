@@ -122,9 +122,8 @@ export default async function Video({
   if (analysis && analysis.data && analysis.data.length > 0) {
     console.log("got analysis");
     console.log(analysis);
-    //TODO: return the page here, after getting the video stuff
     vidData = await getVideo(token as string, params.videoid as string);
-    successDisplay(vidData);
+    return successDisplay(vidData);
   }
 
   // captions summary exist?
@@ -176,7 +175,7 @@ export default async function Video({
         await pocketChain.emotionalAnalysis(sentimentRes, emoData);
       }
 
-      console.log("create analysis");
+      vidData = await getVideo(token as string, params.videoid as string);
       const analysisRes = await createAnalysis(
         token,
         userId as string,
@@ -186,7 +185,7 @@ export default async function Video({
 
       console.log("created analysis!");
       console.log(analysisRes);
-      return <>create analysis</>;
+      return successDisplay(vidData);
       //successDisplay(vidData);
     }
   }
@@ -362,10 +361,17 @@ export default async function Video({
           emoData as unknown as EmotionalAnalysisArgs[]
         );
       }
+      vidData = await getVideo(token as string, params.videoid as string);
 
       console.log("create analysis");
-      return <>create analysis</>;
-      //successDisplay(vidData);
+      const analysisRes = await createAnalysis(
+        token,
+        userId as string,
+        params.videoid,
+        sentimentRes
+      );
+      console.log("analsysRes: ", analysisRes);
+      return successDisplay(vidData);
     }
   } else {
     return <>no analysis yet</>;
@@ -373,8 +379,9 @@ export default async function Video({
 }
 
 type MockCategories = { heading: string; description: string }[];
+// there is a way of generating types from the supabase cli, but...
 
-function successDisplay(vidData: { [x: string]: any } /** analysisData */) {
+function successDisplay(vidData: { [x: string]: any }) {
   return (
     <section className="bg-primary-content md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-8 md:flex-none flex flex-col grid-cols-none gap-0">
       <div
