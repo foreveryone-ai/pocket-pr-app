@@ -129,6 +129,7 @@ export default async function Video({
     console.log("got analysis");
     console.log(analysis);
     vidData = await getVideo(token as string, params.videoid as string);
+    //TODO: also pass in caption summary
     return successDisplay(
       vidData,
       analysis.data[0] as unknown as VideoAnalysisFields
@@ -469,6 +470,7 @@ function successDisplay(
           />
         </div>
         <div className="text-ellipsis overflow-clip max-h-60 px-4">
+          {/* feed in captions here */}
           To summarize your YouTube video about the controversy surrounding the
           use of genetically modified organisms (GMOs), you presented arguments
           from both sides of the debate. You explained that proponents of GMOs
