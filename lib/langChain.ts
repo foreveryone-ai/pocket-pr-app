@@ -18,8 +18,10 @@ import { OpenAI } from "langchain/llms/openai";
 import {
   LLMChain,
   loadSummarizationChain,
+  VectorDBQAChain,
   loadQAMapReduceChain,
   loadQAStuffChain,
+  RetrievalQAChain,
 } from "langchain/chains";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { Document } from "langchain/document";
@@ -185,13 +187,6 @@ export class PocketChain {
     sentimentBreakdown: string,
     commentSummaries: EmotionalAnalysisArgs[]
   ) {
-    // Initialize the LLM to use to answer the question.
-    const llm = new OpenAI({
-      openAIApiKey: process.env.OPENAI_API_KEY,
-      modelName: "gpt-3.5-turbo",
-      temperature: 0,
-    });
-
     console.log("comsums: ", commentSummaries);
     const comSum = commentSummaries.map(
       (sum) => sum.comment_summary.summaryText
@@ -217,6 +212,7 @@ export class PocketChain {
 
     // maybe pass in, text and metadata. metadata is an array of objects
     const docs = await textSplitter.createDocuments(comSum, comSumMeta);
+    // TODO: add captions here
 
     console.log("docs length");
     console.log(docs.length);
@@ -229,17 +225,26 @@ export class PocketChain {
     if (!url) throw new Error(`Expected env var SUPABASE_URL`);
 
     const client = createClient(url, supabaseKey);
-    const vectorStore = await SupabaseVectorStore.fromDocuments(
-      docs,
+
+    // for query only...
+    const vectorStore = await SupabaseVectorStore.fromExistingIndex(
       new OpenAIEmbeddings(),
       {
         client,
         tableName: "documents",
-        queryName: "match_documents",
       }
     );
+    // const vectorStore = await SupabaseVectorStore.fromDocuments(
+    //   docs,
+    //   new OpenAIEmbeddings(),
+    //   {
+    //     client,
+    //     tableName: "documents",
+    //     queryName: "match_documents",
+    //   }
+    // );
 
-    // query, k (num of docs to return), {} metadate filter
+    //query, k (num of docs to return), {} metadate filter
     const q1 = await vectorStore.similaritySearch(
       "Is anyone interested in the lecture?",
       1,
@@ -248,8 +253,62 @@ export class PocketChain {
 
     console.log("q1", q1);
 
+    // Initialize the LLM to use to answer the question.
+    const llm = new OpenAI({
+      openAIApiKey: process.env.OPENAI_API_KEY,
+      modelName: "gpt-3.5-turbo",
+      temperature: 0,
+    });
+
+    // const template = `Use the captions and commentData to answer the following questions.
+    // captions: ${this.captions}
+    // commentData: {commentData}
+    // question: {questions}
+    // `
+    // const prompt = PromptTemplate.fromTemplate(template);
+
+    //const questions = "Based on the sentiment distribution and comment summaries, can you infer any dominant emotions such as joy, sadness, anger, fear, surprise, and disgust? Provide a distribution of these emotions, if possible."
+    const questions = "Is anyone interested in the lecure?";
+
     // how do we want to make the final call?
     // one call with retrieval QA chain with promptTemplate, map_reduce, map_refine, refine?
+
+    // const qaChain = RetrievalQAChain.fromLLM(llm, vectorStore.asRetriever(), {
+    //   returnSourceDocuments: true,
+    //   prompt: prompt
+    // });
+
+    // final call without meta filter
+    //const res = await qaChain.call({query: questions});
+
+    //console.log("final call without metadata filter");
+    //console.log("res", res);
+
+    // using simularity search..
+
+    const template2 =
+      PromptTemplate.fromTemplate(`You are an emotionally intellegent PR assistant, who has been given the captions from a You Tube video, along with some data from the comments section. Give the person who created the video a helpful response based on the captions and data provided. The tone should be conversational.
+    captions: {captions}
+    comments: {comments}`);
+
+    console.log("captions type: ", typeof this.captions);
+    console.log("captions: ", this.captions);
+
+    const caption = JSON.stringify(this.captions);
+    console.log("stringified: ", caption);
+    const captionObj = JSON.parse(caption);
+    console.log("objectified: ", captionObj);
+
+    const formattedTemp = await template2.format({
+      captions: captionObj.summaryText,
+      comments: q1[0].pageContent,
+    });
+
+    console.log("formattedTemp", formattedTemp);
+
+    const predictionRes = await llm.predict(formattedTemp);
+
+    console.log("predictionRes", predictionRes);
 
     return;
   }

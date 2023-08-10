@@ -18,6 +18,7 @@ import {
   getCommentsSentiment,
   getAnalysis,
   getDataForEmotionalAnalysis,
+  createAnalysis,
 } from "@/lib/supabaseClient";
 import { auth, currentUser } from "@clerk/nextjs";
 
@@ -31,10 +32,10 @@ export default async function Video({
   params: { videoid: string };
 }) {
   const { userId, getToken } = auth();
+  // token used for all supabase calls
   const token = await getToken({ template: "supabase" });
-  console.log("token...");
-  console.log(token);
-
+  console.log("got token...");
+  // global variables
   let userOAuth,
     pocketChain,
     batches,
@@ -46,8 +47,10 @@ export default async function Video({
     comData,
     capData,
     summariesForEmotionalAnalysis,
+    videoAnalysis,
     sentiment;
 
+  // we get oauth from google so long as we have Clerk userId
   if (userId) {
     try {
       userOAuth = await getOAuthData(userId, "oauth_google");
@@ -56,10 +59,12 @@ export default async function Video({
     }
   }
 
+  // if supabase token has expired, redirect to /sign-in
   if (!token) {
     console.log("no token found, redirect to /sign-in");
     redirect("/sign-in");
   }
+  // mock text
   const mockCategoriesMiddle = [
     {
       heading: "Sentiment Breakdown",
@@ -88,6 +93,7 @@ export default async function Video({
     },
   ];
 
+  // mock text
   const mockCategoriesRight = [
     {
       heading: "Content Suggestions",
@@ -116,24 +122,30 @@ export default async function Video({
     },
   ];
 
-  // show analysis if it exists. return here.
+  // show analysis if it exists and display and return
   analysis = await getAnalysis(token, params.videoid);
+  console.log("got analysis: ", analysis);
   if (analysis && analysis.data && analysis.data.length > 0) {
     console.log("got analysis");
     console.log(analysis);
-    //TODO: return the page here, after getting the video stuff
     vidData = await getVideo(token as string, params.videoid as string);
-    successDisplay(mockCategoriesMiddle, mockCategoriesRight, vidData);
+    //TODO: also pass in caption summary
+    return successDisplay(
+      vidData,
+      analysis.data[0] as unknown as VideoAnalysisFields
+    );
   }
 
-  // captions summary exist?
+  // if there is no analysis, we check if we have captions in the db
+  // and save the result to capSummary
   capSummary = await getCaptionSummary(token, "", params.videoid);
   if (capSummary && capSummary.data && capSummary.data.length > 0) {
     console.log("got cap summary");
     console.log(capSummary);
   }
 
-  // comments summary exists?
+  // next, we check if we have comments stored in the db
+  // and save to comSummaryData
   const { data: comSummaryData, error: comSummaryError } =
     await getCommentsSummaries(token, [], params.videoid);
   if (comSummaryError) {
@@ -153,6 +165,7 @@ export default async function Video({
     capSummary.data.length > 0
   ) {
     // pass dummy params??
+    //TODO: this is problematic
     pocketChain = new PocketChain(capSummary.data[0] as unknown as string, [
       [
         {
@@ -163,27 +176,47 @@ export default async function Video({
         },
       ],
     ]);
+
+    //---------------------------- Create Analysis ---------------------------//
+    // gather all sentiment from the comments to ask open ai
     sentiment = await getCommentsSentiment(token as string, params.videoid);
     if (sentiment) {
       console.log("sentiment breakdown: ");
+      // TODO: store this in VideoAnalysis
       const sentimentRes = await PocketChain.sentimentBreakdown(sentiment);
       console.log(sentimentRes);
       console.log("emotional analysis: ");
       const emoData = await getDataForEmotionalAnalysis(token, params.videoid);
       console.log("emoData ", emoData);
+      // TODO: convert this to a api call
       if (emoData && emoData.length > 0) {
+        // get emotional analysis!!
         await pocketChain.emotionalAnalysis(sentimentRes, emoData);
       }
 
-      console.log("create analysis");
-      return <>create analysis</>;
-      //successDisplay(vidData);
+      vidData = await getVideo(token as string, params.videoid as string);
+      videoAnalysis = await createAnalysis(
+        token,
+        userId as string,
+        params.videoid,
+        sentimentRes
+      );
+
+      console.log("created analysis!");
+      console.log(videoAnalysis);
+      // do we really need to call it again??
+      const { data: videoAnalysisData, error: videoAnalysisError } =
+        await getAnalysis(token, params.videoid);
+      return successDisplay(
+        vidData,
+        videoAnalysisData as unknown as VideoAnalysisFields
+      );
     }
   }
 
   //--------------------no cap/com summaries---------------------//
 
-  // Get comments data and store in comData, otherwide comSummary already
+  // Get comments data and store in comData, otherwise comSummary already
   // exists
   if (!comSummary || comSummary.length === 0) {
     console.log("no comment summaries in database");
@@ -206,12 +239,15 @@ export default async function Video({
       console.error(commentsError);
       return <>{commentsError}</>;
     } else {
+      //TODO: create another function here for a UI
+      //TODO: instruction to return and hit update
       return <>no comments, need to hit the update button</>;
     }
   }
-  const captionsArr: StoreCaptionsParams[] = [];
+  // caption summaries will be stored here before db call to store them
+  //const captionsArr: StoreCaptionsParams[] = [];
 
-  // if there are no capSummaries, get them from db and save to
+  // if there are no capSummaries, get the captions from db and save to
   // capData. Otherwise, need to update captions
   if (capSummary && capSummary.data && capSummary.data.length === 0) {
     // Get captions
@@ -221,20 +257,23 @@ export default async function Video({
       params.videoid as string
     );
 
+    // check if we have captions in the db
     if (captionsData && captionsData.length > 0) {
       console.log("got captions data...");
       capData = [...captionsData];
 
-      captionsArr.push({
-        id: captionsData[0].id as string,
-        video_id: captionsData[0].video_id as string,
-        language: captionsData[0].language as string,
-        captions: captionsData[0].captions as string,
-        updatedAt: captionsData[0].updatedAt as Date,
-      });
+      // captionsArr.push({
+      //   id: captionsData[0].id as string,
+      //   video_id: captionsData[0].video_id as string,
+      //   language: captionsData[0].language as string,
+      //   captions: captionsData[0].captions as string,
+      //   updatedAt: captionsData[0].updatedAt as Date,
+      // });
     } else if (captionsError) {
       throw new Error("Error getting captions from database");
     } else {
+      //TODO: use the UI from before to direct the user to the previous page
+      //TODO: or bring the update button into this page as well
       console.log("no caption data, need to hit the update buttons");
       return <>no caption data, need to hit the update button</>;
     }
@@ -249,6 +288,7 @@ export default async function Video({
     capData
   ) {
     console.log("sending to PocketChain...");
+    //TODO: this part is confusing
     pocketChain = new PocketChain(
       (capData[0].captions as string).replace(/\n/, ""),
       [
@@ -262,6 +302,7 @@ export default async function Video({
         ],
       ]
     );
+    // summarize captions
     capSummary = await pocketChain.summarizeCaptions();
     console.log("captionsId: ", capData[0].id);
     console.log("captions summary: ", capSummary);
@@ -279,7 +320,7 @@ export default async function Video({
       console.error(error);
     }
   }
-  // if comData,
+  // if we have comments in db preprocess them before sending to openai
   if (comData && comData.length > 0) {
     console.log("Preprocess comments...");
     console.log("got comments data");
@@ -287,7 +328,10 @@ export default async function Video({
     batches = preprocessor.preprocessComments();
     console.log("batches created...");
     console.log("captionsData...");
+    // instantiate PocketChain if it doens't exist, make sure
+    // we have the caption summaries in order to instantiate
     if (!pocketChain && capSummary) {
+      // TODO: this is causeing chaos in PocketChain
       pocketChain = new PocketChain(
         capSummary.data[0] as unknown as string,
         batches
@@ -295,6 +339,7 @@ export default async function Video({
       console.log("processing comments...");
       const commentsRes = await pocketChain.processComments();
       console.log("commentsRes.length = ", commentsRes.length);
+      // if there are comment summaries..
       if (commentsRes.length > 0) {
         // store everything
         // create comment summaries
@@ -307,8 +352,6 @@ export default async function Video({
           );
           console.log("comments summaries stored succesfully!");
           console.log(commentsSummaryRes);
-
-          console.log("storing sentiment...");
         } catch (error) {
           console.error("error on storing comment summaries");
           console.error(error);
@@ -317,21 +360,28 @@ export default async function Video({
     }
   }
 
-  // here we are back to the top. If we have comSummary, we start
+  // here we are back to the top. If we have comment summaries, we start
   // creating the analysis.
-  if (comSummary && comSummary.length > 0) {
-    sentiment = await getCommentsSentiment(token as string, params.videoid);
-    console.log("sentiment breakdown: ");
-    if (sentiment) {
-      await PocketChain.sentimentBreakdown(sentiment);
-      console.log("emotional analysis: ");
-      console.log("create analysis");
-    }
-  }
+  //---------------------------- Create Analysis ---------------------------//
+  // if (comSummary && comSummary.length > 0) {
+  //   sentiment = await getCommentsSentiment(token as string, params.videoid);
+  //   console.log("sentiment breakdown: ");
+  //   if (sentiment) {
+  //     await PocketChain.sentimentBreakdown(sentiment);
+  //     console.log("create analysis");
+  //     //TODO: create analysis
+  //   }
+  // }
 
   // once the analysis is created, we call to display here
   if (analysis && analysis.data && analysis.data.length > 0 && vidData) {
-    return successDisplay(mockCategoriesMiddle, mockCategoriesRight, vidData);
+    const { data: videoAnalysisData, error: videoAnalysisError } =
+      await getAnalysis(token, params.videoid);
+    return successDisplay(
+      vidData,
+      videoAnalysisData as unknown as VideoAnalysisFields
+    );
+    // otherwise, we have everything but the analysis
   } else if (
     comSummary &&
     comSummary.length > 0 &&
@@ -339,6 +389,7 @@ export default async function Video({
     capSummary.data &&
     capSummary.data.length > 0
   ) {
+    //---------------------------- Create Analysis ---------------------------//
     sentiment = await getCommentsSentiment(token as string, params.videoid);
     if (sentiment) {
       console.log("sentiment breakdown: ");
@@ -352,33 +403,66 @@ export default async function Video({
           emoData as unknown as EmotionalAnalysisArgs[]
         );
       }
+      vidData = await getVideo(token as string, params.videoid as string);
 
       console.log("create analysis");
-      return <>create analysis</>;
-      //successDisplay(vidData);
+      const analysisRes = await createAnalysis(
+        token,
+        userId as string,
+        params.videoid,
+        sentimentRes
+      );
+      console.log("analsysRes: ", analysisRes);
+      const { data: videoAnalysisData, error: videoAnalysisError } =
+        await getAnalysis(token, params.videoid);
+      return successDisplay(
+        vidData,
+        videoAnalysisData as unknown as VideoAnalysisFields
+      );
     }
   } else {
+    // this shouldn't happen
+    console.error("this should not be happening");
     return <>no analysis yet</>;
   }
 }
 
-type MockCategories = { heading: string; description: string }[];
+// there is a way of generating types from the supabase cli, but...
+type VideoAnalysisFields = {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  sentiment_breakdown: string;
+  emotional_analysis: string;
+  conflict_detection: string;
+  conflict_resolution_suggestions: string;
+  popular_topics: string;
+  content_suggestions: string;
+  engagement_opportunities: string;
+  notable_comments: string;
+  influencer_identification: string;
+  tone_of_communication: string;
+  video_id: string;
+  user_id: string;
+};
 
 function successDisplay(
-  mockCategoriesMiddle: MockCategories,
-  mockCategoriesRight: MockCategories,
-  vidData: { [x: string]: any } /** analysisData */
+  //TODO: got me on my knees!!
+  vidData: any,
+  analysis: VideoAnalysisFields
 ) {
+  console.log("vidData: ", vidData);
+  console.log("analysis: ", analysis);
   return (
     <section className="bg-primary-content md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-8 md:flex-none flex flex-col grid-cols-none gap-0">
       <div
         id="left-side"
         className="artboard md:phone-3 sm:phone-1 bg-base-content flex flex-col justify-evenly items-center py-4"
       >
-        <h1 className="text-xl text-center">{vidData && vidData.title}</h1>
+        <h1 className="text-xl text-center">{vidData && vidData[0].title}</h1>
         <div className="p-4 md:w-[400px] sm:w-[300px] w-[260px]">
           <Image
-            src={vidData && vidData.thumbnail_url}
+            src={vidData && vidData[0].thumbnail_url}
             alt="thumbnail"
             width={640}
             height={480}
@@ -386,6 +470,7 @@ function successDisplay(
           />
         </div>
         <div className="text-ellipsis overflow-clip max-h-60 px-4">
+          {/* feed in captions here */}
           To summarize your YouTube video about the controversy surrounding the
           use of genetically modified organisms (GMOs), you presented arguments
           from both sides of the debate. You explained that proponents of GMOs
@@ -402,37 +487,23 @@ function successDisplay(
       </div>
 
       <section className="flex flex-col justify-evenly items-center gap-12 py-12">
-        {mockCategoriesMiddle.map((item, i) => (
-          <div
-            key={i}
-            className="md:w-full w-[280px] collapse bg-[#7AD9F8] opacity-80 text-black text-center"
-          >
-            <input type="checkbox" className="w-full" />
-            <div className="collapse-title text-xl font-medium">
-              {item.heading}
-            </div>
-            <div className="collapse-content ">
-              <p className="text-black">{item.description}</p>
-            </div>
+        <div className="md:w-full w-[280px] collapse bg-[#7AD9F8] opacity-80 text-black text-center">
+          <input type="checkbox" className="w-full" />
+          <div className="collapse-title text-xl font-medium">heading</div>
+          <div className="collapse-content ">
+            <p className="text-black">description</p>
           </div>
-        ))}
+        </div>
       </section>
 
       <section className="md:-order-1 lg:order-last flex flex-col justify-evenly items-center gap-12 pb-12">
-        {mockCategoriesRight.map((item, i) => (
-          <div
-            key={i}
-            className="md:w-full w-[280px] collapse bg-[#7AD9F8] opacity-80 text-black text-center"
-          >
-            <input type="checkbox" className="w-full" />
-            <div className="collapse-title text-xl font-medium">
-              {item.heading}
-            </div>
-            <div className="collapse-content ">
-              <p className="text-black">{item.description}</p>
-            </div>
+        <div className="md:w-full w-[280px] collapse bg-[#7AD9F8] opacity-80 text-black text-center">
+          <input type="checkbox" className="w-full" />
+          <div className="collapse-title text-xl font-medium">heading</div>
+          <div className="collapse-content ">
+            <p className="text-black">description</p>
           </div>
-        ))}
+        </div>
       </section>
     </section>
   );
