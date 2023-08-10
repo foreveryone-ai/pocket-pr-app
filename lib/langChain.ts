@@ -212,7 +212,6 @@ export class PocketChain {
 
     // maybe pass in, text and metadata. metadata is an array of objects
     const docs = await textSplitter.createDocuments(comSum, comSumMeta);
-    // TODO: add captions here
 
     console.log("docs length");
     console.log(docs.length);
@@ -227,27 +226,27 @@ export class PocketChain {
     const client = createClient(url, supabaseKey);
 
     // for query only...
-    const vectorStore = await SupabaseVectorStore.fromExistingIndex(
-      new OpenAIEmbeddings(),
-      {
-        client,
-        tableName: "documents",
-      }
-    );
-    // const vectorStore = await SupabaseVectorStore.fromDocuments(
-    //   docs,
+    // const vectorStore = await SupabaseVectorStore.fromExistingIndex(
     //   new OpenAIEmbeddings(),
     //   {
     //     client,
     //     tableName: "documents",
-    //     queryName: "match_documents",
     //   }
     // );
+    const vectorStore = await SupabaseVectorStore.fromDocuments(
+      docs,
+      new OpenAIEmbeddings(),
+      {
+        client,
+        tableName: "documents",
+        queryName: "match_documents",
+      }
+    );
 
     //query, k (num of docs to return), {} metadate filter
     const q1 = await vectorStore.similaritySearch(
-      "Is anyone interested in the lecture?",
-      1,
+      "Return comments with a strong emotional content",
+      3,
       { video_id: comSumMeta[0].video_id }
     );
 
@@ -259,16 +258,6 @@ export class PocketChain {
       modelName: "gpt-3.5-turbo",
       temperature: 0,
     });
-
-    // const template = `Use the captions and commentData to answer the following questions.
-    // captions: ${this.captions}
-    // commentData: {commentData}
-    // question: {questions}
-    // `
-    // const prompt = PromptTemplate.fromTemplate(template);
-
-    //const questions = "Based on the sentiment distribution and comment summaries, can you infer any dominant emotions such as joy, sadness, anger, fear, surprise, and disgust? Provide a distribution of these emotions, if possible."
-    const questions = "Is anyone interested in the lecure?";
 
     // how do we want to make the final call?
     // one call with retrieval QA chain with promptTemplate, map_reduce, map_refine, refine?
@@ -287,7 +276,7 @@ export class PocketChain {
     // using simularity search..
 
     const template2 =
-      PromptTemplate.fromTemplate(`You are an emotionally intellegent PR assistant, who has been given the captions from a You Tube video, along with some data from the comments section. Give the person who created the video a helpful response based on the captions and data provided. The tone should be conversational.
+      PromptTemplate.fromTemplate(`You are a public relations consultant. First, use the captions to understand the content of the YouTube video. Then, summarize the emotional breakdown of the comments in relation to the video. 
     captions: {captions}
     comments: {comments}`);
 

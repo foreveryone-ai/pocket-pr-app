@@ -130,6 +130,32 @@ export default async function Video({
     console.log(analysis);
     vidData = await getVideo(token as string, params.videoid as string);
     //TODO: also pass in caption summary
+    // only for testing!!!
+    //-------------------------- TRASH BELOW ---------------------- //
+
+    capSummary = await getCaptionSummary(token, "", params.videoid);
+    pocketChain = new PocketChain(capSummary.data[0] as unknown as string, [
+      [
+        {
+          comment_id: "",
+          text_display: "",
+          like_count: 0,
+          author_display_name: "",
+        },
+      ],
+    ]);
+    sentiment = await getCommentsSentiment(token as string, params.videoid);
+    const sentimentRes = await PocketChain.sentimentBreakdown(sentiment);
+    console.log(sentimentRes);
+    console.log("emotional analysis: ");
+    const emoData = await getDataForEmotionalAnalysis(token, params.videoid);
+    console.log("emoData ", emoData);
+    // TODO: convert this to a api call
+    if (emoData && emoData.length > 0) {
+      // get emotional analysis!!
+      await pocketChain.emotionalAnalysis(sentimentRes, emoData);
+    }
+    //------------------------- Trash Above --------------------------//
     return successDisplay(
       vidData,
       analysis.data[0] as unknown as VideoAnalysisFields
@@ -362,16 +388,16 @@ export default async function Video({
 
   // here we are back to the top. If we have comment summaries, we start
   // creating the analysis.
-  //---------------------------- Create Analysis ---------------------------//
-  // if (comSummary && comSummary.length > 0) {
-  //   sentiment = await getCommentsSentiment(token as string, params.videoid);
-  //   console.log("sentiment breakdown: ");
-  //   if (sentiment) {
-  //     await PocketChain.sentimentBreakdown(sentiment);
-  //     console.log("create analysis");
-  //     //TODO: create analysis
-  //   }
-  // }
+  //---------------------------- Create Sentiment Analysis---------------------------//
+  if (comSummary && comSummary.length > 0) {
+    sentiment = await getCommentsSentiment(token as string, params.videoid);
+    console.log("sentiment breakdown: ");
+    if (sentiment) {
+      await PocketChain.sentimentBreakdown(sentiment);
+      console.log("create analysis");
+      //TODO: create analysis
+    }
+  }
 
   // once the analysis is created, we call to display here
   if (analysis && analysis.data && analysis.data.length > 0 && vidData) {
@@ -391,6 +417,7 @@ export default async function Video({
   ) {
     //---------------------------- Create Analysis ---------------------------//
     sentiment = await getCommentsSentiment(token as string, params.videoid);
+    console.log("line 394", sentiment);
     if (sentiment) {
       console.log("sentiment breakdown: ");
       const sentimentRes = await PocketChain.sentimentBreakdown(sentiment);
