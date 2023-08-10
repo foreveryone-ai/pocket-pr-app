@@ -80,7 +80,7 @@ export async function createAnalysis(
   const { data: aData, error: aError } = await db
     .from("VideoAnalysis")
     .insert({
-      sentimentBreakdown,
+      sentiment_breakdown: sentimentBreakdown,
       video_id,
       user_id: userId,
     })
@@ -374,7 +374,11 @@ export async function getChannelId(authToken: string, user_id: string) {
 export async function getVideo(authToken: string, videoId: string) {
   const db = createServerDbClient(authToken);
   const { data, error } = await db.from("Videos").select().eq("id", videoId);
-  return data ? data : error;
+  if (data) {
+    return data;
+  } else {
+    return error;
+  }
 }
 
 export async function getVideos(authToken: string, channel_id: string) {

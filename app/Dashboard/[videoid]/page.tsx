@@ -47,6 +47,7 @@ export default async function Video({
     comData,
     capData,
     summariesForEmotionalAnalysis,
+    videoAnalysis,
     sentiment;
 
   // we get oauth from google so long as we have Clerk userId
@@ -128,7 +129,10 @@ export default async function Video({
     console.log("got analysis");
     console.log(analysis);
     vidData = await getVideo(token as string, params.videoid as string);
-    return successDisplay(vidData);
+    return successDisplay(
+      vidData,
+      analysis.data[0] as unknown as VideoAnalysisFields
+    );
   }
 
   // if there is no analysis, we check if we have captions in the db
@@ -183,13 +187,14 @@ export default async function Video({
       console.log("emotional analysis: ");
       const emoData = await getDataForEmotionalAnalysis(token, params.videoid);
       console.log("emoData ", emoData);
+      // TODO: convert this to a api call
       if (emoData && emoData.length > 0) {
         // get emotional analysis!!
         await pocketChain.emotionalAnalysis(sentimentRes, emoData);
       }
 
       vidData = await getVideo(token as string, params.videoid as string);
-      const analysisRes = await createAnalysis(
+      videoAnalysis = await createAnalysis(
         token,
         userId as string,
         params.videoid,
@@ -197,8 +202,14 @@ export default async function Video({
       );
 
       console.log("created analysis!");
-      console.log(analysisRes);
-      return successDisplay(vidData);
+      console.log(videoAnalysis);
+      // do we really need to call it again??
+      const { data: videoAnalysisData, error: videoAnalysisError } =
+        await getAnalysis(token, params.videoid);
+      return successDisplay(
+        vidData,
+        videoAnalysisData as unknown as VideoAnalysisFields
+      );
     }
   }
 
@@ -233,7 +244,7 @@ export default async function Video({
     }
   }
   // caption summaries will be stored here before db call to store them
-  const captionsArr: StoreCaptionsParams[] = [];
+  //const captionsArr: StoreCaptionsParams[] = [];
 
   // if there are no capSummaries, get the captions from db and save to
   // capData. Otherwise, need to update captions
@@ -250,13 +261,13 @@ export default async function Video({
       console.log("got captions data...");
       capData = [...captionsData];
 
-      captionsArr.push({
-        id: captionsData[0].id as string,
-        video_id: captionsData[0].video_id as string,
-        language: captionsData[0].language as string,
-        captions: captionsData[0].captions as string,
-        updatedAt: captionsData[0].updatedAt as Date,
-      });
+      // captionsArr.push({
+      //   id: captionsData[0].id as string,
+      //   video_id: captionsData[0].video_id as string,
+      //   language: captionsData[0].language as string,
+      //   captions: captionsData[0].captions as string,
+      //   updatedAt: captionsData[0].updatedAt as Date,
+      // });
     } else if (captionsError) {
       throw new Error("Error getting captions from database");
     } else {
@@ -351,18 +362,24 @@ export default async function Video({
   // here we are back to the top. If we have comment summaries, we start
   // creating the analysis.
   //---------------------------- Create Analysis ---------------------------//
-  if (comSummary && comSummary.length > 0) {
-    sentiment = await getCommentsSentiment(token as string, params.videoid);
-    console.log("sentiment breakdown: ");
-    if (sentiment) {
-      await PocketChain.sentimentBreakdown(sentiment);
-      console.log("create analysis");
-    }
-  }
+  // if (comSummary && comSummary.length > 0) {
+  //   sentiment = await getCommentsSentiment(token as string, params.videoid);
+  //   console.log("sentiment breakdown: ");
+  //   if (sentiment) {
+  //     await PocketChain.sentimentBreakdown(sentiment);
+  //     console.log("create analysis");
+  //     //TODO: create analysis
+  //   }
+  // }
 
   // once the analysis is created, we call to display here
   if (analysis && analysis.data && analysis.data.length > 0 && vidData) {
-    return successDisplay(vidData);
+    const { data: videoAnalysisData, error: videoAnalysisError } =
+      await getAnalysis(token, params.videoid);
+    return successDisplay(
+      vidData,
+      videoAnalysisData as unknown as VideoAnalysisFields
+    );
     // otherwise, we have everything but the analysis
   } else if (
     comSummary &&
@@ -395,7 +412,12 @@ export default async function Video({
         sentimentRes
       );
       console.log("analsysRes: ", analysisRes);
-      return successDisplay(vidData);
+      const { data: videoAnalysisData, error: videoAnalysisError } =
+        await getAnalysis(token, params.videoid);
+      return successDisplay(
+        vidData,
+        videoAnalysisData as unknown as VideoAnalysisFields
+      );
     }
   } else {
     // this shouldn't happen
@@ -405,18 +427,41 @@ export default async function Video({
 }
 
 // there is a way of generating types from the supabase cli, but...
+type VideoAnalysisFields = {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  sentiment_breakdown: string;
+  emotional_analysis: string;
+  conflict_detection: string;
+  conflict_resolution_suggestions: string;
+  popular_topics: string;
+  content_suggestions: string;
+  engagement_opportunities: string;
+  notable_comments: string;
+  influencer_identification: string;
+  tone_of_communication: string;
+  video_id: string;
+  user_id: string;
+};
 
-function successDisplay(vidData: { [x: string]: any }) {
+function successDisplay(
+  //TODO: got me on my knees!!
+  vidData: any,
+  analysis: VideoAnalysisFields
+) {
+  console.log("vidData: ", vidData);
+  console.log("analysis: ", analysis);
   return (
     <section className="bg-primary-content md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-8 md:flex-none flex flex-col grid-cols-none gap-0">
       <div
         id="left-side"
         className="artboard md:phone-3 sm:phone-1 bg-base-content flex flex-col justify-evenly items-center py-4"
       >
-        <h1 className="text-xl text-center">{vidData && vidData.title}</h1>
+        <h1 className="text-xl text-center">{vidData && vidData[0].title}</h1>
         <div className="p-4 md:w-[400px] sm:w-[300px] w-[260px]">
           <Image
-            src={vidData && vidData.thumbnail_url}
+            src={vidData && vidData[0].thumbnail_url}
             alt="thumbnail"
             width={640}
             height={480}
