@@ -1,4 +1,4 @@
 import { NextResponse, NextRequest } from "next/server";
-export function POST(request: NextRequest) {
+export function GET(request: NextRequest) {
   return NextResponse.json({ message: "hello from conflict detection!" });
 }

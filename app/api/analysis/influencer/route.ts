@@ -1,4 +1,4 @@
 import { NextResponse } from "next/server";
 export function GET(request: Request) {
-  return NextResponse.json({ message: "hi from route" });
+  return NextResponse.json({ message: "hi from influencer" });
 }

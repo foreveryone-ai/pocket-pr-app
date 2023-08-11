@@ -1,13 +1,25 @@
 "use client";
-
-import { BaseSyntheticEvent } from "react";
+import { BaseSyntheticEvent, useState } from "react";
 
 type AnalysisButtonProps = {
   title: string;
 };
 export default function AnalysisButton({ title }: AnalysisButtonProps) {
-  const handleClick = (event: BaseSyntheticEvent) => {
-    console.log(title);
+  const [error, setError] = useState("");
+  const [description, setDescription] = useState("");
+  const [open, setOpen] = useState(true);
+
+  const handleClick = async (event: BaseSyntheticEvent) => {
+    setOpen(!open);
+    try {
+      // check to make sure the collaps is opening to display the message
+      if (open) {
+        const res = await fetch(`/api/analysis/${title.toLowerCase()}`);
+        setDescription((await res.json()).message);
+      }
+    } catch (err) {
+      setError(err as string);
+    }
   };
 
   return (
@@ -15,7 +27,7 @@ export default function AnalysisButton({ title }: AnalysisButtonProps) {
       <input onClick={handleClick} type="checkbox" className="w-full" />
       <div className="collapse-title text-xl font-medium">{title}</div>
       <div className="collapse-content ">
-        <p className="text-black">description</p>
+        <p className="text-black">{error ? error : description}</p>
       </div>
     </div>
   );
