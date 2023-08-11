@@ -1,11 +1,10 @@
 import AnalysisButton from "@/app/components/AnalysisButton";
 import { redirect } from "next/navigation";
 import Image from "next/image";
-import { getVideo } from "@/lib/supabaseClient";
+import { getCaptionSummary, getVideo } from "@/lib/supabaseClient";
 import { auth } from "@clerk/nextjs";
 import { getOAuthData } from "@/lib/googleApi";
-
-//TODO: will need an update button if captions or comments are not in db
+import VideoCommentsCaptionsButton from "@/app/components/VideoCommentsCaptionsButton";
 
 export default async function Video({
   params,
@@ -17,7 +16,7 @@ export default async function Video({
   const token = await getToken({ template: "supabase" });
   console.log("got token...");
   // global variables
-  let userOAuth;
+  let userOAuth, summary;
 
   // we get oauth from google so long as we have Clerk userId
   if (userId) {
@@ -34,7 +33,21 @@ export default async function Video({
     redirect("/sign-in");
   }
 
+  // get video data for the current video
   const vidData = await getVideo(token as string, params.videoid as string);
+
+  // get caption summary and save to summary if it exists
+  const { data: summaryData, error: summaryError } = await getCaptionSummary(
+    token,
+    "",
+    params.videoid
+  );
+  if (summaryData && summaryData.length > 0) {
+    summary = summaryData[0].summaryText;
+  }
+  if (summaryError) {
+    console.error(summaryError);
+  }
 
   const analysisTitles = [
     "Sentiment",
@@ -66,7 +79,11 @@ export default async function Video({
           />
         </div>
         <div className="text-ellipsis overflow-clip max-h-60 px-4">
-          {/* feed in captions here */}
+          {summary ? (
+            summary
+          ) : (
+            <VideoCommentsCaptionsButton videoId={params.videoid} />
+          )}
         </div>
       </div>
 

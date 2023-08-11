@@ -1,8 +1,13 @@
 import ClerkErrorHandler from "@/lib/error-handlers/clerkErrorHandler";
-import { getCaptions } from "@/lib/supabaseClient";
+import {
+  getCaptionSummary,
+  getCaptions,
+  storeCaptionsSummary,
+} from "@/lib/supabaseClient";
 import { auth, currentUser } from "@clerk/nextjs";
 import { getOAuthData, GoogleApi } from "@/lib/googleApi";
 import { NextResponse } from "next/server";
+import { PocketChain } from "@/lib/langChain";
 
 type Params = {
   params: {
@@ -10,7 +15,7 @@ type Params = {
   };
 };
 export async function GET(request: Request, context: Params) {
-  let userOAuth;
+  let userOAuth, summary;
   const params = context.params;
   const { userId, getToken } = auth();
   // const user = await currentUser();
@@ -53,8 +58,39 @@ export async function GET(request: Request, context: Params) {
     //TODO: handle error
   }
 
-  //TODO: get comments and replies
+  // this method is misslabled, it should be getCommentsAndReplies
   GoogleApi.getCommentsAndCaptions(token as string, params.videoid as string);
+
+  const { data: summaryData, error: summaryError } = await getCaptionSummary(
+    token,
+    "",
+    params.videoid
+  );
+  if (summaryData && summaryData.length > 0) {
+    summary = summaryData[0].summaryText;
+    return NextResponse.json({ message: summary });
+  } else if (summaryData && summaryData.length === 0) {
+    const { data: capData, error: capError } = await getCaptions(
+      token as string,
+      params.videoid as string
+    );
+    if (capData && capData.length > 0) {
+      const pc = new PocketChain(capData[0].captions);
+      const captionsSummary = await pc.summarizeCaptions();
+      if (captionsSummary) {
+        await storeCaptionsSummary(
+          token,
+          capData[0].id,
+          captionsSummary,
+          params.videoid
+        );
+        return NextResponse.json({ message: summary });
+      }
+    }
+  }
+  if (summaryError) {
+    console.error(summaryError);
+  }
 
   return NextResponse.json({ message: "yay! from update/video-data" });
 }
