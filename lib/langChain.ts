@@ -44,9 +44,9 @@ export class PocketChain {
   captions: string;
   batches: SmallComment[][];
 
-  constructor(videoCaptions: string, commentBatches: SmallComment[][]) {
-    this.captions = videoCaptions;
-    this.batches = commentBatches;
+  constructor(videoCaptions?: string, commentBatches?: SmallComment[][]) {
+    this.captions = videoCaptions || "";
+    this.batches = commentBatches || [];
   }
   async summarizeCaptions() {
     // created the class here to set the maxConcurrency property
@@ -72,7 +72,7 @@ export class PocketChain {
       console.log(res);
       // update summary?
       this.captions = res && res.text;
-      return res;
+      return this.captions;
     } catch (error) {
       console.error("error on summarize captions!");
       console.error(error);
@@ -300,5 +300,13 @@ export class PocketChain {
     console.log("predictionRes", predictionRes);
 
     return;
+  }
+  static async conflict_detection() {
+    fetch("/api/analysis/conflict-detection", {
+      headers: {
+        method: "GET",
+        "Content-Type": "application/json",
+      },
+    });
   }
 }

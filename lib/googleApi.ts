@@ -52,7 +52,6 @@ export class GoogleApi {
             {
               headers: {
                 Accept: "application/json",
-                //TODO: 401 unauthorized here
                 Authorization: `Bearer ${userOAuth}`,
               },
             }

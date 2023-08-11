@@ -1,5 +1,10 @@
-import { CommentSummary, SENTIMENT } from "@prisma/client";
-import { createClient } from "@supabase/supabase-js";
+import { CommentSummary, SENTIMENT, Videos } from "@prisma/client";
+import {
+  PostgrestError,
+  PostgrestResponse,
+  SupabaseClient,
+  createClient,
+} from "@supabase/supabase-js";
 import { v4 as uuidv4 } from "uuid";
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
@@ -373,11 +378,12 @@ export async function getChannelId(authToken: string, user_id: string) {
 
 export async function getVideo(authToken: string, videoId: string) {
   const db = createServerDbClient(authToken);
-  const { data, error } = await db.from("Videos").select().eq("id", videoId);
-  if (data) {
-    return data;
+  const res = await db.from("Videos").select().eq("id", videoId);
+  if (res && res.data && res.data.length > 0) {
+    return res.data;
   } else {
-    return error;
+    console.error(res.error);
+    return;
   }
 }
 
