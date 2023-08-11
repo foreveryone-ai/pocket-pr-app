@@ -3,13 +3,6 @@ import {
   StoreOrUpdateParams,
   storeChannelId,
   storeOrUpdateVideo,
-  storeAllComments,
-  storeAllReplies,
-  getComments,
-  storeCaptions,
-  StoreAllCommentsParams,
-  StoreAllRepliesParams,
-  StoreCaptionsParams,
 } from "@/lib/supabaseClient";
 import { auth, currentUser } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
@@ -18,8 +11,8 @@ import { GoogleApis, google } from "googleapis";
 
 export async function GET() {
   const { userId, getToken } = auth();
-  // const user = await currentUser();
   const token = await getToken({ template: "supabase" });
+
   // create placeholders and update after recieving google token
   let userOAuth, yt, chList, youtube_channel_id;
 
@@ -122,20 +115,7 @@ export async function GET() {
       }
     }
   }
-
-  // if (userId) {
-  //   try {
-  //     userOAuth = await getOAuthData(userId, "oauth_google");
-  //   } catch (error) {
-  //     console.error("no oauth found ", error);
-  //   }
-  // }
-  // console.log(userOAuth);
   redirect("/dashboard");
-
-  //return NextResponse.json({ userId });
-
-  // this will hold all comments and replies in memory...
 }
 
 // fetch comments from database

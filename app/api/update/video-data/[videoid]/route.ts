@@ -29,6 +29,7 @@ export async function GET(request: Request, context: Params) {
     }
   } else {
     console.error("no userId or token found");
+    throw new Error("no userId or token found");
   }
   // check to see if captions are in database
   const captionsRes = await getCaptions(
