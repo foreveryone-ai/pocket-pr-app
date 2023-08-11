@@ -301,4 +301,12 @@ export class PocketChain {
 
     return;
   }
+  static async conflict_detection() {
+    fetch("/api/analysis/conflict-detection", {
+      headers: {
+        method: "GET",
+        "Content-Type": "application/json",
+      },
+    });
+  }
 }
