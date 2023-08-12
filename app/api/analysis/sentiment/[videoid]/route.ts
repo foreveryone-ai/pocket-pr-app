@@ -20,7 +20,6 @@ type Params = {
 
 export async function GET(request: Request, context: Params) {
   // get summary and comments
-  console.log(request.url);
   const { userId, getToken } = auth();
   const params = context.params;
   console.log(params.videoid);
@@ -121,5 +120,5 @@ export async function GET(request: Request, context: Params) {
   // store the sentiment analysis
   await createAnalysis(token, userId, params.videoid, sentimentBreakdownRes);
   // return the sentiment analysis
-  return NextResponse.json({ message: "hi from sentiment route" });
+  return NextResponse.json({ message: sentimentBreakdownRes });
 }
