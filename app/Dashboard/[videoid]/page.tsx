@@ -88,19 +88,19 @@ export default async function Video({
       </div>
 
       <section className="flex flex-col justify-evenly items-center gap-12 py-12">
-        <AnalysisButton title={analysisTitles[0]} />
-        <AnalysisButton title={analysisTitles[1]} />
-        <AnalysisButton title={analysisTitles[2]} />
-        <AnalysisButton title={analysisTitles[3]} />
-        <AnalysisButton title={analysisTitles[4]} />
+        <AnalysisButton title={analysisTitles[0]} videoid={params.videoid} />
+        <AnalysisButton title={analysisTitles[1]} videoid={params.videoid} />
+        <AnalysisButton title={analysisTitles[2]} videoid={params.videoid} />
+        <AnalysisButton title={analysisTitles[3]} videoid={params.videoid} />
+        <AnalysisButton title={analysisTitles[4]} videoid={params.videoid} />
       </section>
 
       <section className="md:-order-1 lg:order-last flex flex-col justify-evenly items-center gap-12 pb-12">
-        <AnalysisButton title={analysisTitles[5]} />
-        <AnalysisButton title={analysisTitles[6]} />
-        <AnalysisButton title={analysisTitles[7]} />
-        <AnalysisButton title={analysisTitles[8]} />
-        <AnalysisButton title={analysisTitles[9]} />
+        <AnalysisButton title={analysisTitles[5]} videoid={params.videoid} />
+        <AnalysisButton title={analysisTitles[6]} videoid={params.videoid} />
+        <AnalysisButton title={analysisTitles[7]} videoid={params.videoid} />
+        <AnalysisButton title={analysisTitles[8]} videoid={params.videoid} />
+        <AnalysisButton title={analysisTitles[9]} videoid={params.videoid} />
       </section>
     </section>
   );

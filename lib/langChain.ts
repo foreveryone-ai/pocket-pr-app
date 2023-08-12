@@ -95,9 +95,6 @@ export class PocketChain {
             summary: z
               .string()
               .describe("summary of the coorisponding comment"),
-            words: z
-              .array(z.string().describe("relavant keywords or phrases"))
-              .describe("an array of the most relavent keywords or phrases"),
           })
         )
         .describe(
@@ -134,7 +131,6 @@ export class PocketChain {
       id: string;
       sentiment: string;
       summary: string;
-      words: [];
     }[] = [];
     for (let list of this.batches) {
       // create documents based on a batch

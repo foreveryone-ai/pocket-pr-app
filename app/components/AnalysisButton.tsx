@@ -3,8 +3,12 @@ import { BaseSyntheticEvent, useState } from "react";
 
 type AnalysisButtonProps = {
   title: string;
+  videoid: string;
 };
-export default function AnalysisButton({ title }: AnalysisButtonProps) {
+export default function AnalysisButton({
+  title,
+  videoid,
+}: AnalysisButtonProps) {
   const [error, setError] = useState("");
   const [description, setDescription] = useState("");
   const [open, setOpen] = useState(true);
@@ -14,7 +18,9 @@ export default function AnalysisButton({ title }: AnalysisButtonProps) {
     try {
       // check to make sure the collaps is opening to display the message
       if (open) {
-        const res = await fetch(`/api/analysis/${title.toLowerCase()}`);
+        const res = await fetch(
+          `/api/analysis/${title.toLowerCase()}/${videoid}`
+        );
         setDescription((await res.json()).message);
       }
     } catch (err) {
