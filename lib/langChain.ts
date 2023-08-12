@@ -80,7 +80,6 @@ export class PocketChain {
   }
 
   async processComments() {
-    console.log("batches object: ", this.batches);
     console.log("creating zod schema...");
     const zodSchema = z.object({
       comments: z
@@ -95,9 +94,6 @@ export class PocketChain {
             summary: z
               .string()
               .describe("summary of the coorisponding comment"),
-            words: z
-              .array(z.string().describe("relavant keywords or phrases"))
-              .describe("an array of the most relavent keywords or phrases"),
           })
         )
         .describe(
@@ -115,7 +111,8 @@ export class PocketChain {
     const prompt = new ChatPromptTemplate({
       promptMessages: [
         SystemMessagePromptTemplate.fromTemplate(
-          `Give sentiment and summary for each of the comment objects based on the text_display field, as well as the most relavant keywords or phrases. Use the following summary for context when analysing the comments: {captions}`
+          `Give sentiment and summary for each of the comment objects based on the text_display field. Use the following video_captions for context when analysing the comments.
+          video_captions: {captions}`
         ),
         HumanMessagePromptTemplate.fromTemplate("{input_text}"),
       ],
@@ -134,7 +131,6 @@ export class PocketChain {
       id: string;
       sentiment: string;
       summary: string;
-      words: [];
     }[] = [];
     for (let list of this.batches) {
       // create documents based on a batch

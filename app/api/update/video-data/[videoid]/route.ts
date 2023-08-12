@@ -4,7 +4,7 @@ import {
   getCaptions,
   storeCaptionsSummary,
 } from "@/lib/supabaseClient";
-import { auth, currentUser } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs";
 import { getOAuthData, GoogleApi } from "@/lib/googleApi";
 import { NextResponse } from "next/server";
 import { PocketChain } from "@/lib/langChain";
