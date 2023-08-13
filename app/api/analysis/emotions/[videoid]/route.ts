@@ -89,6 +89,10 @@ export async function GET(request: Request, context: Params) {
         "No comments, try hitting the update button to make sure we have all of the comments.",
     });
   }
+  // check if embeddings exist
+  const pc = new PocketChain(summaryData[0].summaryText);
+  const he = await pc.hasEmbeddings(params.videoid);
+  console.log(he);
 
   // create it if it doesn't exist
   // store for all comments if doesn't exist
