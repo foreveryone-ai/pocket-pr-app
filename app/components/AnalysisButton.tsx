@@ -12,9 +12,11 @@ export default function AnalysisButton({
   const [error, setError] = useState("");
   const [description, setDescription] = useState("");
   const [open, setOpen] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const handleClick = async (event: BaseSyntheticEvent) => {
     setOpen(!open);
+    setLoading(true);
     try {
       // check to make sure the collaps is opening to display the message
       if (open) {
@@ -22,6 +24,7 @@ export default function AnalysisButton({
           `/api/analysis/${title.toLowerCase()}/${videoid}`
         );
         setDescription((await res.json()).message);
+        setLoading(false);
       }
     } catch (err) {
       setError(err as string);
@@ -30,6 +33,7 @@ export default function AnalysisButton({
 
   return (
     <div className="md:w-full w-[280px] collapse bg-[#7AD9F8] opacity-80 text-black text-center">
+      {loading && <input disabled type="checkbox" className="w-full" />}
       <input onClick={handleClick} type="checkbox" className="w-full" />
       <div className="collapse-title text-xl font-medium">{title}</div>
       <div className="collapse-content ">

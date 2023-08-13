@@ -179,10 +179,7 @@ export class PocketChain {
     const sentimentRes = await llm.predict(formattedPrompt);
     return sentimentRes;
   }
-  async emotionalAnalysis(
-    sentimentBreakdown: string,
-    commentSummaries: EmotionalAnalysisArgs[]
-  ) {
+  async emotionalAnalysis(commentSummaries: EmotionalAnalysisArgs[]) {
     console.log("comsums: ", commentSummaries);
     const comSum = commentSummaries.map(
       (sum) => sum.comment_summary.summaryText
@@ -239,7 +236,7 @@ export class PocketChain {
       }
     );
 
-    //query, k (num of docs to return), {} metadate filter
+    //query, k (num of docs to return), {} metadata filter
     const q1 = await vectorStore.similaritySearch(
       "Return comments with a strong emotional content",
       3,
@@ -297,12 +294,34 @@ export class PocketChain {
 
     return;
   }
-  static async conflict_detection() {
-    fetch("/api/analysis/conflict-detection", {
-      headers: {
-        method: "GET",
-        "Content-Type": "application/json",
-      },
+  async hasEmbeddings(videoid: string) {
+    // verify supabase credentials
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!supabaseKey) throw new Error(`Expected SUPABASE_SERVICE_ROLE_KEY`);
+
+    const url = process.env.SUPABASE_URL;
+    if (!url) throw new Error(`Expected env var SUPABASE_URL`);
+
+    const client = createClient(url, supabaseKey);
+    // for query only...
+    const vectorStore = await SupabaseVectorStore.fromExistingIndex(
+      new OpenAIEmbeddings(),
+      {
+        client,
+        tableName: "documents",
+      }
+    );
+    //query, k (num of docs to return), {} metadata filter
+    const foundDocuments = await vectorStore.similaritySearch("Anything", 3, {
+      video_id: videoid,
     });
+
+    console.log("q1", foundDocuments);
+
+    if (foundDocuments && foundDocuments.length > 0) {
+      return true;
+    }
+
+    return false;
   }
 }
