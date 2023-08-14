@@ -94,9 +94,14 @@ export async function GET(request: Request, context: Params) {
   const he = await pc.hasEmbeddings(params.videoid);
   console.log(he);
 
-  // create it if it doesn't exist
-  // store for all comments if doesn't exist
+  // create or search embeddings
+  // first parameter is everything need from supabase to do the analysis
+  // second param. If false, they need to be stored in vectorStore.
+
+  // toriaizu...
+  return NextResponse.json({
+    message: await pc.emotionalAnalysis(dfea, he === true),
+  });
   // check if analysis exists
   // create emotional_breakdown in analysis if it does not exist
-  return NextResponse.json({ message: "hi from emotions" });
 }

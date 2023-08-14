@@ -30,8 +30,10 @@ import { SENTIMENT } from "@prisma/client";
 
 export type EmotionalAnalysisArgs = {
   video_id: string;
+  id: string;
   author_display_name: string;
   author_image_url: string;
+  text_display: string;
   like_count: number;
   comment_summary: {
     summaryText: string;
@@ -179,13 +181,16 @@ export class PocketChain {
     const sentimentRes = await llm.predict(formattedPrompt);
     return sentimentRes;
   }
-  async emotionalAnalysis(commentSummaries: EmotionalAnalysisArgs[]) {
-    console.log("comsums: ", commentSummaries);
-    const comSum = commentSummaries.map(
-      (sum) => sum.comment_summary.summaryText
-    );
-    const comSumMeta = commentSummaries.map((obj) => ({
+  async emotionalAnalysis(
+    comments: EmotionalAnalysisArgs[],
+    embeddingsExist: boolean
+  ) {
+    let vectorStore;
+    console.log("comsums: ", comments);
+    const comSum = comments.map((comment) => comment.text_display);
+    const comSumMeta = comments.map((obj) => ({
       video_id: obj.video_id,
+      id: obj.id,
       author_display_name: obj.author_display_name,
       author_image_url: obj.author_image_url,
       like_count: obj.like_count,
@@ -219,26 +224,29 @@ export class PocketChain {
     const client = createClient(url, supabaseKey);
 
     // for query only...
-    // const vectorStore = await SupabaseVectorStore.fromExistingIndex(
-    //   new OpenAIEmbeddings(),
-    //   {
-    //     client,
-    //     tableName: "documents",
-    //   }
-    // );
-    const vectorStore = await SupabaseVectorStore.fromDocuments(
-      docs,
-      new OpenAIEmbeddings(),
-      {
-        client,
-        tableName: "documents",
-        queryName: "match_documents",
-      }
-    );
+    if (embeddingsExist) {
+      vectorStore = await SupabaseVectorStore.fromExistingIndex(
+        new OpenAIEmbeddings(),
+        {
+          client,
+          tableName: "documents",
+        }
+      );
+    } else {
+      vectorStore = await SupabaseVectorStore.fromDocuments(
+        docs,
+        new OpenAIEmbeddings(),
+        {
+          client,
+          tableName: "documents",
+          queryName: "match_documents",
+        }
+      );
+    }
 
     //query, k (num of docs to return), {} metadata filter
     const q1 = await vectorStore.similaritySearch(
-      "Return comments with a strong emotional content",
+      "Return comments with a strong emotions",
       3,
       { video_id: comSumMeta[0].video_id }
     );
@@ -252,22 +260,6 @@ export class PocketChain {
       temperature: 0,
     });
 
-    // how do we want to make the final call?
-    // one call with retrieval QA chain with promptTemplate, map_reduce, map_refine, refine?
-
-    // const qaChain = RetrievalQAChain.fromLLM(llm, vectorStore.asRetriever(), {
-    //   returnSourceDocuments: true,
-    //   prompt: prompt
-    // });
-
-    // final call without meta filter
-    //const res = await qaChain.call({query: questions});
-
-    //console.log("final call without metadata filter");
-    //console.log("res", res);
-
-    // using simularity search..
-
     const template2 =
       PromptTemplate.fromTemplate(`You are a public relations consultant. First, use the captions to understand the content of the YouTube video. Then, summarize the emotional breakdown of the comments in relation to the video. 
     captions: {captions}
@@ -276,14 +268,15 @@ export class PocketChain {
     console.log("captions type: ", typeof this.captions);
     console.log("captions: ", this.captions);
 
-    const caption = JSON.stringify(this.captions);
-    console.log("stringified: ", caption);
-    const captionObj = JSON.parse(caption);
-    console.log("objectified: ", captionObj);
+    // const caption = JSON.stringify(this.captions);
+    // console.log("stringified: ", caption);
+    // const captionObj = JSON.parse(caption);
+    // console.log("objectified: ", captionObj);
 
     const formattedTemp = await template2.format({
-      captions: captionObj.summaryText,
-      comments: q1[0].pageContent,
+      captions: this.captions,
+      comments:
+        q1[0].pageContent + "\n" + q1[1].pageContent + "\n" + q1[2].pageContent,
     });
 
     console.log("formattedTemp", formattedTemp);
@@ -292,7 +285,7 @@ export class PocketChain {
 
     console.log("predictionRes", predictionRes);
 
-    return;
+    return predictionRes;
   }
   async hasEmbeddings(videoid: string) {
     // verify supabase credentials
