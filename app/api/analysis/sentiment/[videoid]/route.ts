@@ -77,11 +77,13 @@ export async function GET(request: Request, context: Params) {
   // send batches to langchain
   const pc = new PocketChain(summaryData[0].summaryText, batches);
   const comSummariesArr = await pc.processComments();
+  console.log(`${comSummariesArr.length} summary objects`);
   if (!comSummariesArr || comSummariesArr.length === 0) {
     console.error("comment summaries array returning null or length 0");
     return NextResponse.json({ message: "Error: no comment summaries" });
   }
   // store comment summaries
+  // TODO: find out why only some of the summaries are being stored
   try {
     await storeCommentsSummaries(token, comSummariesArr, params.videoid);
   } catch (error) {

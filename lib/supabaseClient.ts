@@ -190,7 +190,7 @@ export async function getDataForEmotionalAnalysis(
   const { data: comSummaryData, error: errorSummaryData } = await db
     .from("Comments")
     .select(
-      "author_display_name, author_image_url, like_count, CommentSummary (summaryText, sentiment)"
+      "id, author_display_name, author_image_url, like_count, text_display, CommentSummary (summaryText, sentiment)"
     )
     .in("id", comIds);
 
@@ -201,9 +201,11 @@ export async function getDataForEmotionalAnalysis(
     //TODO: Hack!!
     return comSummaryData.map((cs) => ({
       video_id,
+      id: cs.id,
       author_display_name: cs.author_display_name,
       author_image_url: cs.author_image_url,
       like_count: cs.like_count,
+      text_display: cs.text_display,
       comment_summary: cs.CommentSummary[0],
     }));
   }
