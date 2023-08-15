@@ -82,7 +82,10 @@ export default async function Video({
           {summary ? (
             summary
           ) : (
-            <VideoCommentsCaptionsButton videoId={params.videoid} />
+            <VideoCommentsCaptionsButton
+              videoId={params.videoid}
+              source={"video"}
+            />
           )}
         </div>
       </div>

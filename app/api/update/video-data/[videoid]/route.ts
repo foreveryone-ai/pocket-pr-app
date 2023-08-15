@@ -2,6 +2,7 @@ import ClerkErrorHandler from "@/lib/error-handlers/clerkErrorHandler";
 import {
   getCaptionSummary,
   getCaptions,
+  getComments,
   storeCaptionsSummary,
 } from "@/lib/supabaseClient";
 import { auth } from "@clerk/nextjs";
@@ -58,8 +59,15 @@ export async function GET(request: Request, context: Params) {
     //TODO: handle error
   }
 
-  // this method is misslabled, it should be getCommentsAndReplies
-  GoogleApi.getCommentsAndCaptions(token as string, params.videoid as string);
+  // check to see if comments are already in database
+  const { data: commentsData, error: commentsError } = await getComments(
+    token,
+    params.videoid
+  );
+  if (commentsData && commentsData.length === 0) {
+    // this method is misslabled, it should be getCommentsAndReplies
+    GoogleApi.getCommentsAndCaptions(token as string, params.videoid as string);
+  }
 
   const { data: summaryData, error: summaryError } = await getCaptionSummary(
     token,
