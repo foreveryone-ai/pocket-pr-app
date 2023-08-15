@@ -37,7 +37,7 @@ export default function VideoCard({
         />
       </figure>
       <div className="absolute inset-0 flex flex-col-reverse items-start justify-start rounded-2xl">
-        <VideoCommentsCaptionsButton videoId={videoId} />
+        <VideoCommentsCaptionsButton videoId={videoId} source={"dashboard"} />
         <Link
           className="btn glass btn-outline text-slate-300"
           href={`/dashboard/${videoId}`}

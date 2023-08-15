@@ -71,6 +71,37 @@ export async function GET(request: Request, context: Params) {
     });
   }
 
+  // check if comment summary is already in db, but there is no analysis
+  // call the sentiment analysis method and store the analysis
+  const { data: commentSummaryData } = await getCommentsSummaries(
+    token,
+    [""],
+    params.videoid
+  );
+  if (commentSummaryData && commentSummaryData.length > 0) {
+    // create sentiment analysis
+    const comSentiment = await getCommentsSentiment(token, params.videoid);
+    if (!comSentiment) {
+      console.error("getting comments sentiment from db returned null");
+      return NextResponse.json({
+        message: "Error: unable to retrieve comment sentiment",
+      });
+    }
+    const sentimentBreakdownRes = await PocketChain.sentimentBreakdown(
+      comSentiment
+    );
+    if (!sentimentBreakdownRes) {
+      console.error("no response from getSentiment method in langchain");
+      return NextResponse.json({
+        message: "Error: unable to retrieve sentiment",
+      });
+    }
+    // store the sentiment analysis
+    await createAnalysis(token, userId, params.videoid, sentimentBreakdownRes);
+    // return the sentiment analysis
+    return NextResponse.json({ message: sentimentBreakdownRes });
+  }
+
   // process the comments into batches
   const pp = new PreProcessorA(comData as Comment[]);
   const batches = pp.preprocessComments();
