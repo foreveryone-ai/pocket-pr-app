@@ -71,10 +71,12 @@ const NavBar = () => {
 
           <NavbarContent justify="end">
             <NavbarItem className="hidden lg:flex">
-              <Link href="/sign-in">Sign In</Link>
+              <Button href="/sign-in" variant="light">
+                Sign In
+              </Button>
             </NavbarItem>
             <NavbarItem>
-              <Button as={Link} color="warning" href="/sign-up" variant="flat">
+              <Button as={Link} href="/sign-up">
                 Sign Up
               </Button>
             </NavbarItem>
