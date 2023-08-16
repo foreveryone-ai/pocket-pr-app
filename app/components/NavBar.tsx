@@ -19,7 +19,7 @@ const NavBar = () => {
   return (
     <>
       <SignedOut>
-        <Navbar disableAnimation isBordered>
+        <Navbar position="static">
           <NavbarContent className="sm:hidden" justify="start">
             <NavbarMenuToggle />
           </NavbarContent>
