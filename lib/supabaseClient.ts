@@ -244,6 +244,8 @@ export async function getCommentsSentiment(authToken: string, videoId: string) {
     }
     console.log("ids added to array: ", commentIds);
     console.log("getting comment summaries...");
+    // this will cause an error if the commentId is not in the commentSummary
+    // table
     const { data: summaryData, error: summaryError } = await db
       .from("CommentSummary")
       .select()
