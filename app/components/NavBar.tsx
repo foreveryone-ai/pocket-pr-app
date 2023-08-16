@@ -19,7 +19,7 @@ const NavBar = () => {
   return (
     <>
       <SignedOut>
-        <Navbar position="static">
+        <Navbar position="static" className="bg-white">
           <NavbarContent className="sm:hidden" justify="start">
             <NavbarMenuToggle />
           </NavbarContent>
@@ -53,7 +53,7 @@ const NavBar = () => {
                 Dashboard
               </Link>
             </NavbarItem>
-            <NavbarItem isActive>
+            <NavbarItem>
               <Link color="foreground" href="/about">
                 About
               </Link>
@@ -102,7 +102,7 @@ const NavBar = () => {
       </SignedOut>
 
       <SignedIn>
-        <Navbar disableAnimation isBordered>
+        <Navbar position="static" className="bg-white">
           <NavbarContent className="sm:hidden" justify="start">
             <NavbarMenuToggle />
           </NavbarContent>
@@ -132,17 +132,17 @@ const NavBar = () => {
               </Link>
             </NavbarBrand>
             <NavbarItem className="pl-12">
-              <Link color="foreground" href="#">
+              <Link color="foreground" href="/dashboard">
                 Dashboard
               </Link>
             </NavbarItem>
-            <NavbarItem isActive>
-              <Link color="foreground" href="#">
+            <NavbarItem>
+              <Link color="foreground" href="/reports">
                 Past Reports
               </Link>
             </NavbarItem>
             <NavbarItem>
-              <Link color="foreground" href="#">
+              <Link color="foreground" href="/help">
                 Get Help
               </Link>
             </NavbarItem>
