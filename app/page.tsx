@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { SignedIn, SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
+import { Button } from "@nextui-org/button";
 
 export default function Home() {
   return (
@@ -19,8 +20,8 @@ export default function Home() {
                 Let&apos;s turn your <i>feedback</i> into <u>fame.</u>
               </h1>
               <SignedIn>
-                <Link href="/dashboard" className="btn btn-ghost">
-                  Dashboard
+                <Link href="/dashboard">
+                  <Button>Dashboard</Button>
                 </Link>
               </SignedIn>
 
