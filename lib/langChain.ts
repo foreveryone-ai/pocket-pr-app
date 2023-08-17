@@ -1,3 +1,4 @@
+import * as fs from "fs";
 import { z } from "zod";
 import { createClient } from "@supabase/supabase-js";
 import { FunctionalTranslator } from "langchain/retrievers/self_query/functional";
@@ -126,8 +127,10 @@ export class PocketChain {
     const jsonChain = createStructuredOutputChainFromZod(zodSchema, {
       prompt,
       llm,
+      verbose: true,
     });
     console.log("entering for loop to send batches...");
+
     let counter = 0;
     let summariesToReturn: {
       id: string;
@@ -146,6 +149,12 @@ export class PocketChain {
           captions: this.captions,
         });
         console.log(JSON.stringify(response, null, 2));
+        try {
+          fs.writeFileSync("../logs/lang-logs.txt", "utf8");
+        } catch (error) {
+          console.error("error on logging", error);
+        }
+
         summariesToReturn.push(response.output.comments);
       } catch (error) {
         console.error("hit catch!!");
