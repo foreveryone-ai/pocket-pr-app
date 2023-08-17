@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "@nextui-org/button";
 
 type VideoCommentsCaptionsButtonProps = {
   videoId: string;
@@ -30,14 +31,15 @@ export default function VideoCommentsCaptionsButton({
       {summary ? (
         summary
       ) : (
-        <button
-          // change the look of the button when it is clicked
-          className="btn glass btn-outline text-slate-300"
+        <Button
+          color="warning"
+          // change the look of the Button when it is clicked
+          className="mt-2"
           onClick={handleUpdate}
           disabled={isComplete}
         >
           {isComplete ? "Update Complete" : "Update"}
-        </button>
+        </Button>
       )}
     </>
   );
