@@ -1,6 +1,7 @@
 import VideoCommentsCaptionsButton from "./VideoCommentsCaptionsButton";
 import Image from "next/image";
 import Link from "next/link";
+import { Button } from "@nextui-org/button";
 
 type VideoCardProps = {
   key: number;
@@ -36,13 +37,11 @@ export default function VideoCard({
           className="rounded-2xl object-cover"
         />
       </figure>
-      <div className="absolute inset-0 flex flex-col-reverse items-start justify-start rounded-2xl">
+      <div className="absolute inset-0 flex flex-col-reverse items-center justify-center rounded-2xl">
         <VideoCommentsCaptionsButton videoId={videoId} source={"dashboard"} />
-        <Link
-          className="btn glass btn-outline text-slate-300"
-          href={`/dashboard/${videoId}`}
-        >
-          {truncateTitle(title)}
+
+        <Link href={`/dashboard/${videoId}`}>
+          <Button color="primary">{truncateTitle(title)}</Button>
         </Link>
       </div>
     </div>

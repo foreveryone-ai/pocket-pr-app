@@ -29,7 +29,7 @@ export default async function Home() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center text-black justify-start xl:px-20 pt-20 pb-10 bg-primary-content">
+    <main className="flex min-h-screen flex-col items-center text-black justify-start xl:px-20 pt-20 pb-10 bg-blue-400">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-12 gap-12 sm:px-4 md:px-8 lg:px-10 xl:px-20 2xl:px-32">
         {videos
           ? videos.data?.map((video, i) => (
