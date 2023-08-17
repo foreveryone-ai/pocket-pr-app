@@ -16,12 +16,20 @@ import {
 } from "@nextui-org/navbar";
 
 const NavBar = () => {
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   return (
     <>
       <SignedOut>
-        <Navbar position="static" className="bg-white">
+        <Navbar
+          position="static"
+          className="bg-white"
+          isMenuOpen={isMenuOpen}
+          onMenuOpenChange={setIsMenuOpen}
+        >
           <NavbarContent className="sm:hidden" justify="start">
-            <NavbarMenuToggle />
+            <NavbarMenuToggle
+              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            />
           </NavbarContent>
 
           <NavbarContent className="sm:hidden pl-8" justify="center">
@@ -31,7 +39,7 @@ const NavBar = () => {
                   src="/pocket-pr-logo.png"
                   alt="panda logo"
                   width={100}
-                  height={70}
+                  height={100}
                 />
               </Link>
             </NavbarBrand>
@@ -44,7 +52,7 @@ const NavBar = () => {
                   src="/pocket-pr-logo.png"
                   alt="panda logo"
                   width={150}
-                  height={70}
+                  height={100}
                 />
               </Link>
             </NavbarBrand>
@@ -67,12 +75,14 @@ const NavBar = () => {
 
           <NavbarContent justify="end">
             <NavbarItem className="hidden lg:flex">
-              <Button href="/sign-in">Sign In</Button>
+              <Link href="/sign-in">
+                <Button>Sign In</Button>
+              </Link>
             </NavbarItem>
             <NavbarItem>
-              <Button variant="bordered" href="/sign-up">
-                Sign Up
-              </Button>
+              <Link href="/sign-up">
+                <Button variant="bordered">Sign Up</Button>
+              </Link>
             </NavbarItem>
           </NavbarContent>
 
@@ -102,9 +112,16 @@ const NavBar = () => {
       </SignedOut>
 
       <SignedIn>
-        <Navbar position="static" className="bg-white">
+        <Navbar
+          position="static"
+          className="bg-white"
+          isMenuOpen={isMenuOpen}
+          onMenuOpenChange={setIsMenuOpen}
+        >
           <NavbarContent className="sm:hidden" justify="start">
-            <NavbarMenuToggle />
+            <NavbarMenuToggle
+              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            />
           </NavbarContent>
 
           <NavbarContent className="sm:hidden pl-8" justify="center">
@@ -114,7 +131,7 @@ const NavBar = () => {
                   src="/pocket-pr-logo.png"
                   alt="panda logo"
                   width={100}
-                  height={70}
+                  height={100}
                 />
               </Link>
             </NavbarBrand>
@@ -127,7 +144,7 @@ const NavBar = () => {
                   src="/pocket-pr-logo.png"
                   alt="panda logo"
                   width={150}
-                  height={70}
+                  height={100}
                 />
               </Link>
             </NavbarBrand>
@@ -156,18 +173,23 @@ const NavBar = () => {
 
           <NavbarMenu>
             <NavbarMenuItem>
-              <Link className="w-full" color="foreground" href="/dashboard">
-                Dashboard
+              <Link className="w-full" color="foreground" href="/about">
+                About
               </Link>
             </NavbarMenuItem>
             <NavbarMenuItem>
-              <Link className="w-full" color="foreground" href="/reports">
-                Past Reports
+              <Link className="w-full" color="foreground" href="/pricing">
+                Pricing
               </Link>
             </NavbarMenuItem>
             <NavbarMenuItem>
-              <Link className="w-full" color="foreground" href="/help">
-                Get Help
+              <Link className="w-full" color="foreground" href="/contact">
+                Contact
+              </Link>
+            </NavbarMenuItem>
+            <NavbarMenuItem>
+              <Link className="w-full" color="foreground" href="/sign-in">
+                Sign In
               </Link>
             </NavbarMenuItem>
           </NavbarMenu>
