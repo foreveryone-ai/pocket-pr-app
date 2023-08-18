@@ -1,3 +1,4 @@
+import path from "path";
 import * as fs from "fs";
 import { z } from "zod";
 import { createClient } from "@supabase/supabase-js";
@@ -131,6 +132,7 @@ export class PocketChain {
     });
     console.log("entering for loop to send batches...");
 
+    let logCounter = 0;
     let counter = 0;
     let summariesToReturn: {
       id: string;
@@ -149,8 +151,16 @@ export class PocketChain {
           captions: this.captions,
         });
         console.log(JSON.stringify(response, null, 2));
+
+        // Use this to log the output to a file
         try {
-          fs.writeFileSync("../logs/lang-logs.txt", "utf8");
+          const ROUTE = path.join(__dirname, "../../../logs");
+          fs.appendFileSync(
+            ROUTE + `log${logCounter}.txt`,
+            JSON.stringify(response, null, 2)
+          );
+
+          logCounter++;
         } catch (error) {
           console.error("error on logging", error);
         }
