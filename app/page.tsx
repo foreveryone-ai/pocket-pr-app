@@ -5,6 +5,7 @@ import { Image } from "@nextui-org/image";
 import { SignedIn, SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
 import { Button } from "@nextui-org/button";
 import "animate.css/animate.min.css";
+import { BsFillArrowDownCircleFill } from "react-icons/bs";
 
 const Roles = ["Content Creators", "Businesses", "Influencers", "Everyone"];
 
@@ -62,7 +63,9 @@ export default function Home() {
         </h1>
       </div>
       <div className="flex justify-center mt-12">
-        <Button color="success">Learn More</Button>
+        <Button color="success" endContent={<BsFillArrowDownCircleFill />}>
+          Learn More
+        </Button>
       </div>
 
       {/* --------------------------------------TAG-------------------------------------- */}
