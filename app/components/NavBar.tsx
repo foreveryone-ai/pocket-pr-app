@@ -30,15 +30,11 @@ export default function () {
               tabIndex={0}
               className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
             >
-              <li>
-                <a>Dashboard</a>
-              </li>
-              <li>
-                <a>Past Reports</a>
-              </li>
-              <li>
-                <a>Get Help</a>
-              </li>
+              <Link href="/dashboard">
+                <li>Dashboard</li>
+              </Link>
+              <li>Past Reports</li>
+              <li>Get Help</li>
             </ul>
           </div>
         </SignedIn>
