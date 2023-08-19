@@ -7,12 +7,12 @@ import { Button } from "@nextui-org/button";
 import "animate.css/animate.min.css";
 import { BsFillArrowDownCircleFill } from "react-icons/bs";
 
-const Roles = ["Content Creators", "Businesses", "Influencers", "Everyone"];
-
 export default function Home() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [animationClass, setAnimationClass] = useState("animate__flipInX");
   const textRef = useRef<HTMLHeadingElement | null>(null);
+
+  const Roles = ["Content Creators", "Businesses", "Influencers", "Everyone"];
 
   useEffect(() => {
     const interval = setInterval(() => {
