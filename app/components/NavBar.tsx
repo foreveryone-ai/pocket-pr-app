@@ -36,9 +36,9 @@ const NavBar = () => {
             <NavbarBrand>
               <Link href="/" className="btn btn-ghost normal-case text-2xl">
                 <Image
-                  src="/pocket-pr-logo.png"
+                  src="/runningkang.svg"
                   alt="panda logo"
-                  width={100}
+                  width={50}
                   height={100}
                 />
               </Link>
@@ -49,14 +49,14 @@ const NavBar = () => {
             <NavbarBrand className="pr-32">
               <Link href="/" className="btn btn-ghost normal-case text-2xl">
                 <Image
-                  src="/pocket-pr-logo.png"
+                  src="/runningkang.svg"
                   alt="panda logo"
-                  width={150}
+                  width={50}
                   height={100}
                 />
               </Link>
             </NavbarBrand>
-            <NavbarItem className="pl-12">
+            {/* <NavbarItem className="pl-12">
               <Link color="foreground" href="/dashboard">
                 Dashboard
               </Link>
@@ -70,7 +70,7 @@ const NavBar = () => {
               <Link color="foreground" href="/contact">
                 Contact
               </Link>
-            </NavbarItem>
+            </NavbarItem> */}
           </NavbarContent>
 
           <NavbarContent justify="end">
@@ -87,7 +87,7 @@ const NavBar = () => {
           </NavbarContent>
 
           <NavbarMenu>
-            <NavbarMenuItem>
+            {/* <NavbarMenuItem>
               <Link className="w-full" color="foreground" href="/about">
                 About
               </Link>
@@ -106,7 +106,7 @@ const NavBar = () => {
               <Link className="w-full" color="foreground" href="/sign-in">
                 Sign In
               </Link>
-            </NavbarMenuItem>
+            </NavbarMenuItem> */}
           </NavbarMenu>
         </Navbar>
       </SignedOut>
@@ -128,10 +128,10 @@ const NavBar = () => {
             <NavbarBrand>
               <Link href="/" className="btn btn-ghost normal-case text-2xl">
                 <Image
-                  src="/pocket-pr-logo.png"
+                  src="/runningkang.svg"
                   alt="panda logo"
-                  width={100}
-                  height={100}
+                  width={50}
+                  height={50}
                 />
               </Link>
             </NavbarBrand>
@@ -141,10 +141,10 @@ const NavBar = () => {
             <NavbarBrand className="pr-32">
               <Link href="/" className="btn btn-ghost normal-case text-2xl">
                 <Image
-                  src="/pocket-pr-logo.png"
+                  src="/runningkang.svg"
                   alt="panda logo"
-                  width={150}
-                  height={100}
+                  width={50}
+                  height={50}
                 />
               </Link>
             </NavbarBrand>

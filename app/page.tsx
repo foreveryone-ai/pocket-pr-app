@@ -6,24 +6,31 @@ import { Button } from "@nextui-org/button";
 export default function Home() {
   return (
     <main>
-      <div className="flex min-h-screen flex-row items-center bg-primary-400">
+      <div className="flex min-h-screen flex-row items-center justify-center bg-white">
         <Image
           isBlurred
-          src="/kangaroo.png"
+          src="/pocket-pr-logo-licensed.svg"
+          alt="panda logo"
+          width={700}
+          height={300}
+        />
+      </div>
+      {/* <div className="flex min-h-screen flex-row items-center bg-primary-400">
+        
+        <div className="hero min-h-screen flex-col">
+          <div className="hero-content  text-start">
+            <div className="max-w-5xl bg-base">
+              
+            <Image
+          isBlurred
+          src="/pocket-pr-logo-licensed.svg"
           alt="panda logo"
           width={400}
           height={70}
           className=" m-16"
         />
-        <div className="hero min-h-screen flex-col">
-          <div className="hero-content  text-start">
-            <div className="max-w-5xl bg-base">
-              <h1 className="text-4xl pb-10 text-white font-black">
-                <b>pocketPR</b> is for <i>Content Creators </i>
-              </h1>
-              <h1 className="mb-10 text-5xl pb-10 text-white font-black">
-                Let&apos;s turn your feedback into FAME
-              </h1>
+
+              <div>
               <SignedIn>
                 <Link href="/dashboard">
                   <Button>Dashboard</Button>
@@ -34,8 +41,6 @@ export default function Home() {
                   </Button>
                 </Link>
               </SignedIn>
-
-              <div>
                 <SignedOut>
                   <SignUpButton>
                     <Button className="mx-4">Sign Up</Button>
@@ -50,7 +55,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </main>
   );
 }
