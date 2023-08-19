@@ -29,7 +29,7 @@ export default function Home() {
           { once: true }
         );
       }
-    }, 2000);
+    }, 2500);
 
     // Cleanup interval on component unmount
     return () => clearInterval(interval);
