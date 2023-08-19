@@ -1,61 +1,71 @@
+"use client";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { Image } from "@nextui-org/image";
 import { SignedIn, SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
 import { Button } from "@nextui-org/button";
+import "animate.css/animate.min.css";
+
+const Roles = ["Content Creators", "Businesses", "Influencers", "Everyone"];
 
 export default function Home() {
-  return (
-    <main>
-      <div className="flex min-h-screen flex-row items-center justify-center bg-white">
-        <Image
-          isBlurred
-          src="/pocket-pr-logo-licensed.svg"
-          alt="panda logo"
-          width={700}
-          height={300}
-        />
-      </div>
-      {/* <div className="flex min-h-screen flex-row items-center bg-primary-400">
-        
-        <div className="hero min-h-screen flex-col">
-          <div className="hero-content  text-start">
-            <div className="max-w-5xl bg-base">
-              
-            <Image
-          isBlurred
-          src="/pocket-pr-logo-licensed.svg"
-          alt="panda logo"
-          width={400}
-          height={70}
-          className=" m-16"
-        />
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [animationClass, setAnimationClass] = useState("animate__flipInX");
+  const textRef = useRef<HTMLHeadingElement | null>(null);
 
-              <div>
-              <SignedIn>
-                <Link href="/dashboard">
-                  <Button>Dashboard</Button>
-                </Link>
-                <Link href="#">
-                  <Button variant="bordered" className="mx-4">
-                    Learn More
-                  </Button>
-                </Link>
-              </SignedIn>
-                <SignedOut>
-                  <SignUpButton>
-                    <Button className="mx-4">Sign Up</Button>
-                  </SignUpButton>
-                  <Link href="#">
-                    <Button variant="bordered" className="mx-4">
-                      Learn More
-                    </Button>
-                  </Link>
-                </SignedOut>
-              </div>
-            </div>
-          </div>
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAnimationClass("animate__flipOutX");
+
+      if (textRef.current) {
+        // <-- This will check for null now
+        textRef.current.addEventListener(
+          "animationend",
+          () => {
+            // Update the content and switch to the next animation
+            setCurrentIndex((prevIndex) => (prevIndex + 1) % Roles.length);
+            setAnimationClass("animate__flipInX");
+          },
+          { once: true }
+        );
+      }
+    }, 2000);
+
+    // Cleanup interval on component unmount
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <main className="bg-white min-h-screen">
+      {/* --------------------------------------HERO-------------------------------------- */}
+      <div className="flex justify-center items-start bg-white">
+        <div className="w-3/4 sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/2 mt-12 sm:mt-16 md:mt-20 lg:mt-24 xl:mt-28 mb-8 sm:mb-12 md:mb-16 lg:mb-20 xl:mb-24">
+          <Image
+            isBlurred
+            src="/pocket-pr-logo-licensed.svg"
+            alt="panda logo"
+            width={1000}
+            height={500}
+          />
         </div>
-      </div> */}
+      </div>
+      <div className="flex justify-center items-center bg-white grid grid-cols-2 gap-2">
+        <h1 className="text-med sm:text-lg md:text-3xl lg:text-4xl font-bold text-right text-black">
+          Public Relations for
+        </h1>
+        <h1
+          ref={textRef}
+          key={Roles[currentIndex]}
+          className={`text-med sm:text-lg md:text-3xl lg:text-4xl font-bold text-left text-black animate__animated ${animationClass}`}
+        >
+          {Roles[currentIndex]}.
+        </h1>
+      </div>
+      <div className="flex justify-center mt-12">
+        <Button color="success">Learn More</Button>
+      </div>
+
+      {/* --------------------------------------TAG-------------------------------------- */}
     </main>
   );
 }
