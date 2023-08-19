@@ -5,7 +5,7 @@ import { Spacer } from "@nextui-org/spacer";
 
 export default function () {
   return (
-    <div className="navbar bg-white pt-6">
+    <div className="navbar bg-white pt-4">
       {/* ----------------------------NAVBAR START---------------------------- */}
       <div className="navbar-start">
         <SignedIn>
