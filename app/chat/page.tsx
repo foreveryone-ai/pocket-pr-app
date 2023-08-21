@@ -1,3 +1,9 @@
+import ChatUI from "@/app/components/ChatUI";
+
 export default function Chat() {
-  return <section></section>;
+  return (
+    <section>
+      <ChatUI />
+    </section>
+  );
 }
