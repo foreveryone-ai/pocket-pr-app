@@ -3,30 +3,53 @@
 import { BaseSyntheticEvent, useState } from "react";
 
 export default function ChatUI() {
-  const [messages, setMessages] = useState<string[]>([]);
+  const [userMessages, setUserMessages] = useState<string[]>([]);
+  const [assistantMessages, setAssistantMessages] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState("");
 
   const handleInputChange = (e: BaseSyntheticEvent) => {
     setInputValue(e.target.value);
   };
 
-  const handleSendMessage = (e: BaseSyntheticEvent) => {
+  const handleSendMessage = async (e: BaseSyntheticEvent) => {
     e.preventDefault();
     if (inputValue.trim() !== "") {
-      setMessages([...messages, inputValue]);
+      setUserMessages([...userMessages, inputValue]);
       setInputValue("");
+      try {
+        // TODO: replace with dynamic videoid
+        const response = await fetch("/api/chat/8PGIHKydMqc", {
+          method: "POST",
+          body: JSON.stringify({ message: inputValue }),
+          headers: { "Content-Type": "application/json" },
+        });
+        const data = await response.json();
+        if (data.message) {
+          ("message received");
+          setAssistantMessages([...assistantMessages, data.message]);
+        } else {
+          console.error("No message received");
+        }
+      } catch (error) {
+        console.error("error on assistant response", error);
+      }
     }
   };
 
   const handleClear = () => {
-    setMessages([]);
+    setUserMessages([]);
   };
 
   return (
     <div>
       <div className="chat-messages">
-        {messages.map((message, index) => (
-          <div key={index} className="message">
+        {userMessages.map((message, index) => (
+          <div key={index}>{message}</div>
+        ))}
+      </div>
+      <div className="chat-messages">
+        {assistantMessages.map((message, index) => (
+          <div key={index + 1000} className="text-orange-400">
             {message}
           </div>
         ))}
