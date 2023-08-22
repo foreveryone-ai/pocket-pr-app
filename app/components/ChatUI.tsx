@@ -2,70 +2,75 @@
 
 import { BaseSyntheticEvent, useState } from "react";
 
-export default function ChatUI() {
-  const [userMessages, setUserMessages] = useState<string[]>([]);
-  const [assistantMessages, setAssistantMessages] = useState<string[]>([]);
-  const [inputValue, setInputValue] = useState("");
+type ChatUIProps = {
+  videoid: string;
+};
 
-  const handleInputChange = (e: BaseSyntheticEvent) => {
-    setInputValue(e.target.value);
+export default function ChatUI({ videoid }: ChatUIProps) {
+  const [inputValue, setInputValue] = useState("");
+  const [messages, setMessages] = useState<string[]>([]);
+
+  const handleSubmit = async (event: BaseSyntheticEvent) => {
+    event.preventDefault();
+    setMessages([...messages, inputValue]);
+    setInputValue("");
+    const response = await getGPTResponse(inputValue);
+    setMessages([...messages, response as string]);
   };
 
-  const handleSendMessage = async (e: BaseSyntheticEvent) => {
-    e.preventDefault();
-    if (inputValue.trim() !== "") {
-      setUserMessages([...userMessages, inputValue]);
-      setInputValue("");
-      try {
-        // TODO: replace with dynamic videoid
-        const response = await fetch("/api/chat/8PGIHKydMqc", {
-          method: "POST",
-          body: JSON.stringify({ message: inputValue }),
-          headers: { "Content-Type": "application/json" },
-        });
-        const data = await response.json();
-        if (data.message) {
-          ("message received");
-          setAssistantMessages([...assistantMessages, data.message]);
-        } else {
-          console.error("No message received");
-        }
-      } catch (error) {
-        console.error("error on assistant response", error);
-      }
+  const handleInput = (event: BaseSyntheticEvent) => {
+    event.preventDefault();
+    setInputValue(event.target.value as string);
+    console.log(inputValue);
+  };
+
+  const clearChat = (event: BaseSyntheticEvent) => {
+    console.log("clearing messages");
+    event.preventDefault();
+    setMessages([]);
+    // this will happen before setMessages in completed
+    console.log("messages now", messages.length);
+  };
+
+  const getGPTResponse = async (userMessage: string) => {
+    try {
+      const res = await fetch(`/api/chat/${videoid}`, {
+        method: "POST",
+        body: JSON.stringify(userMessage),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      return data.message;
+    } catch (error) {
+      console.error(error);
     }
   };
 
-  const handleClear = () => {
-    setUserMessages([]);
-  };
-
   return (
-    <div>
-      <div className="chat-messages">
-        {userMessages.map((message, index) => (
-          <div key={index}>{message}</div>
-        ))}
+    <section>
+      <div>
+        {messages &&
+          messages.map((message, index) => (
+            <p
+              key={index}
+              className={index % 2 === 0 ? `text-white-300` : `text-orange-400`}
+            >
+              {message}
+            </p>
+          ))}
       </div>
-      <div className="chat-messages">
-        {assistantMessages.map((message, index) => (
-          <div key={index + 1000} className="text-orange-400">
-            {message}
-          </div>
-        ))}
-      </div>
-      <div className="chat-input">
-        <form onSubmit={handleSendMessage}>
-          <input
-            type="text"
-            className="text-black"
-            value={inputValue}
-            onChange={handleInputChange}
-          />
-          <button className="mr-4">Send</button>
-          <button onClick={handleClear}>Clear</button>
-        </form>
-      </div>
-    </div>
+      <form onSubmit={handleSubmit}>
+        <input
+          className="text-black"
+          onChange={handleInput}
+          type="text"
+          value={inputValue}
+        />
+        <button>send</button>
+        <button onClick={clearChat}>clear</button>
+      </form>
+    </section>
   );
 }
