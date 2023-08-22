@@ -27,12 +27,7 @@ export default function Home() {
   const [animationClass, setAnimationClass] = useState("animate__flipInX");
   const textRef = useRef<HTMLHeadingElement | null>(null);
 
-  const Roles = [
-    "Content Creators.",
-    "Businesses.",
-    "Influencers.",
-    "Everyone.AI",
-  ];
+  const Roles = ["Creators.", "Businesses.", "Influencers.", "Everyone.AI"];
 
   const tagRef = useRef<HTMLDivElement | null>(null);
   const scrollToTagSection = () => {
@@ -98,11 +93,11 @@ export default function Home() {
           />
         </div>
       </div>
-      <div className="flex justify-end items-center bg-white grid grid-cols-2 gap-2">
+      <div className="flex justify-end items-center bg-white grid grid-cols-2 gap-1 md:gap-2">
         <h1
           className={`text-med sm:text-lg md:text-3xl lg:text-4xl font-bold text-right text-black ${playfairDisplay500.className}`}
         >
-          Automated Public Relations for
+          Automated PR for
         </h1>
 
         <h1
