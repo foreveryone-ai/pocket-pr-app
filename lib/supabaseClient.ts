@@ -224,7 +224,7 @@ export async function getCaptionSummary(
 }
 
 export async function getCommentsSentiment(authToken: string, videoId: string) {
-  const commentIds = [];
+  //const commentIds = [];
   const sentiment = {
     pos: 0,
     neg: 0,
@@ -233,41 +233,51 @@ export async function getCommentsSentiment(authToken: string, videoId: string) {
 
   const db = createServerDbClient(authToken);
 
-  const { data: commentData, error: commentError } = await db
-    .from("Comments")
+  // const { data: commentData, error: commentError } = await db
+  //   .from("Comments")
+  //   .select()
+  //   .eq(`video_id`, videoId);
+  // if (commentData && commentData.length > 0) {
+  //   console.log("adding comment ids to array...");
+  //   for (let comment of commentData) {
+  //     commentIds.push(comment.id);
+  //   }
+  //   console.log("ids added to array: ", commentIds);
+  //   console.log("getting comment summaries...");
+  // this will cause an error if the commentId is not in the commentSummary
+  // table
+  // const { data: summaryData, error: summaryError } = await db
+  //   .from("CommentSummary")
+  //   .select()
+  //   .in("comment_id", commentIds);
+
+  // get all comment summaries related to the video id
+  const { data: summaryData, error: summaryError } = await db
+    .from("CommentSummary")
     .select()
-    .eq(`video_id`, videoId);
-  if (commentData && commentData.length > 0) {
-    console.log("adding comment ids to array...");
-    for (let comment of commentData) {
-      commentIds.push(comment.id);
-    }
-    console.log("ids added to array: ", commentIds);
-    console.log("getting comment summaries...");
-    const { data: summaryData, error: summaryError } = await db
-      .from("CommentSummary")
-      .select()
-      .in("comment_id", commentIds);
-    if (summaryData && summaryData.length > 0) {
-      console.log("returning summary data...");
-      for (let summary of summaryData) {
-        if (summary.sentiment === SENTIMENT.POSITIVE) {
-          sentiment.pos++;
-        } else if (summary.sentiment === SENTIMENT.NEGATIVE) {
-          sentiment.neg++;
-        } else {
-          sentiment.neu++;
-        }
+    .eq("video_id", videoId);
+
+  if (summaryData && summaryData.length > 0) {
+    console.log("returning summary data...");
+    for (let summary of summaryData) {
+      if (summary.sentiment === SENTIMENT.POSITIVE) {
+        sentiment.pos++;
+      } else if (summary.sentiment === SENTIMENT.NEGATIVE) {
+        sentiment.neg++;
+      } else {
+        sentiment.neu++;
       }
-      return sentiment;
-    } else {
-      console.log("no summary data");
-      return;
     }
+    return sentiment;
   } else {
-    console.error("error getting comment data", commentError);
+    console.log("no summary data");
     return;
   }
+  // } else {
+  //console.error("error getting comment data", commentError);
+  // console.error("error getting comment data: ");
+  //return;
+  //}
 }
 
 //-------------------------------Update------------------------------------//

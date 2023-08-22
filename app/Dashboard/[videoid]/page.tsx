@@ -1,3 +1,4 @@
+import ChatUI from "@/app/components/ChatUI";
 import AnalysisButton from "@/app/components/AnalysisButton";
 import { redirect } from "next/navigation";
 import Image from "next/image";
@@ -88,6 +89,7 @@ export default async function Video({
             />
           )}
         </div>
+        <ChatUI videoid={params.videoid} />
       </div>
 
       <section className="flex flex-col justify-evenly items-center gap-12 py-12">
