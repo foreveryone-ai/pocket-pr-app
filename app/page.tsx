@@ -27,7 +27,12 @@ export default function Home() {
   const [animationClass, setAnimationClass] = useState("animate__flipInX");
   const textRef = useRef<HTMLHeadingElement | null>(null);
 
-  const Roles = ["Content Creators", "Businesses", "Influencers", "Everyone"];
+  const Roles = [
+    "Content Creators.",
+    "Businesses.",
+    "Influencers.",
+    "Everyone.AI",
+  ];
 
   const tagRef = useRef<HTMLDivElement | null>(null);
   const scrollToTagSection = () => {
@@ -93,11 +98,11 @@ export default function Home() {
           />
         </div>
       </div>
-      <div className="flex justify-center items-center bg-white grid grid-cols-2 gap-2">
+      <div className="flex justify-end items-center bg-white grid grid-cols-2 gap-2">
         <h1
           className={`text-med sm:text-lg md:text-3xl lg:text-4xl font-bold text-right text-black ${playfairDisplay500.className}`}
         >
-          Public Relations for
+          Automated Public Relations for
         </h1>
 
         <h1
@@ -105,7 +110,7 @@ export default function Home() {
           key={Roles[currentIndex]}
           className={`text-med sm:text-lg md:text-3xl lg:text-4xl font-bold text-left text-black animate__animated ${animationClass} ${playfairDisplay800.className}`}
         >
-          {Roles[currentIndex]}.
+          {Roles[currentIndex]}
         </h1>
       </div>
       <div className="flex justify-center mt-12">
@@ -151,12 +156,10 @@ export default function Home() {
                 </dl>
               </div>
             </div>
-            <img
-              src="https://tailwindui.com/img/component-images/dark-project-app-screenshot.png"
+            <Image
+              src="/dashboard-screenshot.png"
               alt="Product screenshot"
-              className="w-[48rem] max-w-none rounded-xl shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0"
-              width={2432}
-              height={1442}
+              width={2000}
             />
           </div>
         </div>
