@@ -12,10 +12,12 @@ export default function ChatUI({ videoid }: ChatUIProps) {
 
   const handleSubmit = async (event: BaseSyntheticEvent) => {
     event.preventDefault();
-    setMessages([...messages, inputValue]);
+    const localMessages: string[] = [];
+    localMessages.push(inputValue);
     setInputValue("");
-    const response = await getGPTResponse(inputValue);
-    setMessages([...messages, response as string]);
+    const response = await getGPTResponse(messages[messages.length - 1]);
+    localMessages.push(response);
+    setMessages([...messages, localMessages[0], localMessages[1]]);
   };
 
   const handleInput = (event: BaseSyntheticEvent) => {
