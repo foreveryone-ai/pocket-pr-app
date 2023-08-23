@@ -6,8 +6,11 @@ type Params = {
   };
 };
 
-export function POST(req: NextRequest, context: Params) {
+export async function POST(req: NextRequest, context: Params) {
   const videoid = context.params.videoid;
-  console.log("videoid: ", videoid);
-  return NextResponse.json({ message: "Hello from chat!" });
+  console.log(await req.json());
+  // check if vector store exists
+  // return isStore true
+  return NextResponse.json({ message: "Hello from chat..." });
+  // if it doesn't, check
 }

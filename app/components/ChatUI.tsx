@@ -14,8 +14,9 @@ export default function ChatUI({ videoid }: ChatUIProps) {
     event.preventDefault();
     const localMessages: string[] = [];
     localMessages.push(inputValue);
+    const response = await getGPTResponse(inputValue);
+    console.log(response);
     setInputValue("");
-    const response = await getGPTResponse(messages[messages.length - 1]);
     localMessages.push(response);
     setMessages([...messages, localMessages[0], localMessages[1]]);
   };
@@ -30,8 +31,6 @@ export default function ChatUI({ videoid }: ChatUIProps) {
     console.log("clearing messages");
     event.preventDefault();
     setMessages([]);
-    // this will happen before setMessages in completed
-    console.log("messages now", messages.length);
   };
 
   const getGPTResponse = async (userMessage: string) => {
