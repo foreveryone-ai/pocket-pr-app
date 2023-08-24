@@ -1,4 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs";
+import { getCaptionSummary } from "@/lib/supabaseClient";
+import { PocketChain } from "@/lib/langChain";
 
 type Params = {
   params: {
@@ -8,9 +11,32 @@ type Params = {
 
 export async function POST(req: NextRequest, context: Params) {
   const videoid = context.params.videoid;
+  const { userId, getToken } = auth();
   console.log(await req.json());
-  // check if vector store exists
-  // return isStore true
+
+  const token = await getToken({ template: "supabase" });
+  // send to sign-in if there is no token
+  if (!token) return NextResponse.rewrite("/sign-in");
+  if (!userId) return NextResponse.rewrite("/sign-in");
+
+  // check if video summary is in db
+  const { data: summaryData, error: summaryError } = await getCaptionSummary(
+    token,
+    "",
+    videoid
+  );
+
+  if (!summaryData || summaryData.length === 0 || summaryError) {
+    return NextResponse.json({
+      message:
+        "No summary, try hitting the update button to make sure we have your video summary",
+    });
+  }
+
+  // check if embeddings exist
+  const pocketChain = new PocketChain(summaryData[0].summaryText);
+  const hasEmbeddings = await pocketChain.hasEmbeddings(videoid);
+  console.log(hasEmbeddings);
+
   return NextResponse.json({ message: "Hello from chat..." });
-  // if it doesn't, check
 }
