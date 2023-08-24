@@ -5,12 +5,12 @@ import { Spacer } from "@nextui-org/spacer";
 
 export default function () {
   return (
-    <div className="navbar bg-white p-4">
+    <div className="navbar bg-green-800 p-4">
       {/* ----------------------------NAVBAR START---------------------------- */}
       <div className="navbar-start">
         <SignedIn>
           <div className="dropdown">
-            <Button color="success" tabIndex={0}>
+            <Button color="default" tabIndex={0}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
