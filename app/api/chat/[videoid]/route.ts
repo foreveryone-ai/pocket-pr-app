@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs";
+import { auth, clerkClient } from "@clerk/nextjs";
 import { getCaptionSummary } from "@/lib/supabaseClient";
 import { PocketChain } from "@/lib/langChain";
 
@@ -18,6 +18,11 @@ export async function POST(req: NextRequest, context: Params) {
   // send to sign-in if there is no token
   if (!token) return NextResponse.rewrite("/sign-in");
   if (!userId) return NextResponse.rewrite("/sign-in");
+
+  const user = await clerkClient.users.getUser(userId);
+  if (user.privateMetadata.hasEmbeddings) {
+    return NextResponse.json({ message: "we have embeddings" });
+  }
 
   // check if video summary is in db
   const { data: summaryData, error: summaryError } = await getCaptionSummary(
@@ -38,5 +43,17 @@ export async function POST(req: NextRequest, context: Params) {
   const hasEmbeddings = await pocketChain.hasEmbeddings(videoid);
   console.log(hasEmbeddings);
 
-  return NextResponse.json({ message: "Hello from chat..." });
+  // set private metadata in jwt to varify embeddings are present
+  if (hasEmbeddings) {
+    await clerkClient.users.updateUserMetadata(userId, {
+      privateMetadata: {
+        hasEmbeddings: true,
+      },
+    });
+  }
+  // if embeddings, start chat
+
+  // otherwise, create embeddings
+
+  return NextResponse.json({ message: "token should now have embeddings..." });
 }
