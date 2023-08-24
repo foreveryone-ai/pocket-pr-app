@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Image } from "@nextui-org/image";
 import { SignedIn, SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
 import { Button } from "@nextui-org/button";
+import { Divider } from "@nextui-org/divider";
 import "animate.css/animate.min.css";
 import { BsFillArrowDownCircleFill } from "react-icons/bs";
 import {
@@ -66,58 +67,22 @@ export default function Home() {
     },
   ];
 
-  const stats = [
-    { id: 1, name: "Creators on the platform", value: "8,000+" },
-    { id: 2, name: "Flat platform fee", value: "3%" },
-    { id: 3, name: "Uptime guarantee", value: "99.9%" },
-    { id: 4, name: "Paid out to creators", value: "$70M" },
+  const hobbyFeatures = [
+    "Pariatur quod similique",
+    "Sapiente libero doloribus",
+    "Vel ipsa esse repudiandae",
   ];
-
-  const tiers = [
-    {
-      name: "Freelancer",
-      id: "tier-freelancer",
-      href: "#",
-      priceMonthly: "$24",
-      description: "The essentials to provide your best work for clients.",
-      features: [
-        "5 products",
-        "Up to 1,000 subscribers",
-        "Basic analytics",
-        "48-hour support response time",
-      ],
-      mostPopular: false,
-    },
-    {
-      name: "Startup",
-      id: "tier-startup",
-      href: "#",
-      priceMonthly: "$32",
-      description: "A plan that scales with your rapidly growing business.",
-      features: [
-        "25 products",
-        "Up to 10,000 subscribers",
-        "Advanced analytics",
-        "24-hour support response time",
-        "Marketing automations",
-      ],
-      mostPopular: true,
-    },
-    {
-      name: "Enterprise",
-      id: "tier-enterprise",
-      href: "#",
-      priceMonthly: "$48",
-      description: "Dedicated support and infrastructure for your company.",
-      features: [
-        "Unlimited products",
-        "Unlimited subscribers",
-        "Advanced analytics",
-        "1-hour, dedicated support response time",
-        "Marketing automations",
-      ],
-      mostPopular: false,
-    },
+  const scaleFeatures = [
+    "Pariatur quod similique",
+    "Sapiente libero doloribus",
+    "Vel ipsa esse repudiandae",
+  ];
+  const growthFeatures = [
+    "Quia rem est sed impedit magnam",
+    "Dolorem vero ratione voluptates",
+    "Qui sed ab doloribus voluptatem dolore",
+    "Laborum commodi molestiae id et fugiat",
+    "Nam ut ipsa nesciunt culpa modi dolor",
   ];
 
   useEffect(() => {
@@ -235,7 +200,7 @@ export default function Home() {
           {Roles[currentIndex]}
         </h1>
       </div>
-      <div className="flex justify-center mt-12">
+      <div className="flex justify-center mt-12 mb-36">
         <Button
           color="success"
           endContent={<BsFillArrowDownCircleFill />}
@@ -246,18 +211,84 @@ export default function Home() {
       </div>
 
       {/* --------------------------------------TAG-------------------------------------- */}
-      <div ref={tagRef} className="overflow-hidden py-24 sm:py-32">
+      <Divider className="my-4" />
+      <div ref={tagRef} className="mx-auto max-w-7xl pt-12 px-24 lg:px-8">
+        <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
+          <div className="lg:pr-8 lg:pt-4">
+            <div className="lg:max-w-lg">
+              <p
+                className={`${playFairDisplay650.className} mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl`}
+              >
+                Silence the noise.
+              </p>
+              <p className="mt-6 text-lg leading-8 text-gray-600">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                Maiores impedit perferendis suscipit eaque, iste dolor
+                cupiditate blanditiis ratione.
+              </p>
+              <dl className="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-600 lg:max-w-none">
+                {features.map((feature) => (
+                  <div key={feature.name} className="relative pl-9">
+                    <dt className="inline font-semibold text-gray-900">
+                      <feature.icon
+                        className="absolute left-1 top-1 h-5 w-5 text-green-600"
+                        aria-hidden="true"
+                      />
+                      {feature.name}
+                    </dt>{" "}
+                    <dd className="inline">{feature.description}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          </div>
+
+          <div className="relative mx-auto border-gray-800 dark:border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[600px] w-[300px]">
+            <div className="h-[32px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -left-[17px] top-[72px] rounded-l-lg"></div>
+            <div className="h-[46px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -left-[17px] top-[124px] rounded-l-lg"></div>
+            <div className="h-[46px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -left-[17px] top-[178px] rounded-l-lg"></div>
+            <div className="h-[64px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -right-[17px] top-[142px] rounded-r-lg"></div>
+            <div className="rounded-[2rem] overflow-hidden w-[272px] h-[572px] bg-white dark:bg-gray-800">
+              <Image src="/dashboard-screenshot.png" alt="Product screenshot" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="mx-auto max-w-7xl py-24 px-6 py-16 md:py-32 lg:px-8">
+        <div className="relative isolate flex justify-center align-center overflow-hidden bg-green-900 px-6 pt-16 shadow-2xl rounded-3xl px-16 gap-x-10 md:pt-24 lg:flex lg:gap-x-20 lg:px-24 lg:pt-0">
+          <div className="mx-12 max-w-md text-center lg:mx-0 lg:py-32 lg:text-center">
+            <h2
+              className={`${playFairDisplay650.className} text-3xl font-bold tracking-tight text-white sm:text-4xl`}
+            >
+              Focus.
+            </h2>
+            <p className="mt-4 text-lg text-white">
+              Lorem ipsum dolor sit amet consect adipisicing possimus.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="overflow-hidden bg-white py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
-            <div className="lg:pr-8 lg:pt-4">
+            <div className="relative mx-auto border-gray-800 dark:border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[600px] w-[300px]">
+              <div className="h-[32px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -left-[17px] top-[72px] rounded-l-lg"></div>
+              <div className="h-[46px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -left-[17px] top-[124px] rounded-l-lg"></div>
+              <div className="h-[46px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -left-[17px] top-[178px] rounded-l-lg"></div>
+              <div className="h-[64px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -right-[17px] top-[142px] rounded-r-lg"></div>
+              <div className="rounded-[2rem] overflow-hidden w-[272px] h-[572px] bg-white dark:bg-gray-800">
+                <Image src="/chat-screenshot.png" alt="Product screenshot" />
+              </div>
+            </div>
+
+            <div className="lg:ml-auto lg:pl-4 lg:pt-4">
               <div className="lg:max-w-lg">
-                <h2 className="text-base font-semibold leading-7 text-indigo-600">
-                  Move <i>Faster</i>
-                </h2>
                 <p
                   className={`${playFairDisplay650.className} mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl`}
                 >
-                  Silence the Noise
+                  Turn feedback into fame.
                 </p>
                 <p className="mt-6 text-lg leading-8 text-gray-600">
                   Lorem ipsum, dolor sit amet consectetur adipisicing elit.
@@ -269,7 +300,7 @@ export default function Home() {
                     <div key={feature.name} className="relative pl-9">
                       <dt className="inline font-semibold text-gray-900">
                         <feature.icon
-                          className="absolute left-1 top-1 h-5 w-5 text-indigo-600"
+                          className="absolute left-1 top-1 h-5 w-5 text-green-600"
                           aria-hidden="true"
                         />
                         {feature.name}
@@ -280,187 +311,206 @@ export default function Home() {
                 </dl>
               </div>
             </div>
-
-            <div className="relative mx-auto border-gray-800 dark:border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[600px] w-[300px]">
-              <div className="h-[32px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -left-[17px] top-[72px] rounded-l-lg"></div>
-              <div className="h-[46px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -left-[17px] top-[124px] rounded-l-lg"></div>
-              <div className="h-[46px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -left-[17px] top-[178px] rounded-l-lg"></div>
-              <div className="h-[64px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -right-[17px] top-[142px] rounded-r-lg"></div>
-              <div className="rounded-[2rem] overflow-hidden w-[272px] h-[572px] bg-white dark:bg-gray-800">
-                <Image
-                  src="/dashboard-screenshot.png"
-                  alt="Product screenshot"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white py-24 sm:py-32">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="mx-auto max-w-2xl lg:max-w-none">
-              <div className="text-center">
-                <h2
-                  className={`${playFairDisplay650.className} text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl`}
-                >
-                  Trusted by creators worldwide
-                </h2>
-                <p className="mt-4 text-lg leading-8 text-gray-600">
-                  Lorem ipsum dolor sit amet consect adipisicing possimus.
-                </p>
-              </div>
-              <dl className="mt-16 grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4">
-                {stats.map((stat) => (
-                  <div
-                    key={stat.id}
-                    className="flex flex-col bg-gray-400/5 p-8"
-                  >
-                    <dt className="text-sm font-semibold leading-6 text-gray-600">
-                      {stat.name}
-                    </dt>
-                    <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900">
-                      {stat.value}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-          </div>
-        </div>
-
-        <div className="overflow-hidden bg-white py-24 sm:py-32">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
-              <div className="relative mx-auto border-gray-800 dark:border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[600px] w-[300px]">
-                <div className="h-[32px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -left-[17px] top-[72px] rounded-l-lg"></div>
-                <div className="h-[46px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -left-[17px] top-[124px] rounded-l-lg"></div>
-                <div className="h-[46px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -left-[17px] top-[178px] rounded-l-lg"></div>
-                <div className="h-[64px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -right-[17px] top-[142px] rounded-r-lg"></div>
-                <div className="rounded-[2rem] overflow-hidden w-[272px] h-[572px] bg-white dark:bg-gray-800">
-                  <Image src="/chat-screenshot.png" alt="Product screenshot" />
-                </div>
-              </div>
-
-              <div className="lg:ml-auto lg:pl-4 lg:pt-4">
-                <div className="lg:max-w-lg">
-                  <h2 className="text-base font-semibold leading-7 text-indigo-600">
-                    Deploy faster
-                  </h2>
-                  <p
-                    className={`${playFairDisplay650.className} mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl`}
-                  >
-                    A better workflow
-                  </p>
-                  <p className="mt-6 text-lg leading-8 text-gray-600">
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                    Maiores impedit perferendis suscipit eaque, iste dolor
-                    cupiditate blanditiis ratione.
-                  </p>
-                  <dl className="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-600 lg:max-w-none">
-                    {features.map((feature) => (
-                      <div key={feature.name} className="relative pl-9">
-                        <dt className="inline font-semibold text-gray-900">
-                          <feature.icon
-                            className="absolute left-1 top-1 h-5 w-5 text-indigo-600"
-                            aria-hidden="true"
-                          />
-                          {feature.name}
-                        </dt>{" "}
-                        <dd className="inline">{feature.description}</dd>
-                      </div>
-                    ))}
-                  </dl>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
 
-      <div className="bg-white py-24 sm:py-32">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-4xl text-center">
-            <h2 className="text-base font-semibold leading-7 text-indigo-600">
-              Pricing
-            </h2>
+      <div className="bg-green-900">
+        <div className="px-6 pt-12 lg:px-8 lg:pt-20">
+          <div className="text-center">
             <p
-              className={`${playFairDisplay650.className} mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl`}
+              className={`${playFairDisplay650.className} mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl`}
             >
-              Pricing plans for teams of&nbsp;all&nbsp;sizes
+              The right price for you, whoever you are
+            </p>
+            <p className="mx-auto mt-3 max-w-4xl text-xl text-gray-300 sm:mt-5 sm:text-2xl">
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Velit
+              numquam eligendi quos odit doloribus molestiae voluptatum.
             </p>
           </div>
-          <p className="mx-auto mt-6 max-w-2xl text-center text-lg leading-8 text-gray-600">
-            Distinctio et nulla eum soluta et neque labore quibusdam. Saepe et
-            quasi iusto modi velit ut non voluptas in. Explicabo id ut laborum.
-          </p>
-          <div className="isolate mx-auto mt-16 grid max-w-md grid-cols-1 gap-y-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-            {tiers.map((tier, tierIdx) => (
-              <div
-                key={tier.id}
-                className={classNames(
-                  tier.mostPopular ? "lg:z-10 lg:rounded-b-none" : "lg:mt-8",
-                  tierIdx === 0 ? "lg:rounded-r-none" : "",
-                  tierIdx === tiers.length - 1 ? "lg:rounded-l-none" : "",
-                  "flex flex-col justify-between rounded-3xl bg-white p-8 ring-1 ring-gray-200 xl:p-10"
-                )}
-              >
-                <div>
-                  <div className="flex items-center justify-between gap-x-4">
-                    <h3
-                      id={tier.id}
-                      className={classNames(
-                        tier.mostPopular ? "text-indigo-600" : "text-gray-900",
-                        "text-lg font-semibold leading-8"
-                      )}
-                    >
-                      {tier.name}
-                    </h3>
-                    {tier.mostPopular ? (
-                      <p className="rounded-full bg-indigo-600/10 px-2.5 py-1 text-xs font-semibold leading-5 text-indigo-600">
-                        Most popular
-                      </p>
-                    ) : null}
+        </div>
+
+        <div className="mt-16 bg-green pb-12 lg:mt-20 lg:pb-20">
+          <div className="relative z-0">
+            <div className="absolute inset-0 h-5/6 bg-green-900 lg:h-2/3" />
+            <div className="mx-auto max-w-7xl px-6 lg:px-8">
+              <div className="relative lg:grid lg:grid-cols-7">
+                <div className="mx-auto max-w-md lg:col-start-1 lg:col-end-3 lg:row-start-2 lg:row-end-3 lg:mx-0 lg:max-w-none">
+                  <div className="flex h-full flex-col overflow-hidden rounded-lg shadow-lg lg:rounded-none lg:rounded-l-lg">
+                    <div className="flex flex-1 flex-col">
+                      <div className="bg-white px-6 py-10">
+                        <div>
+                          <h3
+                            className="text-center text-2xl font-medium text-gray-900"
+                            id="tier-hobby"
+                          >
+                            Hobby
+                          </h3>
+                          <div className="mt-4 flex items-center justify-center">
+                            <span className="flex items-start px-3 text-6xl tracking-tight text-gray-900">
+                              <span className="mr-2 mt-2 text-4xl font-medium tracking-tight">
+                                $
+                              </span>
+                              <span className="font-bold">79</span>
+                            </span>
+                            <span className="text-xl font-medium text-gray-500">
+                              /month
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex flex-1 flex-col justify-between border-t-2 border-gray-100 bg-gray-50 p-6 sm:p-10 lg:p-6 xl:p-10">
+                        <ul role="list" className="space-y-4">
+                          {hobbyFeatures.map((feature) => (
+                            <li key={feature} className="flex items-start">
+                              <div className="flex-shrink-0">
+                                <CheckIcon
+                                  className="h-6 w-6 flex-shrink-0 text-green-500"
+                                  aria-hidden="true"
+                                />
+                              </div>
+                              <p className="ml-3 text-base font-medium text-gray-500">
+                                {feature}
+                              </p>
+                            </li>
+                          ))}
+                        </ul>
+                        <div className="mt-8">
+                          <div className="rounded-lg shadow-md">
+                            <a
+                              href="#"
+                              className="block w-full rounded-lg border border-transparent bg-white px-6 py-3 text-center text-base font-medium text-green-600 hover:bg-gray-50"
+                              aria-describedby="tier-hobby"
+                            >
+                              Start your trial
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <p className="mt-4 text-sm leading-6 text-gray-600">
-                    {tier.description}
-                  </p>
-                  <p className="mt-6 flex items-baseline gap-x-1">
-                    <span className="text-4xl font-bold tracking-tight text-gray-900">
-                      {tier.priceMonthly}
-                    </span>
-                    <span className="text-sm font-semibold leading-6 text-gray-600">
-                      /month
-                    </span>
-                  </p>
-                  <ul
-                    role="list"
-                    className="mt-8 space-y-3 text-sm leading-6 text-gray-600"
-                  >
-                    {tier.features.map((feature) => (
-                      <li key={feature} className="flex gap-x-3">
-                        <CheckIcon
-                          className="h-6 w-5 flex-none text-indigo-600"
-                          aria-hidden="true"
-                        />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
                 </div>
-                <a
-                  href={tier.href}
-                  aria-describedby={tier.id}
-                  className={classNames(
-                    tier.mostPopular
-                      ? "bg-indigo-600 text-white shadow-sm hover:bg-indigo-500"
-                      : "text-indigo-600 ring-1 ring-inset ring-indigo-200 hover:ring-indigo-300",
-                    "mt-8 block rounded-md py-2 px-3 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                  )}
-                >
-                  Buy plan
-                </a>
+                <div className="mx-auto mt-10 max-w-lg lg:col-start-3 lg:col-end-6 lg:row-start-1 lg:row-end-4 lg:mx-0 lg:mt-0 lg:max-w-none">
+                  <div className="relative z-10 rounded-lg shadow-xl">
+                    <div
+                      className="pointer-events-none absolute inset-0 rounded-lg border-2 border-green-600"
+                      aria-hidden="true"
+                    />
+                    <div className="absolute inset-x-0 top-0 translate-y-px transform">
+                      <div className="flex -translate-y-1/2 transform justify-center">
+                        <span className="inline-flex rounded-full bg-green-600 px-4 py-1 text-base font-semibold text-white">
+                          Most popular
+                        </span>
+                      </div>
+                    </div>
+                    <div className="rounded-t-lg bg-white px-6 pb-10 pt-12">
+                      <div>
+                        <h3
+                          className="text-center text-3xl font-semibold tracking-tight text-gray-900 sm:-mx-6"
+                          id="tier-growth"
+                        >
+                          Growth
+                        </h3>
+                        <div className="mt-4 flex items-center justify-center">
+                          <span className="flex items-start px-3 text-6xl tracking-tight text-gray-900 sm:text-6xl">
+                            <span className="mr-2 mt-2 text-4xl font-medium tracking-tight">
+                              $
+                            </span>
+                            <span className="font-bold">149</span>
+                          </span>
+                          <span className="text-2xl font-medium text-gray-500">
+                            /month
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="rounded-b-lg border-t-2 border-gray-100 bg-gray-50 px-6 pb-8 pt-10 sm:px-10 sm:py-10">
+                      <ul role="list" className="space-y-4">
+                        {growthFeatures.map((feature) => (
+                          <li key={feature} className="flex items-start">
+                            <div className="flex-shrink-0">
+                              <CheckIcon
+                                className="h-6 w-6 flex-shrink-0 text-green-500"
+                                aria-hidden="true"
+                              />
+                            </div>
+                            <p className="ml-3 text-base font-medium text-gray-500">
+                              {feature}
+                            </p>
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="mt-10">
+                        <div className="rounded-lg shadow-md">
+                          <a
+                            href="#"
+                            className="block w-full rounded-lg border border-transparent bg-green-600 px-6 py-4 text-center text-xl font-medium leading-6 text-white hover:bg-green-700"
+                            aria-describedby="tier-growth"
+                          >
+                            Start your trial
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="mx-auto mt-10 max-w-md lg:col-start-6 lg:col-end-8 lg:row-start-2 lg:row-end-3 lg:m-0 lg:max-w-none">
+                  <div className="flex h-full flex-col overflow-hidden rounded-lg shadow-lg lg:rounded-none lg:rounded-r-lg">
+                    <div className="flex flex-1 flex-col">
+                      <div className="bg-white px-6 py-10">
+                        <div>
+                          <h3
+                            className="text-center text-2xl font-medium text-gray-900"
+                            id="tier-scale"
+                          >
+                            Scale
+                          </h3>
+                          <div className="mt-4 flex items-center justify-center">
+                            <span className="flex items-start px-3 text-6xl tracking-tight text-gray-900">
+                              <span className="mr-2 mt-2 text-4xl font-medium tracking-tight">
+                                $
+                              </span>
+                              <span className="font-bold">349</span>
+                            </span>
+                            <span className="text-xl font-medium text-gray-500">
+                              /month
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex flex-1 flex-col justify-between border-t-2 border-gray-100 bg-gray-50 p-6 sm:p-10 lg:p-6 xl:p-10">
+                        <ul role="list" className="space-y-4">
+                          {scaleFeatures.map((feature) => (
+                            <li key={feature} className="flex items-start">
+                              <div className="flex-shrink-0">
+                                <CheckIcon
+                                  className="h-6 w-6 flex-shrink-0 text-green-500"
+                                  aria-hidden="true"
+                                />
+                              </div>
+                              <p className="ml-3 text-base font-medium text-gray-500">
+                                {feature}
+                              </p>
+                            </li>
+                          ))}
+                        </ul>
+                        <div className="mt-8">
+                          <div className="rounded-lg shadow-md">
+                            <a
+                              href="#"
+                              className="block w-full rounded-lg border border-transparent bg-white px-6 py-3 text-center text-base font-medium text-green-600 hover:bg-gray-50"
+                              aria-describedby="tier-scale"
+                            >
+                              Start your trial
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </div>
