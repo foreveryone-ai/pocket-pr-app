@@ -5,8 +5,10 @@ import { Image } from "@nextui-org/image";
 import { SignedIn, SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
 import { Button } from "@nextui-org/button";
 import { Divider } from "@nextui-org/divider";
+import { Spacer } from "@nextui-org/spacer";
 import "animate.css/animate.min.css";
 import { BsFillArrowDownCircleFill } from "react-icons/bs";
+import { BsFillArrowRightCircleFill } from "react-icons/bs";
 import {
   CloudArrowUpIcon,
   LockClosedIcon,
@@ -46,21 +48,42 @@ export default function Home() {
     }
   };
 
-  const features = [
+  const features1 = [
     {
-      name: "Push to deploy.",
+      name: "Audience Listening",
       description:
         "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.",
       icon: CloudArrowUpIcon,
     },
     {
-      name: "SSL certificates.",
+      name: "Conflict Mitigation & Forecasting",
       description:
         "Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.",
       icon: LockClosedIcon,
     },
     {
-      name: "Database backups.",
+      name: "Growth Planning",
+      description:
+        "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.",
+      icon: ServerIcon,
+    },
+  ];
+
+  const features2 = [
+    {
+      name: "Cross-Platform Context",
+      description:
+        "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.",
+      icon: CloudArrowUpIcon,
+    },
+    {
+      name: "Chat-With-Your-Posts",
+      description:
+        "Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.",
+      icon: LockClosedIcon,
+    },
+    {
+      name: "Analytical Reports",
       description:
         "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.",
       icon: ServerIcon,
@@ -200,14 +223,29 @@ export default function Home() {
           {Roles[currentIndex]}
         </h1>
       </div>
-      <div className="flex justify-center mt-12 mb-36">
+      <div className="flex justify-center mt-12 mb-36 space-x-4">
         <Button
           color="success"
           endContent={<BsFillArrowDownCircleFill />}
           onClick={scrollToTagSection}
+          className="mr=4"
         >
           Learn More
         </Button>
+        <SignedIn>
+          <Link href="/dashboard">
+            <Button variant="ghost" endContent={<BsFillArrowRightCircleFill />}>
+              Dashboard
+            </Button>
+          </Link>
+        </SignedIn>
+        <SignedOut>
+          <SignInButton>
+            <Button variant="ghost" endContent={<BsFillArrowRightCircleFill />}>
+              Sign In
+            </Button>
+          </SignInButton>
+        </SignedOut>
       </div>
 
       {/* --------------------------------------TAG-------------------------------------- */}
@@ -227,7 +265,7 @@ export default function Home() {
                 cupiditate blanditiis ratione.
               </p>
               <dl className="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-600 lg:max-w-none">
-                {features.map((feature) => (
+                {features1.map((feature) => (
                   <div key={feature.name} className="relative pl-9">
                     <dt className="inline font-semibold text-gray-900">
                       <feature.icon
@@ -263,9 +301,7 @@ export default function Home() {
             >
               Focus.
             </h2>
-            <p className="mt-4 text-lg text-white">
-              Lorem ipsum dolor sit amet consect adipisicing possimus.
-            </p>
+            <p className="mt-4 text-lg text-white">(take the high road)</p>
           </div>
         </div>
       </div>
@@ -296,7 +332,7 @@ export default function Home() {
                   cupiditate blanditiis ratione.
                 </p>
                 <dl className="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-600 lg:max-w-none">
-                  {features.map((feature) => (
+                  {features2.map((feature) => (
                     <div key={feature.name} className="relative pl-9">
                       <dt className="inline font-semibold text-gray-900">
                         <feature.icon
@@ -344,14 +380,14 @@ export default function Home() {
                             className="text-center text-2xl font-medium text-gray-900"
                             id="tier-hobby"
                           >
-                            Hobby
+                            Hobbyist
                           </h3>
                           <div className="mt-4 flex items-center justify-center">
                             <span className="flex items-start px-3 text-6xl tracking-tight text-gray-900">
                               <span className="mr-2 mt-2 text-4xl font-medium tracking-tight">
                                 $
                               </span>
-                              <span className="font-bold">79</span>
+                              <span className="font-bold">19</span>
                             </span>
                             <span className="text-xl font-medium text-gray-500">
                               /month
@@ -409,14 +445,14 @@ export default function Home() {
                           className="text-center text-3xl font-semibold tracking-tight text-gray-900 sm:-mx-6"
                           id="tier-growth"
                         >
-                          Growth
+                          Content Creator
                         </h3>
                         <div className="mt-4 flex items-center justify-center">
                           <span className="flex items-start px-3 text-6xl tracking-tight text-gray-900 sm:text-6xl">
                             <span className="mr-2 mt-2 text-4xl font-medium tracking-tight">
                               $
                             </span>
-                            <span className="font-bold">149</span>
+                            <span className="font-bold">49</span>
                           </span>
                           <span className="text-2xl font-medium text-gray-500">
                             /month
@@ -463,14 +499,14 @@ export default function Home() {
                             className="text-center text-2xl font-medium text-gray-900"
                             id="tier-scale"
                           >
-                            Scale
+                            Influencer
                           </h3>
                           <div className="mt-4 flex items-center justify-center">
                             <span className="flex items-start px-3 text-6xl tracking-tight text-gray-900">
                               <span className="mr-2 mt-2 text-4xl font-medium tracking-tight">
                                 $
                               </span>
-                              <span className="font-bold">349</span>
+                              <span className="font-bold">99</span>
                             </span>
                             <span className="text-xl font-medium text-gray-500">
                               /month
@@ -521,8 +557,9 @@ export default function Home() {
             <h2
               className={`${playFairDisplay650.className} text-3xl font-bold tracking-tight text-white sm:text-4xl`}
             >
-              Boost your productivity.
+              Leave the noise for the machines.
               <br />
+              <Spacer y={2} />
               Start using our app today.
             </h2>
             <p className="mt-6 text-lg leading-8 text-gray-300">
