@@ -19,8 +19,10 @@ export async function POST(req: NextRequest, context: Params) {
   if (!token) return NextResponse.rewrite("/sign-in");
   if (!userId) return NextResponse.rewrite("/sign-in");
 
+  // check for is embeddings exist in JWT metadata
   const user = await clerkClient.users.getUser(userId);
   if (user.privateMetadata.hasEmbeddings) {
+    // if they exist we can call the chat method here and return the result
     return NextResponse.json({ message: "we have embeddings" });
   }
 

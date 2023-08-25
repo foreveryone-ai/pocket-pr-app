@@ -6,7 +6,12 @@ import { FunctionalTranslator } from "langchain/retrievers/self_query/functional
 import { SelfQueryRetriever } from "langchain/retrievers/self_query";
 import { AttributeInfo } from "langchain/schema/query_constructor";
 import { SupabaseVectorStore } from "langchain/vectorstores/supabase";
-import { ChatOpenAI } from "langchain/chat_models/openai";
+import {
+  ChatOpenAI,
+  SystemMessage,
+  HumanMessage,
+  Embeddings,
+} from "langchain/chat_models/openai";
 import {
   PromptTemplate,
   ChatPromptTemplate,
@@ -29,7 +34,6 @@ import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { Document } from "langchain/document";
 import type { SmallComment } from "./supabaseClient";
 import { SENTIMENT } from "@prisma/client";
-
 export type EmotionalAnalysisArgs = {
   video_id: string;
   id: string;
@@ -335,5 +339,54 @@ export class PocketChain {
     }
 
     return false;
+  }
+  async chat(videoid: string, userMessage: string) {
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!supabaseKey) throw new Error(`Expected SUPABASE_SERVICE_ROLE_KEY`);
+
+    const url = process.env.SUPABASE_URL;
+    if (!url) throw new Error(`Expected env var SUPABASE_URL`);
+
+    const client = createClient(url, supabaseKey);
+
+    // search embeddings based on user prompt
+    const vectorStore = await SupabaseVectorStore.fromExistingIndex(
+      new OpenAIEmbeddings(),
+      {
+        client,
+        tableName: "documents",
+      }
+    );
+    //query, k (num of docs to return), {} metadata filter
+    const foundDocuments = await vectorStore.similaritySearch(userMessage, 3, {
+      video_id: videoid,
+    });
+
+    console.log("documents retrieved: ", foundDocuments);
+
+    // Initialize the LLM to use to answer the question.
+    const chat = new ChatOpenAI({
+      openAIApiKey: process.env.OPENAI_API_KEY,
+      modelName: "gpt-3.5-turbo",
+      temperature: 0,
+    });
+
+    const systemMessagePrompt =
+      new SystemMessage(`You are a helpful public relations assistant that is having a conversation with your client about a You Tube video that they have created. Use the transcription from the video, as well as the commments to respond to your client.
+    transcript: ${this.captions},
+    comments:
+        ${
+          foundDocuments[0].pageContent +
+          "\n" +
+          foundDocuments[1].pageContent +
+          "\n" +
+          foundDocuments[2].pageContent
+        }
+    `);
+
+    const humanMessagePrompt = new HumanMessage(userMessage);
+
+    // include embeddings and summary of transcript as context
+    const response = chat.call([systemMessagePrompt, humanMessagePrompt]);
   }
 }
