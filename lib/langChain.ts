@@ -29,7 +29,6 @@ import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { Document } from "langchain/document";
 import type { SmallComment } from "./supabaseClient";
 import { SENTIMENT } from "@prisma/client";
-
 export type EmotionalAnalysisArgs = {
   video_id: string;
   id: string;
@@ -335,5 +334,67 @@ export class PocketChain {
     }
 
     return false;
+  }
+  async chat(videoid: string, userMessage: string) {
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!supabaseKey) throw new Error(`Expected SUPABASE_SERVICE_ROLE_KEY`);
+
+    const url = process.env.SUPABASE_URL;
+    if (!url) throw new Error(`Expected env var SUPABASE_URL`);
+
+    const client = createClient(url, supabaseKey);
+
+    // search embeddings based on user prompt
+    const vectorStore = await SupabaseVectorStore.fromExistingIndex(
+      new OpenAIEmbeddings(),
+      {
+        client,
+        tableName: "documents",
+      }
+    );
+    //query, k (num of docs to return), {} metadata filter
+    const foundDocuments = await vectorStore.similaritySearch(userMessage, 10, {
+      video_id: videoid,
+    });
+
+    console.log("documents retrieved: ", foundDocuments);
+
+    // Initialize the LLM to use to answer the question.
+    const chat = new ChatOpenAI({
+      openAIApiKey: process.env.OPENAI_API_KEY,
+      modelName: "gpt-3.5-turbo",
+      temperature: 0,
+    });
+
+    const template = `You are a helpful public relations assistant that is having a conversation with your client about a You Tube video that they have created. Use the transcription from the video, as well as the commments to respond to your client.
+    transcription: {transcription},
+    comments: {comments}
+    `;
+
+    const systemMessagePrompt =
+      SystemMessagePromptTemplate.fromTemplate(template);
+
+    const humanMessagePrompt =
+      HumanMessagePromptTemplate.fromTemplate(userMessage);
+
+    const chatPrompt = ChatPromptTemplate.fromPromptMessages([
+      systemMessagePrompt,
+      humanMessagePrompt,
+    ]);
+
+    console.log("chatPrompt: ", chatPrompt);
+    const chain = new LLMChain({
+      llm: chat,
+      prompt: chatPrompt,
+    });
+
+    const response = await chain.call({
+      transcription: this.captions,
+      comments: `
+      ${foundDocuments.map((document) => document.pageContent + "\n")}`,
+    });
+
+    console.log("chat response: ", response);
+    return response.text;
   }
 }

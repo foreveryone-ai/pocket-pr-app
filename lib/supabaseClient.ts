@@ -445,10 +445,10 @@ export async function storeCommentsSummaries(
     .select();
 
   if (data) {
-    console.log("returning data from storeCaptionsSummary");
+    console.log("returning data from storeCommentsSummary");
     return data;
   } else {
-    console.error("error on storeCaptionsSummary");
+    console.error("error on storeCommentsSummary");
     return error;
   }
 }
@@ -477,6 +477,7 @@ export async function storeCaptionsSummary(
     return data;
   } else {
     console.error("error on storeCaptionsSummary");
+    console.error(error);
     return error;
   }
 }

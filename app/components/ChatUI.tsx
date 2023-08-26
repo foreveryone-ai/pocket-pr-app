@@ -4,18 +4,22 @@ import { BaseSyntheticEvent, useState } from "react";
 
 type ChatUIProps = {
   videoid: string;
+  captionSummary: string;
 };
 
-export default function ChatUI({ videoid }: ChatUIProps) {
+export default function ChatUI({ videoid, captionSummary }: ChatUIProps) {
   const [inputValue, setInputValue] = useState("");
   const [messages, setMessages] = useState<string[]>([]);
 
   const handleSubmit = async (event: BaseSyntheticEvent) => {
     event.preventDefault();
-    setMessages([...messages, inputValue]);
+    const localMessages: string[] = [];
+    localMessages.push(inputValue);
+    const response = await getGPTResponse(inputValue, captionSummary);
+    console.log(response);
     setInputValue("");
-    const response = await getGPTResponse(inputValue);
-    setMessages([...messages, response as string]);
+    localMessages.push(response);
+    setMessages([...messages, localMessages[0], localMessages[1]]);
   };
 
   const handleInput = (event: BaseSyntheticEvent) => {
@@ -28,15 +32,13 @@ export default function ChatUI({ videoid }: ChatUIProps) {
     console.log("clearing messages");
     event.preventDefault();
     setMessages([]);
-    // this will happen before setMessages in completed
-    console.log("messages now", messages.length);
   };
 
-  const getGPTResponse = async (userMessage: string) => {
+  const getGPTResponse = async (userMessage: string, capSum: string) => {
     try {
       const res = await fetch(`/api/chat/${videoid}`, {
         method: "POST",
-        body: JSON.stringify(userMessage),
+        body: JSON.stringify({ message: userMessage, captionSummary: capSum }),
         headers: {
           "Content-Type": "application/json",
         },

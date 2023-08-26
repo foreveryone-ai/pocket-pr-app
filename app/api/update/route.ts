@@ -9,7 +9,7 @@ import { NextResponse } from "next/server";
 import { GoogleApi, getOAuthData } from "@/lib/googleApi";
 import { GoogleApis, google } from "googleapis";
 
-export async function GET() {
+export async function GET(request: Request) {
   const { userId, getToken } = auth();
   const token = await getToken({ template: "supabase" });
 
@@ -115,7 +115,7 @@ export async function GET() {
       }
     }
   }
-  redirect("/dashboard");
+  return NextResponse.redirect(new URL("/dashboard", request.url));
 }
 
 // fetch comments from database

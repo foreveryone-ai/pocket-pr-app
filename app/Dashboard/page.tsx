@@ -7,7 +7,6 @@ export default async function Home() {
   console.log(userId);
   const user = await currentUser();
   const token = await getToken({ template: "supabase" });
-
   // create placeholders and update after recieving google token
   let videos, youtube_channel_id;
 
@@ -24,6 +23,7 @@ export default async function Home() {
       token as string,
       (youtube_channel_id as unknown as string) || ""
     );
+    console.log("videos from getVideos: ", videos);
   } catch (error) {
     console.error(error);
   }
