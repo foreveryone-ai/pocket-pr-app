@@ -16,6 +16,7 @@ import {
   CheckIcon,
 } from "@heroicons/react/20/solid";
 import { Playfair_Display } from "next/font/google";
+import dynamic from "next/dynamic";
 
 const playfairDisplay500 = Playfair_Display({
   weight: ["400"],
@@ -195,144 +196,87 @@ export default function Home() {
   ];
 
   return (
-    <div className="bg-white min-h-screen">
-      {/* --------------------------------------HERO-------------------------------------- */}
-      <div className="flex justify-center items-start bg-white">
-        <div className="w-3/4 sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/2 mt-12 sm:mt-16 md:mt-20 lg:mt-24 xl:mt-28 mb-8 sm:mb-12 md:mb-16 lg:mb-20 xl:mb-24">
-          <Image
-            isBlurred
-            src="/pocket-pr-logo-licensed.svg"
-            alt="panda logo"
-            width={1000}
-            height={500}
-          />
+    <main>
+      <div className="bg-white min-h-screen">
+        {/* --------------------------------------HERO-------------------------------------- */}
+        <div className="flex justify-center items-start bg-white">
+          <div className="w-3/4 sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/2 mt-12 sm:mt-16 md:mt-20 lg:mt-24 xl:mt-28 mb-8 sm:mb-12 md:mb-16 lg:mb-20 xl:mb-24">
+            <Image
+              isBlurred
+              src="/pocket-pr-logo-licensed.svg"
+              alt="panda logo"
+              width={1000}
+              height={500}
+            />
+          </div>
         </div>
-      </div>
-      <div className="flex justify-end items-center bg-white grid grid-cols-2 gap-1 md:gap-2">
-        <h1
-          className={`text-med sm:text-lg md:text-3xl lg:text-4xl font-bold text-right text-black ${playfairDisplay500.className}`}
-        >
-          Automated PR for
-        </h1>
+        <div className="justify-end items-center bg-white grid grid-cols-2 gap-1 md:gap-2">
+          <h1
+            className={`text-med sm:text-lg md:text-3xl lg:text-4xl font-bold text-right text-black ${playfairDisplay500.className}`}
+          >
+            Automated PR for
+          </h1>
 
-        <h1
-          ref={textRef}
-          key={Roles[currentIndex]}
-          className={`text-med sm:text-lg md:text-3xl lg:text-4xl font-bold text-left text-black animate__animated ${animationClass} ${playfairDisplay800.className}`}
-        >
-          {Roles[currentIndex]}
-        </h1>
-      </div>
-      <div className="flex justify-center mt-12 mb-36 space-x-4">
-        <Button
-          color="success"
-          endContent={<BsFillArrowDownCircleFill />}
-          onClick={scrollToTagSection}
-          className="mr=4"
-        >
-          Learn More
-        </Button>
-        <SignedIn>
-          <Link href="/dashboard">
-            <Button variant="ghost" endContent={<BsFillArrowRightCircleFill />}>
-              Dashboard
-            </Button>
-          </Link>
-        </SignedIn>
-        <SignedOut>
-          <SignInButton>
-            <Button variant="ghost" endContent={<BsFillArrowRightCircleFill />}>
-              Sign In
-            </Button>
-          </SignInButton>
-        </SignedOut>
-      </div>
-
-      {/* --------------------------------------TAG-------------------------------------- */}
-      <Divider className="my-4" />
-      <div ref={tagRef} className="mx-auto max-w-7xl pt-12 px-24 lg:px-8">
-        <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
-          <div className="lg:pr-8 lg:pt-4">
-            <div className="lg:max-w-lg">
-              <p
-                className={`${playFairDisplay650.className} mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl`}
+          <h1
+            ref={textRef}
+            key={Roles[currentIndex]}
+            className={`text-med sm:text-lg md:text-3xl lg:text-4xl font-bold text-left text-black animate__animated ${animationClass} ${playfairDisplay800.className}`}
+          >
+            {Roles[currentIndex]}
+          </h1>
+        </div>
+        <div className="flex justify-center mt-12 mb-36 space-x-4">
+          <Button
+            color="success"
+            endContent={<BsFillArrowDownCircleFill />}
+            onClick={scrollToTagSection}
+            className="mr=4"
+          >
+            Learn More
+          </Button>
+          <SignedIn>
+            <Link href="/dashboard">
+              <Button
+                variant="ghost"
+                endContent={<BsFillArrowRightCircleFill />}
               >
-                Silence the noise.
-              </p>
-              <p className="mt-6 text-lg leading-8 text-gray-600">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                Maiores impedit perferendis suscipit eaque, iste dolor
-                cupiditate blanditiis ratione.
-              </p>
-              <dl className="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-600 lg:max-w-none">
-                {features1.map((feature) => (
-                  <div key={feature.name} className="relative pl-9">
-                    <dt className="inline font-semibold text-gray-900">
-                      <feature.icon
-                        className="absolute left-1 top-1 h-5 w-5 text-green-600"
-                        aria-hidden="true"
-                      />
-                      {feature.name}
-                    </dt>{" "}
-                    <dd className="inline">{feature.description}</dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-          </div>
-
-          <div className="relative mx-auto border-gray-800 dark:border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[600px] w-[300px]">
-            <div className="h-[32px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -left-[17px] top-[72px] rounded-l-lg"></div>
-            <div className="h-[46px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -left-[17px] top-[124px] rounded-l-lg"></div>
-            <div className="h-[46px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -left-[17px] top-[178px] rounded-l-lg"></div>
-            <div className="h-[64px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -right-[17px] top-[142px] rounded-r-lg"></div>
-            <div className="rounded-[2rem] overflow-hidden w-[272px] h-[572px] bg-white dark:bg-gray-800">
-              <Image src="/dashboard-screenshot.png" alt="Product screenshot" />
-            </div>
-          </div>
+                Dashboard
+              </Button>
+            </Link>
+          </SignedIn>
+          <SignedOut>
+            <SignInButton>
+              <Button
+                variant="ghost"
+                endContent={<BsFillArrowRightCircleFill />}
+              >
+                Sign In
+              </Button>
+            </SignInButton>
+          </SignedOut>
         </div>
-      </div>
 
-      <div className="mx-auto max-w-7xl py-24 px-6 py-16 md:py-32 lg:px-8">
-        <div className="relative isolate flex justify-center align-center overflow-hidden bg-green-900 px-6 pt-16 shadow-2xl rounded-3xl px-16 gap-x-10 md:pt-24 lg:flex lg:gap-x-20 lg:px-24 lg:pt-0">
-          <div className="mx-12 max-w-md text-center lg:mx-0 lg:py-32 lg:text-center">
-            <h2
-              className={`${playFairDisplay650.className} text-3xl font-bold tracking-tight text-white sm:text-4xl`}
-            >
-              Focus.
-            </h2>
-            <p className="mt-4 text-lg text-white">(take the high road)</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="overflow-hidden bg-white py-24 sm:py-32">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        {/* --------------------------------------TAG-------------------------------------- */}
+        <Divider className="my-4" />
+        <div
+          ref={tagRef}
+          className="mx-auto max-w-7xl py-24 px-6 md:py-32 lg:px-8"
+        >
           <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
-            <div className="relative mx-auto border-gray-800 dark:border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[600px] w-[300px]">
-              <div className="h-[32px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -left-[17px] top-[72px] rounded-l-lg"></div>
-              <div className="h-[46px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -left-[17px] top-[124px] rounded-l-lg"></div>
-              <div className="h-[46px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -left-[17px] top-[178px] rounded-l-lg"></div>
-              <div className="h-[64px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -right-[17px] top-[142px] rounded-r-lg"></div>
-              <div className="rounded-[2rem] overflow-hidden w-[272px] h-[572px] bg-white dark:bg-gray-800">
-                <Image src="/chat-screenshot.png" alt="Product screenshot" />
-              </div>
-            </div>
-
-            <div className="lg:ml-auto lg:pl-4 lg:pt-4">
+            <div className="lg:pr-8 lg:pt-4">
               <div className="lg:max-w-lg">
                 <p
                   className={`${playFairDisplay650.className} mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl`}
                 >
-                  Turn feedback into fame.
+                  Silence the noise.
                 </p>
                 <p className="mt-6 text-lg leading-8 text-gray-600">
-                  Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                  Maiores impedit perferendis suscipit eaque, iste dolor
-                  cupiditate blanditiis ratione.
+                  PocketPR brings the power of generative-AI to your digital
+                  interactions. We help you learn how your audience understands
+                  your content, and how to better communicate with them.
                 </p>
                 <dl className="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-600 lg:max-w-none">
-                  {features2.map((feature) => (
+                  {features1.map((feature) => (
                     <div key={feature.name} className="relative pl-9">
                       <dt className="inline font-semibold text-gray-900">
                         <feature.icon
@@ -347,176 +291,192 @@ export default function Home() {
                 </dl>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
 
-      <div className="bg-green-900">
-        <div className="px-6 pt-12 lg:px-8 lg:pt-20">
-          <div className="text-center">
-            <p
-              className={`${playFairDisplay650.className} mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl`}
-            >
-              The right price for you, whoever you are
-            </p>
-            <p className="mx-auto mt-3 max-w-4xl text-xl text-gray-300 sm:mt-5 sm:text-2xl">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Velit
-              numquam eligendi quos odit doloribus molestiae voluptatum.
-            </p>
+            <div className="relative mx-auto border-gray-800 dark:border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[600px] w-[300px]">
+              <div className="h-[32px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -left-[17px] top-[72px] rounded-l-lg"></div>
+              <div className="h-[46px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -left-[17px] top-[124px] rounded-l-lg"></div>
+              <div className="h-[46px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -left-[17px] top-[178px] rounded-l-lg"></div>
+              <div className="h-[64px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -right-[17px] top-[142px] rounded-r-lg"></div>
+              <div className="rounded-[2rem] overflow-hidden w-[272px] h-[572px] bg-white dark:bg-gray-800">
+                <Image
+                  src="/dashboard-screenshot.png"
+                  alt="Product screenshot"
+                />
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="mt-16 bg-green pb-12 lg:mt-20 lg:pb-20">
-          <div className="relative z-0">
-            <div className="absolute inset-0 h-5/6 bg-green-900 lg:h-2/3" />
-            <div className="mx-auto max-w-7xl px-6 lg:px-8">
-              <div className="relative lg:grid lg:grid-cols-7">
-                <div className="mx-auto max-w-md lg:col-start-1 lg:col-end-3 lg:row-start-2 lg:row-end-3 lg:mx-0 lg:max-w-none">
-                  <div className="flex h-full flex-col overflow-hidden rounded-lg shadow-lg lg:rounded-none lg:rounded-l-lg">
-                    <div className="flex flex-1 flex-col">
-                      <div className="bg-white px-6 py-10">
-                        <div>
-                          <h3
-                            className="text-center text-2xl font-medium text-gray-900"
-                            id="tier-hobby"
-                          >
-                            Hobbyist
-                          </h3>
-                          <div className="mt-4 flex items-center justify-center">
-                            <span className="flex items-start px-3 text-6xl tracking-tight text-gray-900">
-                              <span className="mr-2 mt-2 text-4xl font-medium tracking-tight">
-                                $
-                              </span>
-                              <span className="font-bold">19</span>
-                            </span>
-                            <span className="text-xl font-medium text-gray-500">
-                              /month
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex flex-1 flex-col justify-between border-t-2 border-gray-100 bg-gray-50 p-6 sm:p-10 lg:p-6 xl:p-10">
-                        <ul role="list" className="space-y-4">
-                          {hobbyFeatures.map((feature) => (
-                            <li key={feature} className="flex items-start">
-                              <div className="flex-shrink-0">
-                                <CheckIcon
-                                  className="h-6 w-6 flex-shrink-0 text-green-500"
-                                  aria-hidden="true"
-                                />
-                              </div>
-                              <p className="ml-3 text-base font-medium text-gray-500">
-                                {feature}
-                              </p>
-                            </li>
-                          ))}
-                        </ul>
-                        <div className="mt-8">
-                          <div className="rounded-lg shadow-md">
-                            <a
-                              href="#"
-                              className="block w-full rounded-lg border border-transparent bg-white px-6 py-3 text-center text-base font-medium text-green-600 hover:bg-gray-50"
-                              aria-describedby="tier-hobby"
-                            >
-                              Start your trial
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+        <div className="mx-auto max-w-7xl py-24 px-6 md:py-32 lg:px-8">
+          <div className="relative isolate flex justify-center align-center overflow-hidden bg-green-900 px-6 pt-16 shadow-2xl rounded-3xl md:pt-24 lg:flex lg:gap-x-20 lg:px-24 lg:pt-0">
+            <div className="mx-12 max-w-md text-center lg:mx-0 lg:py-32 lg:text-center">
+              <h2
+                className={`${playFairDisplay650.className} text-3xl font-bold tracking-tight text-white sm:text-4xl`}
+              >
+                Focus.
+              </h2>
+              <p className="mt-4 text-lg text-white">(take the high road)</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="overflow-hidden bg-white py-24 sm:py-32">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
+              <div className="relative mx-auto border-gray-800 dark:border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[600px] w-[300px]">
+                <div className="h-[32px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -left-[17px] top-[72px] rounded-l-lg"></div>
+                <div className="h-[46px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -left-[17px] top-[124px] rounded-l-lg"></div>
+                <div className="h-[46px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -left-[17px] top-[178px] rounded-l-lg"></div>
+                <div className="h-[64px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -right-[17px] top-[142px] rounded-r-lg"></div>
+                <div className="rounded-[2rem] overflow-hidden w-[272px] h-[572px] bg-white dark:bg-gray-800">
+                  <Image src="/chat-screenshot.png" alt="Product screenshot" />
                 </div>
-                <div className="mx-auto mt-10 max-w-lg lg:col-start-3 lg:col-end-6 lg:row-start-1 lg:row-end-4 lg:mx-0 lg:mt-0 lg:max-w-none">
-                  <div className="relative z-10 rounded-lg shadow-xl">
-                    <div
-                      className="pointer-events-none absolute inset-0 rounded-lg border-2 border-green-600"
-                      aria-hidden="true"
-                    />
-                    <div className="absolute inset-x-0 top-0 translate-y-px transform">
-                      <div className="flex -translate-y-1/2 transform justify-center">
-                        <span className="inline-flex rounded-full bg-green-600 px-4 py-1 text-base font-semibold text-white">
-                          Most popular
-                        </span>
+              </div>
+
+              <div className="lg:ml-auto lg:pl-4 lg:pt-4">
+                <div className="lg:max-w-lg">
+                  <p
+                    className={`${playFairDisplay650.className} mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl`}
+                  >
+                    Turn feedback into fame.
+                  </p>
+                  <p className="mt-6 text-lg leading-8 text-gray-600">
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                    Maiores impedit perferendis suscipit eaque, iste dolor
+                    cupiditate blanditiis ratione.
+                  </p>
+                  <dl className="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-600 lg:max-w-none">
+                    {features2.map((feature) => (
+                      <div key={feature.name} className="relative pl-9">
+                        <dt className="inline font-semibold text-gray-900">
+                          <feature.icon
+                            className="absolute left-1 top-1 h-5 w-5 text-green-600"
+                            aria-hidden="true"
+                          />
+                          {feature.name}
+                        </dt>{" "}
+                        <dd className="inline">{feature.description}</dd>
                       </div>
-                    </div>
-                    <div className="rounded-t-lg bg-white px-6 pb-10 pt-12">
-                      <div>
-                        <h3
-                          className="text-center text-3xl font-semibold tracking-tight text-gray-900 sm:-mx-6"
-                          id="tier-growth"
-                        >
-                          Content Creator
-                        </h3>
-                        <div className="mt-4 flex items-center justify-center">
-                          <span className="flex items-start px-3 text-6xl tracking-tight text-gray-900 sm:text-6xl">
-                            <span className="mr-2 mt-2 text-4xl font-medium tracking-tight">
-                              $
-                            </span>
-                            <span className="font-bold">49</span>
-                          </span>
-                          <span className="text-2xl font-medium text-gray-500">
-                            /month
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="rounded-b-lg border-t-2 border-gray-100 bg-gray-50 px-6 pb-8 pt-10 sm:px-10 sm:py-10">
-                      <ul role="list" className="space-y-4">
-                        {growthFeatures.map((feature) => (
-                          <li key={feature} className="flex items-start">
-                            <div className="flex-shrink-0">
-                              <CheckIcon
-                                className="h-6 w-6 flex-shrink-0 text-green-500"
-                                aria-hidden="true"
-                              />
+                    ))}
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-green-900 min-h-screen">
+          <div className="px-6 pt-12 lg:px-8 lg:pt-20">
+            <div className="text-center">
+              <p
+                className={`${playFairDisplay650.className} mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl`}
+              >
+                The right price for you, whoever you are
+              </p>
+              <p className="mx-auto mt-3 max-w-4xl text-xl text-gray-300 sm:mt-5 sm:text-2xl">
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Velit
+                numquam eligendi quos odit doloribus molestiae voluptatum.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-16 bg-green pb-12 lg:mt-20 lg:pb-20">
+            <div className="relative z-0">
+              <div className="absolute inset-0 h-5/6 bg-green-900 lg:h-2/3" />
+              <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                <div className="relative lg:grid lg:grid-cols-7">
+                  <div className="mx-auto max-w-md lg:col-start-1 lg:col-end-3 lg:row-start-2 lg:row-end-3 lg:mx-0 lg:max-w-none">
+                    <div className="flex h-full flex-col overflow-hidden rounded-lg shadow-lg lg:rounded-none lg:rounded-l-lg">
+                      <div className="flex flex-1 flex-col">
+                        <div className="bg-white px-6 py-10">
+                          <div>
+                            <h3
+                              className="text-center text-2xl font-medium text-gray-900"
+                              id="tier-hobby"
+                            >
+                              Hobbyist
+                            </h3>
+                            <div className="mt-4 flex items-center justify-center">
+                              <span className="flex items-start px-3 text-6xl tracking-tight text-gray-900">
+                                <span className="mr-2 mt-2 text-4xl font-medium tracking-tight">
+                                  $
+                                </span>
+                                <span className="font-bold">9</span>
+                              </span>
+                              <span className="text-xl font-medium text-gray-500">
+                                /month
+                              </span>
                             </div>
-                            <p className="ml-3 text-base font-medium text-gray-500">
-                              {feature}
-                            </p>
-                          </li>
-                        ))}
-                      </ul>
-                      <div className="mt-10">
-                        <div className="rounded-lg shadow-md">
-                          <a
-                            href="#"
-                            className="block w-full rounded-lg border border-transparent bg-green-600 px-6 py-4 text-center text-xl font-medium leading-6 text-white hover:bg-green-700"
-                            aria-describedby="tier-growth"
-                          >
-                            Start your trial
-                          </a>
+                          </div>
+                        </div>
+                        <div className="flex flex-1 flex-col justify-between border-t-2 border-gray-100 bg-gray-50 p-6 sm:p-10 lg:p-6 xl:p-10">
+                          <ul role="list" className="space-y-4">
+                            {hobbyFeatures.map((feature) => (
+                              <li key={feature} className="flex items-start">
+                                <div className="flex-shrink-0">
+                                  <CheckIcon
+                                    className="h-6 w-6 flex-shrink-0 text-green-500"
+                                    aria-hidden="true"
+                                  />
+                                </div>
+                                <p className="ml-3 text-base font-medium text-gray-500">
+                                  {feature}
+                                </p>
+                              </li>
+                            ))}
+                          </ul>
+                          <div className="mt-8">
+                            <div className="rounded-lg shadow-md">
+                              <a
+                                href="#"
+                                className="block w-full rounded-lg border border-transparent bg-white px-6 py-3 text-center text-base font-medium text-green-600 hover:bg-gray-50"
+                                aria-describedby="tier-hobby"
+                              >
+                                Start your trial
+                              </a>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="mx-auto mt-10 max-w-md lg:col-start-6 lg:col-end-8 lg:row-start-2 lg:row-end-3 lg:m-0 lg:max-w-none">
-                  <div className="flex h-full flex-col overflow-hidden rounded-lg shadow-lg lg:rounded-none lg:rounded-r-lg">
-                    <div className="flex flex-1 flex-col">
-                      <div className="bg-white px-6 py-10">
+                  <div className="mx-auto mt-10 max-w-lg lg:col-start-3 lg:col-end-6 lg:row-start-1 lg:row-end-4 lg:mx-0 lg:mt-0 lg:max-w-none">
+                    <div className="relative z-10 rounded-lg shadow-xl">
+                      <div
+                        className="pointer-events-none absolute inset-0 rounded-lg border-2 border-green-600"
+                        aria-hidden="true"
+                      />
+                      <div className="absolute inset-x-0 top-0 translate-y-px transform">
+                        <div className="flex -translate-y-1/2 transform justify-center">
+                          <span className="inline-flex rounded-full bg-green-600 px-4 py-1 text-base font-semibold text-white">
+                            Most popular
+                          </span>
+                        </div>
+                      </div>
+                      <div className="rounded-t-lg bg-white px-6 pb-10 pt-12">
                         <div>
                           <h3
-                            className="text-center text-2xl font-medium text-gray-900"
-                            id="tier-scale"
+                            className="text-center text-3xl font-semibold tracking-tight text-gray-900 sm:-mx-6"
+                            id="tier-growth"
                           >
-                            Influencer
+                            Content Creator
                           </h3>
                           <div className="mt-4 flex items-center justify-center">
-                            <span className="flex items-start px-3 text-6xl tracking-tight text-gray-900">
+                            <span className="flex items-start px-3 text-6xl tracking-tight text-gray-900 sm:text-6xl">
                               <span className="mr-2 mt-2 text-4xl font-medium tracking-tight">
                                 $
                               </span>
-                              <span className="font-bold">99</span>
+                              <span className="font-bold">25</span>
                             </span>
-                            <span className="text-xl font-medium text-gray-500">
+                            <span className="text-2xl font-medium text-gray-500">
                               /month
                             </span>
                           </div>
                         </div>
                       </div>
-                      <div className="flex flex-1 flex-col justify-between border-t-2 border-gray-100 bg-gray-50 p-6 sm:p-10 lg:p-6 xl:p-10">
+                      <div className="rounded-b-lg border-t-2 border-gray-100 bg-gray-50 px-6 pb-8 pt-10 sm:px-10 sm:py-10">
                         <ul role="list" className="space-y-4">
-                          {scaleFeatures.map((feature) => (
+                          {growthFeatures.map((feature) => (
                             <li key={feature} className="flex items-start">
                               <div className="flex-shrink-0">
                                 <CheckIcon
@@ -530,15 +490,70 @@ export default function Home() {
                             </li>
                           ))}
                         </ul>
-                        <div className="mt-8">
+                        <div className="mt-10">
                           <div className="rounded-lg shadow-md">
                             <a
                               href="#"
-                              className="block w-full rounded-lg border border-transparent bg-white px-6 py-3 text-center text-base font-medium text-green-600 hover:bg-gray-50"
-                              aria-describedby="tier-scale"
+                              className="block w-full rounded-lg border border-transparent bg-green-600 px-6 py-4 text-center text-xl font-medium leading-6 text-white hover:bg-green-700"
+                              aria-describedby="tier-growth"
                             >
                               Start your trial
                             </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mx-auto mt-10 max-w-md lg:col-start-6 lg:col-end-8 lg:row-start-2 lg:row-end-3 lg:m-0 lg:max-w-none">
+                    <div className="flex h-full flex-col overflow-hidden rounded-lg shadow-lg lg:rounded-none lg:rounded-r-lg">
+                      <div className="flex flex-1 flex-col">
+                        <div className="bg-white px-6 py-10">
+                          <div>
+                            <h3
+                              className="text-center text-2xl font-medium text-gray-900"
+                              id="tier-scale"
+                            >
+                              Influencer
+                            </h3>
+                            <div className="mt-4 flex items-center justify-center">
+                              <span className="flex items-start px-3 text-6xl tracking-tight text-gray-900">
+                                <span className="mr-2 mt-2 text-4xl font-medium tracking-tight">
+                                  $
+                                </span>
+                                <span className="font-bold">49</span>
+                              </span>
+                              <span className="text-xl font-medium text-gray-500">
+                                /month
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex flex-1 flex-col justify-between border-t-2 border-gray-100 bg-gray-50 p-6 sm:p-10 lg:p-6 xl:p-10">
+                          <ul role="list" className="space-y-4">
+                            {scaleFeatures.map((feature) => (
+                              <li key={feature} className="flex items-start">
+                                <div className="flex-shrink-0">
+                                  <CheckIcon
+                                    className="h-6 w-6 flex-shrink-0 text-green-500"
+                                    aria-hidden="true"
+                                  />
+                                </div>
+                                <p className="ml-3 text-base font-medium text-gray-500">
+                                  {feature}
+                                </p>
+                              </li>
+                            ))}
+                          </ul>
+                          <div className="mt-8">
+                            <div className="rounded-lg shadow-md">
+                              <a
+                                href="#"
+                                className="block w-full rounded-lg border border-transparent bg-white px-6 py-3 text-center text-base font-medium text-green-600 hover:bg-gray-50"
+                                aria-describedby="tier-scale"
+                              >
+                                Start your trial
+                              </a>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -549,70 +564,70 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="mx-auto max-w-7xl py-24 sm:px-6 sm:py-32 lg:px-8">
-        <div className="relative isolate overflow-hidden bg-green-900 px-6 pt-16 shadow-2xl sm:rounded-3xl sm:px-16 md:pt-24 lg:flex lg:gap-x-20 lg:px-24 lg:pt-0">
-          <div className="mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left">
-            <h2
-              className={`${playFairDisplay650.className} text-3xl font-bold tracking-tight text-white sm:text-4xl`}
-            >
-              Leave the noise for the machines.
-              <br />
-              <Spacer y={2} />
-              Start using our app today.
-            </h2>
-            <p className="mt-6 text-lg leading-8 text-gray-300">
-              Ac euismod vel sit maecenas id pellentesque eu sed consectetur.
-              Malesuada adipiscing sagittis vel nulla.
-            </p>
-            <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
-              <a
-                href="#"
-                className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+        <div className="mx-auto max-w-7xl py-24 sm:px-6 sm:py-32 lg:px-8">
+          <div className="relative isolate overflow-hidden bg-green-900 px-6 pt-16 shadow-2xl sm:rounded-3xl sm:px-16 md:pt-24 lg:flex lg:gap-x-20 lg:px-24 lg:pt-0">
+            <div className="mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left">
+              <h2
+                className={`${playFairDisplay650.className} text-3xl font-bold tracking-tight text-white sm:text-4xl`}
               >
-                Get started
-              </a>
-              <a
-                href="#"
-                className="text-sm font-semibold leading-6 text-white"
-              >
-                Learn more <span aria-hidden="true">→</span>
-              </a>
+                Leave the noise for the machines.
+                <br />
+                <Spacer y={2} />
+                Start using our app today.
+              </h2>
+              <p className="mt-6 text-lg leading-8 text-gray-300">
+                Ac euismod vel sit maecenas id pellentesque eu sed consectetur.
+                Malesuada adipiscing sagittis vel nulla.
+              </p>
+              <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
+                <a
+                  href="#"
+                  className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                >
+                  Get started
+                </a>
+                <a
+                  href="#"
+                  className="text-sm font-semibold leading-6 text-white"
+                >
+                  Learn more <span aria-hidden="true">→</span>
+                </a>
+              </div>
+            </div>
+            <div className="relative mt-16 h-80 lg:mt-8">
+              <Image
+                src="/happykang.svg"
+                alt="App screenshot"
+                width={1824}
+                height={1080}
+              />
             </div>
           </div>
-          <div className="relative mt-16 h-80 lg:mt-8">
-            <Image
-              src="/happykang.svg"
-              alt="App screenshot"
-              width={1824}
-              height={1080}
-            />
-          </div>
         </div>
-      </div>
 
-      <footer className="bg-white">
-        <div className="mx-auto max-w-7xl px-6 py-12 md:flex md:items-center md:justify-between lg:px-8">
-          <div className="flex justify-center space-x-6 md:order-2">
-            {navigation.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                className="text-gray-400 hover:text-gray-500"
-              >
-                <span className="sr-only">{item.name}</span>
-                <item.icon className="h-6 w-6" aria-hidden="true" />
-              </a>
-            ))}
+        <footer className="bg-white">
+          <div className="mx-auto max-w-7xl px-6 py-12 md:flex md:items-center md:justify-between lg:px-8">
+            <div className="flex justify-center space-x-6 md:order-2">
+              {navigation.map((item) => (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  className="text-gray-400 hover:text-gray-500"
+                >
+                  <span className="sr-only">{item.name}</span>
+                  <item.icon className="h-6 w-6" aria-hidden="true" />
+                </a>
+              ))}
+            </div>
+            <div className="mt-8 md:order-1 md:mt-0">
+              <p className="text-center text-xs leading-5 text-gray-500">
+                &copy; 2020 Your Company, Inc. All rights reserved.
+              </p>
+            </div>
           </div>
-          <div className="mt-8 md:order-1 md:mt-0">
-            <p className="text-center text-xs leading-5 text-gray-500">
-              &copy; 2020 Your Company, Inc. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
-    </div>
+        </footer>
+      </div>
+    </main>
   );
 }
