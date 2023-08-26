@@ -6,12 +6,7 @@ import { FunctionalTranslator } from "langchain/retrievers/self_query/functional
 import { SelfQueryRetriever } from "langchain/retrievers/self_query";
 import { AttributeInfo } from "langchain/schema/query_constructor";
 import { SupabaseVectorStore } from "langchain/vectorstores/supabase";
-import {
-  ChatOpenAI,
-  SystemMessage,
-  HumanMessage,
-  Embeddings,
-} from "langchain/chat_models/openai";
+import { ChatOpenAI } from "langchain/chat_models/openai";
 import {
   PromptTemplate,
   ChatPromptTemplate,
@@ -358,7 +353,7 @@ export class PocketChain {
       }
     );
     //query, k (num of docs to return), {} metadata filter
-    const foundDocuments = await vectorStore.similaritySearch(userMessage, 3, {
+    const foundDocuments = await vectorStore.similaritySearch(userMessage, 10, {
       video_id: videoid,
     });
 
@@ -371,22 +366,35 @@ export class PocketChain {
       temperature: 0,
     });
 
+    const template = `You are a helpful public relations assistant that is having a conversation with your client about a You Tube video that they have created. Use the transcription from the video, as well as the commments to respond to your client.
+    transcription: {transcription},
+    comments: {comments}
+    `;
+
     const systemMessagePrompt =
-      new SystemMessage(`You are a helpful public relations assistant that is having a conversation with your client about a You Tube video that they have created. Use the transcription from the video, as well as the commments to respond to your client.
-    transcript: ${this.captions},
-    comments:
-        ${
-          foundDocuments[0].pageContent +
-          "\n" +
-          foundDocuments[1].pageContent +
-          "\n" +
-          foundDocuments[2].pageContent
-        }
-    `);
+      SystemMessagePromptTemplate.fromTemplate(template);
 
-    const humanMessagePrompt = new HumanMessage(userMessage);
+    const humanMessagePrompt =
+      HumanMessagePromptTemplate.fromTemplate(userMessage);
 
-    // include embeddings and summary of transcript as context
-    const response = chat.call([systemMessagePrompt, humanMessagePrompt]);
+    const chatPrompt = ChatPromptTemplate.fromPromptMessages([
+      systemMessagePrompt,
+      humanMessagePrompt,
+    ]);
+
+    console.log("chatPrompt: ", chatPrompt);
+    const chain = new LLMChain({
+      llm: chat,
+      prompt: chatPrompt,
+    });
+
+    const response = await chain.call({
+      transcription: this.captions,
+      comments: `
+      ${foundDocuments.map((document) => document.pageContent + "\n")}`,
+    });
+
+    console.log("chat response: ", response);
+    return response.text;
   }
 }

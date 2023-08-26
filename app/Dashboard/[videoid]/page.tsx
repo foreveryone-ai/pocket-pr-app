@@ -89,7 +89,11 @@ export default async function Video({
             />
           )}
         </div>
-        <ChatUI videoid={params.videoid} />
+        {summaryData ? (
+          <ChatUI videoid={params.videoid} captionSummary={summary} />
+        ) : (
+          <p className="text-red-400">problem with caption summary</p>
+        )}
       </div>
 
       <section className="flex flex-col justify-evenly items-center gap-12 py-12">

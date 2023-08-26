@@ -12,7 +12,8 @@ type Params = {
 export async function POST(req: NextRequest, context: Params) {
   const videoid = context.params.videoid;
   const { userId, getToken } = auth();
-  console.log(await req.json());
+  const userData = await req.json();
+  console.log("user data: ", userData);
 
   const token = await getToken({ template: "supabase" });
   // send to sign-in if there is no token
@@ -23,7 +24,14 @@ export async function POST(req: NextRequest, context: Params) {
   const user = await clerkClient.users.getUser(userId);
   if (user.privateMetadata.hasEmbeddings) {
     // if they exist we can call the chat method here and return the result
-    return NextResponse.json({ message: "we have embeddings" });
+    const pocketChat = new PocketChain(userData.captionSummary);
+    console.log("calling chat after confirming embeddings on line 28");
+    try {
+      const chatResponse = await pocketChat.chat(videoid, userData.message);
+      return NextResponse.json({ message: chatResponse });
+    } catch (error) {
+      return NextResponse.json({ message: "error on chat response" });
+    }
   }
 
   // check if video summary is in db
@@ -52,6 +60,9 @@ export async function POST(req: NextRequest, context: Params) {
         hasEmbeddings: true,
       },
     });
+
+    console.log("sending to pocketChain chat()...");
+    await pocketChain.chat(videoid, userData.captionSummary);
   }
   // if embeddings, start chat
 

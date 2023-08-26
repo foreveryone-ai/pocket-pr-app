@@ -4,9 +4,10 @@ import { BaseSyntheticEvent, useState } from "react";
 
 type ChatUIProps = {
   videoid: string;
+  captionSummary: string;
 };
 
-export default function ChatUI({ videoid }: ChatUIProps) {
+export default function ChatUI({ videoid, captionSummary }: ChatUIProps) {
   const [inputValue, setInputValue] = useState("");
   const [messages, setMessages] = useState<string[]>([]);
 
@@ -14,7 +15,7 @@ export default function ChatUI({ videoid }: ChatUIProps) {
     event.preventDefault();
     const localMessages: string[] = [];
     localMessages.push(inputValue);
-    const response = await getGPTResponse(inputValue);
+    const response = await getGPTResponse(inputValue, captionSummary);
     console.log(response);
     setInputValue("");
     localMessages.push(response);
@@ -33,11 +34,11 @@ export default function ChatUI({ videoid }: ChatUIProps) {
     setMessages([]);
   };
 
-  const getGPTResponse = async (userMessage: string) => {
+  const getGPTResponse = async (userMessage: string, capSum: string) => {
     try {
       const res = await fetch(`/api/chat/${videoid}`, {
         method: "POST",
-        body: JSON.stringify(userMessage),
+        body: JSON.stringify({ message: userMessage, captionSummary: capSum }),
         headers: {
           "Content-Type": "application/json",
         },

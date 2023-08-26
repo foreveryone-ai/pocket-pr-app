@@ -116,7 +116,12 @@ export async function GET(request: Request, context: Params) {
   // store comment summaries
   // TODO: find out why only some of the summaries are being stored
   try {
-    await storeCommentsSummaries(token, comSummariesArr, params.videoid);
+    const storeCommentsSummaryRes = await storeCommentsSummaries(
+      token,
+      comSummariesArr,
+      params.videoid
+    );
+    console.log("storeCommentsSummaryRes", storeCommentsSummaryRes);
   } catch (error) {
     console.error("unable to store commentS summaries", error);
     return NextResponse.json({ message: "Error: Server issue" });
