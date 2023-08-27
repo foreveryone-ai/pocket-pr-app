@@ -35,27 +35,35 @@ export default function VideoCard({
   };
 
   return (
-    <Card className="py-4 bg-green-800">
-      <Skeleton isLoaded={isLoaded} className="rounded-lg">
-        <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-          <p className="text-tiny text-white font-bold">YouTube</p>
-
-          <h4 className="font-bold text-white text-large">
-            {truncateTitle(title)}
-          </h4>
-        </CardHeader>
-
-        <CardBody className="overflow-visible py-2">
-          <Image
-            alt={title}
-            className="object-cover rounded-xl"
-            src={imageUrl}
-            width={270}
-            height={480}
-          />
-        </CardBody>
-      </Skeleton>
-    </Card>
+    <Skeleton isLoaded={isLoaded} className="rounded-lg">
+      <Card className="py-4 bg-green-800">
+        <Skeleton isLoaded={isLoaded} className="rounded-lg">
+          <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+            <Skeleton isLoaded={isLoaded}>
+              <p className="text-tiny text-white font-bold">YouTube</p>
+            </Skeleton>
+            <Skeleton isLoaded={isLoaded}>
+              <h4 className="font-bold text-white text-large">
+                {truncateTitle(title)}
+              </h4>
+            </Skeleton>
+          </CardHeader>
+        </Skeleton>
+        <Skeleton isLoaded={isLoaded} className="rounded-lg">
+          <CardBody className="overflow-visible py-2">
+            <Skeleton isLoaded={isLoaded}>
+              <Image
+                alt={title}
+                className="object-cover rounded-xl"
+                src={imageUrl}
+                width={270}
+                height={480}
+              />
+            </Skeleton>
+          </CardBody>
+        </Skeleton>
+      </Card>
+    </Skeleton>
   );
 }
 
