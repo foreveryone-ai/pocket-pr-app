@@ -38,7 +38,7 @@ export default function VideoCard({
     <Skeleton isLoaded={isLoaded} className="rounded-lg">
       <Card className="py-4 bg-green-800">
         <Skeleton isLoaded={isLoaded} className="rounded-lg">
-          <CardHeader className="pb-0 pt-2 px-4 flex justify-between items-start">
+          <CardHeader className="pb-0 pt-2 px-5 flex justify-between items-start">
             <div>
               <Skeleton isLoaded={isLoaded}>
                 <p className="text-tiny text-white font-bold">YouTube</p>
