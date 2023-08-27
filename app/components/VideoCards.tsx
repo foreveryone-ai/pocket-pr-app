@@ -30,7 +30,7 @@ export default function VideoCard({
     }
   }, [title, imageUrl, videoId]);
   // Function to truncate the title if it exceeds 25 characters
-  const truncateTitle = (title: string, limit: number = 25) => {
+  const truncateTitle = (title: string, limit: number = 15) => {
     return title.length > limit ? `${title.substring(0, limit)}...` : title;
   };
 
@@ -38,14 +38,21 @@ export default function VideoCard({
     <Skeleton isLoaded={isLoaded} className="rounded-lg">
       <Card className="py-4 bg-green-800">
         <Skeleton isLoaded={isLoaded} className="rounded-lg">
-          <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+          <CardHeader className="pb-0 pt-2 px-4 flex justify-between items-start">
+            <div>
+              <Skeleton isLoaded={isLoaded}>
+                <p className="text-tiny text-white font-bold">YouTube</p>
+              </Skeleton>
+              <Skeleton isLoaded={isLoaded}>
+                <h4 className="font-bold text-white text-large">
+                  {truncateTitle(title)}
+                </h4>
+              </Skeleton>
+            </div>
             <Skeleton isLoaded={isLoaded}>
-              <p className="text-tiny text-white font-bold">YouTube</p>
-            </Skeleton>
-            <Skeleton isLoaded={isLoaded}>
-              <h4 className="font-bold text-white text-large">
-                {truncateTitle(title)}
-              </h4>
+              <Button variant="bordered" className="text-white">
+                Analyze
+              </Button>
             </Skeleton>
           </CardHeader>
         </Skeleton>

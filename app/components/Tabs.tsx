@@ -32,7 +32,7 @@ export default function Home() {
           title={
             <div className="flex items-center space-x-2">
               <BsFacebook />
-              <span>Facebook</span>
+              <span className="hidden md:inline">Facebook</span>
             </div>
           }
         />
@@ -41,7 +41,7 @@ export default function Home() {
           title={
             <div className="flex items-center space-x-2">
               <BiLogoDiscord />
-              <span>Discord</span>
+              <span className="hidden md:inline">Discord</span>
             </div>
           }
         />
@@ -50,7 +50,7 @@ export default function Home() {
           title={
             <div className="flex items-center space-x-2">
               <AiFillInstagram />
-              <span>Instagram</span>
+              <span className="hidden md:inline">Instagram</span>
             </div>
           }
         />
@@ -59,7 +59,7 @@ export default function Home() {
           title={
             <div className="flex items-center space-x-2">
               <BsYoutube />
-              <span>YouTube</span>
+              <span className="hidden md:inline">YouTube</span>
             </div>
           }
         />
@@ -68,7 +68,7 @@ export default function Home() {
           title={
             <div className="flex items-center space-x-2">
               <BsLinkedin />
-              <span>LinkedIn</span>
+              <span className="hidden md:inline">LinkedIn</span>
             </div>
           }
         />
@@ -77,7 +77,7 @@ export default function Home() {
           title={
             <div className="flex items-center space-x-2">
               <BsTwitch />
-              <span>Twitch</span>
+              <span className="hidden md:inline">Twitch</span>
             </div>
           }
         />
@@ -86,7 +86,7 @@ export default function Home() {
           title={
             <div className="flex items-center space-x-2">
               <BsTwitter />
-              <span>Twitter</span>
+              <span className="hidden md:inline">Twitter</span>
             </div>
           }
         />
