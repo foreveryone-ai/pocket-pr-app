@@ -38,7 +38,10 @@ export default function () {
                   Menu
                 </Button>
               </DropdownTrigger>
-              <DropdownMenu aria-label="Static Actions">
+              <DropdownMenu
+                aria-label="Static Actions"
+                disabledKeys={["settings"]}
+              >
                 <DropdownItem
                   key="dashboard"
                   onPress={toDashboard}
