@@ -196,7 +196,7 @@ export default function Home() {
   ];
 
   return (
-    <main>
+    <>
       <div className="bg-white min-h-screen">
         {/* --------------------------------------HERO-------------------------------------- */}
         <div className="flex justify-center items-start bg-white">
@@ -628,6 +628,6 @@ export default function Home() {
           </div>
         </footer>
       </div>
-    </main>
+    </>
   );
 }
