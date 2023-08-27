@@ -179,6 +179,12 @@ export async function getDataForEmotionalAnalysis(
     authToken,
     video_id
   );
+
+  if (errorData) {
+    console.error("error getting comData in supabaseClient");
+    throw new Error("error on getComments " + errorData);
+  }
+
   const comIds = [];
 
   if (comData && comData.length > 0) {

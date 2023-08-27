@@ -152,22 +152,23 @@ export class PocketChain {
         console.log(JSON.stringify(response, null, 2));
 
         // Use this to log the output to a file
-        try {
-          const ROUTE = path.join(__dirname, "../../../logs");
-          fs.appendFileSync(
-            ROUTE + `log${logCounter}.txt`,
-            JSON.stringify(response, null, 2)
-          );
+        // try {
+        //   const ROUTE = path.join(__dirname, "../../../logs");
+        //   fs.appendFileSync(
+        //     ROUTE + `log${logCounter}.txt`,
+        //     JSON.stringify(response, null, 2)
+        //   );
 
-          logCounter++;
-        } catch (error) {
-          console.error("error on logging", error);
-        }
+        //   logCounter++;
+        // } catch (error) {
+        //   console.error("error on logging", error);
+        // }
 
         summariesToReturn.push(response.output.comments);
       } catch (error) {
         console.error("hit catch!!");
         console.error(error);
+        return [];
       }
     }
     console.log("summariesToReturn");
