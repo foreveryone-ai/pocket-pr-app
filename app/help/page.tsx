@@ -43,7 +43,7 @@ export default function Home() {
   }
 
   return (
-    <main className="flex flex-col min-h-screen items-center text-black justify-start pt-20 pb-5 bg-primary-content">
+    <main className="flex flex-col min-h-screen items-center text-black justify-start pt-20 pb-5 bg-green-800">
       <div className="mx-auto grid max-w-7xl grid-cols-1 lg:grid-cols-2">
         <div className="relative sm:pt-32 lg:static lg:px-8 lg:py-48">
           <div className="mx-auto max-w-xl lg:mx-0 lg:max-w-lg">
@@ -57,7 +57,7 @@ export default function Home() {
             </p>
           </div>
           <div className="text-accent py-5 justify-center">
-            <Link href="https://discord.gg/KxhbkGpV">
+            <Link href="https://discord.gg/KxhbkGpV" className="text-white">
               <u>Join our Discord server today!</u>
             </Link>
           </div>

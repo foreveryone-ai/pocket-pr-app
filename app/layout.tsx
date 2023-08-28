@@ -20,10 +20,12 @@ export default function RootLayout({
     <html lang="en">
       <ClerkProvider>
         <body className={publicSans.className}>
-          <Providers>
-            <NavBar />
-            {children}
-          </Providers>
+          <main>
+            <Providers>
+              <NavBar />
+              {children}
+            </Providers>
+          </main>
         </body>
       </ClerkProvider>
     </html>

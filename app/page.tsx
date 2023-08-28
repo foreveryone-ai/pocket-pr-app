@@ -53,19 +53,19 @@ export default function Home() {
     {
       name: "Audience Listening",
       description:
-        "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.",
+        "With PocketPR, you won't miss a beat. Stay up-to-date with what people are saying and when.",
       icon: CloudArrowUpIcon,
     },
     {
       name: "Conflict Mitigation & Forecasting",
       description:
-        "Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.",
+        "Sometimes, when things get tense, it's best to take a step back.",
       icon: LockClosedIcon,
     },
     {
       name: "Growth Planning",
       description:
-        "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.",
+        "Maintain awareness of your audience's interests as your platform grows.",
       icon: ServerIcon,
     },
   ];
@@ -74,39 +74,37 @@ export default function Home() {
     {
       name: "Cross-Platform Context",
       description:
-        "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.",
+        "Today, we offer support for YouTube. Soon, we'll support a multitude of social networks, allowing your PR assistant to gain an understanding of your audience's perspectives across platforms.",
       icon: CloudArrowUpIcon,
     },
     {
       name: "Chat-With-Your-Posts",
       description:
-        "Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.",
+        "Talk to your assistant about any of your individual posts and what people are saying about them, or zoom out and talk to your entire channel.",
       icon: LockClosedIcon,
     },
     {
       name: "Analytical Reports",
       description:
-        "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.",
+        "Future updates will bring a multitude of analytical reports, with the goal of bolstering productive dialogues, predicting consumer trends, and maximizing your bottom line as an online creator.",
       icon: ServerIcon,
     },
   ];
 
   const hobbyFeatures = [
-    "Pariatur quod similique",
-    "Sapiente libero doloribus",
-    "Vel ipsa esse repudiandae",
+    "Chat with 1 video per week",
+    "Sentiment Reports",
+    "Conflict Detection Reports",
   ];
   const scaleFeatures = [
-    "Pariatur quod similique",
-    "Sapiente libero doloribus",
-    "Vel ipsa esse repudiandae",
+    "Chat with unlimited videos",
+    "Platform-Growth Consultation",
+    "Chat with your channel",
   ];
   const growthFeatures = [
-    "Quia rem est sed impedit magnam",
-    "Dolorem vero ratione voluptates",
-    "Qui sed ab doloribus voluptatem dolore",
-    "Laborum commodi molestiae id et fugiat",
-    "Nam ut ipsa nesciunt culpa modi dolor",
+    "Chat with 3 videos per week",
+    "Sentiment & Conflict Mitigation Reports",
+    "Chat with any YouTube video",
   ];
 
   useEffect(() => {
@@ -133,19 +131,6 @@ export default function Home() {
 
   const navigation = [
     {
-      name: "Facebook",
-      href: "#",
-      icon: (props: any) => (
-        <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
-          <path
-            fillRule="evenodd"
-            d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
-            clipRule="evenodd"
-          />
-        </svg>
-      ),
-    },
-    {
       name: "Instagram",
       href: "#",
       icon: (props: any) => (
@@ -168,19 +153,6 @@ export default function Home() {
       ),
     },
     {
-      name: "GitHub",
-      href: "#",
-      icon: (props: any) => (
-        <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
-          <path
-            fillRule="evenodd"
-            d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-            clipRule="evenodd"
-          />
-        </svg>
-      ),
-    },
-    {
       name: "YouTube",
       href: "#",
       icon: (props: any) => (
@@ -196,66 +168,67 @@ export default function Home() {
   ];
 
   return (
-    <main>
+    <>
       <div className="bg-white min-h-screen">
         {/* --------------------------------------HERO-------------------------------------- */}
-        <div className="flex justify-center items-start bg-white">
-          <div className="w-3/4 sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/2 mt-12 sm:mt-16 md:mt-20 lg:mt-24 xl:mt-28 mb-8 sm:mb-12 md:mb-16 lg:mb-20 xl:mb-24">
-            <Image
-              isBlurred
-              src="/pocket-pr-logo-licensed.svg"
-              alt="panda logo"
-              width={1000}
-              height={500}
-            />
+        <div className="min-h-screen">
+          <div className="flex justify-center items-start bg-white">
+            <div className="w-3/4 sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/2 mt-24 sm:mt-16 md:mt-20 lg:mt-24 xl:mt-28 mb-8 sm:mb-12 md:mb-16 lg:mb-20 xl:mb-24">
+              <Image
+                isBlurred
+                src="/pocket-pr-logo-licensed.svg"
+                alt="panda logo"
+                width={1000}
+                height={500}
+              />
+            </div>
+          </div>
+          <div className="justify-end items-center mt-24 md:mt-4 bg-white grid grid-cols-2 gap-1 md:gap-2">
+            <h1
+              className={`text-med sm:text-lg md:text-3xl lg:text-4xl font-bold text-right text-black ${playfairDisplay500.className}`}
+            >
+              Automated PR for
+            </h1>
+
+            <h1
+              ref={textRef}
+              key={Roles[currentIndex]}
+              className={`text-med sm:text-lg md:text-3xl lg:text-4xl font-bold text-left text-black animate__animated ${animationClass} ${playfairDisplay800.className}`}
+            >
+              {Roles[currentIndex]}
+            </h1>
+          </div>
+          <div className="flex justify-center mt-24 md:mt-12 md:mb-36 space-x-4">
+            <Button
+              color="success"
+              endContent={<BsFillArrowDownCircleFill />}
+              onClick={scrollToTagSection}
+              className="mr=4"
+            >
+              Learn More
+            </Button>
+            <SignedIn>
+              <Link href="/dashboard">
+                <Button
+                  variant="ghost"
+                  endContent={<BsFillArrowRightCircleFill />}
+                >
+                  Dashboard
+                </Button>
+              </Link>
+            </SignedIn>
+            <SignedOut>
+              <SignInButton>
+                <Button
+                  variant="ghost"
+                  endContent={<BsFillArrowRightCircleFill />}
+                >
+                  Sign In
+                </Button>
+              </SignInButton>
+            </SignedOut>
           </div>
         </div>
-        <div className="justify-end items-center bg-white grid grid-cols-2 gap-1 md:gap-2">
-          <h1
-            className={`text-med sm:text-lg md:text-3xl lg:text-4xl font-bold text-right text-black ${playfairDisplay500.className}`}
-          >
-            Automated PR for
-          </h1>
-
-          <h1
-            ref={textRef}
-            key={Roles[currentIndex]}
-            className={`text-med sm:text-lg md:text-3xl lg:text-4xl font-bold text-left text-black animate__animated ${animationClass} ${playfairDisplay800.className}`}
-          >
-            {Roles[currentIndex]}
-          </h1>
-        </div>
-        <div className="flex justify-center mt-12 mb-36 space-x-4">
-          <Button
-            color="success"
-            endContent={<BsFillArrowDownCircleFill />}
-            onClick={scrollToTagSection}
-            className="mr=4"
-          >
-            Learn More
-          </Button>
-          <SignedIn>
-            <Link href="/dashboard">
-              <Button
-                variant="ghost"
-                endContent={<BsFillArrowRightCircleFill />}
-              >
-                Dashboard
-              </Button>
-            </Link>
-          </SignedIn>
-          <SignedOut>
-            <SignInButton>
-              <Button
-                variant="ghost"
-                endContent={<BsFillArrowRightCircleFill />}
-              >
-                Sign In
-              </Button>
-            </SignInButton>
-          </SignedOut>
-        </div>
-
         {/* --------------------------------------TAG-------------------------------------- */}
         <Divider className="my-4" />
         <div
@@ -307,9 +280,9 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="mx-auto max-w-7xl py-24 px-6 md:py-32 lg:px-8">
-          <div className="relative isolate flex justify-center align-center overflow-hidden bg-green-900 px-6 pt-16 shadow-2xl rounded-3xl md:pt-24 lg:flex lg:gap-x-20 lg:px-24 lg:pt-0">
-            <div className="mx-12 max-w-md text-center lg:mx-0 lg:py-32 lg:text-center">
+        <div className="mx-auto max-w-xl py-24 px-6 md:py-32 lg:px-8">
+          <div className="relative isolate flex justify-center align-center overflow-hidden bg-green-900 shadow-2xl rounded-3xl pt-10 pb-10 lg:flex lg:gap-x-10 lg:px-10">
+            <div className="mx-12 max-w-md text-center  lg:py-32 lg:text-center">
               <h2
                 className={`${playFairDisplay650.className} text-3xl font-bold tracking-tight text-white sm:text-4xl`}
               >
@@ -341,9 +314,11 @@ export default function Home() {
                     Turn feedback into fame.
                   </p>
                   <p className="mt-6 text-lg leading-8 text-gray-600">
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                    Maiores impedit perferendis suscipit eaque, iste dolor
-                    cupiditate blanditiis ratione.
+                    This is just the beginning of a central-hub for your
+                    platform-growth. We aim to bring a robust understanding of
+                    the entirety of your online presence in an effort to best
+                    guide your decision making as a creator and
+                    online-personality.
                   </p>
                   <dl className="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-600 lg:max-w-none">
                     {features2.map((feature) => (
@@ -374,8 +349,8 @@ export default function Home() {
                 The right price for you, whoever you are
               </p>
               <p className="mx-auto mt-3 max-w-4xl text-xl text-gray-300 sm:mt-5 sm:text-2xl">
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Velit
-                numquam eligendi quos odit doloribus molestiae voluptatum.
+                Try one video for free, and if you like what you see, come back
+                and find the plan that fits your goals.
               </p>
             </div>
           </div>
@@ -569,29 +544,29 @@ export default function Home() {
           <div className="relative isolate overflow-hidden bg-green-900 px-6 pt-16 shadow-2xl sm:rounded-3xl sm:px-16 md:pt-24 lg:flex lg:gap-x-20 lg:px-24 lg:pt-0">
             <div className="mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left">
               <h2
-                className={`${playFairDisplay650.className} text-3xl font-bold tracking-tight text-white sm:text-4xl`}
+                className={`${playFairDisplay650.className} text-2xl font-bold tracking-tight text-white sm:text-3xl`}
               >
-                Leave the noise for the machines.
+                Leave the noise 4 GPT.
                 <br />
                 <Spacer y={2} />
-                Start using our app today.
+                Sign-up today.
               </h2>
               <p className="mt-6 text-lg leading-8 text-gray-300">
-                Ac euismod vel sit maecenas id pellentesque eu sed consectetur.
-                Malesuada adipiscing sagittis vel nulla.
+                What you see is just the beginning. Users that sign-up today
+                will receive priority access to new features and beta releases!
               </p>
               <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
                 <a
-                  href="#"
+                  href="/sign-up"
                   className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                 >
-                  Get started
+                  Sign Up
                 </a>
                 <a
-                  href="#"
+                  href="/sign-in"
                   className="text-sm font-semibold leading-6 text-white"
                 >
-                  Learn more <span aria-hidden="true">→</span>
+                  Sign In <span aria-hidden="true">→</span>
                 </a>
               </div>
             </div>
@@ -622,12 +597,12 @@ export default function Home() {
             </div>
             <div className="mt-8 md:order-1 md:mt-0">
               <p className="text-center text-xs leading-5 text-gray-500">
-                &copy; 2020 Your Company, Inc. All rights reserved.
+                &copy; 2023 ForEveryone.AI - All rights reserved.
               </p>
             </div>
           </div>
         </footer>
       </div>
-    </main>
+    </>
   );
 }

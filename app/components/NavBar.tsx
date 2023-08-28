@@ -3,42 +3,71 @@ import Link from "next/link";
 import { SignedIn, SignedOut, UserButton, SignInButton } from "@clerk/nextjs";
 import { Button } from "@nextui-org/button";
 import { Spacer } from "@nextui-org/spacer";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownSection,
+  DropdownItem,
+} from "@nextui-org/dropdown";
+import { useRouter } from "next/navigation";
 
 export default function () {
+  const router = useRouter();
+
+  const toDashboard = () => {
+    router.push("/dashboard");
+  };
+
+  const toSettings = () => {
+    router.push("/settings");
+  };
+
+  const toHelp = () => {
+    router.push("/help");
+  };
   return (
     <>
       <div className="navbar bg-green-800 p-4">
         {/* ----------------------------NAVBAR START---------------------------- */}
         <div className="navbar-start">
           <SignedIn>
-            <div className="dropdown">
-              <Button color="default" tabIndex={0}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 6h16M4 12h16M4 18h7"
-                  />
-                </svg>
-              </Button>
-              <ul
-                tabIndex={0}
-                className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+            <Dropdown backdrop="blur">
+              <DropdownTrigger>
+                <Button variant="flat" className="text-white">
+                  Menu
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu
+                aria-label="Static Actions"
+                disabledKeys={["settings"]}
               >
-                <Link href="/dashboard">
-                  <li>Dashboard</li>
-                </Link>
-                <li>Past Reports</li>
-                <li>Get Help</li>
-              </ul>
-            </div>
+                <DropdownItem
+                  key="dashboard"
+                  onPress={toDashboard}
+                  className="text-black"
+                  color="default"
+                >
+                  Dashboard
+                </DropdownItem>
+                <DropdownItem
+                  key="settings"
+                  onPress={toSettings}
+                  className="text-black"
+                  color="default"
+                >
+                  Settings
+                </DropdownItem>
+                <DropdownItem
+                  key="help"
+                  onPress={toHelp}
+                  className="text-black"
+                  color="default"
+                >
+                  Get Help
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
           </SignedIn>
         </div>
 
