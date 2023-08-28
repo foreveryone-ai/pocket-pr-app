@@ -15,7 +15,7 @@ import { Button } from "@nextui-org/button";
 export default function Home() {
   return (
     <div className="flex flex-col-3 space-between">
-      <Button className="mr-24">Refresh Videos</Button>
+      <Button className="mr-24">Refresh</Button>
       <div className="flex flex-col pb-12">
         <Tabs
           disabledKeys={[
