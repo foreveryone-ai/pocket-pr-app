@@ -16,7 +16,6 @@ import {
   CheckIcon,
 } from "@heroicons/react/20/solid";
 import { Playfair_Display } from "next/font/google";
-import dynamic from "next/dynamic";
 
 const playfairDisplay500 = Playfair_Display({
   weight: ["400"],
