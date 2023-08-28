@@ -35,42 +35,36 @@ export default function VideoCard({
   };
 
   return (
-    <Skeleton isLoaded={isLoaded} className="rounded-lg">
-      <Card className="py-4 bg-green-800">
-        <Skeleton isLoaded={isLoaded} className="rounded-lg">
-          <CardHeader className="pb-0 pt-2 px-5 flex justify-between items-start">
-            <div>
-              <Skeleton isLoaded={isLoaded}>
-                <p className="text-tiny text-white font-bold">YouTube</p>
-              </Skeleton>
-              <Skeleton isLoaded={isLoaded}>
-                <h4 className="font-bold text-white text-large">
-                  {truncateTitle(title)}
-                </h4>
-              </Skeleton>
-            </div>
-            <Skeleton isLoaded={isLoaded}>
-              <Button variant="bordered" className="text-white">
-                Analyze
-              </Button>
-            </Skeleton>
-          </CardHeader>
+    <Card className="py-3 bg-green-800">
+      <CardHeader className="pb-0 pt-2 px-5 flex justify-between items-start">
+        <div>
+          <Skeleton isLoaded={isLoaded} className="rounded-md">
+            <p className="text-tiny text-white font-bold">YouTube</p>
+          </Skeleton>
+          <Skeleton isLoaded={isLoaded} className="rounded-lg">
+            <h4 className="font-bold text-white text-large">
+              {truncateTitle(title)}
+            </h4>
+          </Skeleton>
+        </div>
+
+        <Button variant="ghost" className="text-white">
+          Analyze
+        </Button>
+      </CardHeader>
+
+      <CardBody className="overflow-visible py-2 max-h-480">
+        <Skeleton isLoaded={isLoaded} className="rounded-large">
+          <Image
+            alt={title}
+            className="object-cover rounded-xl"
+            src={imageUrl}
+            width={270}
+            height={480}
+          />
         </Skeleton>
-        <Skeleton isLoaded={isLoaded} className="rounded-lg">
-          <CardBody className="overflow-visible py-2">
-            <Skeleton isLoaded={isLoaded}>
-              <Image
-                alt={title}
-                className="object-cover rounded-xl"
-                src={imageUrl}
-                width={270}
-                height={480}
-              />
-            </Skeleton>
-          </CardBody>
-        </Skeleton>
-      </Card>
-    </Skeleton>
+      </CardBody>
+    </Card>
   );
 }
 

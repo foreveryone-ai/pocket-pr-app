@@ -13,8 +13,11 @@ export default function Home() {
   const [successAlert, setSuccessAlert] = useState(false);
   const [errorAlert, setErrorAlert] = useState(false);
 
+  const [loading, setLoading] = useState(false);
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    setLoading(true);
 
     const response = await fetch("/api/form-submit", {
       method: "POST",
@@ -29,6 +32,8 @@ export default function Home() {
         message,
       }),
     });
+
+    setLoading(false);
 
     if (response.ok) {
       setFirstName("");
@@ -52,8 +57,8 @@ export default function Home() {
             </h2>
             <p className="mt-6 text-lg leading-8 text-white">
               Fill out our contact form and one of our founders will get back to
-              you ASAP! Alternatively, you can add join our Discord server and
-              ask questions there.
+              you ASAP! Alternatively, you can join our Discord server and ask
+              questions there.
             </p>
           </div>
           <div className="text-accent py-5 justify-center">
@@ -86,6 +91,7 @@ export default function Home() {
                       autoComplete="given-name"
                       className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                       onChange={(e) => setFirstName(e.target.value)}
+                      disabled={loading}
                     />
                   </div>
                 </div>
@@ -163,7 +169,11 @@ export default function Home() {
                 </div>
               </div>
               <div className="mt-8 flex justify-center">
-                <button type="submit" className="btn btn-primary">
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={loading}
+                >
                   Send message
                 </button>
               </div>
