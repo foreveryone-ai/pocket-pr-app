@@ -1,6 +1,7 @@
 import UpdateDatabase from "../components/UpdateDatabase";
 import { auth, currentUser } from "@clerk/nextjs";
 import { createUser } from "@/lib/supabaseClient";
+import OnboardingPage from "../components/OnboardingPage";
 
 export default async function Onboarding() {
   const { userId, getToken } = auth();
@@ -24,10 +25,10 @@ export default async function Onboarding() {
   }
 
   return (
-    <section>
-      <div>
-        <UpdateDatabase />
+    <>
+      <div className="min-h-screen bg-green-800">
+        <OnboardingPage />
       </div>
-    </section>
+    </>
   );
 }
