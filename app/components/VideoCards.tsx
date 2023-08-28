@@ -63,7 +63,7 @@ export default function VideoCard({
     }, 10000);
   };
 
-  const truncateTitle = (title: string, limit: number = 15) => {
+  const truncateTitle = (title: string, limit: number = 10) => {
     return title.length > limit ? `${title.substring(0, limit)}...` : title;
   };
 
@@ -77,7 +77,7 @@ export default function VideoCard({
             </Skeleton>
             <Skeleton isLoaded={isLoaded} className="rounded-lg">
               <h4
-                className={`font-bold text-white text-large ${playfairDisplay800.className}`}
+                className={`font-bold text-white text-md ${playfairDisplay500.className}`}
               >
                 {truncateTitle(title)}
               </h4>
@@ -106,7 +106,7 @@ export default function VideoCard({
           {() => (
             <>
               <ModalHeader className="flex flex-col gap-1 text-black font-black">
-                Confirm Analysis of "{truncateTitle(title)}"
+                Confirm Analysis of "{title}"
               </ModalHeader>
               <ModalBody className="">
                 <p className="text-black ">
