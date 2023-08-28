@@ -28,7 +28,7 @@ const playFairDisplay800 = Playfair_Display({
 export default function App() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [step, setStep] = useState(1);
-  const [value, setValue] = useState(33);
+  const [value, setValue] = useState(0);
 
   const nextStep = () => {
     setStep((prevStep) => prevStep + 1);
@@ -43,9 +43,8 @@ export default function App() {
   return (
     <>
       <div className="min-h-screen flex flex-col justify-center items-center">
-        <h1 className={`text-2xl ${playFairDisplay500.className}`}>Welcome!</h1>
         <h2 className={`py-4  text-3xl ${playFairDisplay800.className}`}>
-          It's time to get you onboarded.
+          Welcome! It's time to get you onboarded.
         </h2>
         <h1 className={`pb-12 text-2xl ${playFairDisplay500.className}`}>
           In just a few clicks, we'll have you automated in no-time.
@@ -87,13 +86,19 @@ export default function App() {
                       {/* ... other content for step 3 ... */}
                     </div>
                   )}
+                  {step === 4 && (
+                    <div>
+                      <p>This is the content of step 4.</p>
+                      {/* ... other content for step 4 ... */}
+                    </div>
+                  )}
                 </ModalBody>
                 <ModalFooter>
                   <Button color="danger" variant="light" onPress={onClose}>
                     Close
                   </Button>
 
-                  {step < 3 ? (
+                  {step < 4 ? (
                     <Button color="primary" onPress={nextStep}>
                       Next
                     </Button>
