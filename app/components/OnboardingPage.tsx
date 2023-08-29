@@ -7,6 +7,7 @@ import {
   ModalFooter,
   useDisclosure,
 } from "@nextui-org/modal";
+import { Progress } from "@nextui-org/progress";
 import { Button } from "@nextui-org/button";
 import { Playfair_Display } from "next/font/google";
 import { useState } from "react";
@@ -27,21 +28,23 @@ const playFairDisplay800 = Playfair_Display({
 export default function App() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [step, setStep] = useState(1);
+  const [value, setValue] = useState(1);
 
   const nextStep = () => {
     setStep((prevStep) => prevStep + 1);
+    setValue((prevValue) => prevValue + 33);
   };
 
   const prevStep = () => {
     setStep((prevStep) => prevStep - 1);
+    setValue((prevValue) => prevValue - 33);
   };
 
   return (
     <>
       <div className="min-h-screen flex flex-col justify-center items-center">
-        <h1 className={`text-2xl ${playFairDisplay500.className}`}>Welcome!</h1>
         <h2 className={`py-4  text-3xl ${playFairDisplay800.className}`}>
-          It's time to get you onboarded.
+          Welcome! It's time to get you onboarded.
         </h2>
         <h1 className={`pb-12 text-2xl ${playFairDisplay500.className}`}>
           In just a few clicks, we'll have you automated in no-time.
@@ -57,6 +60,14 @@ export default function App() {
                   Modal Title - Step {step}
                 </ModalHeader>
                 <ModalBody className="text-black">
+                  <Progress
+                    aria-label="Progress..."
+                    size="md"
+                    value={value}
+                    color="success"
+                    showValueLabel={true}
+                    className="max-w-md mb-4"
+                  />
                   {step === 1 && (
                     <div>
                       <p>This is the content of step 1.</p>
@@ -72,7 +83,13 @@ export default function App() {
                   {step === 3 && (
                     <div>
                       <p>This is the content of step 3.</p>
-                      {/* ... other content for step 2 ... */}
+                      {/* ... other content for step 3 ... */}
+                    </div>
+                  )}
+                  {step === 4 && (
+                    <div>
+                      <p>This is the content of step 4.</p>
+                      {/* ... other content for step 4 ... */}
                     </div>
                   )}
                 </ModalBody>
@@ -81,7 +98,7 @@ export default function App() {
                     Close
                   </Button>
 
-                  {step < 3 ? (
+                  {step < 4 ? (
                     <Button color="primary" onPress={nextStep}>
                       Next
                     </Button>

@@ -14,86 +14,90 @@ import { Button } from "@nextui-org/button";
 
 export default function Home() {
   return (
-    <div className="flex flex-col-3 space-between">
-      <Button className="mr-24">Refresh</Button>
-      <div className="flex flex-col pb-12">
-        <Tabs
-          disabledKeys={[
-            "Facebook",
-            "Discord",
-            "Instagram",
-            "Twitch",
-            "LinkedIn",
-            "Twitter",
-          ]}
-          aria-label="Options"
-          color="default"
-          variant="solid"
-        >
-          <Tab
-            key="Facebook"
-            title={
-              <div className="flex items-center space-x-2">
-                <BsFacebook />
-                <span className="hidden md:inline">Facebook</span>
-              </div>
-            }
-          />
-          <Tab
-            key="Discord"
-            title={
-              <div className="flex items-center space-x-2">
-                <BiLogoDiscord />
-                <span className="hidden md:inline">Discord</span>
-              </div>
-            }
-          />
-          <Tab
-            key="Instagram"
-            title={
-              <div className="flex items-center space-x-2">
-                <AiFillInstagram />
-                <span className="hidden md:inline">Instagram</span>
-              </div>
-            }
-          />
-          <Tab
-            key="YouTube"
-            title={
-              <div className="flex items-center space-x-2">
-                <BsYoutube />
-                <span className="hidden md:inline">YouTube</span>
-              </div>
-            }
-          />
-          <Tab
-            key="LinkedIn"
-            title={
-              <div className="flex items-center space-x-2">
-                <BsLinkedin />
-                <span className="hidden md:inline">LinkedIn</span>
-              </div>
-            }
-          />
-          <Tab
-            key="Twitch"
-            title={
-              <div className="flex items-center space-x-2">
-                <BsTwitch />
-                <span className="hidden md:inline">Twitch</span>
-              </div>
-            }
-          />
-          <Tab
-            key="Twitter"
-            title={
-              <div className="flex items-center space-x-2">
-                <BsTwitter />
-                <span className="hidden md:inline">Twitter</span>
-              </div>
-            }
-          />
-        </Tabs>
+    <div className="">
+      <Button className="px-0 lg:hidden">Refresh</Button>
+      <div className="md:flex md:flex-col-3 md:space-between">
+        <Button className="hidden lg:block md:px-0 md:mr-24">Refresh</Button>
+
+        <div className="flex flex-col md:pb-12">
+          <Tabs
+            disabledKeys={[
+              "Facebook",
+              "Discord",
+              "Instagram",
+              "Twitch",
+              "LinkedIn",
+              "Twitter",
+            ]}
+            aria-label="Options"
+            color="default"
+            variant="solid"
+          >
+            <Tab
+              key="Facebook"
+              title={
+                <div className="flex items-center space-x-2">
+                  <BsFacebook />
+                  <span className="hidden md:inline">Facebook</span>
+                </div>
+              }
+            />
+            <Tab
+              key="Discord"
+              title={
+                <div className="flex items-center space-x-2">
+                  <BiLogoDiscord />
+                  <span className="hidden md:inline">Discord</span>
+                </div>
+              }
+            />
+            <Tab
+              key="Instagram"
+              title={
+                <div className="flex items-center space-x-2">
+                  <AiFillInstagram />
+                  <span className="hidden md:inline">Instagram</span>
+                </div>
+              }
+            />
+            <Tab
+              key="YouTube"
+              title={
+                <div className="flex items-center space-x-2">
+                  <BsYoutube />
+                  <span className="hidden md:inline">YouTube</span>
+                </div>
+              }
+            />
+            <Tab
+              key="LinkedIn"
+              title={
+                <div className="flex items-center space-x-2">
+                  <BsLinkedin />
+                  <span className="hidden md:inline">LinkedIn</span>
+                </div>
+              }
+            />
+            <Tab
+              key="Twitch"
+              title={
+                <div className="flex items-center space-x-2">
+                  <BsTwitch />
+                  <span className="hidden md:inline">Twitch</span>
+                </div>
+              }
+            />
+            <Tab
+              key="Twitter"
+              title={
+                <div className="flex items-center space-x-2">
+                  <BsTwitter />
+                  <span className="hidden md:inline">Twitter</span>
+                </div>
+              }
+            />
+          </Tabs>
+        </div>
       </div>
     </div>
   );

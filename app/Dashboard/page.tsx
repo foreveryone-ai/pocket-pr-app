@@ -43,7 +43,7 @@ export default async function Home() {
                 title={video.title as string}
                 imageUrl={video.thumbnail_url as string}
                 //TODO: store this in database
-                width={640}
+                width={270}
                 height={480}
               />
             ))
