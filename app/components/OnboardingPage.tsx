@@ -28,7 +28,7 @@ const playFairDisplay800 = Playfair_Display({
 export default function App() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [step, setStep] = useState(1);
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(1);
 
   const nextStep = () => {
     setStep((prevStep) => prevStep + 1);

@@ -69,85 +69,87 @@ export default function VideoCard({
 
   return (
     <div className="relative">
-      <Card className="py-3 bg-green-800">
-        <CardHeader className="pb-0 pt-2 px-5 flex justify-between items-start">
-          <div>
-            <Skeleton isLoaded={isLoaded} className="rounded-md">
-              <p className="text-tiny text-red-500 font-md">YouTube</p>
-            </Skeleton>
-            <Skeleton isLoaded={isLoaded} className="rounded-lg">
-              <h4
-                className={`font-bold text-white text-md ${playfairDisplay500.className}`}
-              >
-                {truncateTitle(title)}
-              </h4>
-            </Skeleton>
-          </div>
-
-          <Button variant="ghost" className="text-white" onPress={onOpen}>
-            Analyze
-          </Button>
-        </CardHeader>
-
-        <CardBody className="overflow-visible py-2 max-h-480">
-          <Skeleton isLoaded={isLoaded} className="rounded-large">
-            <Image
-              alt={title}
-              className="object-cover rounded-xl"
-              src={imageUrl}
-              width={270}
-              height={480}
-            />
-          </Skeleton>
-        </CardBody>
-      </Card>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent>
-          {() => (
-            <>
-              <ModalHeader className="flex flex-col gap-1 text-black font-black">
-                Confirm Analysis of "{title}"
-              </ModalHeader>
-              <ModalBody className="">
-                <p className="text-black ">
-                  If you'd like to analyze this video, click on "Get Started"
-                  below.
-                </p>
-                <p className="text-black ">
-                  Once you do, the analysis process will begin. This typically
-                  takes a couple minutes, depending on the number of comments on
-                  your video.
-                </p>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onOpenChange}>
-                  Close
-                </Button>
-                <Button
-                  className="bg-green-600 text-white"
-                  onPress={handleModalClose}
+      <Link href={`/dashboard/${videoId}`}>
+        <Card className="py-3 bg-green-800">
+          <CardHeader className="pb-0 pt-2 px-5 flex justify-between items-start">
+            <div>
+              <Skeleton isLoaded={isLoaded} className="rounded-md">
+                <p className="text-tiny text-red-500 font-md">YouTube</p>
+              </Skeleton>
+              <Skeleton isLoaded={isLoaded} className="rounded-lg">
+                <h4
+                  className={`font-bold text-white text-md ${playfairDisplay500.className}`}
                 >
-                  Get Started
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
+                  {truncateTitle(title)}
+                </h4>
+              </Skeleton>
+            </div>
 
-      {isLoading && (
-        <div className="absolute inset-0 bg-gray-900 bg-opacity-50 px-6 rounded-large flex justify-center items-center">
-          <Progress
-            color="warning"
-            isStriped
-            size="lg"
-            radius="sm"
-            isIndeterminate
-            aria-label="Loading..."
-            className="max-w-sm"
-          />
-        </div>
-      )}
+            <Button variant="ghost" className="text-white" onPress={onOpen}>
+              Analyze
+            </Button>
+          </CardHeader>
+
+          <CardBody className="overflow-visible py-2 max-h-480">
+            <Skeleton isLoaded={isLoaded} className="rounded-large">
+              <Image
+                alt={title}
+                className="object-cover rounded-xl"
+                src={imageUrl}
+                width={270}
+                height={480}
+              />
+            </Skeleton>
+          </CardBody>
+        </Card>
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+          <ModalContent>
+            {() => (
+              <>
+                <ModalHeader className="flex flex-col gap-1 text-black font-black">
+                  Confirm Analysis of "{title}"
+                </ModalHeader>
+                <ModalBody className="">
+                  <p className="text-black ">
+                    If you'd like to analyze this video, click on "Get Started"
+                    below.
+                  </p>
+                  <p className="text-black ">
+                    Once you do, the analysis process will begin. This typically
+                    takes a couple minutes, depending on the number of comments
+                    on your video.
+                  </p>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="danger" variant="light" onPress={onOpenChange}>
+                    Close
+                  </Button>
+                  <Button
+                    className="bg-green-600 text-white"
+                    onPress={handleModalClose}
+                  >
+                    Get Started
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
+
+        {isLoading && (
+          <div className="absolute inset-0 bg-gray-900 bg-opacity-50 px-6 rounded-large flex justify-center items-center">
+            <Progress
+              color="warning"
+              isStriped
+              size="lg"
+              radius="sm"
+              isIndeterminate
+              aria-label="Loading..."
+              className="max-w-sm"
+            />
+          </div>
+        )}
+      </Link>
     </div>
   );
 }
