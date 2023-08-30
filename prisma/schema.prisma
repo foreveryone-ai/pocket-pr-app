@@ -11,7 +11,15 @@ generator client {
     provider = "prisma-client-js"
 }
 
-model Users {
+enum SubscriptionStatus {
+    NONE
+    HOBBYIST
+    CONTENT_CREATOR
+    INFLUENCER
+}
+
+
+model User {
     id                  String   @id @default(cuid())
     createdAt           DateTime @default(now())
     updatedAt           DateTime @updatedAt
@@ -26,13 +34,15 @@ model Users {
     email               String   @unique
     image_url           String?
     youtube_channel_id  String?
+    subscriptionStatus  SubscriptionStatus
+    credits             Int      @default(0)
     sender              Messages[]
-    videos              Videos[]
+    videos              Video[]
     prompts             Prompts[]
-    analysis            VideoAnalysis[]
+    orders              Orders[]
 }
 
-model Videos {
+model Video {
     id                  String   @id @default(cuid())
     createdAt           DateTime @default(now())
     updatedAt           DateTime @updatedAt
@@ -44,12 +54,11 @@ model Videos {
     channel_id          String
     channel_title       String
     user_id             String
-    user                Users    @relation(fields: [user_id], references: [id], onDelete: Cascade) 
+    hasEmbeddings       Boolean @default(false)
+    user                User    @relation(fields: [user_id], references: [id], onDelete: Cascade) 
     comments            Comments[]
     conversation        Conversation?
     captions            Captions[]
-    analysis            VideoAnalysis[]
-    comment_summary     CommentSummary[]
     caption_summary     CaptionSummary[]
 
     @@index([user_id])
@@ -60,7 +69,7 @@ model Conversation {
     createdAt           DateTime @default(now())
     updatedAt           DateTime @updatedAt
     video_id            String   @unique 
-    video               Videos   @relation(fields: [video_id], references: [id], onDelete: Cascade)
+    video               Video   @relation(fields: [video_id], references: [id], onDelete: Cascade)
     messages            Messages[]
 
     @@index([video_id])
@@ -72,18 +81,12 @@ model Messages {
     updatedAt           DateTime @updatedAt
     content             String
     sender_id           String   @unique 
-    sender              Users    @relation(fields: [sender_id], references: [id], onDelete: Cascade) 
+    sender              User    @relation(fields: [sender_id], references: [id], onDelete: Cascade) 
     conversation_id     String
     conversation        Conversation @relation(fields: [conversation_id], references: [id], onDelete: Cascade) 
 
     @@index([sender_id])
     @@index([conversation_id])
-}
-
-enum SENTIMENT {
-    POSITIVE
-    NEGATIVE
-    NEUTRAL
 }
 
 model Comments {
@@ -97,8 +100,7 @@ model Comments {
     video_id            String
     author_display_name String
     author_image_url    String
-    video               Videos   @relation(fields: [video_id], references: [id], onDelete: Cascade) 
-    comment_summary     CommentSummary[]
+    video               Video   @relation(fields: [video_id], references: [id], onDelete: Cascade) 
     replies             Replies[]
 
     @@index([video_id])
@@ -117,7 +119,6 @@ model Replies {
     comment_id          String
     summary             String?
     comment             Comments @relation(fields: [comment_id], references: [id], onDelete: Cascade) 
-    sentiment           SENTIMENT?
 
     @@index([comment_id])
 }
@@ -128,7 +129,7 @@ model Prompts {
     updatedAt           DateTime @updatedAt
     prompt_text         String
     user_id             String
-    user                Users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+    user                User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
     @@index([user_id])
 }
@@ -139,7 +140,7 @@ model Captions {
     language            String
     updatedAt           DateTime @updatedAt
     video_id            String 
-    video               Videos      @relation(fields: [video_id], references: [id], onDelete: Cascade)
+    video               Video      @relation(fields: [video_id], references: [id], onDelete: Cascade)
     captionsSummary     CaptionSummary[]
 
     @@index([video_id])
@@ -152,47 +153,21 @@ model CaptionSummary {
     caption_id          String 
     caption             Captions @relation(fields: [caption_id], references: [id], onDelete: Cascade)
     video_id                 String 
-    video                    Videos      @relation(fields: [video_id], references: [id], onDelete: Cascade)
+    video                    Video      @relation(fields: [video_id], references: [id], onDelete: Cascade)
 
     @@index([caption_id])
     @@index([video_id])
 }
 
-model CommentSummary {
-    id                       String  @id @default(cuid()) 
-    createdAt                DateTime @default(now())
-    updatedAt                DateTime @updatedAt
-    summaryText              String
-    sentiment                SENTIMENT
-    comment_id               String 
-    comment                  Comments @relation(fields: [comment_id], references: [id], onDelete: Cascade)
-    video_id                 String 
-    video                    Videos      @relation(fields: [video_id], references: [id], onDelete: Cascade)
+model Orders {
+    id String @id @default(cuid())
+    user_id String
+    user    User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+} 
 
-    @@index([comment_id])
-    @@index([video_id])
+model Document {
+  id      String                 @id @default(cuid())
+  content String
+  metadata Json?
+  vector  Unsupported("vector")?
 }
-
-model VideoAnalysis {
-    id                              String   @id @default(cuid()) 
-    createdAt                       DateTime @default(now())
-    updatedAt                       DateTime @updatedAt
-    sentiment_breakdown             String
-    emotional_analysis              String
-    conflict_detection              String
-    conflict_resolution_suggestions String
-    popular_topics                  String
-    content_suggestions             String
-    engagement_opportunities        String
-    notable_comments                String
-    influencer_identification       String
-    tone_of_communication           String
-    video_id                        String 
-    video                           Videos      @relation(fields: [video_id], references: [id], onDelete: Cascade)
-    user_id                         String 
-    user                            Users        @relation(fields: [user_id], references: [id], onDelete: Cascade)
-
-    @@index([video_id])
-    @@index([user_id])
-}
-
