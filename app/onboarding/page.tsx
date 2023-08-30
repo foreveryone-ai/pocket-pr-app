@@ -7,8 +7,12 @@ export default async function Onboarding() {
   const { userId, getToken } = auth();
   const user = await currentUser();
   const token = await getToken({ template: "supabase" });
+  console.log("first name: ", user?.firstName);
+  console.log(userId);
+  console.log("token ", token);
 
   if (token && userId && user?.firstName) {
+    console.log("try and create new user...");
     try {
       const dbUser = await createUser(
         token,

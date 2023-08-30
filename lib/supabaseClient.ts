@@ -1,4 +1,4 @@
-import { CommentSummary, SENTIMENT, Videos } from "@prisma/client";
+import { Video } from "@prisma/client";
 import {
   PostgrestError,
   PostgrestResponse,
@@ -39,7 +39,7 @@ export async function createUser(
     const db = createServerDbClient(authToken);
 
     const newUser = await db
-      .from("Users")
+      .from("User")
       .upsert({
         id: userId,
         google_id: googleId,
@@ -57,46 +57,6 @@ export async function createUser(
     return 400;
   }
 }
-// id                              String   @id @default(cuid())
-// createdAt                       DateTime @default(now())
-// updatedAt                       DateTime @updatedAt
-// sentiment_breakdown             String
-// emotional_analysis              String
-// conflict_detection              String
-// conflict_resolution_suggestions String
-// popular_topics                  String
-// content_suggestions             String
-// engagement_opportunities        String
-// notable_comments                String
-// influencer_identification       String
-// tone_of_communication           String
-// video_id                        String
-// video                           Videos      @relation(fields: [video_id], references: [id], onDelete: Cascade)
-// user_id                         String
-// user                            Users        @relation(fields: [user_id], references: [id], onDelete: Cascade)
-
-export async function createAnalysis(
-  authToken: string,
-  userId: string,
-  video_id: string,
-  sentimentBreakdown: string
-) {
-  const db = createServerDbClient(authToken);
-  const { data: aData, error: aError } = await db
-    .from("VideoAnalysis")
-    .insert({
-      sentiment_breakdown: sentimentBreakdown,
-      video_id,
-      user_id: userId,
-    })
-    .select();
-
-  if (aData) {
-    return aData;
-  } else {
-    return aError;
-  }
-}
 
 export async function storeChannelId(
   authToken: string,
@@ -108,7 +68,7 @@ export async function storeChannelId(
     const db = createServerDbClient(authToken);
 
     const updatedUser = await db
-      .from("Users")
+      .from("User")
       .update({
         youtube_channel_id,
         updatedAt: new Date(),
@@ -143,7 +103,7 @@ export async function storeOrUpdateVideo(
 ) {
   const db = createServerDbClient(authToken);
 
-  const { data, error } = await db.from("Videos").upsert(video).select();
+  const { data, error } = await db.from("Video").upsert(video).select();
 
   if (data) {
     return data;
@@ -164,58 +124,6 @@ export type StoreAllCommentsParams = {
   author_image_url: string;
 };
 //-------------------------------Read------------------------------------//
-export async function getAnalysis(authToken: string, video_id: string) {
-  const db = createServerDbClient(authToken);
-  return await db.from("VideoAnalysis").select().eq(`video_id`, video_id);
-}
-
-export async function getDataForEmotionalAnalysis(
-  authToken: string,
-  video_id: string
-) {
-  const db = createServerDbClient(authToken);
-
-  const { data: comData, error: errorData } = await getComments(
-    authToken,
-    video_id
-  );
-
-  if (errorData) {
-    console.error("error getting comData in supabaseClient");
-    throw new Error("error on getComments " + errorData);
-  }
-
-  const comIds = [];
-
-  if (comData && comData.length > 0) {
-    for (let com of comData) {
-      comIds.push(com.id);
-    }
-  }
-
-  const { data: comSummaryData, error: errorSummaryData } = await db
-    .from("Comments")
-    .select(
-      "id, author_display_name, author_image_url, like_count, text_display, CommentSummary (summaryText, sentiment)"
-    )
-    .in("id", comIds);
-
-  if (errorSummaryData) {
-    console.error(errorSummaryData);
-  } else {
-    console.log("comSummaryData: ", comSummaryData);
-    //TODO: Hack!!
-    return comSummaryData.map((cs) => ({
-      video_id,
-      id: cs.id,
-      author_display_name: cs.author_display_name,
-      author_image_url: cs.author_image_url,
-      like_count: cs.like_count,
-      text_display: cs.text_display,
-      comment_summary: cs.CommentSummary[0],
-    }));
-  }
-}
 
 export async function getCaptionSummary(
   authToken: string,
@@ -227,63 +135,6 @@ export async function getCaptionSummary(
     return await db.from("CaptionSummary").select().eq(`video_id`, video_id);
   }
   return await db.from("CaptionSummary").select().eq(`caption_id`, caption_id);
-}
-
-export async function getCommentsSentiment(authToken: string, videoId: string) {
-  //const commentIds = [];
-  const sentiment = {
-    pos: 0,
-    neg: 0,
-    neu: 0,
-  };
-
-  const db = createServerDbClient(authToken);
-
-  // const { data: commentData, error: commentError } = await db
-  //   .from("Comments")
-  //   .select()
-  //   .eq(`video_id`, videoId);
-  // if (commentData && commentData.length > 0) {
-  //   console.log("adding comment ids to array...");
-  //   for (let comment of commentData) {
-  //     commentIds.push(comment.id);
-  //   }
-  //   console.log("ids added to array: ", commentIds);
-  //   console.log("getting comment summaries...");
-  // this will cause an error if the commentId is not in the commentSummary
-  // table
-  // const { data: summaryData, error: summaryError } = await db
-  //   .from("CommentSummary")
-  //   .select()
-  //   .in("comment_id", commentIds);
-
-  // get all comment summaries related to the video id
-  const { data: summaryData, error: summaryError } = await db
-    .from("CommentSummary")
-    .select()
-    .eq("video_id", videoId);
-
-  if (summaryData && summaryData.length > 0) {
-    console.log("returning summary data...");
-    for (let summary of summaryData) {
-      if (summary.sentiment === SENTIMENT.POSITIVE) {
-        sentiment.pos++;
-      } else if (summary.sentiment === SENTIMENT.NEGATIVE) {
-        sentiment.neg++;
-      } else {
-        sentiment.neu++;
-      }
-    }
-    return sentiment;
-  } else {
-    console.log("no summary data");
-    return;
-  }
-  // } else {
-  //console.error("error getting comment data", commentError);
-  // console.error("error getting comment data: ");
-  //return;
-  //}
 }
 
 //-------------------------------Update------------------------------------//
@@ -332,23 +183,6 @@ export async function storeAllReplies(
   }
 }
 
-//-------------------------------Delete------------------------------------//
-
-export async function getCommentsSummaries(
-  authToken: string,
-  commentIdArray: string[],
-  video_id?: string
-) {
-  const db = createServerDbClient(authToken);
-  if (video_id) {
-    return await db.from("CommentSummary").select().eq("video_id", video_id);
-  }
-  return await db
-    .from("CommentSummary")
-    .select()
-    .in("comment_id", commentIdArray);
-}
-
 export async function getComments(authToken: string, videoId: string) {
   const db = createServerDbClient(authToken);
 
@@ -391,12 +225,12 @@ export async function storeCaptions(
 export async function getChannelId(authToken: string, user_id: string) {
   const db = createServerDbClient(authToken);
 
-  return await db.from("Users").select().eq(`id`, user_id);
+  return await db.from("User").select().eq(`id`, user_id);
 }
 
 export async function getVideo(authToken: string, videoId: string) {
   const db = createServerDbClient(authToken);
-  const res = await db.from("Videos").select().eq("id", videoId);
+  const res = await db.from("Video").select().eq("id", videoId);
   if (res && res.data && res.data.length > 0) {
     return res.data;
   } else {
@@ -408,7 +242,7 @@ export async function getVideo(authToken: string, videoId: string) {
 export async function getVideos(authToken: string, channel_id: string) {
   const db = createServerDbClient(authToken);
 
-  return await db.from("Videos").select().eq(`channel_id`, channel_id);
+  return await db.from("Video").select().eq(`channel_id`, channel_id);
 }
 
 export type StoreCommentSummaryParams = {
@@ -416,48 +250,6 @@ export type StoreCommentSummaryParams = {
   sentiment: string;
   summary: string;
 };
-
-export async function storeCommentsSummaries(
-  authToken: string,
-  commentSummaries: StoreCommentSummaryParams[],
-  video_id: string
-) {
-  const commentSummariesToStore: CommentSummary[] = [];
-  for (let summary of commentSummaries) {
-    let sentiment;
-    if (summary.sentiment.toLocaleLowerCase() === "positive") {
-      sentiment = SENTIMENT.POSITIVE;
-    } else if (summary.sentiment.toLocaleLowerCase() === "negative") {
-      sentiment = SENTIMENT.NEGATIVE;
-    } else {
-      sentiment = SENTIMENT.NEUTRAL;
-    }
-    // create format for db insert
-    commentSummariesToStore.push({
-      id: uuidv4(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      summaryText: summary.summary,
-      comment_id: summary.id,
-      sentiment: sentiment,
-      video_id,
-    });
-  }
-  const db = createServerDbClient(authToken);
-  // default values are not being generated by prisma
-  const { data, error } = await db
-    .from("CommentSummary")
-    .insert(commentSummariesToStore)
-    .select();
-
-  if (data) {
-    console.log("returning data from storeCommentsSummary");
-    return data;
-  } else {
-    console.error("error on storeCommentsSummary");
-    return error;
-  }
-}
 
 export async function storeCaptionsSummary(
   authToken: string,
@@ -559,7 +351,4 @@ export class PreProcessorA {
   }
 }
 
-/*
-/ DataAnalyser contains all of the methods that will be used to query the database before 
-/ sending the prompts to the LLM.
-*/
+//-------------------------------Delete------------------------------------//
