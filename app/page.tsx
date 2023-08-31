@@ -17,6 +17,7 @@ import {
 } from "@heroicons/react/20/solid";
 import { Playfair_Display } from "next/font/google";
 import DashboardHero from "./components/DashboardHero";
+import { Accordion, AccordionItem } from "@nextui-org/accordion";
 
 const playfairDisplay500 = Playfair_Display({
   weight: ["400"],
@@ -377,8 +378,48 @@ export default function Home() {
             </div>
           </div>
         </div>
+        <div className="mx-auto mt-10 sm:px-6 sm:py-32 md:py-12 lg:px-8">
+          <div
+            className={`${playFairDisplay650.className} pb-12 hidden md:block text-center font-black text-black`}
+          >
+            Frequently Asked Questions
+          </div>
+          <div
+            className={` pb-12 md:hidden text-center font-black text-xl text-black ${playFairDisplay650.className}`}
+          >
+            FAQ's
+          </div>
+          <Accordion variant="splitted">
+            <AccordionItem
+              className="text-black"
+              key="1"
+              aria-label="Accordion 1"
+              title="What is PocketPR?"
+            >
+              PocketPR is an app! It's built with code. Does cool stuff! Try it
+              out. Give us your money!
+            </AccordionItem>
+            <AccordionItem
+              className="text-black"
+              key="2"
+              aria-label="Accordion 2"
+              title="Does it really read all of my comments?"
+            >
+              Yeah! I think? We don't really know! But if you pretend it does,
+              it's all the same, really!
+            </AccordionItem>
+            <AccordionItem
+              className="text-black"
+              key="3"
+              aria-label="Accordion 3"
+              title="Why does it cost money?"
+            >
+              Because we're greedy pigs. This took us 2 hours to build.
+            </AccordionItem>
+          </Accordion>
+        </div>
 
-        <div className="mx-auto max-w-7xl py-24 sm:px-6 sm:py-32 lg:px-8">
+        <div className="mx-auto max-w-7xl sm:px-6 sm:py-32 lg:px-8">
           <div className="relative isolate overflow-hidden bg-green-900 px-6 pt-16 shadow-2xl sm:rounded-3xl sm:px-16 md:pt-24 lg:flex lg:gap-x-20 lg:px-24 lg:pt-0">
             <div className="mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left">
               <h2
