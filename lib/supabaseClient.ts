@@ -1,4 +1,4 @@
-import { Video } from "@prisma/client";
+import { Video, SubscriptionStatus } from "@prisma/client";
 import {
   PostgrestError,
   PostgrestResponse,
@@ -47,6 +47,7 @@ export async function createUser(
         name,
         email,
         image_url: imageUrl,
+        subscriptionStatus: SubscriptionStatus.NONE,
       })
       .select();
 
@@ -243,6 +244,12 @@ export async function getVideos(authToken: string, channel_id: string) {
   const db = createServerDbClient(authToken);
 
   return await db.from("Video").select().eq(`channel_id`, channel_id);
+}
+
+export async function getVideosByUserId(authToken: string, user_id: string) {
+  const db = createServerDbClient(authToken);
+
+  return await db.from("Video").select().eq(`user_id`, user_id);
 }
 
 export type StoreCommentSummaryParams = {

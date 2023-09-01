@@ -1,4 +1,10 @@
 "use client";
+import { useRouter } from "next/navigation";
+import {
+  getCaptionsOnboarding,
+  getChannelOnboarding,
+  getVideoOnboarding,
+} from "@/lib/api";
 import {
   Modal,
   ModalContent,
@@ -29,8 +35,32 @@ export default function App() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [step, setStep] = useState(1);
   const [value, setValue] = useState(1);
+  const router = useRouter();
 
-  const nextStep = () => {
+  const nextStep = async () => {
+    switch (step) {
+      case 1:
+        {
+          await getChannelOnboarding();
+        }
+        break;
+      case 2:
+        {
+          await getVideoOnboarding();
+        }
+        break;
+      case 3:
+        {
+          await getCaptionsOnboarding();
+        }
+        break;
+      case 4: {
+        router.replace("/dashboard");
+      }
+      default: {
+        throw new Error("This should not happen");
+      }
+    }
     setStep((prevStep) => prevStep + 1);
     setValue((prevValue) => prevValue + 33);
   };
