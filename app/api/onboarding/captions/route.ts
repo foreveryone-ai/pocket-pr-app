@@ -5,7 +5,7 @@ import { getVideosByUserId } from "@/lib/supabaseClient";
 
 export async function GET() {
   const { userId, getToken } = auth();
-  const token = await getToken({ template: "supabase" });
+  let token = await getToken({ template: "supabase" });
 
   if (!token) NextResponse.rewrite("/sign-in");
   if (!userId) NextResponse.rewrite("/sign-in");
@@ -38,7 +38,10 @@ export async function GET() {
       }
       console.log(`getting all captions for ${videoIds.length} videos`);
       for (let vId of videoIds) {
-        await GoogleApi.getCaptions(token as string, vId, userOAuth);
+        // Refresh the token
+        //token = await getToken({ template: "supabase" });
+        //userOAuth = await getOAuthData(userId as string, "oauth_google"); // Refresh the userOAuth
+        await GoogleApi.getCaptions(token as string, vId, userOAuth[0].token);
       }
     }
   } catch (error) {

@@ -38,6 +38,7 @@ export default function App() {
   const router = useRouter();
 
   const nextStep = async () => {
+    console.log(step);
     switch (step) {
       case 1:
         {
@@ -55,10 +56,13 @@ export default function App() {
         }
         break;
       case 4: {
+        console.log("hit case 4");
         router.replace("/dashboard");
+        return;
       }
       default: {
-        throw new Error("This should not happen");
+        console.log("hit default case");
+        router.replace("/dashboard");
       }
     }
     setStep((prevStep) => prevStep + 1);
@@ -133,7 +137,14 @@ export default function App() {
                       Next
                     </Button>
                   ) : (
-                    <Button color="primary" onPress={onClose}>
+                    <Button
+                      color="primary"
+                      onPress={() => {
+                        console.log("finished button..");
+                        onClose();
+                        nextStep();
+                      }}
+                    >
                       Finish
                     </Button>
                   )}
