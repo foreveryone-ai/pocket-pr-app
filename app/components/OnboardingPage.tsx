@@ -1,4 +1,10 @@
 "use client";
+import { useRouter } from "next/navigation";
+import {
+  getCaptionsOnboarding,
+  getChannelOnboarding,
+  getVideoOnboarding,
+} from "@/lib/api";
 import {
   Modal,
   ModalContent,
@@ -29,8 +35,36 @@ export default function App() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [step, setStep] = useState(1);
   const [value, setValue] = useState(1);
+  const router = useRouter();
 
-  const nextStep = () => {
+  const nextStep = async () => {
+    console.log(step);
+    switch (step) {
+      case 1:
+        {
+          await getChannelOnboarding();
+        }
+        break;
+      case 2:
+        {
+          await getVideoOnboarding();
+        }
+        break;
+      case 3:
+        {
+          await getCaptionsOnboarding();
+        }
+        break;
+      case 4: {
+        console.log("hit case 4");
+        router.replace("/dashboard");
+        return;
+      }
+      default: {
+        console.log("hit default case");
+        router.replace("/dashboard");
+      }
+    }
     setStep((prevStep) => prevStep + 1);
     setValue((prevValue) => prevValue + 33);
   };
@@ -103,7 +137,14 @@ export default function App() {
                       Next
                     </Button>
                   ) : (
-                    <Button color="primary" onPress={onClose}>
+                    <Button
+                      color="primary"
+                      onPress={() => {
+                        console.log("finished button..");
+                        onClose();
+                        nextStep();
+                      }}
+                    >
                       Finish
                     </Button>
                   )}
