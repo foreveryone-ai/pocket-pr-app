@@ -73,7 +73,7 @@ export default function () {
 
         {/* ----------------------------NAVBAR CENTER---------------------------- */}
         <Link href="/">
-          <Button className="navbar-center bg-gradient-to-tr from-orange-600 to-yellow-300 text-white shadow-lg">
+          <Button className="navbar-center bg-gradient-to-r from-yellow-300 to-orange-300 text-white shadow-lg">
             <img
               src="/pocket-pr-text.svg"
               alt="panda logo"

@@ -11,6 +11,19 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        playfair: ["Playfair Display", "serif"],
+        inter: ["Inter", "sans-serif"],
+        manrope: ["Manrope", "sans-serif"],
+      },
+      fontWeight: {
+        400: "400",
+        500: "500",
+        600: "600",
+        700: "700",
+        800: "800",
+        900: "900",
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
