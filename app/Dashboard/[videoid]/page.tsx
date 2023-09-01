@@ -5,6 +5,7 @@ import { getCaptionSummary, getVideo } from "@/lib/supabaseClient";
 import { auth } from "@clerk/nextjs";
 import { getOAuthData } from "@/lib/googleApi";
 import VideoCommentsCaptionsButton from "@/app/components/VideoCommentsCaptionsButton";
+import { Button } from "@nextui-org/button";
 
 type VideoCardProps = {
   key: number;
@@ -36,83 +37,95 @@ export default function ChatUI({
           </div>
           <div className="p-4 overflow-y-auto" style={{ maxHeight: "500px" }}>
             <div className="chat chat-start">
-              <div className="chat-bubble">
-                It's over Anakin, <br />I have the high ground.
+              <div className="bg-gray-200 text-black chat-bubble">
+                It's over Anakin, I have the high ground.
               </div>
             </div>
             <div className="chat chat-end">
-              <div className="chat-bubble">You underestimate my power!</div>
+              <div className="text-white chat-bubble">
+                You underestimate my power!
+              </div>
             </div>
             <div className="chat chat-start">
-              <div className="chat-bubble">Don't try it.</div>
-            </div>
-            <div className="chat chat-end">
-              <div className="chat-bubble">I hate you!</div>
-            </div>
-            <div className="chat chat-start">
-              <div className="chat-bubble">
-                You were my brother, Anakin. <br />I loved you.
+              <div className="chat-bubble bg-gray-200 text-black">
+                Don't try it.
               </div>
             </div>
             <div className="chat chat-end">
-              <div className="chat-bubble">I HATE YOU!</div>
+              <div className="text-white chat-bubble">I hate you!</div>
             </div>
             <div className="chat chat-start">
-              <div className="chat-bubble">
+              <div className="chat-bubble bg-gray-200 text-black">
+                You were my brother, Anakin. I loved you.
+              </div>
+            </div>
+            <div className="chat chat-end">
+              <div className="text-white chat-bubble">I HATE YOU!</div>
+            </div>
+            <div className="chat chat-start">
+              <div className="chat-bubble bg-gray-200 text-black">
                 Anakin... Chancellor Palpatine is evil!
               </div>
             </div>
             <div className="chat chat-end">
-              <div className="chat-bubble">
+              <div className="text-white chat-bubble">
                 From my point of view, the Jedi are evil!
               </div>
             </div>
             <div className="chat chat-start">
-              <div className="chat-bubble">Well then you are lost!</div>
+              <div className="chat-bubble bg-gray-200 text-black">
+                Well then you are lost!
+              </div>
             </div>
             <div className="chat chat-end">
-              <div className="chat-bubble">
+              <div className="text-white chat-bubble">
                 The dark side is the only way to save Padmé!
               </div>
             </div>
             <div className="chat chat-start">
-              <div className="chat-bubble">
+              <div className="chat-bubble bg-gray-200 text-black">
                 Anakin, Padmé would never want this for you.
               </div>
             </div>
             <div className="chat chat-end">
-              <div className="chat-bubble">
+              <div className="text-white chat-bubble">
                 You don't know what she wants for me!
               </div>
             </div>
             <div className="chat chat-start">
-              <div className="chat-bubble">
+              <div className="chat-bubble bg-gray-200 text-black">
                 I know you're a good person, Anakin. Don't let Palpatine control
                 you.
               </div>
             </div>
             <div className="chat chat-end">
-              <div className="chat-bubble">
+              <div className="text-white chat-bubble">
                 Palpatine is the only one who understands my power!
               </div>
             </div>
             <div className="chat chat-start">
-              <div className="chat-bubble">
+              <div className="chat-bubble bg-gray-200 text-black">
                 Your power doesn't have to be used for evil.
               </div>
             </div>
             <div className="chat chat-end">
-              <div className="chat-bubble">
+              <div className="ctext-white hat-bubble">
                 It's the Jedi who are evil! They've held me back my entire life!
               </div>
             </div>
           </div>
-          <div className="p-4 border-t border-gray-200">
+          <div className="p-4 border-t border-gray-200 flex">
             <input
               type="text"
               placeholder="Type here"
               className="input w-full"
             />
+            <Button
+              size="lg"
+              className="flex-none rounded-md bg-green-600 ml-2"
+            >
+              Send
+            </Button>
           </div>
         </div>
       </div>
