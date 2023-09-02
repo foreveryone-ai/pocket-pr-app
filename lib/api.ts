@@ -65,3 +65,19 @@ export async function getAllComments(videoid: string) {
     console.error(error);
   }
 }
+
+export async function getOrCreateEmbeddings(videoid: string) {
+  try {
+    const res = await fetch("/api/analysis/embeddings", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ videoid }),
+    });
+    const data = await res.json();
+    return data.message;
+  } catch (error) {
+    console.error(error);
+  }
+}

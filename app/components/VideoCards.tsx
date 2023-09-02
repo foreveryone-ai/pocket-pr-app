@@ -16,7 +16,11 @@ import {
 import { Skeleton } from "@nextui-org/skeleton";
 import { Progress } from "@nextui-org/progress";
 import { Playfair_Display } from "next/font/google";
-import { getOrCreateCaptionSummary, getAllComments } from "@/lib/api";
+import {
+  getOrCreateCaptionSummary,
+  getAllComments,
+  getOrCreateEmbeddings,
+} from "@/lib/api";
 
 const playfairDisplay500 = Playfair_Display({
   weight: ["400"],
@@ -60,6 +64,8 @@ export default function VideoCard({
     const commentsRes = await getAllComments(videoId);
     console.log("commentsRes", commentsRes);
     // create embeddings
+    const embeddingsRes = await getOrCreateEmbeddings(videoId);
+    console.log("embeddingsRes", embeddingsRes);
     // check if all was successfull and decrement the users credits
     setIsLoading(false);
     setShowChat(true);

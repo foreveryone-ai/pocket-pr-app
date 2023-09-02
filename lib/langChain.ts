@@ -29,17 +29,13 @@ import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { Document } from "langchain/document";
 import type { SmallComment } from "./supabaseClient";
 import { SENTIMENT } from "@prisma/client";
-export type EmotionalAnalysisArgs = {
+export type CreateEmbeddingsArgs = {
   video_id: string;
   id: string;
   author_display_name: string;
   author_image_url: string;
   text_display: string;
   like_count: number;
-  comment_summary: {
-    summaryText: string;
-    sentiment: SENTIMENT;
-  };
 };
 
 export class PocketChain {
@@ -200,10 +196,7 @@ export class PocketChain {
     const sentimentRes = await llm.predict(formattedPrompt);
     return sentimentRes;
   }
-  async emotionalAnalysis(
-    comments: EmotionalAnalysisArgs[],
-    embeddingsExist: boolean
-  ) {
+  async createEmbeddings(comments: CreateEmbeddingsArgs[]) {
     let vectorStore;
     console.log("comsums: ", comments);
     const comSum = comments.map((comment) => comment.text_display);
@@ -213,7 +206,6 @@ export class PocketChain {
       author_display_name: obj.author_display_name,
       author_image_url: obj.author_image_url,
       like_count: obj.like_count,
-      sentiment: obj.comment_summary.sentiment as string,
     }));
 
     console.log("comSum length: ", comSum.length);
@@ -242,70 +234,71 @@ export class PocketChain {
 
     const client = createClient(url, supabaseKey);
 
-    // for query only...
-    if (embeddingsExist) {
-      vectorStore = await SupabaseVectorStore.fromExistingIndex(
-        new OpenAIEmbeddings(),
-        {
-          client,
-          tableName: "documents",
-        }
-      );
-    } else {
-      vectorStore = await SupabaseVectorStore.fromDocuments(
-        docs,
-        new OpenAIEmbeddings(),
-        {
-          client,
-          tableName: "documents",
-          queryName: "match_documents",
-        }
-      );
-    }
-
-    //query, k (num of docs to return), {} metadata filter
-    const q1 = await vectorStore.similaritySearch(
-      "Return comments with a strong emotions",
-      3,
-      { video_id: comSumMeta[0].video_id }
+    vectorStore = await SupabaseVectorStore.fromDocuments(
+      docs,
+      new OpenAIEmbeddings(),
+      {
+        client,
+        tableName: "document",
+        queryName: "match_documents",
+      }
     );
-
-    console.log("q1", q1);
-
-    // Initialize the LLM to use to answer the question.
-    const llm = new OpenAI({
-      openAIApiKey: process.env.OPENAI_API_KEY,
-      modelName: "gpt-3.5-turbo",
-      temperature: 0,
-    });
-
-    const template2 =
-      PromptTemplate.fromTemplate(`You are a public relations consultant. First, use the captions to understand the content of the YouTube video. Then, summarize the emotional breakdown of the comments in relation to the video. 
-    captions: {captions}
-    comments: {comments}`);
-
-    console.log("captions type: ", typeof this.captions);
-    console.log("captions: ", this.captions);
-
-    // const caption = JSON.stringify(this.captions);
-    // console.log("stringified: ", caption);
-    // const captionObj = JSON.parse(caption);
-    // console.log("objectified: ", captionObj);
-
-    const formattedTemp = await template2.format({
-      captions: this.captions,
-      comments:
-        q1[0].pageContent + "\n" + q1[1].pageContent + "\n" + q1[2].pageContent,
-    });
-
-    console.log("formattedTemp", formattedTemp);
-
-    const predictionRes = await llm.predict(formattedTemp);
-
-    console.log("predictionRes", predictionRes);
-
-    return predictionRes;
+    return true;
   }
+
+  // for query only...
+  // if (embeddingsExist) {
+  //   vectorStore = await SupabaseVectorStore.fromExistingIndex(
+  //     new OpenAIEmbeddings(),
+  //     {
+  //       client,
+  //       tableName: "documents",
+  //     }
+  //   );
+
+  //query, k (num of docs to return), {} metadata filter
+  // const q1 = await vectorStore.similaritySearch(
+  //   "Return comments with a strong emotions",
+  //   3,
+  //   { video_id: comSumMeta[0].video_id }
+  // );
+
+  // console.log("q1", q1);
+
+  // // Initialize the LLM to use to answer the question.
+  // const llm = new OpenAI({
+  //   openAIApiKey: process.env.OPENAI_API_KEY,
+  //   modelName: "gpt-3.5-turbo",
+  //   temperature: 0,
+  // });
+
+  // const template2 =
+  //   PromptTemplate.fromTemplate(`You are a public relations consultant. First, use the captions to understand the content of the YouTube video. Then, summarize the emotional breakdown of the comments in relation to the video.
+  // captions: {captions}
+  // comments: {comments}`);
+
+  // console.log("captions type: ", typeof this.captions);
+  // console.log("captions: ", this.captions);
+
+  // const caption = JSON.stringify(this.captions);
+  // console.log("stringified: ", caption);
+  // const captionObj = JSON.parse(caption);
+  // console.log("objectified: ", captionObj);
+
+  //   const formattedTemp = await template2.format({
+  //     captions: this.captions,
+  //     comments:
+  //       q1[0].pageContent + "\n" + q1[1].pageContent + "\n" + q1[2].pageContent,
+  //   });
+
+  //   console.log("formattedTemp", formattedTemp);
+
+  //   const predictionRes = await llm.predict(formattedTemp);
+
+  //   console.log("predictionRes", predictionRes);
+
+  //   return predictionRes;
+  // }
   async hasEmbeddings(videoid: string) {
     // verify supabase credentials
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -320,7 +313,7 @@ export class PocketChain {
       new OpenAIEmbeddings(),
       {
         client,
-        tableName: "documents",
+        tableName: "document",
       }
     );
     //query, k (num of docs to return), {} metadata filter
@@ -350,7 +343,7 @@ export class PocketChain {
       new OpenAIEmbeddings(),
       {
         client,
-        tableName: "documents",
+        tableName: "document",
       }
     );
     //query, k (num of docs to return), {} metadata filter
