@@ -16,6 +16,7 @@ import {
 import { Skeleton } from "@nextui-org/skeleton";
 import { Progress } from "@nextui-org/progress";
 import { Playfair_Display } from "next/font/google";
+import { getOrCreateCaptionSummary, getAllComments } from "@/lib/api";
 
 const playfairDisplay500 = Playfair_Display({
   weight: ["400"],
@@ -49,13 +50,19 @@ export default function VideoCard({
     }
   }, [title, imageUrl, videoId]);
 
-  const handleModalClose = () => {
+  const handleModalClose = async () => {
     onOpenChange();
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      setShowChat(true);
-    }, 10000);
+    // get captions summary
+    const summaryRes = await getOrCreateCaptionSummary(videoId);
+    console.log("summaryRes", summaryRes);
+    // get all comments
+    const commentsRes = await getAllComments(videoId);
+    console.log("commentsRes", commentsRes);
+    // create embeddings
+    // check if all was successfull and decrement the users credits
+    setIsLoading(false);
+    setShowChat(true);
   };
 
   const handleChatRedirect = () => {
