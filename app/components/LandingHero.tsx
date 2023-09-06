@@ -18,19 +18,6 @@ import {
 } from "@heroicons/react/20/solid";
 import { Card, CardFooter } from "@nextui-org/card";
 
-const playfairDisplay500 = Playfair_Display({
-  weight: ["400"],
-  subsets: ["latin"],
-});
-const playfairDisplay650 = Playfair_Display({
-  weight: ["600"],
-  subsets: ["latin"],
-});
-const playfairDisplay800 = Playfair_Display({
-  weight: ["900"],
-  subsets: ["latin"],
-});
-
 function classNames(...classes: (string | false | null | undefined)[]): string {
   return classes.filter(Boolean).join(" ");
 }
@@ -104,9 +91,7 @@ export default function Hero() {
           </div>
         </div>
         <div className="justify-end items-center mt-24 md:mt-0 bg-white grid grid-cols-2 gap-1 md:gap-2">
-          <h1
-            className={`text-med sm:text-lg md:text-3xl lg:text-4xl font-bold text-right text-black ${playfairDisplay500.className}`}
-          >
+          <h1 className="text-med sm:text-lg md:text-3xl lg:text-4xl font-bold text-right text-black font-playfair">
             Automated PR for
           </h1>
 
