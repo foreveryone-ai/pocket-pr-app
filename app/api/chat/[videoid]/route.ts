@@ -13,6 +13,7 @@ export async function POST(req: NextRequest, context: Params) {
   const videoid = context.params.videoid;
   const { userId, getToken } = auth();
   const userData = await req.json();
+
   console.log("user data: ", userData);
 
   const token = await getToken({ template: "supabase" });

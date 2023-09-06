@@ -1,137 +1,67 @@
-import AnalysisButton from "@/app/components/AnalysisButton";
-import { redirect } from "next/navigation";
-import Image from "next/image";
-import { getCaptionSummary, getVideo } from "@/lib/supabaseClient";
+import { NextResponse } from "next/server";
+import ChatUI from "@/app/components/ChatUI";
+// import AnalysisButton from "@/app/components/AnalysisButton";
+// import { redirect } from "next/navigation";
+// import Image from "next/image";
+import { getCaptionSummary } from "@/lib/supabaseClient";
 import { auth } from "@clerk/nextjs";
-import { getOAuthData } from "@/lib/googleApi";
-import VideoCommentsCaptionsButton from "@/app/components/VideoCommentsCaptionsButton";
-import { Button } from "@nextui-org/button";
+// import { getOAuthData } from "@/lib/googleApi";
+// import VideoCommentsCaptionsButton from "@/app/components/VideoCommentsCaptionsButton";
 
-type VideoCardProps = {
-  key: number;
-  videoId: string;
-  title: string;
-  imageUrl: string;
-  width: number;
-  height: number;
-};
+// type VideoCardProps = {
+//   key: number;
+//   videoId: string;
+//   title: string;
+//   imageUrl: string;
+//   width: number;
+//   height: number;
+// };
+export default async function ChatPage({
+  params,
+}: {
+  params: { videoid: string };
+}) {
+  const { userId, getToken } = auth();
+  console.log(userId);
+  const token = await getToken({ template: "supabase" });
 
-export default function ChatUI({
-  key,
-  title,
-  imageUrl,
-  videoId,
-}: VideoCardProps) {
+  let captions;
+
+  if (!token) return NextResponse.rewrite("/sign-in");
+  // get captions summary to send to
+  const { data: captionsData, error: captionsError } = await getCaptionSummary(
+    token,
+    params.videoid
+  );
+
+  if (captionsError) {
+    console.error(captionsError);
+    return NextResponse.json({ message: "Error on chat" });
+  }
+  if (captionsData && captionsData.length > 0) {
+    captions = captionsData[0].summaryText;
+  }
+
   const truncateTitle = (title: string, limit: number = 10) => {
     return title.length > limit ? `${title.substring(0, limit)}...` : title;
   };
-  return (
-    <div
-      className="flex items-center justify-center min-h-screen pt-18 bg-green-800"
-      style={{ maxHeight: "calc(100vh - 72px)" }}
-    >
-      <div className="px-4 sm:px-6 lg:px-8 w-full sm:max-w-2xl lg:max-w-3xl mx-auto">
-        <div className="bg-white rounded-lg shadow-lg">
-          <div className="p-4 text-center border-b border-gray-200 text-black font-semibold">
-            New Chat
-          </div>
-          <div className="p-4 overflow-y-auto" style={{ maxHeight: "500px" }}>
-            <div className="chat chat-start">
-              <div className="bg-gray-200 text-black chat-bubble">
-                It's over Anakin, I have the high ground.
-              </div>
-            </div>
-            <div className="chat chat-end">
-              <div className="text-white chat-bubble">
-                You underestimate my power!
-              </div>
-            </div>
-            <div className="chat chat-start">
-              <div className="chat-bubble bg-gray-200 text-black">
-                Don't try it.
-              </div>
-            </div>
-            <div className="chat chat-end">
-              <div className="text-white chat-bubble">I hate you!</div>
-            </div>
-            <div className="chat chat-start">
-              <div className="chat-bubble bg-gray-200 text-black">
-                You were my brother, Anakin. I loved you.
-              </div>
-            </div>
-            <div className="chat chat-end">
-              <div className="text-white chat-bubble">I HATE YOU!</div>
-            </div>
-            <div className="chat chat-start">
-              <div className="chat-bubble bg-gray-200 text-black">
-                Anakin... Chancellor Palpatine is evil!
-              </div>
-            </div>
-            <div className="chat chat-end">
-              <div className="text-white chat-bubble">
-                From my point of view, the Jedi are evil!
-              </div>
-            </div>
-            <div className="chat chat-start">
-              <div className="chat-bubble bg-gray-200 text-black">
-                Well then you are lost!
-              </div>
-            </div>
-            <div className="chat chat-end">
-              <div className="text-white chat-bubble">
-                The dark side is the only way to save Padmé!
-              </div>
-            </div>
-            <div className="chat chat-start">
-              <div className="chat-bubble bg-gray-200 text-black">
-                Anakin, Padmé would never want this for you.
-              </div>
-            </div>
-            <div className="chat chat-end">
-              <div className="text-white chat-bubble">
-                You don't know what she wants for me!
-              </div>
-            </div>
-            <div className="chat chat-start">
-              <div className="chat-bubble bg-gray-200 text-black">
-                I know you're a good person, Anakin. Don't let Palpatine control
-                you.
-              </div>
-            </div>
-            <div className="chat chat-end">
-              <div className="text-white chat-bubble">
-                Palpatine is the only one who understands my power!
-              </div>
-            </div>
-            <div className="chat chat-start">
-              <div className="chat-bubble bg-gray-200 text-black">
-                Your power doesn't have to be used for evil.
-              </div>
-            </div>
-            <div className="chat chat-end">
-              <div className="ctext-white hat-bubble">
-                It's the Jedi who are evil! They've held me back my entire life!
-              </div>
-            </div>
-          </div>
-          <div className="p-4 border-t border-gray-200 flex">
-            <input
-              type="text"
-              placeholder="Type here"
-              className="input w-full"
-            />
-            <Button
-              size="lg"
-              className="flex-none rounded-md bg-green-600 ml-2"
-            >
-              Send
-            </Button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+
+  return <ChatUI videoid={params.videoid} captionsSummary={captions} />;
 }
+
+// export default function ChatPage({
+//   key,
+//   title,
+//   imageUrl,
+//   videoId,
+// }: VideoCardProps) {
+//   const truncateTitle = (title: string, limit: number = 10) => {
+//     return title.length > limit ? `${title.substring(0, limit)}...` : title;
+//   };
+//   return (
+//     <ChatUI />
+//   )
+// }
 
 // export default async function Video({
 //   params,

@@ -1,13 +1,14 @@
 "use client";
+import { Button } from "@nextui-org/button";
 
 import { BaseSyntheticEvent, useState } from "react";
 
 type ChatUIProps = {
   videoid: string;
-  captionSummary: string;
+  captionsSummary: string;
 };
 
-export default function ChatUI({ videoid, captionSummary }: ChatUIProps) {
+export default function ChatUI({ videoid, captionsSummary }: ChatUIProps) {
   const [inputValue, setInputValue] = useState("");
   const [messages, setMessages] = useState<string[]>([]);
 
@@ -15,7 +16,7 @@ export default function ChatUI({ videoid, captionSummary }: ChatUIProps) {
     event.preventDefault();
     const localMessages: string[] = [];
     localMessages.push(inputValue);
-    const response = await getGPTResponse(inputValue, captionSummary);
+    const response = await getGPTResponse(inputValue);
     console.log(response);
     setInputValue("");
     localMessages.push(response);
@@ -28,17 +29,20 @@ export default function ChatUI({ videoid, captionSummary }: ChatUIProps) {
     console.log(inputValue);
   };
 
-  const clearChat = (event: BaseSyntheticEvent) => {
-    console.log("clearing messages");
-    event.preventDefault();
-    setMessages([]);
-  };
+  // const clearChat = (event: BaseSyntheticEvent) => {
+  //   console.log("clearing messages");
+  //   event.preventDefault();
+  //   setMessages([]);
+  // };
 
-  const getGPTResponse = async (userMessage: string, capSum: string) => {
+  const getGPTResponse = async (userMessage: string) => {
     try {
       const res = await fetch(`/api/chat/${videoid}`, {
         method: "POST",
-        body: JSON.stringify({ message: userMessage, captionSummary: capSum }),
+        body: JSON.stringify({
+          message: userMessage,
+          captionSummary: captionsSummary,
+        }),
         headers: {
           "Content-Type": "application/json",
         },
@@ -49,30 +53,55 @@ export default function ChatUI({ videoid, captionSummary }: ChatUIProps) {
       console.error(error);
     }
   };
-
   return (
-    <section>
-      <div>
-        {messages &&
-          messages.map((message, index) => (
-            <p
-              key={index}
-              className={index % 2 === 0 ? `text-white-300` : `text-orange-400`}
+    <div
+      className="flex items-center justify-center min-h-screen pt-18 bg-green-800"
+      style={{ maxHeight: "calc(100vh - 72px)" }}
+    >
+      <div className="px-4 sm:px-6 lg:px-8 w-full sm:max-w-2xl lg:max-w-3xl mx-auto">
+        <div className="bg-white rounded-lg shadow-lg">
+          <div className="p-4 text-center border-b border-gray-200 text-black font-semibold">
+            New Chat
+          </div>
+
+          <div className="p-4 overflow-y-auto" style={{ maxHeight: "500px" }}>
+            {messages &&
+              messages.map((message, index) =>
+                index % 2 === 0 ? (
+                  <div className="chat chat-end" key={index}>
+                    <div className="ctext-white chat-bubble">{message}</div>
+                  </div>
+                ) : (
+                  <div className="chat chat-start" key={index}>
+                    <div className="chat-bubble bg-gray-200 text-black">
+                      {message}
+                    </div>
+                  </div>
+                )
+              )}
+          </div>
+          {/* <div className="p-4 border-t border-gray-200 flex"> */}
+          <form
+            className="p-4 border-t border-gray-200 flex"
+            onSubmit={handleSubmit}
+          >
+            <input
+              type="text"
+              onChange={handleInput}
+              value={inputValue}
+              placeholder="Type here"
+              className="input w-full"
+            />
+            <Button
+              size="lg"
+              className="flex-none rounded-md bg-green-600 ml-2"
             >
-              {message}
-            </p>
-          ))}
+              Send
+            </Button>
+          </form>
+          {/* </div> */}
+        </div>
       </div>
-      <form onSubmit={handleSubmit}>
-        <input
-          className="text-black"
-          onChange={handleInput}
-          type="text"
-          value={inputValue}
-        />
-        <button>send</button>
-        <button onClick={clearChat}>clear</button>
-      </form>
-    </section>
+    </div>
   );
 }
