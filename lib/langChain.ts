@@ -1,3 +1,5 @@
+import { PrismaVectorStore } from "langchain/vectorstores/prisma";
+import { db } from "./prismaClient";
 import path from "path";
 import * as fs from "fs";
 import { z } from "zod";
@@ -239,7 +241,7 @@ export class PocketChain {
       new OpenAIEmbeddings(),
       {
         client,
-        tableName: "document",
+        tableName: "documents",
         queryName: "match_documents",
       }
     );
@@ -308,12 +310,12 @@ export class PocketChain {
     if (!url) throw new Error(`Expected env var SUPABASE_URL`);
 
     const client = createClient(url, supabaseKey);
-    // for query only...
+    //for query only...
     const vectorStore = await SupabaseVectorStore.fromExistingIndex(
       new OpenAIEmbeddings(),
       {
         client,
-        tableName: "document",
+        tableName: "documents",
       }
     );
     //query, k (num of docs to return), {} metadata filter
@@ -343,7 +345,7 @@ export class PocketChain {
       new OpenAIEmbeddings(),
       {
         client,
-        tableName: "document",
+        tableName: "documents",
       }
     );
     //query, k (num of docs to return), {} metadata filter
