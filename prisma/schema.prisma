@@ -1,10 +1,10 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 datasource db {
-  provider          = "postgresql"
-  url               = env("DATABASE_URL")
-  directUrl         = env("DIRECT_URL")
-  relationMode      = "foreignKeys"
+    provider     = "postgresql"
+    url          = env("DATABASE_URL")
+    directUrl    = env("DIRECT_URL")
+    relationMode = "foreignKeys"
 }
 
 generator client {
@@ -18,89 +18,88 @@ enum SubscriptionStatus {
     INFLUENCER
 }
 
-
 model User {
-    id                  String   @id @default(cuid())
-    createdAt           DateTime @default(now())
-    updatedAt           DateTime @updatedAt
-    google_id           String?  @unique
-    twitter_id          String?  @unique
-    instagram_id        String?  @unique
-    linkedin_id         String?  @unique
-    twitch_id           String?  @unique
-    discord_id          String?  @unique
-    facebook_id         String?  @unique
-    name                String?
-    email               String   @unique
-    image_url           String?
-    youtube_channel_id  String?
-    subscriptionStatus  SubscriptionStatus
-    credits             Int      @default(0)
-    sender              Messages[]
-    videos              Video[]
-    prompts             Prompts[]
-    orders              Orders[]
+    id                 String             @id @default(cuid())
+    createdAt          DateTime           @default(now())
+    updatedAt          DateTime           @updatedAt
+    google_id          String?            @unique
+    twitter_id         String?            @unique
+    instagram_id       String?            @unique
+    linkedin_id        String?            @unique
+    twitch_id          String?            @unique
+    discord_id         String?            @unique
+    facebook_id        String?            @unique
+    name               String?
+    email              String             @unique
+    image_url          String?
+    youtube_channel_id String?
+    subscriptionStatus SubscriptionStatus
+    credits            Int                @default(0)
+    sender             Messages[]
+    videos             Video[]
+    prompts            Prompts[]
+    orders             Orders[]
 }
 
 model Video {
-    id                  String   @id @default(cuid())
-    createdAt           DateTime @default(now())
-    updatedAt           DateTime @updatedAt
-    video_id            String   @unique
-    title               String
-    description         String
-    published_at        DateTime
-    thumbnail_url       String
-    channel_id          String
-    channel_title       String
-    user_id             String
-    hasEmbeddings       Boolean @default(false)
-    user                User    @relation(fields: [user_id], references: [id], onDelete: Cascade) 
-    comments            Comments[]
-    conversation        Conversation?
-    captions            Captions[]
-    caption_summary     CaptionSummary[]
+    id              String           @id @default(cuid())
+    createdAt       DateTime         @default(now())
+    updatedAt       DateTime         @updatedAt
+    video_id        String           @unique
+    title           String
+    description     String
+    published_at    DateTime
+    thumbnail_url   String
+    channel_id      String
+    channel_title   String
+    user_id         String
+    hasEmbeddings   Boolean          @default(false)
+    user            User             @relation(fields: [user_id], references: [id], onDelete: Cascade)
+    comments        Comments[]
+    conversation    Conversation?
+    captions        Captions[]
+    caption_summary CaptionSummary[]
 
     @@index([user_id])
 }
 
 model Conversation {
-    id                  String   @id @default(cuid())
-    createdAt           DateTime @default(now())
-    updatedAt           DateTime @updatedAt
-    video_id            String   @unique 
-    video               Video   @relation(fields: [video_id], references: [id], onDelete: Cascade)
-    messages            Messages[]
+    id        String     @id @default(cuid())
+    createdAt DateTime   @default(now())
+    updatedAt DateTime   @updatedAt
+    video_id  String     @unique
+    video     Video      @relation(fields: [video_id], references: [id], onDelete: Cascade)
+    messages  Messages[]
 
     @@index([video_id])
 }
 
 model Messages {
-    id                  String   @id @default(cuid())
-    createdAt           DateTime @default(now())
-    updatedAt           DateTime @updatedAt
-    content             String
-    sender_id           String   @unique 
-    sender              User    @relation(fields: [sender_id], references: [id], onDelete: Cascade) 
-    conversation_id     String
-    conversation        Conversation @relation(fields: [conversation_id], references: [id], onDelete: Cascade) 
+    id              String       @id @default(cuid())
+    createdAt       DateTime     @default(now())
+    updatedAt       DateTime     @updatedAt
+    content         String
+    sender_id       String       @unique
+    sender          User         @relation(fields: [sender_id], references: [id], onDelete: Cascade)
+    conversation_id String
+    conversation    Conversation @relation(fields: [conversation_id], references: [id], onDelete: Cascade)
 
     @@index([sender_id])
     @@index([conversation_id])
 }
 
 model Comments {
-    id                  String   @id @default(cuid())
-    createdAt           DateTime @default(now())        
-    updatedAt           DateTime @updatedAt
-    comment_id          String   @unique
+    id                  String    @id @default(cuid())
+    createdAt           DateTime  @default(now())
+    updatedAt           DateTime  @updatedAt
+    comment_id          String    @unique
     text_display        String
     like_count          Int
     published_at        DateTime
     video_id            String
     author_display_name String
     author_image_url    String
-    video               Video   @relation(fields: [video_id], references: [id], onDelete: Cascade) 
+    video               Video     @relation(fields: [video_id], references: [id], onDelete: Cascade)
     replies             Replies[]
 
     @@index([video_id])
@@ -118,56 +117,51 @@ model Replies {
     published_at        DateTime
     comment_id          String
     summary             String?
-    comment             Comments @relation(fields: [comment_id], references: [id], onDelete: Cascade) 
+    comment             Comments @relation(fields: [comment_id], references: [id], onDelete: Cascade)
 
     @@index([comment_id])
 }
 
 model Prompts {
-    id                  String   @id @default(cuid())
-    createdAt           DateTime @default(now())
-    updatedAt           DateTime @updatedAt
-    prompt_text         String
-    user_id             String
-    user                User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+    id          String   @id @default(cuid())
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    prompt_text String
+    user_id     String
+    user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
     @@index([user_id])
 }
 
 model Captions {
-    id                  String  @id @default(cuid()) 
-    captions            String
-    language            String
-    updatedAt           DateTime @updatedAt
-    video_id            String 
-    video               Video      @relation(fields: [video_id], references: [id], onDelete: Cascade)
-    captionsSummary     CaptionSummary[]
+    id              String           @id @default(cuid())
+    captions        String
+    language        String
+    updatedAt       DateTime         @updatedAt
+    video_id        String
+    video           Video            @relation(fields: [video_id], references: [id], onDelete: Cascade)
+    captionsSummary CaptionSummary[]
 
     @@index([video_id])
 }
+
 model CaptionSummary {
-    id                  String  @id @default(cuid()) 
-    createdAt           DateTime @default(now())
-    updatedAt           DateTime @updatedAt
-    summaryText         String
-    caption_id          String 
-    caption             Captions @relation(fields: [caption_id], references: [id], onDelete: Cascade)
-    video_id                 String 
-    video                    Video      @relation(fields: [video_id], references: [id], onDelete: Cascade)
+    id          String   @id @default(cuid())
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    summaryText String
+    caption_id  String
+    caption     Captions @relation(fields: [caption_id], references: [id], onDelete: Cascade)
+    video_id    String
+    video       Video    @relation(fields: [video_id], references: [id], onDelete: Cascade)
 
     @@index([caption_id])
     @@index([video_id])
 }
 
 model Orders {
-    id String @id @default(cuid())
+    id      String @id @default(cuid())
     user_id String
-    user    User @relation(fields: [user_id], references: [id], onDelete: Cascade)
-} 
-
-model Document {
-  id      String                 @id @default(cuid())
-  content String
-  metadata Json?
-  vector  Unsupported("vector")?
+    user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
+
