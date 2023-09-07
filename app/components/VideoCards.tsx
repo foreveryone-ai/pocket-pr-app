@@ -55,18 +55,32 @@ export default function VideoCard({
   const handleModalClose = async () => {
     onOpenChange();
     setIsLoading(true);
-    // get captions summary
-    const summaryRes = await getOrCreateCaptionSummary(videoId);
-    console.log("summaryRes", summaryRes);
-    // get all comments
-    const commentsRes = await getAllComments(videoId);
-    console.log("commentsRes", commentsRes);
-    // create embeddings
-    const embeddingsRes = await getOrCreateEmbeddings(videoId);
-    console.log("embeddingsRes", embeddingsRes);
-    // check if all was successfull and decrement the users credits
-    setIsLoading(false);
-    setShowChat(true);
+
+    try {
+      // get captions summary
+      const summaryPromise = getOrCreateCaptionSummary(videoId);
+      // get all comments
+      const commentsPromise = getAllComments(videoId);
+      // create embeddings
+      const embeddingsPromise = getOrCreateEmbeddings(videoId);
+
+      const [summaryRes, commentsRes, embeddingsRes] = await Promise.all([
+        summaryPromise,
+        commentsPromise,
+        embeddingsPromise,
+      ]);
+
+      console.log("summaryRes", summaryRes);
+      console.log("commentsRes", commentsRes);
+      console.log("embeddingsRes", embeddingsRes);
+
+      // check if all was successful and decrement the users credits
+      setShowChat(true);
+    } catch (error) {
+      console.error("Error during API calls", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleChatRedirect = () => {
