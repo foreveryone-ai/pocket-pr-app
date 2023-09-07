@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@nextui-org/button";
-
+import { Spinner } from "@nextui-org/spinner";
 import { BaseSyntheticEvent, useState } from "react";
 
 type ChatUIProps = {
@@ -11,16 +11,24 @@ type ChatUIProps = {
 export default function ChatUI({ videoid, captionsSummary }: ChatUIProps) {
   const [inputValue, setInputValue] = useState("");
   const [messages, setMessages] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (event: BaseSyntheticEvent) => {
+  const handleSubmit = (event: BaseSyntheticEvent) => {
     event.preventDefault();
-    const localMessages: string[] = [];
-    localMessages.push(inputValue);
-    const response = await getGPTResponse(inputValue);
+    setMessages([...messages, inputValue, "loading"]); // Add a temporary message with "loading"
+    setInputValue(""); // Clear the text input immediately
+    handleResponse(inputValue);
+  };
+
+  const handleResponse = async (userMessage: string) => {
+    const response = await getGPTResponse(userMessage);
     console.log(response);
-    setInputValue("");
-    localMessages.push(response);
-    setMessages([...messages, localMessages[0], localMessages[1]]);
+    setMessages((prevMessages) => {
+      // Replace the temporary message with the actual response
+      const newMessages = [...prevMessages];
+      newMessages[newMessages.length - 1] = response;
+      return newMessages;
+    });
   };
 
   const handleInput = (event: BaseSyntheticEvent) => {
@@ -64,7 +72,10 @@ export default function ChatUI({ videoid, captionsSummary }: ChatUIProps) {
             New Chat
           </div>
 
-          <div className="p-4 overflow-y-auto" style={{ maxHeight: "500px" }}>
+          <div
+            className="p-4 overflow-y-auto"
+            style={{ maxHeight: "500px", minHeight: "500px" }}
+          >
             {messages &&
               messages.map((message, index) =>
                 index % 2 === 0 ? (
@@ -74,7 +85,7 @@ export default function ChatUI({ videoid, captionsSummary }: ChatUIProps) {
                 ) : (
                   <div className="chat chat-start" key={index}>
                     <div className="chat-bubble bg-gray-200 text-black">
-                      {message}
+                      {message === "loading" ? <Spinner /> : message}
                     </div>
                   </div>
                 )

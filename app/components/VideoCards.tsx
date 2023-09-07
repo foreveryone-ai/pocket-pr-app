@@ -43,6 +43,7 @@ export default function VideoCard({
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const router = useRouter();
 
@@ -83,8 +84,10 @@ export default function VideoCard({
     }
   };
 
-  const handleChatRedirect = () => {
-    router.push(`/dashboard/${videoId}`);
+  const handleChatRedirect = async () => {
+    setIsRedirecting(true);
+    await router.push(`/dashboard/${videoId}`);
+    setIsRedirecting(false);
   };
 
   const truncateTitle = (title: string, limit: number = 10) => {
@@ -116,6 +119,7 @@ export default function VideoCard({
               variant="ghost"
               className="text-white"
               onPress={handleChatRedirect}
+              isLoading={isRedirecting}
             >
               Chat
             </Button>

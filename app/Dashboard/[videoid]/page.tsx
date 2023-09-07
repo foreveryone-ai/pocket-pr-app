@@ -5,6 +5,7 @@ import ChatUI from "@/app/components/ChatUI";
 // import Image from "next/image";
 import { getCaptionSummary } from "@/lib/supabaseClient";
 import { auth } from "@clerk/nextjs";
+import { useState } from "react";
 // import { getOAuthData } from "@/lib/googleApi";
 // import VideoCommentsCaptionsButton from "@/app/components/VideoCommentsCaptionsButton";
 
