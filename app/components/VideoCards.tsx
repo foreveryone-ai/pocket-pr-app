@@ -32,8 +32,6 @@ type VideoCardProps = {
   videoId: string;
   title: string;
   imageUrl: string;
-  width: number;
-  height: number;
 };
 
 export default function VideoCard({
@@ -45,6 +43,7 @@ export default function VideoCard({
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const router = useRouter();
 
@@ -57,22 +56,38 @@ export default function VideoCard({
   const handleModalClose = async () => {
     onOpenChange();
     setIsLoading(true);
-    // get captions summary
-    const summaryRes = await getOrCreateCaptionSummary(videoId);
-    console.log("summaryRes", summaryRes);
-    // get all comments
-    const commentsRes = await getAllComments(videoId);
-    console.log("commentsRes", commentsRes);
-    // create embeddings
-    const embeddingsRes = await getOrCreateEmbeddings(videoId);
-    console.log("embeddingsRes", embeddingsRes);
-    // check if all was successfull and decrement the users credits
-    setIsLoading(false);
-    setShowChat(true);
+
+    try {
+      // get captions summary
+      const summaryPromise = getOrCreateCaptionSummary(videoId);
+      // get all comments
+      const commentsPromise = getAllComments(videoId);
+      // create embeddings
+      const embeddingsPromise = getOrCreateEmbeddings(videoId);
+
+      const [summaryRes, commentsRes, embeddingsRes] = await Promise.all([
+        summaryPromise,
+        commentsPromise,
+        embeddingsPromise,
+      ]);
+
+      console.log("summaryRes", summaryRes);
+      console.log("commentsRes", commentsRes);
+      console.log("embeddingsRes", embeddingsRes);
+
+      // check if all was successful and decrement the users credits
+      setShowChat(true);
+    } catch (error) {
+      console.error("Error during API calls", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleChatRedirect = () => {
-    router.push(`/dashboard/${videoId}`);
+  const handleChatRedirect = async () => {
+    setIsRedirecting(true);
+    await router.push(`/dashboard/${videoId}`);
+    setIsRedirecting(false);
   };
 
   const truncateTitle = (title: string, limit: number = 10) => {
@@ -104,6 +119,7 @@ export default function VideoCard({
               variant="ghost"
               className="text-white"
               onPress={handleChatRedirect}
+              isLoading={isRedirecting}
             >
               Chat
             </Button>
@@ -111,15 +127,17 @@ export default function VideoCard({
         </CardHeader>
 
         <CardBody className="overflow-visible py-2 max-h-480">
-          <Skeleton isLoaded={isLoaded} className="rounded-large">
-            <Image
-              alt={title}
-              className="object-cover rounded-xl"
-              src={imageUrl}
-              width={270}
-              height={480}
-            />
-          </Skeleton>
+          <div className="h-56 w-full flex items-center justify-center">
+            <Skeleton isLoaded={isLoaded} className="rounded-large h-56 w-full">
+              <Image
+                alt={title}
+                className="object-cover pt-2 rounded-xl"
+                src={imageUrl}
+                width={270}
+                height={480}
+              />
+            </Skeleton>
+          </div>
         </CardBody>
       </Card>
 
