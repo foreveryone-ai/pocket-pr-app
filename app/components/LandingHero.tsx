@@ -101,16 +101,14 @@ export default function Hero() {
           </div>
         </div>
         <div className="justify-end items-center mt-24 md:mt-0 bg-white grid grid-cols-2 gap-1 md:gap-2">
-          <h1
-            className={`text-med sm:text-lg md:text-3xl lg:text-4xl font-bold text-right text-black ${playfairDisplay500.className}`}
-          >
+          <h1 className="font-playfair text-med sm:text-lg md:text-3xl lg:text-4xl text-right text-black">
             Automated PR for
           </h1>
 
           <h1
             ref={textRef}
             key={Roles[currentIndex]}
-            className={`text-med sm:text-lg md:text-3xl lg:text-4xl font-black text-left text-black animate__animated ${animationClass} ${playfairDisplay800.className}`}
+            className={`text-med sm:text-lg md:text-3xl lg:text-4xl font-black text-left font-playfair text-black animate__animated ${animationClass}`}
           >
             <b>{Roles[currentIndex]}</b>
           </h1>
@@ -154,9 +152,7 @@ export default function Hero() {
         <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
           <div className="lg:pr-8 lg:pt-4">
             <div className="lg:max-w-lg">
-              <p
-                className={`${playfairDisplay650.className} mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl`}
-              >
+              <p className="font-playfair mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
                 Silence the noise.
               </p>
               <p className="mt-6 text-lg leading-8 text-gray-600">

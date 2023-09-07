@@ -16,21 +16,8 @@ import {
   CheckIcon,
 } from "@heroicons/react/20/solid";
 import { Playfair_Display } from "next/font/google";
-import DashboardHero from "./components/DashboardHero";
+import LandingHero from "./components/LandingHero";
 import { Accordion, AccordionItem } from "@nextui-org/accordion";
-
-const playfairDisplay500 = Playfair_Display({
-  weight: ["400"],
-  subsets: ["latin"],
-});
-const playFairDisplay650 = Playfair_Display({
-  weight: ["600"],
-  subsets: ["latin"],
-});
-const playfairDisplay800 = Playfair_Display({
-  weight: ["900"],
-  subsets: ["latin"],
-});
 
 function classNames(...classes: (string | false | null | undefined)[]): string {
   return classes.filter(Boolean).join(" ");
@@ -116,15 +103,13 @@ export default function Home() {
     <>
       <div className="bg-white min-h-screen">
         {/* --------------------------------------HERO-------------------------------------- */}
-        <DashboardHero />
+        <LandingHero />
         {/* --------------------------------------TAG-------------------------------------- */}
 
         <div className="mx-auto max-w-xl py-24 px-6 md:py-32 lg:px-8">
           <div className="relative isolate flex justify-center align-center overflow-hidden bg-green-900 shadow-2xl rounded-3xl pt-10 pb-10 lg:flex lg:gap-x-10 lg:px-10">
             <div className="mx-12 max-w-md text-center  lg:py-32 lg:text-center">
-              <h2
-                className={`${playFairDisplay650.className} text-3xl font-bold tracking-tight text-white sm:text-4xl`}
-              >
+              <h2 className="font-playfair text-3xl font-bold tracking-tight text-white sm:text-4xl">
                 Focus.
               </h2>
               <p className="mt-4 text-lg text-white">(take the high road)</p>
@@ -147,9 +132,7 @@ export default function Home() {
 
               <div className="lg:ml-auto lg:pl-4 lg:pt-4">
                 <div className="lg:max-w-lg">
-                  <p
-                    className={`${playFairDisplay650.className} mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl`}
-                  >
+                  <p className="font-playfair mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
                     Turn feedback into fame.
                   </p>
                   <p className="mt-6 text-lg leading-8 text-gray-600">
@@ -182,9 +165,7 @@ export default function Home() {
         <div className="bg-green-900 min-h-screen">
           <div className="px-6 pt-12 lg:px-8 lg:pt-20">
             <div className="text-center">
-              <p
-                className={`${playFairDisplay650.className} mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl`}
-              >
+              <p className="font-playfair mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
                 The right price for you, whoever you are
               </p>
               <p className="mx-auto mt-3 max-w-4xl text-xl text-gray-300 sm:mt-5 sm:text-2xl">
@@ -378,9 +359,9 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="mx-auto mt-10 sm:px-6 sm:py-32 md:py-12 lg:px-8">
+        {/* <div className="mx-auto mt-10 sm:px-6 sm:py-32 md:py-12 lg:px-8">
           <div
-            className={`${playFairDisplay650.className} pb-12 hidden md:block text-center font-black text-black`}
+            className="font-playfair pb-12 hidden md:block text-center font-black text-black"
           >
             Frequently Asked Questions
           </div>
@@ -417,14 +398,12 @@ export default function Home() {
               Because we're greedy pigs. This took us 2 hours to build.
             </AccordionItem>
           </Accordion>
-        </div>
+        </div> */}
 
         <div className="mx-auto max-w-7xl sm:px-6 sm:py-32 lg:px-8">
           <div className="relative isolate overflow-hidden bg-green-900 px-6 pt-16 shadow-2xl sm:rounded-3xl sm:px-16 md:pt-24 lg:flex lg:gap-x-20 lg:px-24 lg:pt-0">
             <div className="mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left">
-              <h2
-                className={`${playFairDisplay650.className} text-2xl font-bold tracking-tight text-white sm:text-3xl`}
-              >
+              <h2 className="font-playfair text-2xl font-bold tracking-tight text-white sm:text-3xl">
                 Leave the noise 4 GPT.
                 <br />
                 <Spacer y={2} />
