@@ -26,7 +26,12 @@ module.exports = {
     },
   },
   darkMode: "class",
-  plugins: [nextui(), require("daisyui"), require("@tailwindcss/forms")],
+  plugins: [
+    nextui(),
+    require("daisyui"),
+    require("@tailwindcss/forms"),
+    require("@tailwindcss/aspect-ratio"),
+  ],
   daisyui: {
     themes: ["coffee"],
   },

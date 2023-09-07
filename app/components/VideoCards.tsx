@@ -32,8 +32,6 @@ type VideoCardProps = {
   videoId: string;
   title: string;
   imageUrl: string;
-  width: number;
-  height: number;
 };
 
 export default function VideoCard({
@@ -111,15 +109,17 @@ export default function VideoCard({
         </CardHeader>
 
         <CardBody className="overflow-visible py-2 max-h-480">
-          <Skeleton isLoaded={isLoaded} className="rounded-large">
-            <Image
-              alt={title}
-              className="object-cover rounded-xl"
-              src={imageUrl}
-              width={270}
-              height={480}
-            />
-          </Skeleton>
+          <div className="h-56 w-full flex items-center justify-center">
+            <Skeleton isLoaded={isLoaded} className="rounded-large h-56 w-full">
+              <Image
+                alt={title}
+                className="object-cover pt-2 rounded-xl"
+                src={imageUrl}
+                width={270}
+                height={480}
+              />
+            </Skeleton>
+          </div>
         </CardBody>
       </Card>
 
