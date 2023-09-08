@@ -76,7 +76,11 @@ export default function VideoCard({
       console.log("embeddingsRes", embeddingsRes);
 
       // check if all was successful and decrement the users credits
-      setShowChat(true);
+      if (summaryRes && summaryRes && embeddingsRes) {
+        setShowChat(true);
+      }
+      //TODO: show modal saying no chat available because
+      //TODO: the video has not captions and/or comments
     } catch (error) {
       console.error("Error during API calls", error);
     } finally {
