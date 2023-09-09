@@ -45,11 +45,13 @@ export default function ChatUI({ videoid, captionsSummary }: ChatUIProps) {
 
   const getGPTResponse = async (userMessage: string) => {
     try {
+      console.log(captionsSummary);
       const res = await fetch(`/api/chat/${videoid}`, {
         method: "POST",
         body: JSON.stringify({
           message: userMessage,
-          captionSummary: captionsSummary,
+          messageHistory: messages,
+          captionsSummary: captionsSummary,
         }),
         headers: {
           "Content-Type": "application/json",

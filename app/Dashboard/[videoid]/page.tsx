@@ -32,14 +32,18 @@ export default async function ChatPage({
   // get captions summary to send to
   const { data: captionsData, error: captionsError } = await getCaptionSummary(
     token,
+    "",
     params.videoid
   );
+
+  console.log("captionsSummary Data: ", captionsData);
 
   if (captionsError) {
     console.error(captionsError);
     return NextResponse.json({ message: "Error on chat" });
   }
   if (captionsData && captionsData.length > 0) {
+    console.log("get captions summary on video id page!");
     captions = captionsData[0].summaryText;
   }
 

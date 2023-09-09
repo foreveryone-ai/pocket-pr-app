@@ -59,17 +59,11 @@ export default function VideoCard({
 
     try {
       // get captions summary
-      const summaryPromise = getOrCreateCaptionSummary(videoId);
+      const summaryRes = await getOrCreateCaptionSummary(videoId);
       // get all comments
-      const commentsPromise = getAllComments(videoId);
+      const commentsRes = await getAllComments(videoId);
       // create embeddings
-      const embeddingsPromise = getOrCreateEmbeddings(videoId);
-
-      const [summaryRes, commentsRes, embeddingsRes] = await Promise.all([
-        summaryPromise,
-        commentsPromise,
-        embeddingsPromise,
-      ]);
+      const embeddingsRes = await getOrCreateEmbeddings(videoId);
 
       console.log("summaryRes", summaryRes);
       console.log("commentsRes", commentsRes);
@@ -90,7 +84,7 @@ export default function VideoCard({
 
   const handleChatRedirect = async () => {
     setIsRedirecting(true);
-    await router.push(`/dashboard/${videoId}`);
+    router.replace(`/dashboard/${videoId}`);
     setIsRedirecting(false);
   };
 

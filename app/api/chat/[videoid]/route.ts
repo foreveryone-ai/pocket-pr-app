@@ -25,10 +25,15 @@ export async function POST(req: NextRequest, context: Params) {
   const user = await clerkClient.users.getUser(userId);
   if (user.privateMetadata.hasEmbeddings) {
     // if they exist we can call the chat method here and return the result
-    const pocketChat = new PocketChain(userData.captionSummary);
+    const pocketChat = new PocketChain(userData.captionsSummary);
     console.log("calling chat after confirming embeddings on line 28");
+    console.log("captions passed to api: ", userData.captions);
     try {
-      const chatResponse = await pocketChat.chat(videoid, userData.message);
+      const chatResponse = await pocketChat.chat(
+        videoid,
+        userData.message,
+        userData.messageHistory
+      );
       return NextResponse.json({ message: chatResponse });
     } catch (error) {
       return NextResponse.json({ message: "error on chat response" });
@@ -36,21 +41,21 @@ export async function POST(req: NextRequest, context: Params) {
   }
 
   // check if video summary is in db
-  const { data: summaryData, error: summaryError } = await getCaptionSummary(
-    token,
-    "",
-    videoid
-  );
+  // const { data: summaryData, error: summaryError } = await getCaptionSummary(
+  //   token,
+  //   "",
+  //   videoid
+  // );
 
-  if (!summaryData || summaryData.length === 0 || summaryError) {
-    return NextResponse.json({
-      message:
-        "No summary, try hitting the update button to make sure we have your video summary",
-    });
-  }
+  // if (!summaryData || summaryData.length === 0 || summaryError) {
+  //   return NextResponse.json({
+  //     message:
+  //       "No summary, try hitting the update button to make sure we have your video summary",
+  //   });
+  // }
 
   // check if embeddings exist
-  const pocketChain = new PocketChain(summaryData[0].summaryText);
+  const pocketChain = new PocketChain(userData.captionsSummary);
   const hasEmbeddings = await pocketChain.hasEmbeddings(videoid);
   console.log(hasEmbeddings);
 
@@ -63,7 +68,7 @@ export async function POST(req: NextRequest, context: Params) {
     });
 
     console.log("sending to pocketChain chat()...");
-    await pocketChain.chat(videoid, userData.captionSummary);
+    await pocketChain.chat(videoid, userData.message, userData.chatHistory);
   }
   // if embeddings, start chat
 
