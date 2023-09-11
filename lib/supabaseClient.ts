@@ -1,10 +1,5 @@
-import { Video, SubscriptionStatus } from "@prisma/client";
-import {
-  PostgrestError,
-  PostgrestResponse,
-  SupabaseClient,
-  createClient,
-} from "@supabase/supabase-js";
+import { SubscriptionStatus } from "@prisma/client";
+import { createClient } from "@supabase/supabase-js";
 import { v4 as uuidv4 } from "uuid";
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;

@@ -144,12 +144,12 @@ export default function VideoCard({
           {() => (
             <>
               <ModalHeader className="flex flex-col gap-1 text-black font-black">
-                Confirm Analysis of "{title}"
+                Confirm Analysis of &quot;{title}&quot;
               </ModalHeader>
               <ModalBody className="">
                 <p className="text-black ">
-                  If you'd like to analyze this video, click on "Get Started"
-                  below.
+                  If you&apos;d like to analyze this video, click on &quot;Get
+                  Started&quot; below.
                 </p>
                 <p className="text-black ">
                   Once you do, the analysis process will begin. This typically

@@ -83,6 +83,7 @@ export default function Hero() {
 
     // Cleanup interval on component unmount
     return () => clearInterval(interval);
+    // eslint-disable-next-line
   }, []);
 
   const Roles = ["Creators.", "Businesses.", "Influencers.", "Everyone.AI"];

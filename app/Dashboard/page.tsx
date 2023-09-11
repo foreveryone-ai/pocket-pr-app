@@ -43,8 +43,6 @@ export default async function Home() {
                 title={video.title as string}
                 imageUrl={video.thumbnail_url as string}
                 //TODO: store this in database
-                width={270}
-                height={480}
               />
             ))
           : "no videos found"}

@@ -1,23 +1,15 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import Link from "next/link";
 import { Image } from "@nextui-org/image";
-import { SignedIn, SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
-import { Button } from "@nextui-org/button";
-import { Divider } from "@nextui-org/divider";
 import { Spacer } from "@nextui-org/spacer";
 import "animate.css/animate.min.css";
-import { BsFillArrowDownCircleFill } from "react-icons/bs";
-import { BsFillArrowRightCircleFill } from "react-icons/bs";
 import {
   CloudArrowUpIcon,
   LockClosedIcon,
   ServerIcon,
   CheckIcon,
 } from "@heroicons/react/20/solid";
-import { Playfair_Display } from "next/font/google";
 import LandingHero from "./components/LandingHero";
-import { Accordion, AccordionItem } from "@nextui-org/accordion";
 
 function classNames(...classes: (string | false | null | undefined)[]): string {
   return classes.filter(Boolean).join(" ");

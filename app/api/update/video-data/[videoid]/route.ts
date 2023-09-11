@@ -66,7 +66,7 @@ export async function GET(request: Request, context: Params) {
   );
   if (commentsData && commentsData.length === 0) {
     // this method is misslabled, it should be getCommentsAndReplies
-    GoogleApi.getCommentsAndCaptions(token as string, params.videoid as string);
+    GoogleApi.getCommentsAndReplies(token as string, params.videoid as string);
   }
 
   const { data: summaryData, error: summaryError } = await getCaptionSummary(

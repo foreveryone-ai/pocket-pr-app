@@ -37,12 +37,6 @@ export default function ChatUI({ videoid, captionsSummary }: ChatUIProps) {
     console.log(inputValue);
   };
 
-  // const clearChat = (event: BaseSyntheticEvent) => {
-  //   console.log("clearing messages");
-  //   event.preventDefault();
-  //   setMessages([]);
-  // };
-
   const getGPTResponse = async (userMessage: string) => {
     try {
       console.log(captionsSummary);
