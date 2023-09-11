@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import Link from "next/link";
 import { SignedIn, SignedOut, UserButton, SignInButton } from "@clerk/nextjs";
 import { Button } from "@nextui-org/button";
@@ -12,7 +13,7 @@ import {
 } from "@nextui-org/dropdown";
 import { useRouter } from "next/navigation";
 
-export default function () {
+export default function NavBar() {
   const router = useRouter();
 
   const toDashboard = () => {
@@ -74,7 +75,7 @@ export default function () {
         {/* ----------------------------NAVBAR CENTER---------------------------- */}
         <Link href="/">
           <Button className="navbar-center bg-gradient-to-tr from-orange-600 to-yellow-300 text-white shadow-lg">
-            <img
+            <Image
               src="/pocket-pr-text.svg"
               alt="panda logo"
               width={75}
