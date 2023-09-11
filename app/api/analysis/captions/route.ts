@@ -16,15 +16,14 @@ export async function POST(req: Request) {
 
   if (!token) NextResponse.rewrite("/sign-in");
   if (!userId) NextResponse.rewrite("/sign-in");
-  if (!body || !body.videoid)
-    return NextResponse.json({ message: "No video id included" });
+  if (!body || !body.videoid) throw new Error("No video id included");
 
   //--------------- check if caption summary already exists start ------------------//
   const { data: videoCaptionSummaryData, error: videoCaptionSummaryError } =
     await getCaptionSummary(token as string, "", body.videoid);
 
   if (videoCaptionSummaryError) {
-    return NextResponse.json({ message: "Problem retrieving caption summary" });
+    throw new Error("error on caption summary");
   }
   if (videoCaptionSummaryData && videoCaptionSummaryData.length > 0) {
     return NextResponse.json({ message: "Already have caption summary" });
@@ -44,7 +43,7 @@ export async function POST(req: Request) {
   }
 
   if (!pc) {
-    return NextResponse.json({ message: "Unable to create summary" });
+    throw new Error("no video caption data");
   }
 
   const captions = await pc.summarizeCaptions();

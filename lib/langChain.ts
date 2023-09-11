@@ -30,7 +30,6 @@ import {
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { Document } from "langchain/document";
 import type { SmallComment } from "./supabaseClient";
-import { SENTIMENT } from "@prisma/client";
 export type CreateEmbeddingsArgs = {
   video_id: string;
   id: string;
@@ -74,6 +73,36 @@ export class PocketChain {
       // update summary?
       this.captions = res && res.text;
       return this.captions;
+    } catch (error) {
+      console.error("error on summarize captions!");
+      console.error(error);
+    }
+  }
+
+  async summarizeChatHistory(history: string[]) {
+    // created the class here to set the maxConcurrency property
+    const model = new OpenAI({
+      openAIApiKey: process.env.OPENAI_API_KEY,
+      temperature: 0,
+      modelName: "gpt-3.5-turbo",
+      // what does this mean?
+      maxConcurrency: 10,
+    });
+    const text_splitter = new RecursiveCharacterTextSplitter({
+      chunkSize: 1000,
+    });
+    const docs = await text_splitter.createDocuments(history);
+    const chain = loadSummarizationChain(model, {
+      type: "map_reduce",
+      returnIntermediateSteps: true,
+    });
+    try {
+      const res = await chain.call({
+        input_documents: docs,
+      });
+      console.log(res);
+      // update summary?
+      return res && res.text;
     } catch (error) {
       console.error("error on summarize captions!");
       console.error(error);
@@ -331,12 +360,16 @@ export class PocketChain {
 
     return false;
   }
-  async chat(videoid: string, userMessage: string) {
+  async chat(videoid: string, userMessage: string, chatHistory: string[]) {
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
     if (!supabaseKey) throw new Error(`Expected SUPABASE_SERVICE_ROLE_KEY`);
 
     const url = process.env.SUPABASE_URL;
     if (!url) throw new Error(`Expected env var SUPABASE_URL`);
+
+    const summary = await this.summarizeChatHistory(chatHistory);
+
+    console.log(`This is the summary: ${summary}`);
 
     const client = createClient(url, supabaseKey);
 
@@ -362,8 +395,9 @@ export class PocketChain {
       temperature: 0,
     });
 
-    const template = `You are a helpful public relations assistant that is having a conversation with your client about a You Tube video that they have created. Use the transcription from the video, as well as the commments to respond to your client.
+    const template = `You are a helpful public relations assistant that is having a conversation with your client about a You Tube video that they have created. Use the transcription from the video, the chatHistory of your conversation, as well as the commments to respond to your client.
     transcription: {transcription},
+    chatHistory: {chatHistory},
     comments: {comments}
     `;
 
@@ -384,8 +418,11 @@ export class PocketChain {
       prompt: chatPrompt,
     });
 
+    console.log(`Video captions: ` + this.captions);
+
     const response = await chain.call({
       transcription: this.captions,
+      chatHistory: summary,
       comments: `
       ${foundDocuments.map((document) => document.pageContent + "\n")}`,
     });

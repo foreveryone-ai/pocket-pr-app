@@ -22,7 +22,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: "Unable create chat" });
   }
   if (commentData && commentData.length === 0) {
-    return NextResponse.json({ message: "No comments to go on" });
+    throw new Error("we have no comments, or bananas!!");
+    //return NextResponse.json({ message: "No comments to go on" });
   }
   //------------ get comments from db end ----------------//
 

@@ -59,24 +59,22 @@ export default function VideoCard({
 
     try {
       // get captions summary
-      const summaryPromise = getOrCreateCaptionSummary(videoId);
+      const summaryRes = await getOrCreateCaptionSummary(videoId);
       // get all comments
-      const commentsPromise = getAllComments(videoId);
+      const commentsRes = await getAllComments(videoId);
       // create embeddings
-      const embeddingsPromise = getOrCreateEmbeddings(videoId);
-
-      const [summaryRes, commentsRes, embeddingsRes] = await Promise.all([
-        summaryPromise,
-        commentsPromise,
-        embeddingsPromise,
-      ]);
+      const embeddingsRes = await getOrCreateEmbeddings(videoId);
 
       console.log("summaryRes", summaryRes);
       console.log("commentsRes", commentsRes);
       console.log("embeddingsRes", embeddingsRes);
 
       // check if all was successful and decrement the users credits
-      setShowChat(true);
+      if (summaryRes && summaryRes && embeddingsRes) {
+        setShowChat(true);
+      }
+      //TODO: show modal saying no chat available because
+      //TODO: the video has not captions and/or comments
     } catch (error) {
       console.error("Error during API calls", error);
     } finally {
@@ -86,7 +84,7 @@ export default function VideoCard({
 
   const handleChatRedirect = async () => {
     setIsRedirecting(true);
-    await router.push(`/dashboard/${videoId}`);
+    router.replace(`/dashboard/${videoId}`);
     setIsRedirecting(false);
   };
 
