@@ -101,7 +101,7 @@ export default function Hero() {
             />
           </div>
         </div>
-        <div className="justify-end items-center mt-24 md:mt-0 bg-white grid grid-cols-2 gap-1 md:gap-2">
+        <div className="overflow-hidden justify-end items-center mt-24 md:mt-0 bg-white grid grid-cols-2 gap-1 md:gap-2">
           <h1 className="font-playfair text-med sm:text-lg md:text-3xl lg:text-4xl text-right text-black">
             Automated PR for
           </h1>
