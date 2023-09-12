@@ -1,5 +1,3 @@
-"use client";
-import React, { useState, useEffect, useRef } from "react";
 import { Image } from "@nextui-org/image";
 import { Spacer } from "@nextui-org/spacer";
 import "animate.css/animate.min.css";
@@ -11,9 +9,9 @@ import {
 } from "@heroicons/react/20/solid";
 import LandingHero from "./components/LandingHero";
 
-function classNames(...classes: (string | false | null | undefined)[]): string {
-  return classes.filter(Boolean).join(" ");
-}
+// function classNames(...classes: (string | false | null | undefined)[]): string {
+//   return classes.filter(Boolean).join(" ");
+// }
 
 export default function Home() {
   const features2 = [
