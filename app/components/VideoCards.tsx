@@ -101,9 +101,7 @@ export default function VideoCard({
               <p className="text-tiny text-red-500 font-md">YouTube</p>
             </Skeleton>
             <Skeleton isLoaded={isLoaded} className="rounded-lg">
-              <h4
-                className={`font-bold text-white text-md ${playfairDisplay500.className}`}
-              >
+              <h4 className="font-playfair font-bold text-white text-md">
                 {truncateTitle(title)}
               </h4>
             </Skeleton>
