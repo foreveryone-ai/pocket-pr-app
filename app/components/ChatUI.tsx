@@ -59,8 +59,8 @@ export default function ChatUI({ videoid, captionsSummary }: ChatUIProps) {
   };
   return (
     <div
-      className="flex items-center justify-center min-h-screen pt-18 bg-green-800"
-      style={{ maxHeight: "calc(100vh - 72px)" }}
+      className="flex items-center justify-center min-h-screen bg-green-800"
+      style={{ maxHeight: "calc(100vh - 72px)", marginTop: "-50px" }}
     >
       <div className="px-4 sm:px-6 lg:px-8 w-full sm:max-w-2xl lg:max-w-3xl mx-auto">
         <div className="bg-white rounded-lg shadow-lg">
@@ -87,7 +87,7 @@ export default function ChatUI({ videoid, captionsSummary }: ChatUIProps) {
                 )
               )}
           </div>
-          {/* <div className="p-4 border-t border-gray-200 flex"> */}
+
           <form
             className="p-4 border-t border-gray-200 flex"
             onSubmit={handleSubmit}
@@ -106,7 +106,6 @@ export default function ChatUI({ videoid, captionsSummary }: ChatUIProps) {
               Send
             </Button>
           </form>
-          {/* </div> */}
         </div>
       </div>
     </div>

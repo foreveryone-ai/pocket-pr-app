@@ -20,7 +20,7 @@ export default function RootLayout({
     <html lang="en">
       <ClerkProvider>
         <body className={publicSans.className}>
-          <main>
+          <main className="light">
             <Providers>
               <NavBar />
               {children}

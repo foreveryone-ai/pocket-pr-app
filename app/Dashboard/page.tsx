@@ -31,7 +31,7 @@ export default async function Home() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center text-black justify-start xl:px-20 pt-10 pb-10 bg-white">
+    <div className="flex min-h-screen flex-col overflow-hidden items-center text-black justify-start xl:px-20 pt-10 pb-10 bg-white">
       <Tabs />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-12 gap-12 sm:px-4 md:px-8 lg:px-10 xl:px-20 2xl:px-32">

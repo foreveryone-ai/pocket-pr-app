@@ -136,40 +136,41 @@ export default function VideoCard({
           </div>
         </CardBody>
       </Card>
-
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent>
-          {() => (
-            <>
-              <ModalHeader className="flex flex-col gap-1 text-black font-black">
-                Confirm Analysis of &quot;{title}&quot;
-              </ModalHeader>
-              <ModalBody className="">
-                <p className="text-black ">
-                  If you&apos;d like to analyze this video, click on &quot;Get
-                  Started&quot; below.
-                </p>
-                <p className="text-black ">
-                  Once you do, the analysis process will begin. This typically
-                  takes a couple of minutes, depending on the number of comments
-                  on your video.
-                </p>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onOpenChange}>
-                  Close
-                </Button>
-                <Button
-                  className="bg-green-600 text-white"
-                  onPress={handleModalClose}
-                >
-                  Get Started
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
+      <div className="flex items-center justify-center">
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+          <ModalContent>
+            {() => (
+              <>
+                <ModalHeader className="flex flex-col gap-1 text-black font-black">
+                  Confirm Analysis of &quot;{title}&quot;
+                </ModalHeader>
+                <ModalBody className="">
+                  <p className="text-black ">
+                    If you&apos;d like to analyze this video, click on &quot;Get
+                    Started&quot; below.
+                  </p>
+                  <p className="text-black ">
+                    Once you do, the analysis process will begin. This typically
+                    takes a couple of minutes, depending on the number of
+                    comments on your video.
+                  </p>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="danger" variant="light" onPress={onOpenChange}>
+                    Close
+                  </Button>
+                  <Button
+                    className="bg-green-600 text-white"
+                    onPress={handleModalClose}
+                  >
+                    Get Started
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
+      </div>
 
       {isLoading && (
         <div className="absolute inset-0 bg-gray-900 bg-opacity-50 px-6 rounded-large flex justify-center items-center">
