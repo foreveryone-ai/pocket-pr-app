@@ -89,7 +89,7 @@ export default function Hero() {
   const Roles = ["Creators.", "Businesses.", "Influencers.", "Everyone.AI"];
   return (
     <>
-      <div className="min-h-screen">
+      <div className="min-h-screen max-h-screen min-w-screen max-w-screen">
         <div className="flex justify-center items-start bg-white">
           <div className="w-3/4 sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/2 mt-24 sm:mt-16 md:mt-20 lg:mt-24 xl:mt-28 mb-8 sm:mb-12 md:mb-16 lg:mb-20 xl:mb-24">
             <Image
