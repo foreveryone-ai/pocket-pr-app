@@ -84,7 +84,7 @@ export default function VideoCard({
 
   const handleChatRedirect = async () => {
     setIsRedirecting(true);
-    router.replace(`/dashboard/${videoId}`);
+    router.replace(`/chat/${videoId}`);
     setIsRedirecting(false);
   };
 
