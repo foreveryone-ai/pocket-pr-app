@@ -17,7 +17,7 @@ export default function NavBar() {
   const router = useRouter();
 
   const toDashboard = () => {
-    router.push("/dashboard");
+    router.push("/Dashboard");
   };
 
   const toSettings = () => {
