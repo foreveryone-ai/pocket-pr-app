@@ -124,7 +124,7 @@ export default function Hero() {
             Learn More
           </Button>
           <SignedIn>
-            <Link href="/dashboard">
+            <Link href="/Dashboard">
               <Button
                 variant="ghost"
                 endContent={<BsFillArrowRightCircleFill />}
