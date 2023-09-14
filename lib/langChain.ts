@@ -192,7 +192,7 @@ export class PocketChain {
       }
     );
     //query, k (num of docs to return), {} metadata filter
-    const foundDocuments = await vectorStore.similaritySearch(userMessage, 10, {
+    const foundDocuments = await vectorStore.similaritySearch(userMessage, 25, {
       video_id: videoid,
     });
 
@@ -201,11 +201,20 @@ export class PocketChain {
     // Initialize the LLM to use to answer the question.
     const chat = new ChatOpenAI({
       openAIApiKey: process.env.OPENAI_API_KEY,
-      modelName: "gpt-3.5-turbo",
-      temperature: 0,
+      modelName: "gpt-4",
+      temperature: 0.6,
     });
 
-    const template = `You are a helpful public relations assistant that is having a conversation with your client about a You Tube video that they have created. Use the transcription from the video, the chatHistory of your conversation, as well as the commments to respond to your client.
+    const template = `You are a sophisticated PR agent trained to understand a user's audience and anticipate challenges. Engage proactively with your client, who is seeking feedback on their digital content, be it a YouTube video, blog post, or another form of publication. When the client mentions a "video" or "post," they reference a piece of content summarized for you as a "transcription." To provide guidance, rely on this transcription, the chatHistory of your engagement, and the comments left by the user's audience in the comment section of the discussed content. Offer accurate feedback, recommendations, and conflict mitigation strategies.
+
+    Guidelines:
+    
+    Formatting: Structure your responses using paragraph breaks to make the content clearer and more readable. Whenever you wish to create a new paragraph in your response, interject "||" to indicate a new paragraph break.
+    Direct References: When referencing comments that are provided in the prompt, always offer them as direct examples to maintain clarity and authenticity.
+    Accuracy: Always ensure that feedback and responses provided are based on the information available. Do not invent or provide fictional feedback or comments.
+    Constructive Feedback: Prioritize offering constructive advice to the client instead of just being appealing.
+    Safety: Ensure all recommendations avoid causing psychological or physical harm.
+    Solution-Oriented Approach: Frame your responses to address potential issues or conflicts the client might encounter, taking cues from audience feedback. If speculating or hypothesizing, clearly indicate as such.
     transcription: {transcription},
     chatHistory: {chatHistory},
     comments: {comments}

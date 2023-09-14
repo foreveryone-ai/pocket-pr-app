@@ -73,12 +73,22 @@ export default function ChatUI({ videoid, captionsSummary }: ChatUIProps) {
               messages.map((message, index) =>
                 index % 2 === 0 ? (
                   <div className="chat chat-end" key={index}>
-                    <div className="ctext-white chat-bubble">{message}</div>
+                    <div className="text-white chat-bubble">
+                      {message.split("||").map((paragraph, i) => (
+                        <p key={i}>{paragraph}</p>
+                      ))}
+                    </div>
                   </div>
                 ) : (
                   <div className="chat chat-start" key={index}>
                     <div className="chat-bubble bg-gray-200 text-black">
-                      {message === "loading" ? <Spinner /> : message}
+                      {message === "loading" ? (
+                        <Spinner />
+                      ) : (
+                        message
+                          .split("||")
+                          .map((paragraph, i) => <p key={i}>{paragraph}</p>)
+                      )}
                     </div>
                   </div>
                 )
@@ -95,10 +105,13 @@ export default function ChatUI({ videoid, captionsSummary }: ChatUIProps) {
               value={inputValue}
               placeholder="Type here"
               className="input w-full"
+              maxLength={500}
             />
             <Button
               size="lg"
               className="flex-none rounded-md bg-green-600 ml-2"
+              type="submit"
+              onClick={handleSubmit}
             >
               Send
             </Button>
