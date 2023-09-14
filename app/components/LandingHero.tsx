@@ -17,21 +17,6 @@ import {
   CheckIcon,
 } from "@heroicons/react/20/solid";
 
-const playfairDisplay500 = Playfair_Display({
-  weight: ["400"],
-  subsets: ["latin"],
-});
-
-const playfairDisplay650 = Playfair_Display({
-  weight: ["600"],
-  subsets: ["latin"],
-});
-
-const playfairDisplay800 = Playfair_Display({
-  weight: ["900"],
-  subsets: ["latin"],
-});
-
 const features1 = [
   {
     name: "Audience Listening",

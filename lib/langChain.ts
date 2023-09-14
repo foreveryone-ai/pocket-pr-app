@@ -34,7 +34,7 @@ export class PocketChain {
     const model = new OpenAI({
       openAIApiKey: process.env.OPENAI_API_KEY,
       temperature: 0,
-      modelName: "gpt-3.5-turbo",
+      modelName: "gpt-4",
       // what does this mean?
       maxConcurrency: 10,
     });
@@ -65,7 +65,7 @@ export class PocketChain {
     const model = new OpenAI({
       openAIApiKey: process.env.OPENAI_API_KEY,
       temperature: 0,
-      modelName: "gpt-3.5-turbo",
+      modelName: "gpt-4",
       // what does this mean?
       maxConcurrency: 10,
     });
