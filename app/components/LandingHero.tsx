@@ -10,31 +10,28 @@ import Link from "next/link";
 import { Image } from "@nextui-org/image";
 import { Playfair_Display } from "next/font/google";
 import { Divider } from "@nextui-org/divider";
-import {
-  CloudArrowUpIcon,
-  LockClosedIcon,
-  ServerIcon,
-  CheckIcon,
-} from "@heroicons/react/20/solid";
+import { LiaAssistiveListeningSystemsSolid } from "react-icons/lia";
+import { BiSolidBinoculars } from "react-icons/bi";
+import { GiTreeGrowth } from "react-icons/gi";
 
 const features1 = [
   {
     name: "Audience Listening",
     description:
-      "With PocketPR, you won't miss a beat. Stay up-to-date with what people are saying and when.",
-    icon: CloudArrowUpIcon,
+      "Discover PocketPR: Always be in the know, instantly. Track real-time chatter and never miss an opportunity again.",
+    icon: LiaAssistiveListeningSystemsSolid,
   },
   {
     name: "Conflict Mitigation & Forecasting",
     description:
-      "Sometimes, when things get tense, it's best to take a step back.",
-    icon: LockClosedIcon,
+      "In moments of tension, pause, reflect, and let clarity guide your next move.",
+    icon: BiSolidBinoculars,
   },
   {
     name: "Growth Planning",
     description:
-      "Maintain awareness of your audience's interests as your platform grows.",
-    icon: ServerIcon,
+      "Stay attuned to your audience's passions, even as your platform soars to new heights.",
+    icon: GiTreeGrowth,
   },
 ];
 
@@ -76,7 +73,7 @@ export default function Hero() {
     <>
       <div className="min-h-screen max-h-screen min-w-screen max-w-screen">
         <div className="flex justify-center items-start bg-white">
-          <div className="w-3/4 sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/2 mt-24 sm:mt-16 md:mt-20 lg:mt-24 xl:mt-28 mb-8 sm:mb-12 md:mb-16 lg:mb-20 xl:mb-24">
+          <div className="w-3/4 sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/2 pt-36 xl:pt-28 pb-8 sm:pb-12 md:pb-16 lg:pb-20 xl:pb-24">
             <Image
               isBlurred
               src="/pocket-pr-logo-licensed.svg"
@@ -87,14 +84,14 @@ export default function Hero() {
           </div>
         </div>
         <div className="overflow-hidden justify-end items-center mt-24 md:mt-0 bg-white grid grid-cols-2 gap-1 md:gap-2">
-          <h1 className="font-playfair text-med sm:text-lg md:text-3xl lg:text-4xl text-right text-black">
+          <h1 className="font-playfair text-xl md:text-3xl lg:text-4xl text-right text-black">
             Automated PR for
           </h1>
 
           <h1
             ref={textRef}
             key={Roles[currentIndex]}
-            className={`text-med sm:text-lg md:text-3xl lg:text-4xl font-black text-left font-playfair text-black animate__animated ${animationClass}`}
+            className={`text-xl md:text-3xl lg:text-4xl font-black text-left font-playfair text-black animate__animated ${animationClass}`}
           >
             <b>{Roles[currentIndex]}</b>
           </h1>
@@ -142,9 +139,11 @@ export default function Hero() {
                 Silence the noise.
               </p>
               <p className="mt-6 text-lg leading-8 text-gray-600">
-                PocketPR brings the power of generative-AI to your digital
-                interactions. We help you learn how your audience understands
-                your content, and how to better communicate with them.
+                Unlock the full spectrum with PocketPR: Our AI seamlessly
+                integrates with all your social media platforms, capturing a
+                holistic view of your audience's dynamics. We guide you in
+                amplifying your reach, fostering positive relationships, and
+                sparking impactful conversations.
               </p>
               <dl className="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-600 lg:max-w-none">
                 {features1.map((feature) => (
