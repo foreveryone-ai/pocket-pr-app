@@ -15,9 +15,9 @@ import { Button } from "@nextui-org/button";
 export default function Home() {
   return (
     <div className="">
-      <Button className="px-0 lg:hidden">Refresh</Button>
+      {/* <Button className="px-0 lg:hidden">Refresh</Button> */}
       <div className="md:flex md:flex-col-3 md:space-between">
-        <Button className="hidden lg:block md:px-0 md:mr-24">Refresh</Button>
+        {/* <Button className="hidden lg:block md:px-0 md:mr-24">Refresh</Button> */}
 
         <div className="flex flex-col md:pb-12">
           <Tabs
