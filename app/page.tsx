@@ -1,37 +1,31 @@
 import { Image } from "@nextui-org/image";
 import { Spacer } from "@nextui-org/spacer";
 import "animate.css/animate.min.css";
-import {
-  CloudArrowUpIcon,
-  LockClosedIcon,
-  ServerIcon,
-  CheckIcon,
-} from "@heroicons/react/20/solid";
+import { CheckIcon } from "@heroicons/react/20/solid";
 import LandingHero from "./components/LandingHero";
-
-// function classNames(...classes: (string | false | null | undefined)[]): string {
-//   return classes.filter(Boolean).join(" ");
-// }
+import { TbArrowsCross } from "react-icons/tb";
+import { AiFillWechat } from "react-icons/ai";
+import { DiGoogleAnalytics } from "react-icons/di";
 
 export default function Home() {
   const features2 = [
     {
       name: "Cross-Platform Context",
       description:
-        "Today, we offer support for YouTube. Soon, we'll support a multitude of social networks, allowing your PR assistant to gain an understanding of your audience's perspectives across platforms.",
-      icon: CloudArrowUpIcon,
+        "Currently, we're revolutionizing YouTube experiences. But that's just the beginning. Soon, PocketPR will integrate with various social networks, ensuring your PR assistant grasps your audience's nuances from every angle and platform.",
+      icon: TbArrowsCross,
     },
     {
       name: "Chat-With-Your-Posts",
       description:
-        "Talk to your assistant about any of your individual posts and what people are saying about them, or zoom out and talk to your entire channel.",
-      icon: LockClosedIcon,
+        "Engage with your assistant on specific posts and gather insights on the chatter, or take a broader view and discuss your entire channel's dynamics. With PocketPR, every detail is within your grasp.",
+      icon: AiFillWechat,
     },
     {
       name: "Analytical Reports",
       description:
-        "Future updates will bring a multitude of analytical reports, with the goal of bolstering productive dialogues, predicting consumer trends, and maximizing your bottom line as an online creator.",
-      icon: ServerIcon,
+        "Anticipate a wave of insightful reports in our upcoming updates. Aimed at enhancing conversations, forecasting audience trends, and skyrocketing your success as a digital creator with PocketPR.",
+      icon: DiGoogleAnalytics,
     },
   ];
 
@@ -156,11 +150,11 @@ export default function Home() {
           <div className="px-6 pt-12 lg:px-8 lg:pt-20">
             <div className="text-center">
               <p className="font-playfair mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
-                The right price for you, whoever you are
+                Find the perfect price, tailored to you
               </p>
               <p className="mx-auto mt-3 max-w-4xl text-xl text-gray-300 sm:mt-5 sm:text-2xl">
-                Try one video for free, and if you like what you see, come back
-                and find the plan that fits your goals.
+                Sample a video on us. If it resonates, return to discover a plan
+                tailored to your ambitions with PocketPR.
               </p>
             </div>
           </div>
@@ -349,46 +343,6 @@ export default function Home() {
             </div>
           </div>
         </div>
-        {/* <div className="mx-auto mt-10 sm:px-6 sm:py-32 md:py-12 lg:px-8">
-          <div
-            className="font-playfair pb-12 hidden md:block text-center font-black text-black"
-          >
-            Frequently Asked Questions
-          </div>
-          <div
-            className={` pb-12 md:hidden text-center font-black text-xl text-black ${playFairDisplay650.className}`}
-          >
-            FAQ's
-          </div>
-          <Accordion variant="splitted">
-            <AccordionItem
-              className="text-black"
-              key="1"
-              aria-label="Accordion 1"
-              title="What is PocketPR?"
-            >
-              PocketPR is an app! It's built with code. Does cool stuff! Try it
-              out. Give us your money!
-            </AccordionItem>
-            <AccordionItem
-              className="text-black"
-              key="2"
-              aria-label="Accordion 2"
-              title="Does it really read all of my comments?"
-            >
-              Yeah! I think? We don't really know! But if you pretend it does,
-              it's all the same, really!
-            </AccordionItem>
-            <AccordionItem
-              className="text-black"
-              key="3"
-              aria-label="Accordion 3"
-              title="Why does it cost money?"
-            >
-              Because we're greedy pigs. This took us 2 hours to build.
-            </AccordionItem>
-          </Accordion>
-        </div> */}
 
         <div className="mx-auto max-w-7xl sm:px-6 sm:py-32 lg:px-8">
           <div className="relative isolate overflow-hidden bg-green-900 px-6 pt-16 shadow-2xl sm:rounded-3xl sm:px-16 md:pt-24 lg:flex lg:gap-x-20 lg:px-24 lg:pt-0">
@@ -400,8 +354,9 @@ export default function Home() {
                 Sign-up today.
               </h2>
               <p className="mt-6 text-lg leading-8 text-gray-300">
-                What you see is just the beginning. Users that sign-up today
-                will receive priority access to new features and beta releases!
+                Today's glimpse is only the start. Sign up now for priority
+                access to groundbreaking features and exclusive beta releases
+                with PocketPR!
               </p>
               <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
                 <a

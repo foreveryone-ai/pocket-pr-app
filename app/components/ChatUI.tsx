@@ -2,6 +2,8 @@
 import { Button } from "@nextui-org/button";
 import { Spinner } from "@nextui-org/spinner";
 import { BaseSyntheticEvent, useState } from "react";
+import { GrSend } from "react-icons/gr";
+import { BiSolidCopy } from "react-icons/bi";
 
 type ChatUIProps = {
   videoid: string;
@@ -58,10 +60,7 @@ export default function ChatUI({ videoid, captionsSummary }: ChatUIProps) {
     }
   };
   return (
-    <div
-      className="flex items-center justify-center min-h-screen pt-18 bg-green-800"
-      style={{ maxHeight: "calc(100vh - 72px)" }}
-    >
+    <div className="flex pt-12 justify-center min-h-screen bg-green-800">
       <div className="px-4 sm:px-6 lg:px-8 w-full sm:max-w-2xl lg:max-w-3xl mx-auto">
         <div className="bg-white rounded-lg shadow-lg">
           <div className="p-4 text-center border-b border-gray-200 text-black font-semibold">
@@ -76,37 +75,70 @@ export default function ChatUI({ videoid, captionsSummary }: ChatUIProps) {
               messages.map((message, index) =>
                 index % 2 === 0 ? (
                   <div className="chat chat-end" key={index}>
-                    <div className="ctext-white chat-bubble">{message}</div>
+                    <div className="text-white chat-bubble">
+                      {message.split("||").map((paragraph, i) => (
+                        <p key={i}>
+                          {paragraph}
+                          <br />
+                        </p>
+                      ))}
+                    </div>
                   </div>
                 ) : (
                   <div className="chat chat-start" key={index}>
-                    <div className="chat-bubble bg-gray-200 text-black">
-                      {message === "loading" ? <Spinner /> : message}
+                    <div className="flex items-center">
+                      <div className="chat-bubble bg-gray-200 text-black">
+                        {message === "loading" ? (
+                          <Spinner />
+                        ) : (
+                          <>
+                            {message.split("||").map((paragraph, i) => (
+                              <p key={i}>{paragraph}</p>
+                            ))}
+                          </>
+                        )}
+                      </div>
+                      <Button
+                        isIconOnly
+                        size="lg"
+                        variant="light"
+                        className="flex-none rounded-md ml-2"
+                        onClick={() => navigator.clipboard.writeText(message)}
+                      >
+                        <BiSolidCopy />
+                      </Button>
                     </div>
                   </div>
                 )
               )}
           </div>
-          {/* <div className="p-4 border-t border-gray-200 flex"> */}
           <form
             className="p-4 border-t border-gray-200 flex"
             onSubmit={handleSubmit}
           >
-            <input
-              type="text"
-              onChange={handleInput}
-              value={inputValue}
-              placeholder="Type here"
-              className="input w-full"
-            />
+            <div className="relative flex-grow">
+              <input
+                type="text"
+                onChange={handleInput}
+                value={inputValue}
+                placeholder="Type here"
+                className="input w-full pr-20 bg-gray-800"
+                maxLength={500}
+              />
+              <div className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 text-small">
+                {inputValue.length}/500
+              </div>
+            </div>
             <Button
+              isIconOnly
               size="lg"
-              className="flex-none rounded-md bg-green-600 ml-2"
+              variant="light"
+              className="flex-none rounded-md"
+              type="submit"
             >
-              Send
+              <GrSend />
             </Button>
           </form>
-          {/* </div> */}
         </div>
       </div>
     </div>
