@@ -2,6 +2,7 @@
 import { Button } from "@nextui-org/button";
 import { Spinner } from "@nextui-org/spinner";
 import { BaseSyntheticEvent, useState } from "react";
+import { GrSend } from "react-icons/gr";
 
 type ChatUIProps = {
   videoid: string;
@@ -94,29 +95,33 @@ export default function ChatUI({ videoid, captionsSummary }: ChatUIProps) {
                 )
               )}
           </div>
-          {/* <div className="p-4 border-t border-gray-200 flex"> */}
           <form
             className="p-4 border-t border-gray-200 flex"
             onSubmit={handleSubmit}
           >
-            <input
-              type="text"
-              onChange={handleInput}
-              value={inputValue}
-              placeholder="Type here"
-              className="input w-full"
-              maxLength={500}
-            />
+            <div className="relative flex-grow">
+              <input
+                type="text"
+                onChange={handleInput}
+                value={inputValue}
+                placeholder="Type here"
+                className="input w-full pr-20 bg-gray-800"
+                maxLength={500}
+              />
+              <div className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 text-small">
+                {inputValue.length}/500
+              </div>
+            </div>
             <Button
+              isIconOnly
               size="lg"
-              className="flex-none rounded-md bg-green-600 ml-2"
+              variant="light"
+              className="flex-none rounded-md"
               type="submit"
-              onClick={handleSubmit}
             >
-              Send
+              <GrSend />
             </Button>
           </form>
-          {/* </div> */}
         </div>
       </div>
     </div>
