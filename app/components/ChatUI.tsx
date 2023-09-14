@@ -3,6 +3,7 @@ import { Button } from "@nextui-org/button";
 import { Spinner } from "@nextui-org/spinner";
 import { BaseSyntheticEvent, useState } from "react";
 import { GrSend } from "react-icons/gr";
+import { BiSolidCopy } from "react-icons/bi";
 
 type ChatUIProps = {
   videoid: string;
@@ -76,20 +77,36 @@ export default function ChatUI({ videoid, captionsSummary }: ChatUIProps) {
                   <div className="chat chat-end" key={index}>
                     <div className="text-white chat-bubble">
                       {message.split("||").map((paragraph, i) => (
-                        <p key={i}>{paragraph}</p>
+                        <p key={i}>
+                          {paragraph}
+                          <br />
+                        </p>
                       ))}
                     </div>
                   </div>
                 ) : (
                   <div className="chat chat-start" key={index}>
-                    <div className="chat-bubble bg-gray-200 text-black">
-                      {message === "loading" ? (
-                        <Spinner />
-                      ) : (
-                        message
-                          .split("||")
-                          .map((paragraph, i) => <p key={i}>{paragraph}</p>)
-                      )}
+                    <div className="flex items-center">
+                      <div className="chat-bubble bg-gray-200 text-black">
+                        {message === "loading" ? (
+                          <Spinner />
+                        ) : (
+                          <>
+                            {message.split("||").map((paragraph, i) => (
+                              <p key={i}>{paragraph}</p>
+                            ))}
+                          </>
+                        )}
+                      </div>
+                      <Button
+                        isIconOnly
+                        size="lg"
+                        variant="light"
+                        className="flex-none rounded-md ml-2"
+                        onClick={() => navigator.clipboard.writeText(message)}
+                      >
+                        <BiSolidCopy />
+                      </Button>
                     </div>
                   </div>
                 )
