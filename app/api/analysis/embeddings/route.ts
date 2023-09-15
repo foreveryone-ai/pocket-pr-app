@@ -1,6 +1,10 @@
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
-import { getComments, getCaptionSummary } from "@/lib/supabaseClient";
+import {
+  getComments,
+  getCaptionSummary,
+  updateVideoHasEmbeddings,
+} from "@/lib/supabaseClient";
 import { CreateEmbeddingsArgs, PocketChain } from "@/lib/langChain";
 
 export async function POST(req: Request) {
@@ -45,6 +49,15 @@ export async function POST(req: Request) {
   console.log(hasEmbeddings);
 
   if (hasEmbeddings) {
+    // update bool on Video
+    const { data: embedData, error: embedError } =
+      await updateVideoHasEmbeddings(token as string, body.videoid, true);
+    if (embedError) {
+      throw new Error("error on check embeddings");
+    }
+    if (embedData && embedData.length > 0) {
+      console.log("already have embeddings");
+    }
     return NextResponse.json({ message: "Already have embeddings" });
   }
 
@@ -65,6 +78,15 @@ export async function POST(req: Request) {
   const embeddingsCreated = await pc.createEmbeddings(comments);
   // toriaizu...
   if (embeddingsCreated) {
+    // update the video table
+    const { data: embedData, error: embedError } =
+      await updateVideoHasEmbeddings(token as string, body.videoid, true);
+    if (embedError) {
+      throw new Error("error on check embeddings");
+    }
+    if (embedData && embedData.length > 0) {
+      console.log("already have embeddings");
+    }
     return NextResponse.json({
       message: "success",
     });

@@ -134,6 +134,20 @@ export async function getCaptionSummary(
 }
 
 //-------------------------------Update------------------------------------//
+export async function updateVideoHasEmbeddings(
+  authToken: string,
+  video_id: string,
+  bool: boolean
+) {
+  const db = createServerDbClient(authToken);
+
+  return await db
+    .from("Video")
+    .update({ hasEmbeddings: bool })
+    .eq("id", video_id)
+    .select();
+}
+
 export async function storeAllComments(
   authToken: string,
   allComments: StoreAllCommentsParams[]
@@ -238,7 +252,11 @@ export async function getVideo(authToken: string, videoId: string) {
 export async function getVideos(authToken: string, channel_id: string) {
   const db = createServerDbClient(authToken);
 
-  return await db.from("Video").select().eq(`channel_id`, channel_id);
+  return await db
+    .from("Video")
+    .select()
+    .eq(`channel_id`, channel_id)
+    .order("published_at", { ascending: false });
 }
 
 export async function getVideosByUserId(authToken: string, user_id: string) {
