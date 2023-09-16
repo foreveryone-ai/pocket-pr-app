@@ -73,7 +73,7 @@ export default function Hero() {
     <>
       <div className="min-h-screen max-h-screen min-w-screen max-w-screen">
         <div className="flex justify-center items-start bg-white">
-          <div className="w-3/4 sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/2 pt-36 xl:pt-28 pb-8 sm:pb-12 md:pb-16 lg:pb-20 xl:pb-24">
+          <div className="w-3/4 sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/2 pt-36 xl:pt-30 pb-8 sm:pb-12 md:pb-16 lg:pb-20 xl:pb-24">
             <Image
               isBlurred
               src="/pocket-pr-logo-licensed.svg"
@@ -83,7 +83,7 @@ export default function Hero() {
             />
           </div>
         </div>
-        <div className="overflow-hidden justify-end items-center mt-24 md:mt-0 bg-white grid grid-cols-2 gap-1 md:gap-2">
+        <div className="overflow-hidden justify-end items-center pt-24 md:pt-0 xl:pt-20 bg-white grid grid-cols-2 gap-1 md:gap-2">
           <h1 className="font-playfair text-xl md:text-3xl lg:text-4xl text-right text-black">
             Automated PR for
           </h1>
@@ -96,7 +96,7 @@ export default function Hero() {
             <b>{Roles[currentIndex]}</b>
           </h1>
         </div>
-        <div className="flex justify-center mt-24 md:mt-12 md:mb-36 space-x-4">
+        <div className="flex justify-center pt-24 md:pt-12 lg:pt-20 md:mb-36 space-x-4">
           <Button
             color="success"
             endContent={<BsFillArrowDownCircleFill />}
