@@ -108,25 +108,25 @@ export default function App() {
                   />
                   {step === 1 && (
                     <div>
-                      <p>First, let's grab your YouTube Channel ID.</p>
+                      <p>First, let&apos;s grab your YouTube Channel ID.</p>
                     </div>
                   )}
                   {step === 2 && (
                     <div>
-                      <p>Great! Next, we'll need to import your videos.</p>
+                      <p>Great! Next, we&apos;ll need to import your videos.</p>
                     </div>
                   )}
                   {step === 3 && (
                     <div>
                       <p>
-                        Wow, nice stuff. One last thing! Can't forget the video
-                        transcripts...
+                        Wow, nice stuff. One last thing! Can&apos;t forget the
+                        video transcripts...
                       </p>
                     </div>
                   )}
                   {step === 4 && (
                     <div>
-                      <p>Perfect! We're all set. Ready to get started?</p>
+                      <p>Perfect! We&apos;re all set. Ready to get started?</p>
                     </div>
                   )}
                 </ModalBody>
@@ -153,7 +153,7 @@ export default function App() {
                       }}
                       isLoading={isLoading}
                     >
-                      Let's do it!
+                      Let&apos;s do it!
                     </Button>
                   )}
                 </ModalFooter>
