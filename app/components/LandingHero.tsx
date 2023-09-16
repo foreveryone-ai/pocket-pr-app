@@ -72,8 +72,8 @@ export default function Hero() {
   return (
     <>
       <div className="min-h-screen max-h-screen min-w-screen max-w-screen">
-        <div className="flex justify-center items-start bg-white">
-          <div className="w-3/4 sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/2 pt-36 xl:pt-30 pb-8 sm:pb-12 md:pb-16 lg:pb-20 xl:pb-24">
+        <div className="flex justify-center items-center bg-white">
+          <div className="w-3/4 sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/2 pt-36 xl:pt-30 pb-8 sm:pb-12 md:pb-16 lg:pb-20 xl:pb-24 flex justify-center items-center">
             <Image
               isBlurred
               src="/pocket-pr-logo-licensed.svg"
