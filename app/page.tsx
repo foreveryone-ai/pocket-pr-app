@@ -354,7 +354,7 @@ export default function Home() {
                 Sign-up today.
               </h2>
               <p className="mt-6 text-lg leading-8 text-gray-300">
-                Today's glimpse is only the start. Sign up now for priority
+                Today&apos;s glimpse is only the start. Sign up now for priority
                 access to groundbreaking features and exclusive beta releases
                 with PocketPR!
               </p>
