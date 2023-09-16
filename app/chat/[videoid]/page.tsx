@@ -1,7 +1,8 @@
+// app/chat/[videoid]/page.tsx
 import { NextResponse } from "next/server";
 import ChatUI from "@/app/components/ChatUI";
 import { getCaptionSummary } from "@/lib/supabaseClient";
-import { auth } from "@clerk/nextjs";
+import { auth, currentUser } from "@clerk/nextjs";
 import { useState } from "react";
 
 export default async function ChatPage({
@@ -38,5 +39,15 @@ export default async function ChatPage({
     return title.length > limit ? `${title.substring(0, limit)}...` : title;
   };
 
-  return <ChatUI videoid={params.videoid} captionsSummary={captions} />;
+  // Get the current user's name
+  const user = await currentUser();
+  const userName = user?.firstName;
+
+  return (
+    <ChatUI
+      videoid={params.videoid}
+      captionsSummary={captions}
+      userName={userName}
+    />
+  );
 }
