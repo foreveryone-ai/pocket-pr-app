@@ -36,8 +36,11 @@ export default function App() {
   const [step, setStep] = useState(1);
   const [value, setValue] = useState(1);
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   const nextStep = async () => {
+    setIsLoading(true);
     console.log(step);
     switch (step) {
       case 1:
@@ -57,16 +60,17 @@ export default function App() {
         break;
       case 4: {
         console.log("hit case 4");
-        router.replace("/dashboard");
+        router.replace("/Dashboard");
         return;
       }
       default: {
         console.log("hit default case");
-        router.replace("/dashboard");
+        router.replace("/Dashboard");
       }
     }
     setStep((prevStep) => prevStep + 1);
     setValue((prevValue) => prevValue + 33);
+    setIsLoading(false);
   };
 
   const prevStep = () => {
@@ -91,7 +95,7 @@ export default function App() {
             {(onClose) => (
               <>
                 <ModalHeader className="flex text-black flex-col gap-1">
-                  Modal Title - Step {step}
+                  Onboarding - Step {step}
                 </ModalHeader>
                 <ModalBody className="text-black">
                   <Progress
@@ -104,36 +108,39 @@ export default function App() {
                   />
                   {step === 1 && (
                     <div>
-                      <p>This is the content of step 1.</p>
-                      {/* ... other content for step 1 ... */}
+                      <p>First, let's grab your YouTube Channel ID.</p>
                     </div>
                   )}
                   {step === 2 && (
                     <div>
-                      <p>This is the content of step 2.</p>
-                      {/* ... other content for step 2 ... */}
+                      <p>Great! Next, we'll need to import your videos.</p>
                     </div>
                   )}
                   {step === 3 && (
                     <div>
-                      <p>This is the content of step 3.</p>
-                      {/* ... other content for step 3 ... */}
+                      <p>
+                        Wow, nice stuff. One last thing! Can't forget the video
+                        transcripts...
+                      </p>
                     </div>
                   )}
                   {step === 4 && (
                     <div>
-                      <p>This is the content of step 4.</p>
-                      {/* ... other content for step 4 ... */}
+                      <p>Perfect! We're all set. Ready to get started?</p>
                     </div>
                   )}
                 </ModalBody>
                 <ModalFooter>
                   <Button color="danger" variant="light" onPress={onClose}>
-                    Close
+                    Cancel
                   </Button>
 
                   {step < 4 ? (
-                    <Button color="primary" onPress={nextStep}>
+                    <Button
+                      color="primary"
+                      onPress={nextStep}
+                      isLoading={isLoading}
+                    >
                       Next
                     </Button>
                   ) : (
@@ -144,8 +151,9 @@ export default function App() {
                         onClose();
                         nextStep();
                       }}
+                      isLoading={isLoading}
                     >
-                      Finish
+                      Let's do it!
                     </Button>
                   )}
                 </ModalFooter>
