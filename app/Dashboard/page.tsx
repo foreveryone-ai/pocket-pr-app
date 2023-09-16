@@ -42,6 +42,7 @@ export default async function Home() {
                 videoId={video.id as string}
                 title={video.title as string}
                 imageUrl={video.thumbnail_url as string}
+                hasEmbeddings={video.hasEmbeddings}
                 //TODO: store this in database
               />
             ))

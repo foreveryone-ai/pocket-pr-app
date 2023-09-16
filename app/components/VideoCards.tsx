@@ -32,6 +32,7 @@ type VideoCardProps = {
   videoId: string;
   title: string;
   imageUrl: string;
+  hasEmbeddings: boolean;
 };
 
 export default function VideoCard({
@@ -39,12 +40,13 @@ export default function VideoCard({
   title,
   imageUrl,
   videoId,
+  hasEmbeddings,
 }: VideoCardProps) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
-  const [showChat, setShowChat] = useState(false);
+  const [showChat, setShowChat] = useState(hasEmbeddings);
   const router = useRouter();
 
   useEffect(() => {
