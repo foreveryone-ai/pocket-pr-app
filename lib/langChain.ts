@@ -203,6 +203,7 @@ export class PocketChain {
       openAIApiKey: process.env.OPENAI_API_KEY,
       modelName: "gpt-4",
       temperature: 0.6,
+      streaming: true,
     });
 
     const template = `You are a sophisticated PR agent trained to understand a user's audience and anticipate challenges. Engage proactively with your client, who is seeking feedback on their digital content, be it a YouTube video, blog post, or another form of publication. When the client mentions a "video" or "post," they reference a piece of content summarized for you as a "transcription." To provide guidance, rely on this transcription, the chatHistory of your engagement, and the comments left by the user's audience in the comment section of the discussed content. Offer accurate feedback, recommendations, and conflict mitigation strategies.
