@@ -141,7 +141,7 @@ export default function Hero() {
               <p className="mt-6 text-lg leading-8 text-gray-600">
                 Unlock the full spectrum with PocketPR: Our AI seamlessly
                 integrates with all your social media platforms, capturing a
-                holistic view of your audience's dynamics. We guide you in
+                holistic view of your audience&apos;s dynamics. We guide you in
                 amplifying your reach, fostering positive relationships, and
                 sparking impactful conversations.
               </p>
