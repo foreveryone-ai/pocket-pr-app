@@ -58,11 +58,13 @@ export default function Home() {
             <p className="mt-6 text-lg leading-8 text-white">
               Fill out our contact form and one of our founders will get back to
               you ASAP! Alternatively, you can join our Discord server and ask
-              questions there.
+              questions there. <br /> NOTE: If you would like your data wiped
+              from our servers, submit a request via Discord. Official methods
+              of account deletion will be available soon.
             </p>
           </div>
           <div className="text-accent py-5 justify-center">
-            <Link href="https://discord.gg/KxhbkGpV" className="text-white">
+            <Link href="https://discord.gg/hRZjjCZr87" className="text-white">
               <u>Join our Discord server today!</u>
             </Link>
           </div>
