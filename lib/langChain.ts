@@ -230,7 +230,7 @@ export class PocketChain {
       systemMessagePrompt,
       humanMessagePrompt,
     ]);
-
+    console.log("template: ", template);
     console.log("chatPrompt: ", chatPrompt);
     const chain = new LLMChain({
       llm: chat,
