@@ -3,11 +3,5 @@
     "app/api/**/*.ts": {
       "maxDuration": 60
     }
-  },
-  "git": {
-    "deploymentEnabled": {
-      "development": false,
-      "main": true
-    }
   }
 }
