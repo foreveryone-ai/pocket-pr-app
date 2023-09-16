@@ -8,9 +8,14 @@ import { BiSolidCopy } from "react-icons/bi";
 type ChatUIProps = {
   videoid: string;
   captionsSummary: string;
+  userName: string | null | undefined;
 };
 
-export default function ChatUI({ videoid, captionsSummary }: ChatUIProps) {
+export default function ChatUI({
+  videoid,
+  captionsSummary,
+  userName = "User",
+}: ChatUIProps) {
   const [inputValue, setInputValue] = useState("");
   const [messages, setMessages] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
@@ -71,6 +76,12 @@ export default function ChatUI({ videoid, captionsSummary }: ChatUIProps) {
             className="p-4 overflow-y-auto"
             style={{ maxHeight: "500px", minHeight: "500px" }}
           >
+            <div className="chat chat-start">
+              <div className="text-black chat-bubble bg-gray-200">
+                Hey {userName}, I&apos;m Kev! Your friendly, Kangaroo PR
+                Assistant. Ask me anything to get started.
+              </div>
+            </div>
             {messages &&
               messages.map((message, index) =>
                 index % 2 === 0 ? (

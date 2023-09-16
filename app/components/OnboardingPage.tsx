@@ -60,11 +60,13 @@ export default function App() {
         break;
       case 4: {
         console.log("hit case 4");
+        setIsRedirecting(true);
         router.replace("/Dashboard");
         return;
       }
       default: {
         console.log("hit default case");
+        setIsRedirecting(true);
         router.replace("/Dashboard");
       }
     }
@@ -88,7 +90,9 @@ export default function App() {
           In just a few clicks, we&apos;ll have you automated in no-time.
         </h1>
 
-        <Button onPress={onOpen}>Start</Button>
+        <Button onPress={onOpen} isLoading={isRedirecting}>
+          Start
+        </Button>
 
         <Modal backdrop="blur" isOpen={isOpen} onOpenChange={onOpenChange}>
           <ModalContent>
