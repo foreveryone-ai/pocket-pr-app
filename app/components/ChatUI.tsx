@@ -43,6 +43,7 @@ export default function ChatUI({
 
   const getGPTResponse = async (userMessage: string) => {
     try {
+      console.log(messages[messages.length - 1]);
       await fetchEventSource(`/api/chat/${videoid}`, {
         method: "POST",
         body: JSON.stringify({
@@ -56,7 +57,8 @@ export default function ChatUI({
         onmessage(ev) {
           setMessages((prevMessages) => [
             ...prevMessages.slice(0, -1),
-            prevMessages[prevMessages.length - 1] + ev.data,
+            prevMessages[prevMessages.length - 1].replace("loading", "") +
+              ev.data,
           ]);
         },
       });
