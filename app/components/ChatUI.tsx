@@ -26,7 +26,7 @@ export default function ChatUI({
 
   const handleSubmit = (event: BaseSyntheticEvent) => {
     event.preventDefault();
-    setMessages((prevMessage) => [...prevMessage, inputValue]);
+    setMessages([...messages, inputValue, "loading"]); // Add a temporary message with "loading"
     setInputValue(""); // Clear the text input immediately
     handleResponse(inputValue);
   };
@@ -42,7 +42,6 @@ export default function ChatUI({
   };
 
   const getGPTResponse = async (userMessage: string) => {
-    setMessages((prevMessages) => [...prevMessages, ""]);
     try {
       await fetchEventSource(`/api/chat/${videoid}`, {
         method: "POST",
