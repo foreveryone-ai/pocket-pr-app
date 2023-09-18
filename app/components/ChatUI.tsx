@@ -1,9 +1,12 @@
 "use client";
+import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { Button } from "@nextui-org/button";
 import { Spinner } from "@nextui-org/spinner";
 import { BaseSyntheticEvent, useState } from "react";
 import { GrSend } from "react-icons/gr";
 import { BiSolidCopy } from "react-icons/bi";
+
+export const runtime = "edge";
 
 type ChatUIProps = {
   videoid: string;
@@ -17,25 +20,19 @@ export default function ChatUI({
   userName = "User",
 }: ChatUIProps) {
   const [inputValue, setInputValue] = useState("");
+  const [output, setOutput] = useState("");
   const [messages, setMessages] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = (event: BaseSyntheticEvent) => {
     event.preventDefault();
-    setMessages([...messages, inputValue, "loading"]); // Add a temporary message with "loading"
+    setMessages((prevMessage) => [...prevMessage, inputValue]);
     setInputValue(""); // Clear the text input immediately
     handleResponse(inputValue);
   };
 
   const handleResponse = async (userMessage: string) => {
-    const response = await getGPTResponse(userMessage);
-    console.log(response);
-    setMessages((prevMessages) => {
-      // Replace the temporary message with the actual response
-      const newMessages = [...prevMessages];
-      newMessages[newMessages.length - 1] = response;
-      return newMessages;
-    });
+    await getGPTResponse(userMessage);
   };
 
   const handleInput = (event: BaseSyntheticEvent) => {
@@ -45,9 +42,9 @@ export default function ChatUI({
   };
 
   const getGPTResponse = async (userMessage: string) => {
+    setMessages((prevMessages) => [...prevMessages, ""]);
     try {
-      console.log(captionsSummary);
-      const res = await fetch(`/api/chat/${videoid}`, {
+      await fetchEventSource(`/api/chat/${videoid}`, {
         method: "POST",
         body: JSON.stringify({
           message: userMessage,
@@ -57,9 +54,14 @@ export default function ChatUI({
         headers: {
           "Content-Type": "application/json",
         },
+        onmessage(ev) {
+          setMessages((prevMessages) => [
+            ...prevMessages.slice(0, -1),
+            prevMessages[prevMessages.length - 1] + ev.data,
+          ]);
+        },
       });
-      const data = await res.json();
-      return data.message;
+      console.log(output);
     } catch (error) {
       console.error(error);
     }

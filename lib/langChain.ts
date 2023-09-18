@@ -1,6 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { SupabaseVectorStore } from "langchain/vectorstores/supabase";
 import { ChatOpenAI } from "langchain/chat_models/openai";
+import { CallbackManager } from "langchain/callbacks";
 import {
   ChatPromptTemplate,
   SystemMessagePromptTemplate,
@@ -198,12 +199,31 @@ export class PocketChain {
 
     console.log("documents retrieved: ", foundDocuments);
 
+    // convert the LLM's callback-based API into a stream-based API
+    const encoder = new TextEncoder();
+    const stream = new TransformStream();
+    const writer = stream.writable.getWriter();
+
     // Initialize the LLM to use to answer the question.
     const chat = new ChatOpenAI({
       openAIApiKey: process.env.OPENAI_API_KEY,
       modelName: "gpt-4",
       temperature: 0.6,
       streaming: true,
+      callbackManager: CallbackManager.fromHandlers({
+        handleLLMNewToken: async (token: string) => {
+          await writer.ready;
+          await writer.write(encoder.encode(`data: ${token}\n\n`));
+        },
+        handleLLMEnd: async () => {
+          await writer.ready;
+          await writer.close();
+        },
+        handleLLMError: async (e: Error) => {
+          await writer.ready;
+          await writer.abort(e);
+        },
+      }),
     });
 
     const template = `You are a sophisticated PR agent trained to understand a user's audience and anticipate challenges. Engage proactively with your client, who is seeking feedback on their digital content, be it a YouTube video, blog post, or another form of publication. When the client mentions a "video" or "post," they reference a piece of content summarized for you as a "transcription." To provide guidance, rely on this transcription, the chatHistory of your engagement, and the comments left by the user's audience in the comment section of the discussed content. Offer accurate feedback, recommendations, and conflict mitigation strategies.
@@ -231,8 +251,9 @@ export class PocketChain {
       systemMessagePrompt,
       humanMessagePrompt,
     ]);
-    console.log("template: ", template);
-    console.log("chatPrompt: ", chatPrompt);
+    // console.log("template: ", template);
+    // console.log("chatPrompt: ", chatPrompt);
+    console.log("creating chain...");
     const chain = new LLMChain({
       llm: chat,
       prompt: chatPrompt,
@@ -240,14 +261,17 @@ export class PocketChain {
 
     console.log(`Video captions: ` + this.captions);
 
-    const response = await chain.call({
-      transcription: this.captions,
-      chatHistory: summary,
-      comments: `
+    chain
+      .call({
+        transcription: this.captions,
+        chatHistory: summary,
+        comments: `
       ${foundDocuments.map((document) => document.pageContent + "\n")}`,
-    });
+      })
+      .catch((e: Error) => console.error(e));
 
-    console.log("chat response: ", response);
-    return response.text;
+    return new Response(stream.readable, {
+      headers: { "Content-Type": "text/event-stream" },
+    });
   }
 }

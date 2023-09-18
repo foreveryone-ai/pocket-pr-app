@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth, clerkClient } from "@clerk/nextjs";
-import { getCaptionSummary } from "@/lib/supabaseClient";
 import { PocketChain } from "@/lib/langChain";
 
 type Params = {
@@ -27,32 +26,17 @@ export async function POST(req: NextRequest, context: Params) {
     // if they exist we can call the chat method here and return the result
     const pocketChat = new PocketChain(userData.captionsSummary);
     console.log("calling chat after confirming embeddings on line 28");
-    console.log("captions passed to api: ", userData.captions);
     try {
-      const chatResponse = await pocketChat.chat(
+      // return the return from chat
+      return await pocketChat.chat(
         videoid,
         userData.message,
         userData.messageHistory
       );
-      return NextResponse.json({ message: chatResponse });
     } catch (error) {
-      return NextResponse.json({ message: "error on chat response" });
+      throw new Error("error on chat!");
     }
   }
-
-  // check if video summary is in db
-  // const { data: summaryData, error: summaryError } = await getCaptionSummary(
-  //   token,
-  //   "",
-  //   videoid
-  // );
-
-  // if (!summaryData || summaryData.length === 0 || summaryError) {
-  //   return NextResponse.json({
-  //     message:
-  //       "No summary, try hitting the update button to make sure we have your video summary",
-  //   });
-  // }
 
   // check if embeddings exist
   const pocketChain = new PocketChain(userData.captionsSummary);
@@ -76,3 +60,5 @@ export async function POST(req: NextRequest, context: Params) {
 
   return NextResponse.json({ message: "token should now have embeddings..." });
 }
+
+export const runtime = "edge";
