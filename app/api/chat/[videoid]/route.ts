@@ -22,6 +22,10 @@ export async function POST(req: NextRequest, context: Params) {
 
   // check for is embeddings exist in JWT metadata
   const user = await clerkClient.users.getUser(userId);
+
+  if (!user) {
+    throw new Error("user not authorzed");
+  }
   if (user.privateMetadata.hasEmbeddings) {
     // if they exist we can call the chat method here and return the result
     const pocketChat = new PocketChain(userData.captionsSummary);
@@ -29,6 +33,7 @@ export async function POST(req: NextRequest, context: Params) {
     try {
       // return the return from chat
       return await pocketChat.chat(
+        user.firstName as string,
         videoid,
         userData.message,
         userData.messageHistory
@@ -52,7 +57,12 @@ export async function POST(req: NextRequest, context: Params) {
     });
 
     console.log("sending to pocketChain chat()...");
-    await pocketChain.chat(videoid, userData.message, userData.chatHistory);
+    await pocketChain.chat(
+      user.firstName as string,
+      videoid,
+      userData.message,
+      userData.chatHistory
+    );
   }
   // if embeddings, start chat
 
