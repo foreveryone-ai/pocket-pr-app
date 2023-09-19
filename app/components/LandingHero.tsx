@@ -128,6 +128,27 @@ export default function Hero() {
         </div>
       </div>
 
+      <div className="hidden md:flex md:flex-col md:items-center">
+        <iframe
+          className="rounded-2xl"
+          width="560"
+          height="315"
+          src="https://www.youtube.com/embed/lbcpORKF-Gs?si=BEuhZ4_z6QBpKgFd&amp;controls=0"
+          title="YouTube video player"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        ></iframe>
+      </div>
+      <div className="flex flex-col justify-center items-center md:hidden ">
+        <iframe
+          className="rounded-2xl"
+          width="280"
+          height="315"
+          src="https://www.youtube.com/embed/lbcpORKF-Gs?si=BEuhZ4_z6QBpKgFd&amp;controls=0"
+          title="YouTube video player"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        ></iframe>
+      </div>
+
       <div
         ref={tagRef}
         className="mx-auto max-w-7xl py-24 px-6 md:py-32 lg:px-8"
