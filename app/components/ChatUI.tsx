@@ -81,7 +81,7 @@ export default function ChatUI({
           >
             <div className="chat chat-start">
               <div className="text-black chat-bubble bg-gray-200">
-                Hey {userName}, I&apos;m Kev! Your friendly, Kangaroo PR
+                Hey {userName}, I&apos;m Keusel! Your friendly, Kangaroo PR
                 Assistant. Ask me anything to get started.
               </div>
             </div>
