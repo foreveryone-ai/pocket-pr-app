@@ -132,9 +132,9 @@ export default function Hero() {
         <DemoVideo />
       </div>
 
-      <div className="mx-auto max-w-7xl py-24 px-6 md:py-32 lg:px-8">
+      <div className="mx-auto max-w-7xl py-24 px-6 md:py-32 xl:px-32">
         <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
-          <div className="lg:pr-8 lg:pt-4">
+          <div className="lg:pl-24 lg:pt-4">
             <div className="lg:max-w-lg">
               <p className="font-playfair mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
                 Silence the noise.
@@ -162,7 +162,7 @@ export default function Hero() {
               </dl>
             </div>
           </div>
-          <div className="lg:pl-36">
+          <div className="flex items-center ">
             <div className="relative mx-auto border-gray-800 dark:border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[600px] w-[300px]">
               <div className="h-[32px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -left-[17px] top-[72px] rounded-l-lg"></div>
               <div className="h-[46px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -left-[17px] top-[124px] rounded-l-lg"></div>
