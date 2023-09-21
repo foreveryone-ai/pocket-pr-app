@@ -6,6 +6,32 @@ import LandingHero from "./components/LandingHero";
 import { TbArrowsCross } from "react-icons/tb";
 import { AiFillWechat } from "react-icons/ai";
 import { DiGoogleAnalytics } from "react-icons/di";
+import NavBar from "./components/NavBar";
+import { BriefcaseIcon, FireIcon, CameraIcon } from "@heroicons/react/20/solid";
+
+const features = [
+  {
+    name: "Content Creators",
+    description:
+      "Gain insights into your audience's preferences in order to tailor your content accordingly and address any potential disputes or misunderstandings that may arise, ensuring a harmonious relationship with your followers.",
+    // href: '#',
+    icon: CameraIcon,
+  },
+  {
+    name: "Influencers",
+    description:
+      "Discern which brands resonate most with your audience. Guide your partnership choices and swiftly address any concerns or controversies that may emerge from affiliations with brands that might not align with your audience's values.",
+    // href: '#',
+    icon: FireIcon,
+  },
+  {
+    name: "Businesses",
+    description:
+      "Access a real-time feedback mechanism. Stay attuned to customer sentiments and perceptions, enabling you to rapidly adapt and refine your products and services in response to the ever-evolving demands and expectations of your clientele.",
+    // href: '#',
+    icon: BriefcaseIcon,
+  },
+];
 
 export default function Home() {
   const features2 = [
@@ -86,17 +112,47 @@ export default function Home() {
   return (
     <>
       <div className="bg-white min-h-screen">
+        <NavBar />
         {/* --------------------------------------HERO-------------------------------------- */}
         <LandingHero />
         {/* --------------------------------------TAG-------------------------------------- */}
 
-        <div className="mx-auto max-w-xl py-24 px-6 md:py-32 lg:px-8">
-          <div className="relative isolate flex justify-center align-center overflow-hidden bg-green-900 shadow-2xl rounded-3xl pt-10 pb-10 lg:flex lg:px-10">
-            <div className="mx-12 max-w-md text-center lg:text-center">
-              <h2 className="font-playfair text-3xl font-bold tracking-tight text-white sm:text-4xl">
-                Focus.
+        <div className="bg-green-800 py-24 sm:py-32">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="mx-auto max-w-2xl lg:text-center">
+              <h2 className="text-base font-semibold leading-7 text-white">
+                Stay Ahead
               </h2>
-              <p className="mt-4 text-lg text-white">(take the high road)</p>
+              <p className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                A Use-Case For You, Whoever You Are
+              </p>
+              <p className="mt-6 text-lg leading-8 text-white">
+                PocketPR is a groundbreaking platform that will help anyone and
+                everyone better understand their social communications.
+              </p>
+            </div>
+            <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
+              <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3">
+                {features.map((feature) => (
+                  <div key={feature.name} className="flex flex-col">
+                    <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-white">
+                      <feature.icon
+                        className="h-5 w-5 flex-none text-yellow-400"
+                        aria-hidden="true"
+                      />
+                      {feature.name}
+                    </dt>
+                    <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-white">
+                      <p className="flex-auto">{feature.description}</p>
+                      {/* <p className="mt-6">
+                        <a href={feature.href} className="text-sm font-semibold leading-6 text-orange-600">
+                          Learn more <span aria-hidden="true">→</span>
+                        </a>
+                      </p> */}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
             </div>
           </div>
         </div>
