@@ -57,7 +57,7 @@ export default function RootLayout({
         <body className={publicSans.className}>
           <main>
             <Providers>
-              <NavBar />
+              {/* <NavBar /> */}
               {children}
             </Providers>
           </main>
