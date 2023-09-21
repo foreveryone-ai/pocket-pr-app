@@ -96,8 +96,9 @@ export default function Hero() {
           >
             <b>{Roles[currentIndex]}</b>
           </h1>
+          <span>Content Creators, Influencers, and Businesses</span>
         </div>
-        <div className="flex justify-center pt-24 md:pt-12 lg:pt-14 md:mb-36 space-x-4">
+        <div className="flex justify-center pt-12 lg:pt-14 md:pb-36 space-x-4">
           <Button
             color="success"
             endContent={<BsFillArrowDownCircleFill />}
@@ -128,7 +129,7 @@ export default function Hero() {
           </SignedOut>
         </div>
       </div>
-      <div ref={tagRef}>
+      <div ref={tagRef} className="pt-28">
         <DemoVideo />
       </div>
 
