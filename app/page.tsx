@@ -6,6 +6,7 @@ import LandingHero from "./components/LandingHero";
 import { TbArrowsCross } from "react-icons/tb";
 import { AiFillWechat } from "react-icons/ai";
 import { DiGoogleAnalytics } from "react-icons/di";
+import NavBar from "./components/NavBar";
 
 export default function Home() {
   const features2 = [
@@ -86,6 +87,7 @@ export default function Home() {
   return (
     <>
       <div className="bg-white min-h-screen">
+        <NavBar />
         {/* --------------------------------------HERO-------------------------------------- */}
         <LandingHero />
         {/* --------------------------------------TAG-------------------------------------- */}
