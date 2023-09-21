@@ -91,8 +91,8 @@ export default function Home() {
         {/* --------------------------------------TAG-------------------------------------- */}
 
         <div className="mx-auto max-w-xl py-24 px-6 md:py-32 lg:px-8">
-          <div className="relative isolate flex justify-center align-center overflow-hidden bg-green-900 shadow-2xl rounded-3xl pt-10 pb-10 lg:flex lg:gap-x-10 lg:px-10">
-            <div className="mx-12 max-w-md text-center  lg:py-32 lg:text-center">
+          <div className="relative isolate flex justify-center align-center overflow-hidden bg-green-900 shadow-2xl rounded-3xl pt-10 pb-10 lg:flex lg:px-10">
+            <div className="mx-12 max-w-md text-center lg:text-center">
               <h2 className="font-playfair text-3xl font-bold tracking-tight text-white sm:text-4xl">
                 Focus.
               </h2>
@@ -101,10 +101,13 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="overflow-hidden bg-white py-24 sm:py-32">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        {/* <div className="mx-auto max-w-7xl py-24 px-6 md:py-32 xl:px-32">
+        <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2"> */}
+
+        <div className="overflow-hidden bg-white">
+          <div className="mx-auto max-w-7xl py-24 px-6 md:py-32 xl:px-32">
             <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
-              <div className="md:pr-36">
+              <div className="flex items-center">
                 <div className="relative mx-auto border-gray-800 dark:border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[600px] w-[300px]">
                   <div className="h-[32px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -left-[17px] top-[72px] rounded-l-lg"></div>
                   <div className="h-[46px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -left-[17px] top-[124px] rounded-l-lg"></div>
@@ -118,9 +121,9 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="lg:ml-auto lg:pl-4 lg:pt-4">
+              <div className="lg:pr-24">
                 <div className="lg:max-w-lg">
-                  <p className="font-playfair mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                  <p className="font-playfair pt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
                     Turn feedback into fame.
                   </p>
                   <p className="mt-6 text-lg leading-8 text-gray-600">
@@ -150,7 +153,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="bg-green-900 min-h-screen">
+        {/* <div className="bg-green-900 min-h-screen">
           <div className="px-6 pt-12 lg:px-8 lg:pt-20">
             <div className="text-center">
               <p className="font-playfair mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
@@ -346,7 +349,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div className="mx-auto max-w-7xl sm:px-6 sm:py-32 lg:px-8">
           <div className="relative isolate overflow-hidden bg-green-900 px-6 pt-16 shadow-2xl sm:rounded-3xl sm:px-16 md:pt-24 lg:flex lg:gap-x-20 lg:px-24 lg:pt-0">

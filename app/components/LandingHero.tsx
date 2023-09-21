@@ -13,6 +13,7 @@ import { Divider } from "@nextui-org/divider";
 import { LiaAssistiveListeningSystemsSolid } from "react-icons/lia";
 import { BiSolidBinoculars } from "react-icons/bi";
 import { GiTreeGrowth } from "react-icons/gi";
+import DemoVideo from "./DemoVideo";
 
 const features1 = [
   {
@@ -127,34 +128,13 @@ export default function Hero() {
           </SignedOut>
         </div>
       </div>
-
-      <div className="hidden md:flex md:flex-col md:items-center">
-        <iframe
-          className="rounded-2xl"
-          width="560"
-          height="315"
-          src="https://www.youtube.com/embed/lbcpORKF-Gs?si=BEuhZ4_z6QBpKgFd&amp;controls=0"
-          title="YouTube video player"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        ></iframe>
-      </div>
-      <div className="flex flex-col justify-center items-center md:hidden ">
-        <iframe
-          className="rounded-2xl"
-          width="280"
-          height="315"
-          src="https://www.youtube.com/embed/lbcpORKF-Gs?si=BEuhZ4_z6QBpKgFd&amp;controls=0"
-          title="YouTube video player"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        ></iframe>
+      <div ref={tagRef}>
+        <DemoVideo />
       </div>
 
-      <div
-        ref={tagRef}
-        className="mx-auto max-w-7xl py-24 px-6 md:py-32 lg:px-8"
-      >
+      <div className="mx-auto max-w-7xl py-24 px-6 md:py-32 xl:px-32">
         <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
-          <div className="lg:pr-8 lg:pt-4">
+          <div className="lg:pl-24 lg:pt-4">
             <div className="lg:max-w-lg">
               <p className="font-playfair mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
                 Silence the noise.
@@ -182,7 +162,7 @@ export default function Hero() {
               </dl>
             </div>
           </div>
-          <div className="md:pl-36">
+          <div className="flex items-center ">
             <div className="relative mx-auto border-gray-800 dark:border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[600px] w-[300px]">
               <div className="h-[32px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -left-[17px] top-[72px] rounded-l-lg"></div>
               <div className="h-[46px] w-[3px] bg-gray-800 dark:bg-gray-800 absolute -left-[17px] top-[124px] rounded-l-lg"></div>
