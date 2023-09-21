@@ -9,7 +9,7 @@ export default function () {
           className="rounded-2xl"
           width="350"
           height="197"
-          src="https://www.youtube.com/embed/lbcpORKF-Gs?si=BEuhZ4_z6QBpKgFd&amp;controls=0"
+          src="https://www.youtube.com/embed/gS-lGo31JfI?si=YxsUieN6d_ZOE2Ja"
           title="YouTube video player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         ></iframe>
@@ -21,7 +21,7 @@ export default function () {
           className="rounded-2xl"
           width="600"
           height="337"
-          src="https://www.youtube.com/embed/lbcpORKF-Gs?si=BEuhZ4_z6QBpKgFd&amp;controls=0"
+          src="https://www.youtube.com/embed/gS-lGo31JfI?si=YxsUieN6d_ZOE2Ja"
           title="YouTube video player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         ></iframe>
@@ -33,7 +33,7 @@ export default function () {
           className="rounded-2xl"
           width="700"
           height="394"
-          src="https://www.youtube.com/embed/lbcpORKF-Gs?si=BEuhZ4_z6QBpKgFd&amp;controls=0"
+          src="https://www.youtube.com/embed/gS-lGo31JfI?si=YxsUieN6d_ZOE2Ja"
           title="YouTube video player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         ></iframe>
@@ -45,7 +45,7 @@ export default function () {
           className="rounded-2xl"
           width="900"
           height="506"
-          src="https://www.youtube.com/embed/lbcpORKF-Gs?si=BEuhZ4_z6QBpKgFd&amp;controls=0"
+          src="https://www.youtube.com/embed/gS-lGo31JfI?si=YxsUieN6d_ZOE2Ja"
           title="YouTube video player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         ></iframe>
@@ -57,7 +57,7 @@ export default function () {
           className="rounded-2xl"
           width="1100"
           height="619"
-          src="https://www.youtube.com/embed/lbcpORKF-Gs?si=BEuhZ4_z6QBpKgFd&amp;controls=0"
+          src="https://www.youtube.com/embed/gS-lGo31JfI?si=YxsUieN6d_ZOE2Ja"
           title="YouTube video player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         ></iframe>
@@ -69,7 +69,7 @@ export default function () {
           className="rounded-2xl"
           width="1300"
           height="731"
-          src="https://www.youtube.com/embed/lbcpORKF-Gs?si=BEuhZ4_z6QBpKgFd&amp;controls=0"
+          src="https://www.youtube.com/embed/gS-lGo31JfI?si=YxsUieN6d_ZOE2Ja"
           title="YouTube video player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         ></iframe>
