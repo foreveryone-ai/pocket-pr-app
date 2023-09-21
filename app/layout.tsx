@@ -7,6 +7,7 @@ import { Providers } from "./providers";
 const publicSans = Public_Sans({ subsets: ["latin"] });
 
 export const metadata = {
+  card: "summary_large_image",
   title: "PocketPR",
   description: "Created by ForEveryone.AI",
 };
