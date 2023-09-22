@@ -1,5 +1,6 @@
 "use client";
 import { SignIn } from "@clerk/nextjs";
+import NavBar from "@/app/components/NavBar";
 
 export default function Page() {
   return (
