@@ -4,7 +4,6 @@ import ChatUI from "@/app/components/ChatUI";
 import { getCaptionSummary } from "@/lib/supabaseClient";
 import { auth, currentUser } from "@clerk/nextjs";
 import { useState } from "react";
-import NavBar from "../../components/NavBar";
 
 export default async function ChatPage({
   params,
@@ -45,13 +44,10 @@ export default async function ChatPage({
   const userName = user?.firstName;
 
   return (
-    <div className="min-h-screen bg-green-800">
-      <NavBar />
-      <ChatUI
-        videoid={params.videoid}
-        captionsSummary={captions}
-        userName={userName}
-      />
-    </div>
+    <ChatUI
+      videoid={params.videoid}
+      captionsSummary={captions}
+      userName={userName}
+    />
   );
 }

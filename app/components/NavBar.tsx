@@ -29,7 +29,7 @@ export default function NavBar() {
   };
   return (
     <>
-      <div className="navbar isSticky bg-green-800 p-4">
+      <div className="navbar bg-green-800 p-4">
         {/* ----------------------------NAVBAR START---------------------------- */}
         <div className="navbar-start">
           <SignedIn>
