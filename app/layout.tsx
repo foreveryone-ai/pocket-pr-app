@@ -13,8 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      {/* <head>
-       
+      <head>
         <title>PocketPR - Simplify the Conversation</title>
         <meta name="title" content="PocketPR - Simplify the Conversation" />
         <meta
@@ -22,7 +21,6 @@ export default function RootLayout({
           content="Automated public relations assistants for content creators, influencers, businesses, and you! "
         />
 
-       
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.pocketpr.app/" />
         <meta
@@ -35,7 +33,6 @@ export default function RootLayout({
         />
         <meta property="og:image" content="https://pocketpr.app/meta.png" />
 
-       
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content="https://www.pocketpr.app/" />
         <meta
@@ -50,8 +47,7 @@ export default function RootLayout({
           property="twitter:image"
           content="https://pocketpr.app/meta.png"
         />
-
-      </head> */}
+      </head>
       <ClerkProvider>
         <body className={publicSans.className}>
           <main>
