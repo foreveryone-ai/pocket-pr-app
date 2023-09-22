@@ -6,12 +6,6 @@ import { Providers } from "./providers";
 
 const publicSans = Public_Sans({ subsets: ["latin"] });
 
-export const metadata = {
-  card: "summary_large_image",
-  title: "PocketPR",
-  description: "Created by ForEveryone.AI",
-};
-
 export default function RootLayout({
   children,
 }: {
@@ -63,7 +57,7 @@ export default function RootLayout({
         <body className={publicSans.className}>
           <main>
             <Providers>
-              <NavBar />
+              {/* <NavBar /> */}
               {children}
             </Providers>
           </main>
