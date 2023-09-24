@@ -1,47 +1,17 @@
 "use client";
-
 import { Tabs, Tab } from "@nextui-org/tabs";
-import {
-  BsFacebook,
-  BsYoutube,
-  BsLinkedin,
-  BsTwitch,
-  BsTwitter,
-} from "react-icons/bs";
+import { BsYoutube, BsLinkedin } from "react-icons/bs";
 import { BiLogoDiscord } from "react-icons/bi";
 import { AiFillInstagram } from "react-icons/ai";
 import { Button } from "@nextui-org/button";
-import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-} from "@nextui-org/dropdown";
-import {
-  Navbar,
-  NavbarBrand,
-  NavbarContent,
-  NavbarItem,
-} from "@nextui-org/navbar";
+import { Navbar, NavbarBrand, NavbarContent } from "@nextui-org/navbar";
 
 export default function Home() {
   return (
     <>
-      <Navbar className="bg-white">
+      <Navbar>
         <NavbarBrand>
-          <Dropdown>
-            <DropdownTrigger>
-              <Button variant="flat">Options</Button>
-            </DropdownTrigger>
-            <DropdownMenu
-              aria-label="Action event example"
-              onAction={(key) => alert(key)}
-            >
-              <DropdownItem key="update" className="text-black">
-                Update
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+          <Button>Update</Button>
         </NavbarBrand>
         <NavbarContent className="" justify="center">
           <Tabs

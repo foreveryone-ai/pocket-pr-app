@@ -32,7 +32,7 @@ export default async function Home() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-white">
       <NavBar />
       <Tabs />
       <div className="flex flex-col items-center text-black justify-start xl:px-20 pt-10 pb-10 bg-white">
