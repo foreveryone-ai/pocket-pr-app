@@ -135,8 +135,8 @@ export default function App() {
                         <br /> e) Engage in any activity that disrupts or
                         interferes with the proper working of the App. <br />
                         <b>3. Chat Messages</b> <br />
-                        a) All chat messages exchanged with the App's chatbot
-                        are saved by PocketPR. <br />
+                        a) All chat messages exchanged with the App&lsquo;s
+                        chatbot are saved by PocketPR. <br />
                         b) Saved chat messages are used for the purpose of
                         improving and training future models. <br />
                         c) All saved chat messages are anonymized to protect
