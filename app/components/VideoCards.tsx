@@ -55,6 +55,10 @@ export default function VideoCard({
     }
   }, [title, imageUrl, videoId]);
 
+  const openNoCommentsModal = () => {
+    openNoCommentsModalDisclosure();
+  };
+
   const handleModalClose = async () => {
     onOpenChange();
     setIsLoading(true);
@@ -74,6 +78,8 @@ export default function VideoCard({
       // check if all was successful and decrement the users credits
       if (summaryRes && summaryRes && embeddingsRes) {
         setShowChat(true);
+      } else {
+        openNoCommentsModal();
       }
       //TODO: show modal saying no chat available because
       //TODO: the video has not captions and/or comments
@@ -93,6 +99,12 @@ export default function VideoCard({
   const truncateTitle = (title: string, limit: number = 10) => {
     return title.length > limit ? `${title.substring(0, limit)}...` : title;
   };
+
+  const {
+    isOpen: isNoCommentsModalOpen,
+    onOpen: openNoCommentsModalDisclosure,
+    onOpenChange: toggleNoCommentsModal,
+  } = useDisclosure();
 
   return (
     <div className="relative">
@@ -166,6 +178,38 @@ export default function VideoCard({
                   onPress={handleModalClose}
                 >
                   Get Started
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
+      <Modal
+        isOpen={isNoCommentsModalOpen}
+        onOpenChange={toggleNoCommentsModal}
+      >
+        <ModalContent>
+          {() => (
+            <>
+              <ModalHeader className="flex flex-col gap-1 text-black font-black">
+                Not Enough Comments
+              </ModalHeader>
+              <ModalBody className="">
+                <p className="text-black ">
+                  Unfortunately, this video does not have enough comments to
+                  perform an analysis. When your video has more comments, click
+                  the "Update" button at the top left of the dashboard to
+                  retrieve your latest feedback.
+                </p>
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  color="danger"
+                  variant="light"
+                  onPress={toggleNoCommentsModal}
+                >
+                  Close
                 </Button>
               </ModalFooter>
             </>
