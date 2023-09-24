@@ -31,10 +31,10 @@ export default function Home() {
       <Navbar>
         <NavbarBrand>
           <Button onClick={handleClick}>
-            {isLoading ? <Spinner /> : "Update"}
+            {isLoading ? <Spinner size="sm" color="success" /> : "Update"}
           </Button>
         </NavbarBrand>
-        <NavbarContent className="" justify="center">
+        <NavbarContent justify="center">
           <Tabs
             disabledKeys={[
               "Facebook",
