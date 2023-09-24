@@ -25,7 +25,7 @@ const ResponsiveIframe: FC<ResponsiveIframeProps> = ({
 
 export default function DemoVideo() {
   return (
-    <>
+    <div className="bg-green-800 py-12">
       <ResponsiveIframe
         width={350}
         height={197}
@@ -56,6 +56,6 @@ export default function DemoVideo() {
         height={731}
         className="hidden 2xl:flex 2xl:flex-col 2xl:items-center"
       />
-    </>
+    </div>
   );
 }
