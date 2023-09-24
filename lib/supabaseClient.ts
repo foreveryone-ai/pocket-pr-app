@@ -141,7 +141,9 @@ export async function getLatestVideoDate(
   }
 
   if (data && data.length > 0) {
-    return new Date(data[0].published_at);
+    const latestVideoDate = new Date(data[0].published_at);
+    console.log("Latest video date:", latestVideoDate);
+    return latestVideoDate;
   } else {
     return null;
   }

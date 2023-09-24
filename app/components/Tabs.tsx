@@ -11,7 +11,21 @@ export default function Home() {
     <>
       <Navbar>
         <NavbarBrand>
-          <Button>Update</Button>
+          <Button
+            onClick={async () => {
+              try {
+                const response = await fetch("/api/update-youtube", {
+                  method: "GET",
+                });
+                const data = await response.json();
+                console.log(data);
+              } catch (error) {
+                console.error(error);
+              }
+            }}
+          >
+            Update
+          </Button>
         </NavbarBrand>
         <NavbarContent className="" justify="center">
           <Tabs
