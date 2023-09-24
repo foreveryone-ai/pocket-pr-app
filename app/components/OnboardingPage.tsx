@@ -114,11 +114,12 @@ export default function App() {
                     <div style={{ overflowY: "auto", maxHeight: "200px" }}>
                       <p>
                         <b>1. Introduction Welcome to PocketPR!</b>
-                        <br /> This User Agreement ("Agreement") governs your
-                        use of the PocketPR application ("App"). By accessing or
-                        using the App, you agree to be bound by the terms of
-                        this Agreement. If you do not agree with these terms,
-                        please do not use the App. <br />
+                        <br /> This User Agreement (&quot;Agreement&quot;)
+                        governs your use of the PocketPR application
+                        (&quot;App&quot;). By accessing or using the App, you
+                        agree to be bound by the terms of this Agreement. If you
+                        do not agree with these terms, please do not use the
+                        App. <br />
                         <b>2. User Conduct</b>
                         <br /> You agree not to use the App to:
                         <br />
@@ -126,7 +127,7 @@ export default function App() {
                         b) Transmit or post any content that is violent,
                         offensive, racist, discriminatory, hateful, or otherwise
                         objectionable. <br />
-                        c) Harass, threaten, or defame any person or entity.{" "}
+                        c) Harass, threaten, or defame any person or entity.
                         <br />
                         d) Transmit or post any content that infringes upon the
                         rights of others, including intellectual property
@@ -154,11 +155,12 @@ export default function App() {
                         our sole discretion.
                         <br /> <b> 6. Disclaimers </b>
                         <br />
-                        The App is provided "as is" and without warranties of
-                        any kind, either express or implied. PocketPR disclaims
-                        all warranties, express or implied, including, but not
-                        limited to, implied warranties of merchantability,
-                        fitness for a particular purpose, and non-infringement.{" "}
+                        The App is provided &quot;as is&quot; and without
+                        warranties of any kind, either express or implied.
+                        PocketPR disclaims all warranties, express or implied,
+                        including, but not limited to, implied warranties of
+                        merchantability, fitness for a particular purpose, and
+                        non-infringement.
                         <br /> <b>7. Limitation of Liability </b>
                         <br /> To the fullest extent permitted by applicable
                         law, PocketPR shall not be liable for any indirect,
