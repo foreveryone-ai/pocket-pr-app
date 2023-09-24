@@ -48,7 +48,17 @@ export default function RootLayout({
           content="https://pocketpr.app/meta.png"
         />
       </head>
-      <ClerkProvider>
+      <ClerkProvider
+        appearance={{
+          layout: {
+            logoPlacement: "inside",
+          },
+          variables: {
+            colorPrimary: "green",
+            colorText: "green",
+          },
+        }}
+      >
         <body className={publicSans.className}>
           <main>
             <Providers>
