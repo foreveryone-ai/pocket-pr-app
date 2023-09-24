@@ -10,7 +10,6 @@ import { Spinner } from "@nextui-org/spinner";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
-
   const handleClick = async () => {
     setIsLoading(true);
     try {
@@ -23,6 +22,7 @@ export default function Home() {
       console.error(error);
     } finally {
       setIsLoading(false);
+      window.location.reload(); // Refresh the page when the API request completes
     }
   };
 
