@@ -199,8 +199,8 @@ export default function VideoCard({
                 <p className="text-black ">
                   Unfortunately, this video does not have enough comments to
                   perform an analysis. When your video has more comments, click
-                  the &quot;Update&quot; button at the top left of the dashboard to
-                  retrieve your latest feedback.
+                  the &quot;Update&quot; button at the top left of the dashboard
+                  to retrieve your latest feedback.
                 </p>
               </ModalBody>
               <ModalFooter>
