@@ -111,8 +111,62 @@ export default function App() {
                     className="max-w-md mb-4"
                   />
                   {step === 1 && (
-                    <div>
-                      <p>First, let&apos;s grab your YouTube Channel ID.</p>
+                    <div style={{ overflowY: "auto", maxHeight: "200px" }}>
+                      <p>
+                        1. Introduction Welcome to PocketPR! This User Agreement
+                        ("Agreement") governs your use of the PocketPR
+                        application ("App"). By accessing or using the App, you
+                        agree to be bound by the terms of this Agreement. If you
+                        do not agree with these terms, please do not use the
+                        App. 2. User Conduct You agree not to use the App to: a)
+                        Engage in or promote any illegal activities. b) Transmit
+                        or post any content that is violent, offensive, racist,
+                        discriminatory, hateful, or otherwise objectionable. c)
+                        Harass, threaten, or defame any person or entity. d)
+                        Transmit or post any content that infringes upon the
+                        rights of others, including intellectual property
+                        rights. e) Engage in any activity that disrupts or
+                        interferes with the proper working of the App. 3. Chat
+                        Messages a) All chat messages exchanged with the App's
+                        chatbot are saved by PocketPR. b) Saved chat messages
+                        are used for the purpose of improving and training
+                        future models. c) All saved chat messages are anonymized
+                        to protect user privacy. Personal identifiers are
+                        removed to ensure that individual users cannot be
+                        identified from the saved data. 4. Privacy Your privacy
+                        is important to us. Please review our Privacy Policy,
+                        which is incorporated into this Agreement by reference,
+                        to understand how we collect, use, and disclose
+                        information. 5. Termination PocketPR reserves the right
+                        to terminate or suspend your access to the App without
+                        prior notice if you violate any terms of this Agreement
+                        or for any other reason at our sole discretion. 6.
+                        Disclaimers The App is provided "as is" and without
+                        warranties of any kind, either express or implied.
+                        PocketPR disclaims all warranties, express or implied,
+                        including, but not limited to, implied warranties of
+                        merchantability, fitness for a particular purpose, and
+                        non-infringement. 7. Limitation of Liability To the
+                        fullest extent permitted by applicable law, PocketPR
+                        shall not be liable for any indirect, incidental,
+                        special, consequential, or punitive damages, or any loss
+                        of profits or revenues, whether incurred directly or
+                        indirectly, or any loss of data, use, goodwill, or other
+                        intangible losses, resulting from your use or inability
+                        to use the App. 8. Changes to Agreement PocketPR
+                        reserves the right to modify this Agreement at any time.
+                        Changes will be effective immediately upon posting. Your
+                        continued use of the App after changes are posted
+                        constitutes your acceptance of the revised Agreement. 9.
+                        Governing Law This Agreement is governed by the laws of
+                        the jurisdiction in which PocketPR is based, without
+                        regard to its conflict of law provisions. 10. Contact
+                        For any questions or concerns regarding this Agreement,
+                        please contact us at [contact@pocketpr.com]. By using
+                        the PocketPR App, you acknowledge that you have read,
+                        understood, and agree to be bound by the terms of this
+                        User Agreement.
+                      </p>
                     </div>
                   )}
                   {step === 2 && (
