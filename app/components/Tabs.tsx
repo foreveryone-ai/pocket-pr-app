@@ -11,15 +11,39 @@ import {
 import { BiLogoDiscord } from "react-icons/bi";
 import { AiFillInstagram } from "react-icons/ai";
 import { Button } from "@nextui-org/button";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+} from "@nextui-org/dropdown";
+import {
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+} from "@nextui-org/navbar";
 
 export default function Home() {
   return (
-    <div className="pb-6 lg:pb-0">
-      {/* <Button className="px-0 lg:hidden">Refresh</Button> */}
-      <div className="md:flex md:flex-col-3 md:space-between">
-        {/* <Button className="hidden lg:block md:px-0 md:mr-24">Refresh</Button> */}
-
-        <div className="flex flex-col md:pb-12">
+    <>
+      <Navbar className="bg-white">
+        <NavbarBrand>
+          <Dropdown>
+            <DropdownTrigger>
+              <Button variant="flat">Options</Button>
+            </DropdownTrigger>
+            <DropdownMenu
+              aria-label="Action event example"
+              onAction={(key) => alert(key)}
+            >
+              <DropdownItem key="update" className="text-black">
+                Update
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        </NavbarBrand>
+        <NavbarContent className="" justify="center">
           <Tabs
             disabledKeys={[
               "Facebook",
@@ -33,24 +57,6 @@ export default function Home() {
             color="default"
             variant="solid"
           >
-            <Tab
-              key="Facebook"
-              title={
-                <div className="flex items-center space-x-2">
-                  <BsFacebook />
-                  <span className="hidden md:inline">Facebook</span>
-                </div>
-              }
-            />
-            <Tab
-              key="Discord"
-              title={
-                <div className="flex items-center space-x-2">
-                  <BiLogoDiscord />
-                  <span className="hidden md:inline">Discord</span>
-                </div>
-              }
-            />
             <Tab
               key="Instagram"
               title={
@@ -78,27 +84,10 @@ export default function Home() {
                 </div>
               }
             />
-            <Tab
-              key="Twitch"
-              title={
-                <div className="flex items-center space-x-2">
-                  <BsTwitch />
-                  <span className="hidden md:inline">Twitch</span>
-                </div>
-              }
-            />
-            <Tab
-              key="Twitter"
-              title={
-                <div className="flex items-center space-x-2">
-                  <BsTwitter />
-                  <span className="hidden md:inline">Twitter</span>
-                </div>
-              }
-            />
           </Tabs>
-        </div>
-      </div>
-    </div>
+        </NavbarContent>
+        <NavbarContent justify="end"></NavbarContent>
+      </Navbar>
+    </>
   );
 }
