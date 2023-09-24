@@ -217,14 +217,15 @@ export default function Home() {
         </div>
 
         <div className="bg-green-800 py-24 sm:py-32">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8 bg-white rounded-xl lg:py-8">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8 bg-white rounded-xl py-8">
             <div className="mx-auto max-w-2xl sm:text-center">
               <h2 className="text-3xl font-bold tracking-tight text-black sm:text-4xl">
                 Get Full Access Today
               </h2>
               <p className="mt-6 text-lg leading-8 text-black">
-                If you&apos;re serious about YouTube, subscribe to get unlimited
-                access to your agent.
+                Free users can chat with 1 video per week. If you&apos;re
+                serious about YouTube, subscribe to get unlimited access to your
+                agent.
               </p>
             </div>
             <div className="mx-auto mt-16 max-w-2xl rounded-3xl ring-1 ring-gray-200 sm:mt-20 lg:mx-0 lg:flex lg:max-w-none">
@@ -236,7 +237,7 @@ export default function Home() {
                   Starter subscribers have access to chat with unlimited videos
                   and get first access to new features as they are released.
                 </p>
-                <div className="mt-10 flex items-center gap-x-4">
+                <div className="pt-10 flex items-center gap-x-4">
                   <h4 className="flex-none text-sm font-semibold leading-6 text-green-800">
                     What’s included
                   </h4>
