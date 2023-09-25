@@ -60,9 +60,17 @@ function classNames(...classes: string[]): string {
 }
 
 export default function DesktopTrends() {
+  const itemClasses = {
+    base: "py-0 w-full",
+    title: "font-normal text-medium",
+    trigger:
+      "px-2 py-0 data-[hover=true]:bg-default-100 rounded-lg h-14 flex items-center",
+    indicator: "text-medium",
+    content: "text-small px-2",
+  };
   return (
-    <div className="hidden lg:flow-root">
-      <div className="bg-green-800 rounded-2xl py-4">
+    <div className="hidden lg:flow-root lg:w-80">
+      <div className="bg-green-800 rounded-lg py-4">
         <h1 className="font-playfair text-white font-black text-2xl flex justify-center ">
           Channel Trends
         </h1>
@@ -79,8 +87,48 @@ export default function DesktopTrends() {
                     aria-hidden="true"
                   />
                 ) : null}
-                <div className="relative flex space-x-2">
-                  <Accordion variant="shadow">
+                <div className="relative space-x-2">
+                  <Accordion
+                    variant="shadow"
+                    itemClasses={itemClasses}
+                    className="w-full"
+                    motionProps={{
+                      variants: {
+                        enter: {
+                          y: 0,
+                          opacity: 1,
+                          height: "auto",
+                          transition: {
+                            height: {
+                              type: "spring",
+                              stiffness: 500,
+                              damping: 30,
+                              duration: 1,
+                            },
+                            opacity: {
+                              easings: "ease",
+                              duration: 1,
+                            },
+                          },
+                        },
+                        exit: {
+                          y: -10,
+                          opacity: 0,
+                          height: 0,
+                          transition: {
+                            height: {
+                              easings: "ease",
+                              duration: 0.25,
+                            },
+                            opacity: {
+                              easings: "ease",
+                              duration: 0.3,
+                            },
+                          },
+                        },
+                      },
+                    }}
+                  >
                     <AccordionItem
                       key={event.id}
                       aria-label={event.title}
