@@ -27,7 +27,7 @@ const timeline = [
     icon: UserIcon,
     iconBackground: "bg-orange-500",
     content:
-      "The content of the trend report produced by ChatGPT will be inserted here.",
+      "Welcome aboard! As your channel grows, new reports and trends will appear here.",
   },
   {
     id: 2,
