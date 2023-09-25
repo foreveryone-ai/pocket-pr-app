@@ -41,7 +41,7 @@ export default function NavBar() {
               </DropdownTrigger>
               <DropdownMenu
                 aria-label="Static Actions"
-                disabledKeys={["settings"]}
+                // disabledKeys={["settings"]}
               >
                 <DropdownItem
                   key="dashboard"

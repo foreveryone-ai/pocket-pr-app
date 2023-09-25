@@ -119,6 +119,36 @@ export type StoreAllCommentsParams = {
   author_display_name: string;
   author_image_url: string;
 };
+
+//-------------------------------Get Latest Video Date------------------------------------//
+
+export async function getLatestVideoDate(
+  authToken: string,
+  user_id: string
+): Promise<Date | null> {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db
+    .from("Video")
+    .select("published_at")
+    .eq("user_id", user_id)
+    .order("published_at", { ascending: false })
+    .limit(1);
+
+  if (error) {
+    console.error(error);
+    return null;
+  }
+
+  if (data && data.length > 0) {
+    const latestVideoDate = new Date(data[0].published_at);
+    console.log("Latest video date:", latestVideoDate);
+    return latestVideoDate;
+  } else {
+    return null;
+  }
+}
+
 //-------------------------------Read------------------------------------//
 
 export async function getCaptionSummary(

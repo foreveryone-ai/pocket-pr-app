@@ -1,39 +1,39 @@
+import LandingHero from "@/app/components/LandingHero";
+import Pricing from "@/app/components/Pricing";
+import NavBar from "@/app/components/NavBar";
 import { Image } from "@nextui-org/image";
 import { Spacer } from "@nextui-org/spacer";
 import "animate.css/animate.min.css";
-import { CheckIcon } from "@heroicons/react/20/solid";
-import LandingHero from "./components/LandingHero";
 import { TbArrowsCross } from "react-icons/tb";
 import { AiFillWechat } from "react-icons/ai";
 import { DiGoogleAnalytics } from "react-icons/di";
-import NavBar from "./components/NavBar";
 import { BriefcaseIcon, FireIcon, CameraIcon } from "@heroicons/react/20/solid";
 
-const features = [
-  {
-    name: "Content Creators",
-    description:
-      "Gain insights into your audience's preferences in order to tailor your content accordingly and address any potential disputes or misunderstandings that may arise, ensuring a harmonious relationship with your followers.",
-    // href: '#',
-    icon: CameraIcon,
-  },
-  {
-    name: "Influencers",
-    description:
-      "Discern which brands resonate most with your audience. Guide your partnership choices and swiftly address any concerns or controversies that may emerge from affiliations with brands that might not align with your audience's values.",
-    // href: '#',
-    icon: FireIcon,
-  },
-  {
-    name: "Businesses",
-    description:
-      "Access a real-time feedback mechanism. Stay attuned to customer sentiments and perceptions, enabling you to rapidly adapt and refine your products and services in response to the ever-evolving demands and expectations of your clientele.",
-    // href: '#',
-    icon: BriefcaseIcon,
-  },
-];
-
 export default function Home() {
+  const features = [
+    {
+      name: "Content Creators",
+      description:
+        "Gain insights into your audience's preferences in order to tailor your content accordingly and address any potential disputes or misunderstandings that may arise, ensuring a harmonious relationship with your followers.",
+      // href: '#',
+      icon: CameraIcon,
+    },
+    {
+      name: "Influencers",
+      description:
+        "Discern which brands resonate most with your audience. Guide your partnership choices and swiftly address any concerns or controversies that may emerge from affiliations with brands that might not align with your audience's values.",
+      // href: '#',
+      icon: FireIcon,
+    },
+    {
+      name: "Businesses",
+      description:
+        "Access a real-time feedback mechanism. Stay attuned to customer sentiments and perceptions, enabling you to rapidly adapt and refine your products and services in response to the ever-evolving demands and expectations of your clientele.",
+      // href: '#',
+      icon: BriefcaseIcon,
+    },
+  ];
+
   const features2 = [
     {
       name: "Cross-Platform Context",
@@ -53,22 +53,6 @@ export default function Home() {
         "Anticipate a wave of insightful reports in our upcoming updates. Aimed at enhancing conversations, forecasting audience trends, and skyrocketing your success as a digital creator with PocketPR.",
       icon: DiGoogleAnalytics,
     },
-  ];
-
-  const hobbyFeatures = [
-    "Chat with 1 video per week",
-    "Sentiment Reports",
-    "Conflict Detection Reports",
-  ];
-  const scaleFeatures = [
-    "Chat with unlimited videos",
-    "Platform-Growth Consultation",
-    "Chat with your channel",
-  ];
-  const growthFeatures = [
-    "Chat with 3 videos per week",
-    "Sentiment & Conflict Mitigation Reports",
-    "Chat with any YouTube video",
   ];
 
   const navigation = [
@@ -179,20 +163,20 @@ export default function Home() {
               </div>
               <div className="lg:pr-24">
                 <div className="lg:max-w-lg">
-                  <p className="font-playfair pt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                  <p className="font-playfair pt-2 text-3xl font-bold tracking-tight text-black sm:text-4xl">
                     Turn feedback into fame.
                   </p>
-                  <p className="mt-6 text-lg leading-8 text-gray-600">
+                  <p className="mt-6 text-lg leading-8 text-black">
                     This is just the beginning of a central-hub for your
                     platform-growth. We aim to bring a robust understanding of
                     the entirety of your online presence in an effort to best
                     guide your decision making as a creator and
                     online-personality.
                   </p>
-                  <dl className="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-600 lg:max-w-none">
+                  <dl className="mt-10 max-w-xl space-y-8 text-base leading-7 text-black lg:max-w-none">
                     {features2.map((feature) => (
                       <div key={feature.name} className="relative pl-9">
-                        <dt className="inline font-semibold text-gray-900">
+                        <dt className="inline font-semibold text-black">
                           <feature.icon
                             className="absolute left-1 top-1 h-5 w-5 text-green-600"
                             aria-hidden="true"
@@ -209,203 +193,9 @@ export default function Home() {
           </div>
         </div>
 
-        {/* <div className="bg-green-900 min-h-screen">
-          <div className="px-6 pt-12 lg:px-8 lg:pt-20">
-            <div className="text-center">
-              <p className="font-playfair mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
-                Find the perfect price, tailored to you
-              </p>
-              <p className="mx-auto mt-3 max-w-4xl text-xl text-gray-300 sm:mt-5 sm:text-2xl">
-                Sample a video on us. If it resonates, return to discover a plan
-                tailored to your ambitions with PocketPR.
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-16 bg-green pb-12 lg:mt-20 lg:pb-20">
-            <div className="relative z-0">
-              <div className="absolute inset-0 h-5/6 bg-green-900 lg:h-2/3" />
-              <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                <div className="relative lg:grid lg:grid-cols-7">
-                  <div className="mx-auto max-w-md lg:col-start-1 lg:col-end-3 lg:row-start-2 lg:row-end-3 lg:mx-0 lg:max-w-none">
-                    <div className="flex h-full flex-col overflow-hidden rounded-lg shadow-lg lg:rounded-none lg:rounded-l-lg">
-                      <div className="flex flex-1 flex-col">
-                        <div className="bg-white px-6 py-10">
-                          <div>
-                            <h3
-                              className="text-center text-2xl font-medium text-gray-900"
-                              id="tier-hobby"
-                            >
-                              Hobbyist
-                            </h3>
-                            <div className="mt-4 flex items-center justify-center">
-                              <span className="flex items-start px-3 text-6xl tracking-tight text-gray-900">
-                                <span className="mr-2 mt-2 text-4xl font-medium tracking-tight">
-                                  $
-                                </span>
-                                <span className="font-bold">9</span>
-                              </span>
-                              <span className="text-xl font-medium text-gray-500">
-                                /month
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex flex-1 flex-col justify-between border-t-2 border-gray-100 bg-gray-50 p-6 sm:p-10 lg:p-6 xl:p-10">
-                          <ul role="list" className="space-y-4">
-                            {hobbyFeatures.map((feature) => (
-                              <li key={feature} className="flex items-start">
-                                <div className="flex-shrink-0">
-                                  <CheckIcon
-                                    className="h-6 w-6 flex-shrink-0 text-green-500"
-                                    aria-hidden="true"
-                                  />
-                                </div>
-                                <p className="ml-3 text-base font-medium text-gray-500">
-                                  {feature}
-                                </p>
-                              </li>
-                            ))}
-                          </ul>
-                          <div className="mt-8">
-                            <div className="rounded-lg shadow-md">
-                              <a
-                                href="#"
-                                className="block w-full rounded-lg border border-transparent bg-white px-6 py-3 text-center text-base font-medium text-green-600 hover:bg-gray-50"
-                                aria-describedby="tier-hobby"
-                              >
-                                Start your trial
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mx-auto mt-10 max-w-lg lg:col-start-3 lg:col-end-6 lg:row-start-1 lg:row-end-4 lg:mx-0 lg:mt-0 lg:max-w-none">
-                    <div className="relative z-10 rounded-lg shadow-xl">
-                      <div
-                        className="pointer-events-none absolute inset-0 rounded-lg border-2 border-green-600"
-                        aria-hidden="true"
-                      />
-                      <div className="absolute inset-x-0 top-0 translate-y-px transform">
-                        <div className="flex -translate-y-1/2 transform justify-center">
-                          <span className="inline-flex rounded-full bg-green-600 px-4 py-1 text-base font-semibold text-white">
-                            Most popular
-                          </span>
-                        </div>
-                      </div>
-                      <div className="rounded-t-lg bg-white px-6 pb-10 pt-12">
-                        <div>
-                          <h3
-                            className="text-center text-3xl font-semibold tracking-tight text-gray-900 sm:-mx-6"
-                            id="tier-growth"
-                          >
-                            Content Creator
-                          </h3>
-                          <div className="mt-4 flex items-center justify-center">
-                            <span className="flex items-start px-3 text-6xl tracking-tight text-gray-900 sm:text-6xl">
-                              <span className="mr-2 mt-2 text-4xl font-medium tracking-tight">
-                                $
-                              </span>
-                              <span className="font-bold">25</span>
-                            </span>
-                            <span className="text-2xl font-medium text-gray-500">
-                              /month
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="rounded-b-lg border-t-2 border-gray-100 bg-gray-50 px-6 pb-8 pt-10 sm:px-10 sm:py-10">
-                        <ul role="list" className="space-y-4">
-                          {growthFeatures.map((feature) => (
-                            <li key={feature} className="flex items-start">
-                              <div className="flex-shrink-0">
-                                <CheckIcon
-                                  className="h-6 w-6 flex-shrink-0 text-green-500"
-                                  aria-hidden="true"
-                                />
-                              </div>
-                              <p className="ml-3 text-base font-medium text-gray-500">
-                                {feature}
-                              </p>
-                            </li>
-                          ))}
-                        </ul>
-                        <div className="mt-10">
-                          <div className="rounded-lg shadow-md">
-                            <a
-                              href="#"
-                              className="block w-full rounded-lg border border-transparent bg-green-600 px-6 py-4 text-center text-xl font-medium leading-6 text-white hover:bg-green-700"
-                              aria-describedby="tier-growth"
-                            >
-                              Start your trial
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mx-auto mt-10 max-w-md lg:col-start-6 lg:col-end-8 lg:row-start-2 lg:row-end-3 lg:m-0 lg:max-w-none">
-                    <div className="flex h-full flex-col overflow-hidden rounded-lg shadow-lg lg:rounded-none lg:rounded-r-lg">
-                      <div className="flex flex-1 flex-col">
-                        <div className="bg-white px-6 py-10">
-                          <div>
-                            <h3
-                              className="text-center text-2xl font-medium text-gray-900"
-                              id="tier-scale"
-                            >
-                              Influencer
-                            </h3>
-                            <div className="mt-4 flex items-center justify-center">
-                              <span className="flex items-start px-3 text-6xl tracking-tight text-gray-900">
-                                <span className="mr-2 mt-2 text-4xl font-medium tracking-tight">
-                                  $
-                                </span>
-                                <span className="font-bold">49</span>
-                              </span>
-                              <span className="text-xl font-medium text-gray-500">
-                                /month
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex flex-1 flex-col justify-between border-t-2 border-gray-100 bg-gray-50 p-6 sm:p-10 lg:p-6 xl:p-10">
-                          <ul role="list" className="space-y-4">
-                            {scaleFeatures.map((feature) => (
-                              <li key={feature} className="flex items-start">
-                                <div className="flex-shrink-0">
-                                  <CheckIcon
-                                    className="h-6 w-6 flex-shrink-0 text-green-500"
-                                    aria-hidden="true"
-                                  />
-                                </div>
-                                <p className="ml-3 text-base font-medium text-gray-500">
-                                  {feature}
-                                </p>
-                              </li>
-                            ))}
-                          </ul>
-                          <div className="mt-8">
-                            <div className="rounded-lg shadow-md">
-                              <a
-                                href="#"
-                                className="block w-full rounded-lg border border-transparent bg-white px-6 py-3 text-center text-base font-medium text-green-600 hover:bg-gray-50"
-                                aria-describedby="tier-scale"
-                              >
-                                Start your trial
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div> */}
+        <div className="bg-green-800 py-24 sm:py-32">
+          <Pricing />
+        </div>
 
         <div className="mx-auto max-w-7xl sm:px-6 sm:py-32 lg:px-8">
           <div className="relative isolate overflow-hidden bg-green-900 px-6 pt-16 shadow-2xl sm:rounded-3xl sm:px-16 md:pt-24 lg:flex lg:gap-x-20 lg:px-24 lg:pt-0">
@@ -424,7 +214,7 @@ export default function Home() {
               <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
                 <a
                   href="/sign-up"
-                  className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                  className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-black shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                 >
                   Sign Up
                 </a>

@@ -16,7 +16,7 @@ const ResponsiveIframe: FC<ResponsiveIframeProps> = ({
       className="rounded-2xl"
       width={width}
       height={height}
-      src="https://www.youtube.com/embed/gS-lGo31JfI?si=9fSwVRxP0n1PNqgm"
+      src="https://www.youtube.com/embed/QkeiXiWwk6g?si=4ztzZ9DO3PnsEYOn"
       title="YouTube video player"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
     ></iframe>
@@ -25,7 +25,7 @@ const ResponsiveIframe: FC<ResponsiveIframeProps> = ({
 
 export default function DemoVideo() {
   return (
-    <>
+    <div className="bg-green-800 py-12">
       <ResponsiveIframe
         width={350}
         height={197}
@@ -56,6 +56,6 @@ export default function DemoVideo() {
         height={731}
         className="hidden 2xl:flex 2xl:flex-col 2xl:items-center"
       />
-    </>
+    </div>
   );
 }
