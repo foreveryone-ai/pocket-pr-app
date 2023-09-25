@@ -38,9 +38,9 @@ export default async function Home() {
       <NavBar />
       <div className="pt-8">
         <Tabs />
-        <div className="flex flex-col-2 items-start text-black justify-center pt-10 pb-10 bg-white ">
+        <div className="flex flex-col-1 items-center lg:flex-col-2 lg:items-start text-black justify-center pt-10 pb-10 bg-white ">
           <div
-            className="border rounded-xl bordered pt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-12 gap-12 sm:px-4 md:px-8 lg:px-10 overflow-y-auto"
+            className="border rounded-xl bordered pt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12 px-4 md:px-8 lg:px-10 overflow-y-auto"
             style={{ height: "750px" }}
           >
             {videos
@@ -56,7 +56,7 @@ export default async function Home() {
                 ))
               : "no videos found"}
           </div>
-          <div className="px-4" />
+          <div className="hidden lg:px-4" />
 
           {/* --------------------Visible on LARGE screens and above-------------------- */}
           <DesktopTrends />
