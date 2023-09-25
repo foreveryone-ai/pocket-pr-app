@@ -402,3 +402,35 @@ export class PreProcessorA {
 }
 
 //-------------------------------Delete------------------------------------//
+
+//-------------------------------Update 'Agreed' Bool (does user agree to have their chat history utilized for training)------------------------------------//
+
+export async function getUserAgreed(authToken: string, user_id: string) {
+  const db = createServerDbClient(authToken);
+  const { data, error } = await db
+    .from("User")
+    .select("agreed")
+    .eq("id", user_id);
+  if (error) {
+    console.error(error);
+    return null;
+  }
+  return data[0]?.agreed;
+}
+
+export async function updateUserAgreed(
+  authToken: string,
+  user_id: string,
+  agreed: boolean
+) {
+  const db = createServerDbClient(authToken);
+  const { data, error } = await db
+    .from("User")
+    .update({ agreed })
+    .eq("id", user_id);
+  if (error) {
+    console.error(error);
+    return false;
+  }
+  return true;
+}

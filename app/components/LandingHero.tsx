@@ -7,7 +7,7 @@ import {
 } from "react-icons/bs";
 import { SignedIn, SignedOut, SignUpButton } from "@clerk/clerk-react";
 import Link from "next/link";
-import { Image } from "@nextui-org/image";
+import Image from "next/image";
 import { Playfair_Display } from "next/font/google";
 import { Divider } from "@nextui-org/divider";
 import { LiaAssistiveListeningSystemsSolid } from "react-icons/lia";
@@ -76,7 +76,6 @@ export default function Hero() {
         <div className="flex justify-center items-center bg-white">
           <div className="w-3/4 sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/2 pt-36 xl:pt-30 pb-8 sm:pb-12 flex justify-center items-center">
             <Image
-              isBlurred
               src="/pocket-pr-logo-licensed.svg"
               alt="panda logo"
               width={1000}
@@ -173,6 +172,8 @@ export default function Hero() {
                 <Image
                   src="/dashboard-screenshot.png"
                   alt="Product screenshot"
+                  width={500}
+                  height={500}
                 />
               </div>
             </div>
