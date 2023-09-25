@@ -16,6 +16,7 @@ import {
   useDisclosure,
 } from "@nextui-org/modal";
 import { UserIcon, ChatBubbleLeftRightIcon } from "@heroicons/react/20/solid";
+import { Accordion, AccordionItem } from "@nextui-org/accordion";
 
 const timeline = [
   {
@@ -185,37 +186,32 @@ export default function Home() {
                                     />
                                   ) : null}
                                   <div className="relative flex space-x-3">
-                                    <Button
-                                      variant="bordered"
-                                      size="lg"
-                                      className="bg-white w-80 "
-                                    >
-                                      <div>
-                                        <span
-                                          className={classNames(
-                                            event.iconBackground,
-                                            "h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white"
-                                          )}
-                                        >
-                                          <event.icon
-                                            className="h-5 w-5 text-white"
-                                            aria-hidden="true"
-                                          />
-                                        </span>
-                                      </div>
-                                      <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-0.5">
-                                        <div>
-                                          <p className="text-sm text-green-800 font-inter font-black">
-                                            {event.title}
-                                          </p>
+                                    <Accordion variant="shadow">
+                                      <AccordionItem
+                                        key={event.id}
+                                        aria-label={event.title}
+                                        title={event.title}
+                                        startContent={
+                                          <div>
+                                            <span
+                                              className={classNames(
+                                                event.iconBackground,
+                                                "h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white"
+                                              )}
+                                            >
+                                              <event.icon
+                                                className="h-5 w-5 text-white"
+                                                aria-hidden="true"
+                                              />
+                                            </span>
+                                          </div>
+                                        }
+                                      >
+                                        <div className="text-black bg-white py-2">
+                                          {event.content}
                                         </div>
-                                        <div className="whitespace-nowrap text-right text-sm text-gray-500">
-                                          <time dateTime={event.datetime}>
-                                            {event.date}
-                                          </time>
-                                        </div>
-                                      </div>
-                                    </Button>
+                                      </AccordionItem>
+                                    </Accordion>
                                   </div>
                                 </div>
                               </li>
