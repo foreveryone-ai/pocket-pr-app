@@ -109,7 +109,7 @@ export default function App() {
             </CardBody>
           </Card>
         </Tab>
-        <Tab key="account" title="Account">
+        {/* <Tab key="account" title="Account">
           <Card>
             <CardBody>
               <RadioGroup
@@ -124,7 +124,7 @@ export default function App() {
               <Button color="success">Save</Button>
             </CardBody>
           </Card>
-        </Tab>
+        </Tab> */}
       </Tabs>
     </div>
   );
