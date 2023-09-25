@@ -40,8 +40,8 @@ export default async function Home() {
         <Tabs />
         <div className="flex flex-col-1 items-center lg:flex-col-2 lg:items-start text-black justify-center pt-10 pb-10 bg-white ">
           <div
-            className="border rounded-xl bordered pt-5 lg:pt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12 px-4 md:px-8 lg:px-10 overflow-y-auto"
-            style={{ height: "750px" }}
+            className="border rounded-xl bordered bg-gray-50  pt-5 lg:pt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12 px-4 md:px-8 lg:px-10 overflow-y-auto h-screen-65 lg:h-screen-75"
+            // style={{ height: "750px" }}
           >
             {videos
               ? videos.data?.map((video, i) => (
@@ -56,6 +56,7 @@ export default async function Home() {
                 ))
               : "no videos found"}
           </div>
+
           <div className="hidden lg:block lg:px-4" />
 
           {/* --------------------Visible on LARGE screens and above-------------------- */}

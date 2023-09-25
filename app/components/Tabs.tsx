@@ -162,19 +162,21 @@ export default function Home() {
               <ModalContent>
                 {(onClose) => (
                   <>
-                    <ModalHeader className="flex flex-col gap-1 font-playfair font-black">
+                    <ModalHeader className="flex flex-col font-playfair font-black">
                       Channel Trends
                     </ModalHeader>
                     <ModalBody>
                       {/* --------------------Hidden on LARGE screens and above-------------------- */}
                       <div className="flow-root lg:hidden">
-                        <div className="bg-green-800 rounded-lg py-4">
-                          <h1 className="font-playfair text-white font-black text-2xl flex justify-center ">
-                            Channel Trends
-                          </h1>
-                        </div>
-                        <div className="py-3" />
-                        <div className="overflow-auto max-h-72">
+                        <h1 className="font-playfair pb-2 text-green-800 font-black text-2xl flex justify-center ">
+                          Channel Trends
+                        </h1>
+                        <h2 className="font-inter text-gray-500 font-regular text-lg flex justify-center">
+                          Learn more about your channel here.
+                        </h2>
+
+                        <div className="py-5" />
+                        <div className="border overflow-auto p-2 rounded-xl bordered max-h-72">
                           <ul role="list" className="">
                             {[...timeline].reverse().map((event, eventIdx) => (
                               <li key={event.id}>
@@ -224,9 +226,9 @@ export default function Home() {
                       <Button color="danger" variant="light" onPress={onClose}>
                         Close
                       </Button>
-                      {/* <Button color="primary" onPress={onClose}>
-                  Action
-                </Button> */}
+                      <Button color="success" isDisabled onPress={onClose}>
+                        Trend Settings
+                      </Button>
                     </ModalFooter>
                   </>
                 )}
