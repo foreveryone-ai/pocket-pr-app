@@ -1,7 +1,7 @@
 import LandingHero from "@/app/components/LandingHero";
 import Pricing from "@/app/components/Pricing";
 import NavBar from "@/app/components/NavBar";
-import { Image } from "@nextui-org/image";
+import Image from "next/image";
 import { Spacer } from "@nextui-org/spacer";
 import "animate.css/animate.min.css";
 import { TbArrowsCross } from "react-icons/tb";
@@ -157,6 +157,8 @@ export default function Home() {
                     <Image
                       src="/chat-screenshot.png"
                       alt="Product screenshot"
+                      height={500}
+                      width={500}
                     />
                   </div>
                 </div>
@@ -229,7 +231,7 @@ export default function Home() {
             <div className="relative mt-16 h-80 lg:mt-8">
               <Image
                 src="/happykang.svg"
-                alt="App screenshot"
+                alt="Happy Kang"
                 width={1824}
                 height={1080}
               />
