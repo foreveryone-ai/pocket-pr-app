@@ -7,8 +7,86 @@ import { Button } from "@nextui-org/button";
 import { Navbar, NavbarBrand, NavbarContent } from "@nextui-org/navbar";
 import { useState } from "react";
 import { Spinner } from "@nextui-org/spinner";
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+} from "@nextui-org/modal";
+import { UserIcon, ChatBubbleLeftRightIcon } from "@heroicons/react/20/solid";
+import { Accordion, AccordionItem } from "@nextui-org/accordion";
+
+const timeline = [
+  {
+    id: 1,
+    title: "Welcome to PocketPR!",
+    date: "Sep 20",
+    datetime: "2023-09-20",
+    icon: UserIcon,
+    iconBackground: "bg-orange-500",
+    content:
+      "Welcome aboard! As your channel grows, new reports and trends will appear here.",
+  },
+  {
+    id: 2,
+    title: "View Report",
+    date: "Sep 22",
+    datetime: "2023-09-22",
+    icon: ChatBubbleLeftRightIcon,
+    iconBackground: "bg-green-500",
+    content:
+      "The content of the trend report produced by ChatGPT will be inserted here.",
+  },
+  {
+    id: 3,
+    title: "View Report",
+    date: "Sep 28",
+    datetime: "2023-09-28",
+    icon: ChatBubbleLeftRightIcon,
+    iconBackground: "bg-green-500",
+    content:
+      "The content of the trend report produced by ChatGPT will be inserted here.",
+  },
+  {
+    id: 4,
+    title: "New Video",
+    date: "Sep 30",
+    datetime: "2023-09-30",
+    icon: UserIcon,
+    iconBackground: "bg-orange-500",
+    content:
+      "The content of the trend report produced by ChatGPT will be inserted here.",
+  },
+  {
+    id: 5,
+    title: "View Report",
+    date: "Oct 4",
+    datetime: "2023-10-04",
+    icon: ChatBubbleLeftRightIcon,
+    iconBackground: "bg-green-500",
+    content:
+      "The content of the trend report produced by ChatGPT will be inserted here.",
+  },
+  {
+    id: 6,
+    title: "View Report",
+    date: "Oct 4",
+    datetime: "2023-10-04",
+    icon: ChatBubbleLeftRightIcon,
+    iconBackground: "bg-green-500",
+    content:
+      "The content of the trend report produced by ChatGPT will be inserted here.",
+  },
+];
+
+function classNames(...classes: string[]): string {
+  return classes.filter(Boolean).join(" ");
+}
 
 export default function Home() {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoading, setIsLoading] = useState(false);
   const handleClick = async () => {
     setIsLoading(true);
@@ -77,7 +155,87 @@ export default function Home() {
             />
           </Tabs>
         </NavbarContent>
-        <NavbarContent justify="end"></NavbarContent>
+        <NavbarContent justify="end">
+          <div className="lg:hidden">
+            <Button onPress={onOpen}>Trends</Button>
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+              <ModalContent>
+                {(onClose) => (
+                  <>
+                    <ModalHeader className="flex flex-col font-playfair font-black">
+                      Channel Trends
+                    </ModalHeader>
+                    <ModalBody>
+                      {/* --------------------Hidden on LARGE screens and above-------------------- */}
+                      <div className="flow-root lg:hidden">
+                        <h1 className="font-playfair pb-2 text-green-800 font-black text-2xl flex justify-center ">
+                          Channel Trends
+                        </h1>
+                        <h2 className="font-inter text-gray-500 font-regular text-lg flex justify-center">
+                          Learn more about your channel here.
+                        </h2>
+
+                        <div className="py-5" />
+                        <div className="border overflow-auto p-2 rounded-xl bordered max-h-72">
+                          <ul role="list" className="">
+                            {[...timeline].reverse().map((event, eventIdx) => (
+                              <li key={event.id}>
+                                <div className="relative pb-8">
+                                  {eventIdx !== timeline.length - 1 ? (
+                                    <span
+                                      className="absolute left-4 top-4 -ml-px h-full w-0.5 bg-gray-200"
+                                      aria-hidden="true"
+                                    />
+                                  ) : null}
+                                  <div className="relative flex space-x-3">
+                                    <Accordion variant="shadow">
+                                      <AccordionItem
+                                        key={event.id}
+                                        aria-label={event.title}
+                                        title={event.title}
+                                        startContent={
+                                          <div>
+                                            <span
+                                              className={classNames(
+                                                event.iconBackground,
+                                                "h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white"
+                                              )}
+                                            >
+                                              <event.icon
+                                                className="h-5 w-5 text-white"
+                                                aria-hidden="true"
+                                              />
+                                            </span>
+                                          </div>
+                                        }
+                                      >
+                                        <div className="text-black bg-white py-2">
+                                          {event.content}
+                                        </div>
+                                      </AccordionItem>
+                                    </Accordion>
+                                  </div>
+                                </div>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button color="danger" variant="light" onPress={onClose}>
+                        Close
+                      </Button>
+                      <Button color="success" isDisabled onPress={onClose}>
+                        Trend Settings
+                      </Button>
+                    </ModalFooter>
+                  </>
+                )}
+              </ModalContent>
+            </Modal>
+          </div>
+        </NavbarContent>
       </Navbar>
     </>
   );

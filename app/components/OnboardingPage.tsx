@@ -82,14 +82,7 @@ export default function App() {
 
   return (
     <>
-      <div className="min-h-screen flex flex-col justify-center items-center">
-        <h2 className={`py-4  text-3xl ${playFairDisplay800.className}`}>
-          Welcome! It&apos;s time to get you onboarded.
-        </h2>
-        <h1 className={`pb-12 text-2xl ${playFairDisplay500.className}`}>
-          In just a few clicks, we&apos;ll have you automated in no-time.
-        </h1>
-
+      <div className="flex flex-col justify-center items-center">
         <Button onPress={onOpen} isLoading={isRedirecting}>
           Start
         </Button>

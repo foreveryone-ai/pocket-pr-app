@@ -11,6 +11,11 @@ module.exports = {
   ],
   theme: {
     extend: {
+      height: {
+        "screen-75": "75vh",
+        "screen-65": "65vh",
+        "screen-50": "50vh",
+      },
       fontFamily: {
         inter: ["Inter", "sans-serif"],
         playfair: ["Playfair Display", "serif"],
