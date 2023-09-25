@@ -25,7 +25,7 @@ const timeline = [
   },
   {
     id: 3,
-    content: "Completed phone screening with",
+    content: "Channel Growth on the Rise, Learn Why",
     date: "Sep 28",
     datetime: "2023-09-28",
     icon: ChatBubbleLeftRightIcon,
@@ -33,7 +33,7 @@ const timeline = [
   },
   {
     id: 4,
-    content: "Advanced to interview by",
+    content: "100,000 Follower Milestone Reached!",
     date: "Sep 30",
     datetime: "2023-09-30",
     icon: UserIcon,
@@ -41,7 +41,8 @@ const timeline = [
   },
   {
     id: 5,
-    content: "Completed interview with",
+    content:
+      "Your Channel Loses 1K Followers in 1 Hour: What Went Wrong on Twitter",
     date: "Oct 4",
     datetime: "2023-10-04",
     icon: ChatBubbleLeftRightIcon,
@@ -100,7 +101,9 @@ export default async function Home() {
                 ))
               : "no videos found"}
           </div>
-          <div className="flow-root">
+
+          {/* --------------------Visible on LARGE screens and above-------------------- */}
+          <div className="hidden lg:flow-root">
             <div className="bg-green-800 rounded-2xl py-4">
               <h1 className="font-playfair text-white font-black text-2xl flex justify-center ">
                 Channel Trends
