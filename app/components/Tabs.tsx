@@ -168,7 +168,7 @@ export default function Home() {
                     <ModalBody>
                       {/* --------------------Hidden on LARGE screens and above-------------------- */}
                       <div className="flow-root lg:hidden">
-                        <div className="bg-green-800 rounded-2xl py-4">
+                        <div className="bg-green-800 rounded-lg py-4">
                           <h1 className="font-playfair text-white font-black text-2xl flex justify-center ">
                             Channel Trends
                           </h1>
