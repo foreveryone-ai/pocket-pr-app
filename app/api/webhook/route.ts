@@ -22,12 +22,15 @@ const relevantEvents = new Set([
 
 export async function POST(req: Request) {
   const body = await req.text();
-  const sig = req.headers.get("stripe-signature") as string;
+  const headersList = req.headers;
+  const sig = headersList.get("stripe-signature");
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  console.log(webhookSecret);
   let event: Stripe.Event;
 
   try {
     if (!sig || !webhookSecret) return;
+    console.log("have sig and webhhook secret....");
     event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
   } catch (err: any) {
     console.log(`❌ Error message: ${err.message}`);
@@ -47,6 +50,10 @@ export async function POST(req: Request) {
         //TODO: update db
         case "price.updated":
         //TODO: update db
+        case "customer.created":
+          console.log("a new customer has been created!!");
+        case "customer.deleted":
+          console.log("a customer has been deleted!!");
         case "customer.subscription.created":
           console.log("subscription was created!!");
         //TODO: update db

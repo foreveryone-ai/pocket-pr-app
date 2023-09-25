@@ -9,7 +9,6 @@ import DesktopTrends from "@/app/components/DesktopTrends";
 // get the OAuth token from clerk
 export default async function Home() {
   const { userId, getToken } = auth();
-  console.log(userId);
   const token = await getToken({ template: "supabase" });
 
   // create placeholders and update after recieving google token
@@ -28,7 +27,6 @@ export default async function Home() {
       token as string,
       (youtube_channel_id as unknown as string) || ""
     );
-    console.log("videos from getVideos: ", videos);
   } catch (error) {
     console.error(error);
   }
