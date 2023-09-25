@@ -60,14 +60,6 @@ function classNames(...classes: string[]): string {
 }
 
 export default function DesktopTrends() {
-  const itemClasses = {
-    base: "py-0 w-full",
-    title: "font-normal text-medium",
-    trigger:
-      "px-2 py-0 data-[hover=true]:bg-default-100 rounded-lg h-14 flex items-center",
-    indicator: "text-medium",
-    content: "text-small px-2",
-  };
   return (
     <div className="hidden lg:flow-root lg:w-80">
       <div className="bg-green-800 rounded-lg py-4">
@@ -90,7 +82,6 @@ export default function DesktopTrends() {
                 <div className="relative space-x-2">
                   <Accordion
                     variant="shadow"
-                    itemClasses={itemClasses}
                     className="w-full"
                     motionProps={{
                       variants: {
