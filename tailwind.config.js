@@ -13,8 +13,19 @@ module.exports = {
     extend: {
       height: {
         "screen-75": "75vh",
+        "screen-70": "70vh",
         "screen-65": "65vh",
+        "screen-60": "60vh",
+        "screen-55": "55vh",
         "screen-50": "50vh",
+      },
+      width: {
+        "screen-75": "75vw",
+        "screen-70": "70vw",
+        "screen-65": "65vw",
+        "screen-60": "60vw",
+        "screen-55": "55vw",
+        "screen-50": "50vw",
       },
       fontFamily: {
         inter: ["Inter", "sans-serif"],
