@@ -62,7 +62,7 @@ function classNames(...classes: string[]): string {
 export default function DesktopTrends() {
   return (
     <div className="hidden lg:flow-root lg:w-80">
-      <div className="border rounded-lg bordered bg-gray-50">
+      <div className="border rounded-lg bordered overflow-y-auto h-screen-75 bg-gray-50">
         <div className=" rounded-lg  bg-gray-50 py-4">
           <h1 className="font-playfair text-black font-black text-2xl flex justify-center ">
             Channel Trends
