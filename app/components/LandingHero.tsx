@@ -96,7 +96,6 @@ export default function Hero() {
           >
             <b>{Roles[currentIndex]}</b>
           </h1>
-          <span>Content Creators, Influencers, and Businesses</span>
         </div>
         <div className="flex justify-center pt-12 lg:pt-14 md:pb-36 space-x-4">
           <Button
