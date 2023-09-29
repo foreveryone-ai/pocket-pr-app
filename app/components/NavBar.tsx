@@ -27,6 +27,12 @@ export default function NavBar() {
   const toHelp = () => {
     router.push("/help");
   };
+
+  const handleStripe = async () => {
+    const res = await fetch("/api/account");
+    const url = (await res.json()).url;
+    router.replace(url);
+  };
   return (
     <>
       <div className="navbar isSticky bg-green-800 p-4">
@@ -88,6 +94,7 @@ export default function NavBar() {
         <div className="navbar-end mr-2">
           <SignedIn>
             <UserButton />
+            <button onClick={handleStripe}>stripe</button>
           </SignedIn>
           <SignedOut>
             <Link href="/sign-up">

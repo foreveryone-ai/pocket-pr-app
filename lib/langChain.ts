@@ -86,7 +86,7 @@ export class PocketChain {
       // update summary?
       return res && res.text;
     } catch (error) {
-      console.error("error on summarize captions!");
+      console.error("error on summarize chat history");
       console.error(error);
     }
   }
@@ -114,7 +114,7 @@ export class PocketChain {
     console.log(comSum);
     console.log(comSumMeta);
 
-    // maybe pass in, text and metadata. metadata is an array of objects
+    // pass in, text and metadata. metadata is an array of objects
     const docs = await textSplitter.createDocuments(comSum, comSumMeta);
 
     console.log("docs length");

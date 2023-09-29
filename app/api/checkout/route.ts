@@ -25,7 +25,7 @@ export async function GET() {
       mode: "subscription",
       allow_promotion_codes: true, // hmm ....
       subscription_data: {
-        metadata: {}, // what does here?
+        metadata: {}, // what goes here?
       },
       success_url: `http://localhost:3000/Dashboard`,
       cancel_url: `http://localhost:3000/Dashboard`,

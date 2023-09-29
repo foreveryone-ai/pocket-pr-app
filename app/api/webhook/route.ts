@@ -2,22 +2,12 @@ import Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
 
 const relevantEvents = new Set([
-  "product.created",
-  "product.updated",
-  "price.created",
-  "price.updated",
-  "invoice.created", // created for new or renewing subscription
-  "invoice.finalized",
-  "invoice.finalization_failed",
-  "invoice.paid",
-  "invoice.payment_action_required",
-  "invoice.payment_failed",
-  "invoice.updated",
-  "checkout.session.completed",
   "customer.created",
+  "invoice.payment_succeeded",
   "customer.subscription.created",
   "customer.subscription.updated",
   "customer.subscription.deleted",
+  "payment_intent.succeeded",
 ]);
 
 export async function POST(req: Request) {
@@ -25,8 +15,10 @@ export async function POST(req: Request) {
   const headersList = req.headers;
   const sig = headersList.get("stripe-signature");
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-  console.log(webhookSecret);
   let event: Stripe.Event;
+  let paid = false;
+  let customerId = "";
+  let status = "";
 
   try {
     if (!sig || !webhookSecret) return;
@@ -40,37 +32,30 @@ export async function POST(req: Request) {
   if (relevantEvents.has(event.type)) {
     try {
       switch (event.type) {
-        case "product.created":
-          console.log("product was created!");
-        //TODO: update db
-        case "product.updated":
-          console.log("product was updated!");
-        //TODO: update db
-        case "price.created":
-        //TODO: update db
-        case "price.updated":
-        //TODO: update db
+        case "payment_intent.succeeded":
+          console.log("Payment intent succeeded");
+          paid = true;
+          // @ts-ignore
+          customerId = event.data.object.customer as string;
+          // @ts-ignore
+          status = event.data.object.status as string;
+          console.log(paid, customerId, status);
         case "customer.created":
           console.log("a new customer has been created!!");
-        case "customer.deleted":
-          console.log("a customer has been deleted!!");
         case "customer.subscription.created":
           console.log("subscription was created!!");
-        //TODO: update db
-        case "customer.subscription.updated":
-          console.log("subscription was updated!!");
-        //TODO: update db
-        case "customer.subscription.deleted":
-          console.log("subscription was updated!!");
-        //TODO: update db
+          console.log(event.data.object);
+          paid = true;
         case "checkout.session.completed":
           const checkoutSession = event.data.object as Stripe.Checkout.Session;
           if (checkoutSession.mode === "subscription") {
             const subscriptionId = checkoutSession.subscription;
             console.log("customer sub id: ", subscriptionId);
-            //TODO: update db
           }
-          break;
+        case "customer.subscription.deleted": // this is what happens when they cancel
+          paid = false;
+          console.log("subscription was updated!!");
+          console.log(event.data.object);
         default:
           throw new Error("Unhandled relevant event!");
       }
