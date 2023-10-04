@@ -7,7 +7,8 @@ export default authMiddleware({
     "/help",
     "/sign-in",
     "/sign-up",
-    "/privacy, /api/webhook",
+    "/api/webhook",
+    "/privacy",
   ],
 });
 
