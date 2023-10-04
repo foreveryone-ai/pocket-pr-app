@@ -14,10 +14,11 @@ export default function Privacy() {
                 Welcome to PocketPR!
               </h2>
               <p>
-                This User Agreement ("Agreement") governs your use of the
-                PocketPR application ("App"). By accessing or using the App, you
-                agree to be bound by the terms of this Agreement. If you do not
-                agree with these terms, please do not use the App.
+                This User Agreement (&quot;Agreement&quot;) governs your use of
+                the PocketPR application (&quot;App&quot;). By accessing or
+                using the App, you agree to be bound by the terms of this
+                Agreement. If you do not agree with these terms, please do not
+                use the App.
               </p>
             </li>
             <li>
@@ -48,8 +49,8 @@ export default function Privacy() {
               </h2>
               <ul>
                 <li>
-                  All chat messages exchanged with the App's chatbot are saved
-                  by PocketPR.
+                  All chat messages exchanged with the App&quot;s chatbot are
+                  saved by PocketPR.
                 </li>
                 <li>
                   Saved chat messages are used for the purpose of improving and
@@ -85,11 +86,11 @@ export default function Privacy() {
                 Disclaimers
               </h2>
               <p>
-                The App is provided "as is" and without warranties of any kind,
-                either express or implied. PocketPR disclaims all warranties,
-                express or implied, including, but not limited to, implied
-                warranties of merchantability, fitness for a particular purpose,
-                and non-infringement.
+                The App is provided &quot;as is&quot; and without warranties of
+                any kind, either express or implied. PocketPR disclaims all
+                warranties, express or implied, including, but not limited to,
+                implied warranties of merchantability, fitness for a particular
+                purpose, and non-infringement.
               </p>
             </li>
             <li>
@@ -130,7 +131,7 @@ export default function Privacy() {
               <h2 className="font-bold text-xl pt-4 pb-1 underline">Contact</h2>
               <p>
                 For any questions or concerns regarding this Agreement, please
-                contact us at{" "}
+                contact us at
                 <a href="mailto:help@pocketpr.com">help@pocketpr.com</a>. By
                 using the PocketPR App, you acknowledge that you have read,
                 understood, and agree to be bound by the terms of this User
@@ -146,13 +147,13 @@ export default function Privacy() {
                 Introduction
               </h2>
               <p>
-                Thank you for using the PocketPR application ("App"). Your
-                privacy is of utmost importance to us. This Privacy Policy
+                Thank you for using the PocketPR application (&quot;App&quot;).
+                Your privacy is of utmost importance to us. This Privacy Policy
                 describes how PocketPR collects, uses, and protects your
                 information. By accessing or using the App, you agree to this
-                Privacy Policy in addition to the User Agreement. If there's any
-                inconsistency between this Privacy Policy and the User
-                Agreement, this Privacy Policy will prevail.
+                Privacy Policy in addition to the User Agreement. If
+                there&quot;s any inconsistency between this Privacy Policy and
+                the User Agreement, this Privacy Policy will prevail.
               </p>
             </li>
             <li>
@@ -161,7 +162,7 @@ export default function Privacy() {
               </h2>
               <p>When you use the App, we collect:</p>
               <ul>
-                <li>Chat messages exchanged with the App's chatbot.</li>
+                <li>Chat messages exchanged with the App&quot;s chatbot.</li>
                 <li>
                   Basic usage data like frequency, duration, and features
                   accessed.
@@ -174,7 +175,7 @@ export default function Privacy() {
               </h2>
               <p>We use the collected information for:</p>
               <ul>
-                <li>Improving the App's performance and features.</li>
+                <li>Improving the App&quot;s performance and features.</li>
                 <li>Training and improving future models.</li>
                 <li>
                   Understanding user behavior and preferences to enhance user
@@ -187,10 +188,10 @@ export default function Privacy() {
                 Data Anonymization
               </h2>
               <p>
-                All chat messages exchanged with the App's chatbot are stored in
-                an anonymized manner. We remove all personal identifiers to
-                ensure that individual users cannot be identified from the saved
-                data.
+                All chat messages exchanged with the App&quot;s chatbot are
+                stored in an anonymized manner. We remove all personal
+                identifiers to ensure that individual users cannot be identified
+                from the saved data.
               </p>
             </li>
             <li>
@@ -216,7 +217,7 @@ export default function Privacy() {
             </li>
             <li>
               <h2 className="font-bold text-xl pt-4 pb-1 underline">
-                Children’s Privacy
+                Children&apos;s Privacy
               </h2>
               <p>
                 The App is not intended for use by children under the age of 13.
