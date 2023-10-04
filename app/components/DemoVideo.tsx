@@ -16,7 +16,7 @@ const ResponsiveIframe: FC<ResponsiveIframeProps> = ({
       className="rounded-2xl"
       width={width}
       height={height}
-      src="https://www.youtube.com/embed/QkeiXiWwk6g?si=4ztzZ9DO3PnsEYOn"
+      src="https://www.youtube.com/embed/QkeiXiWwk6g?si=hFbqPW6nCE5dQVoJ&amp;controls=0"
       title="YouTube video player"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
     ></iframe>
