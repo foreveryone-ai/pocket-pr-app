@@ -116,15 +116,16 @@ export async function POST(req: Request) {
           const cancel = event.data.object.cancel_at ? true : null;
           if (cancel) {
             console.log("cancelling subscription");
-            subscriptionActive = false;
             // @ts-ignore
             customerId = event.data.object.customer as string;
             if (customerId) {
               try {
+                // @ts-ignore
+                const timestamp = event.data.object.cancel_at * 1000;
                 const { data: stripeData, error: stripeError } = await client
                   .from("Stripe")
                   .update({
-                    subscription_active: subscriptionActive,
+                    cancel_at: new Date(timestamp),
                   })
                   .eq("id", customerId)
                   .select();
@@ -149,6 +150,7 @@ export async function POST(req: Request) {
                   .from("Stripe")
                   .update({
                     subscription_active: subscriptionActive,
+                    cancel_at: null,
                   })
                   .eq("id", customerId)
                   .select();
