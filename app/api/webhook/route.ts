@@ -1,6 +1,5 @@
 import Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
-import { updateStripeUserSubscriptionStatus } from "@/lib/supabaseClient";
 import { createClient } from "@supabase/supabase-js";
 
 const relevantEvents = new Set([
