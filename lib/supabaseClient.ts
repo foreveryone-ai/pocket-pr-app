@@ -21,6 +21,32 @@ function createServerDbClient(accessToken?: string) {
   });
 }
 //-------------------------------Create------------------------------------//
+export async function createStripeUser(
+  authToken: string,
+  userId: string,
+  subscriptionActive: boolean,
+  plan?: string
+) {
+  try {
+    // auth token is here ...
+    const db = createServerDbClient(authToken);
+
+    const stripeUser = await db
+      .from("stripe")
+      .insert({
+        user_id: userId,
+        supscription_active: subscriptionActive,
+        plan: plan || null,
+      })
+      .select();
+
+    console.log("new stripe user!: ", stripeUser);
+    return stripeUser.status; // 201
+  } catch (error) {
+    console.error(error);
+    return 400;
+  }
+}
 export async function createUser(
   authToken: string,
   userId: string,
@@ -151,6 +177,12 @@ export async function getLatestVideoDate(
 
 //-------------------------------Read------------------------------------//
 
+export async function getStripeId(authToken: string, userId: string) {
+  const db = createServerDbClient(authToken);
+
+  return await db.from("Stripe").select().eq("user_id", userId);
+}
+
 export async function getCaptionSummary(
   authToken: string,
   caption_id: string,
@@ -164,6 +196,22 @@ export async function getCaptionSummary(
 }
 
 //-------------------------------Update------------------------------------//
+export async function updateStripeUserSubscriptionStatus(
+  authToken: string,
+  subscriptionActive: boolean,
+  userId: string
+) {
+  const db = createServerDbClient(authToken);
+
+  return await db
+    .from("stripe")
+    .update({
+      subscription_active: subscriptionActive,
+    })
+    .eq("user_id", userId)
+    .select();
+}
+
 export async function updateVideoHasEmbeddings(
   authToken: string,
   video_id: string,
