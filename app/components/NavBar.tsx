@@ -94,10 +94,10 @@ export default function NavBar() {
         {/* ----------------------------NAVBAR END---------------------------- */}
         <div className="navbar-end mr-2">
           <SignedIn>
-            <Button variant="light" onPress={handleStripe}>
-              <FaCcStripe size={50} color="white" />
+            <Button isIconOnly variant="light" onPress={handleStripe}>
+              <FaCcStripe size={40} color="white" />
             </Button>
-            <div className="px-1" />
+            <div className="px-2" />
             <UserButton />
           </SignedIn>
           <SignedOut>
