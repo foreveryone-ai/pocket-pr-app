@@ -3,11 +3,13 @@ import Pricing from "@/app/components/Pricing";
 import NavBar from "@/app/components/NavBar";
 import Image from "next/image";
 import { Spacer } from "@nextui-org/spacer";
+import { Button } from "@nextui-org/button";
 import "animate.css/animate.min.css";
 import { TbArrowsCross } from "react-icons/tb";
 import { AiFillWechat } from "react-icons/ai";
 import { DiGoogleAnalytics } from "react-icons/di";
 import { BriefcaseIcon, FireIcon, CameraIcon } from "@heroicons/react/20/solid";
+import { RedirectToSignUp, SignUpButton, SignInButton } from "@clerk/nextjs";
 
 export default function Home() {
   const features = [
@@ -214,7 +216,13 @@ export default function Home() {
                 with PocketPR!
               </p>
               <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
-                <a
+                <SignUpButton>
+                  <Button className="bg-success text-white">Sign Up</Button>
+                </SignUpButton>
+                <SignInButton>
+                  <Button className="bg-white">Sign In</Button>
+                </SignInButton>
+                {/* <a
                   href="/sign-up"
                   className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-black shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                 >
@@ -225,7 +233,7 @@ export default function Home() {
                   className="text-sm font-semibold leading-6 text-white"
                 >
                   Sign In <span aria-hidden="true">→</span>
-                </a>
+                </a> */}
               </div>
             </div>
             <div className="relative mt-16 h-80 lg:mt-8">

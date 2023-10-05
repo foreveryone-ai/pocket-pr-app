@@ -1,7 +1,8 @@
 "use client";
 import Link from "next/navigation";
 import { CheckIcon } from "@heroicons/react/20/solid";
-import { SignUp } from "@clerk/nextjs";
+import { SignUpButton } from "@clerk/nextjs";
+import { Button } from "@nextui-org/button";
 
 export default function Pricing() {
   const includedFeatures = [
@@ -64,12 +65,17 @@ export default function Pricing() {
                   USD
                 </span>
               </p>
-              <a
+              <div className="pt-8 pb-4">
+                <SignUpButton>
+                  <Button className="bg-green-800 text-white">Sign up</Button>
+                </SignUpButton>
+              </div>
+              {/* <a
                 href="/sign-up"
-                className="mt-10 block w-full rounded-md bg-green-800 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-800"
+                className="mt-10 block w-full rounded-md bg-green-800  text-center text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-800"
               >
                 Sign up
-              </a>
+              </a> */}
               <p className="mt-6 text-xs leading-5 text-black">
                 PocketPR is currently in Beta. Prices subject to change as our
                 feature set expands.
