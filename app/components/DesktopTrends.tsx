@@ -62,7 +62,7 @@ function classNames(...classes: string[]): string {
 export default function DesktopTrends() {
   return (
     <div className="hidden lg:flow-root lg:w-80">
-      <div className="border rounded-lg bordered bg-gray-50">
+      <div className="border rounded-lg bordered h-screen-75 overflow-scroll bg-gray-50">
         <div className=" rounded-lg  bg-gray-50 py-4">
           <h1 className="font-playfair text-black font-black text-2xl flex justify-center ">
             Channel Trends
@@ -136,7 +136,7 @@ export default function DesktopTrends() {
                             <span
                               className={classNames(
                                 event.iconBackground,
-                                "h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white"
+                                "h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white",
                               )}
                             >
                               <event.icon

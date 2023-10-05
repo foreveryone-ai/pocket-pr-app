@@ -12,6 +12,7 @@ import {
   DropdownItem,
 } from "@nextui-org/dropdown";
 import { useRouter } from "next/navigation";
+import { FaCcStripe } from "react-icons/fa";
 
 export default function NavBar() {
   const router = useRouter();
@@ -93,8 +94,11 @@ export default function NavBar() {
         {/* ----------------------------NAVBAR END---------------------------- */}
         <div className="navbar-end mr-2">
           <SignedIn>
+            <Button isIconOnly variant="light" onPress={handleStripe}>
+              <FaCcStripe size={40} color="white" />
+            </Button>
+            <div className="px-2" />
             <UserButton />
-            <button onClick={handleStripe}>stripe</button>
           </SignedIn>
           <SignedOut>
             <Link href="/sign-up">
