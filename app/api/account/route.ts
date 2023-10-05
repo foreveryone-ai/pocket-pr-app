@@ -8,9 +8,13 @@ export async function POST() {
   // TODO: OR make it so they can't see the button in the first place
   const { userId, getToken } = auth();
   let token = await getToken({ template: "supabase" });
+  let session;
 
   if (!userId) {
-    return NextResponse.json({ error: "error loading dashboard" });
+    return NextResponse.json(
+      { error: "error loading dashboard" },
+      { status: 401 }
+    );
   }
 
   try {
@@ -20,30 +24,41 @@ export async function POST() {
     );
 
     if (stripeError) {
-      throw new Error("could not get stripe id");
+      console.error("error getting stripe info from db");
+      return NextResponse.json({ error: "server error" }, { status: 500 });
     }
     if (stripeData && stripeData.length > 0) {
-      const configuration = await stripe.billingPortal.configurations.create({
-        business_profile: {
-          headline:
-            "ForEveryone.ai partners with Stripe for simplified billing.",
-        },
-        features: {
-          invoice_history: {
-            enabled: true,
+      try {
+        await stripe.billingPortal.configurations.create({
+          business_profile: {
+            headline:
+              "ForEveryone.ai partners with Stripe for simplified billing.",
           },
-        },
-      });
+          features: {
+            invoice_history: {
+              enabled: true,
+            },
+          },
+        });
+      } catch (error) {
+        console.error("error creating dashboard config");
+        return NextResponse.json({ error: "server error" }, { status: 500 });
+      }
 
-      const session = await stripe.billingPortal.sessions.create({
-        customer: stripeData[0].id as unknown as string, // customer id returned from db
-        return_url: process.env.LOCAL_DOMAIN + "Dashboard",
-      });
+      try {
+        session = await stripe.billingPortal.sessions.create({
+          customer: stripeData[0].id as unknown as string, // customer id returned from db
+          return_url: process.env.LOCAL_DOMAIN + "Dashboard",
+        });
+      } catch (error) {
+        console.error("problem creating the session", error);
+        return NextResponse.json({ error: "server error" }, { status: 500 });
+      }
 
       if (session) {
         return NextResponse.json({ url: session.url }, { status: 200 });
       }
-      console.log("this should not happen");
+      console.error("this should not happen");
       return NextResponse.json({ error: "server error" }, { status: 500 });
     }
   } catch (error) {
