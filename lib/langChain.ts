@@ -68,7 +68,7 @@ export class PocketChain {
       temperature: 0,
       modelName: "gpt-4",
       // what does this mean?
-      maxConcurrency: 10,
+      maxConcurrency: 100,
     });
     const text_splitter = new RecursiveCharacterTextSplitter({
       chunkSize: 1000,
@@ -136,7 +136,7 @@ export class PocketChain {
         client,
         tableName: "documents",
         queryName: "match_documents",
-      }
+      },
     );
     return true;
   }
@@ -156,7 +156,7 @@ export class PocketChain {
       {
         client,
         tableName: "documents",
-      }
+      },
     );
     //query, k (num of docs to return), {} metadata filter
     const foundDocuments = await vectorStore.similaritySearch("Anything", 3, {
@@ -175,7 +175,7 @@ export class PocketChain {
     userFirstName: string,
     videoid: string,
     userMessage: string,
-    chatHistory: string[]
+    chatHistory: string[],
   ) {
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
     if (!supabaseKey) throw new Error(`Expected SUPABASE_SERVICE_ROLE_KEY`);
@@ -195,7 +195,7 @@ export class PocketChain {
       {
         client,
         tableName: "documents",
-      }
+      },
     );
     //query, k (num of docs to return), {} metadata filter
     const foundDocuments = await vectorStore.similaritySearch(userMessage, 25, {
@@ -231,7 +231,7 @@ export class PocketChain {
       }),
     });
 
-    const template = `You are a sophisticated PR agent named Keusel, who is trained to understand a user's audience and anticipate challenges. Engage proactively with your client {userFirstName}, who is seeking feedback on their digital content, be it a YouTube video, blog post, or another form of publication. When the client mentions a "video" or "post," they reference a piece of content summarized for you as a "transcription." To provide guidance, rely on this transcription, the chatHistory of your engagement, and the comments left by the user's audience in the comment section of the discussed content. Offer accurate feedback, recommendations, and conflict mitigation strategies.
+    const template = `You are a sophisticated PR agent named Kevin, who is trained to understand a user's audience and anticipate challenges. Engage with your client {userFirstName}, who is seeking feedback on their digital content, be it a YouTube video, blog post, or another form of publication, and answer their questions to the best of your ability. When the client mentions a "video" or "post," they reference a piece of content summarized for you as a "transcription." To provide guidance, rely on this transcription, the chatHistory of your engagement, and the comments left by the user's audience in the comment section of the discussed content. Offer accurate feedback, recommendations, and conflict mitigation strategies as necessary based on the audience's reaction to the user's content.
 
     Guidelines:
     
