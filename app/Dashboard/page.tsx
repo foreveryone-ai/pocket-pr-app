@@ -25,7 +25,7 @@ export default async function Home() {
   try {
     videos = await getVideos(
       token as string,
-      (youtube_channel_id as unknown as string) || ""
+      (youtube_channel_id as unknown as string) || "",
     );
   } catch (error) {
     console.error(error);
@@ -34,9 +34,9 @@ export default async function Home() {
   return (
     <div className="min-h-screen bg-white">
       <NavBar />
-      <div className="pt-8">
+      <div className="pt-6">
         <Tabs />
-        <div className="flex flex-col-1 items-center lg:flex-col-2 lg:items-start text-black justify-center pt-10 pb-10 bg-white ">
+        <div className="flex flex-col-1 items-center lg:flex-col-2 lg:items-start text-black justify-center pt-6 pb-6 bg-white ">
           <div
             className="border rounded-xl bordered bg-gray-50  pt-5 lg:pt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12 px-4 md:px-8 lg:px-10 overflow-y-auto h-screen-65 lg:h-screen-75"
             // style={{ height: "750px" }}
