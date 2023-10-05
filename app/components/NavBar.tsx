@@ -34,10 +34,19 @@ export default function NavBar() {
 
     try {
       res = await fetch("/api/account");
+    } catch (error) {
+      console.error("can't get stripe account");
+      return;
+    }
+
+    try {
       url = (await res.json()).url;
       router.replace(url);
+      return;
     } catch (error) {
       console.error("server error");
+      //TODO: either hide this or tell the user something...
+      return;
     }
   };
   return (
