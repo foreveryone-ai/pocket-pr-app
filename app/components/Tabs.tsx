@@ -264,7 +264,7 @@ export default function Home() {
         </Navbar>
         <div className="lg:hidden">
           <Button color="success" onClick={handleClick} className="px-28">
-            {isLoading ? <Spinner size="sm" color="success" /> : "Channel Chat"}
+            {isLoading ? <Spinner size="lg" color="success" /> : "Channel Chat"}
           </Button>
         </div>
       </div>
