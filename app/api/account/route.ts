@@ -61,6 +61,10 @@ export async function POST() {
       console.error("this should not happen");
       return NextResponse.json({ error: "server error" }, { status: 500 });
     }
+    return NextResponse.json(
+      { error: "User does not have a Stripe account" },
+      { status: 404 }
+    );
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: "server error" }, { status: 500 });
