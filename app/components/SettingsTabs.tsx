@@ -174,7 +174,7 @@ export default function App() {
                     <p>
                       For any questions or concerns regarding this Agreement,
                       please contact us at
-                      <a href="mailto:help@pocketpr.com">help@pocketpr.com</a>.
+                      <a href="mailto:help@pocketpr.app">help@pocketpr.app</a>.
                       By using the PocketPR App, you acknowledge that you have
                       read, understood, and agree to be bound by the terms of
                       this User Agreement.
@@ -275,7 +275,7 @@ export default function App() {
                       information from anyone under the age of 16. If you are a
                       parent or guardian and you believe your child has provided
                       us with personal information, please contact us at{" "}
-                      <a href="mailto:help@pocketpr.com">help@pocketpr.com</a>.
+                      <a href="mailto:help@pocketpr.app">help@pocketpr.app</a>.
                     </p>
                   </li>
                   <li>
@@ -305,7 +305,7 @@ export default function App() {
                     <p>
                       If you wish to exercise any of these rights, please
                       contact us at{" "}
-                      <a href="mailto:help@pocketpr.com">help@pocketpr.com</a>.
+                      <a href="mailto:help@pocketpr.app">help@pocketpr.app</a>.
                     </p>
                   </li>
                   <li>
@@ -316,7 +316,7 @@ export default function App() {
                       If you have any questions or concerns regarding this
                       Privacy Policy or our data practices, please reach out to
                       us: Email:{" "}
-                      <a href="mailto:help@pocketpr.com">help@pocketpr.com</a>.
+                      <a href="mailto:help@pocketpr.app">help@pocketpr.app</a>.
                       By using the PocketPR App, you acknowledge that you have
                       read, understood, and agree to this Privacy Policy.
                     </p>
