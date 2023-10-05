@@ -220,9 +220,9 @@ export default function Privacy() {
                 Children&apos;s Privacy
               </h2>
               <p>
-                The App is not intended for use by children under the age of 13.
+                The App is not intended for use by children under the age of 16.
                 We do not knowingly collect or solicit personal information from
-                anyone under the age of 13. If you are a parent or guardian and
+                anyone under the age of 16. If you are a parent or guardian and
                 you believe your child has provided us with personal
                 information, please contact us at{" "}
                 <a href="mailto:help@pocketpr.com">help@pocketpr.com</a>.
