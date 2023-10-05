@@ -30,7 +30,9 @@ export async function POST(req: Request) {
   const client = createClient(url, supabaseKey);
 
   try {
-    if (!sig || !webhookSecret) return;
+    if (!sig || !webhookSecret) {
+      return new Response(`Webhook Error`, { status: 401 });
+    }
     console.log("have sig and webhhook secret....");
     event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
   } catch (err: any) {
@@ -227,7 +229,9 @@ export async function POST(req: Request) {
           break;
         default:
           console.log(`unhandled event: ${event.data.object}`);
+          return new Response(JSON.stringify({ received: true }));
       }
+      return new Response(JSON.stringify({ received: true }));
     } catch (error) {
       console.log(error);
       return new Response(
