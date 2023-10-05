@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { getStripeId } from "@/lib/supabaseClient";
 import { auth } from "@clerk/nextjs";
 
-export async function GET() {
+export async function POST() {
   //TODO: give user feedback id they haven't signed up for a subscription yet
   // TODO: OR make it so they can't see the button in the first place
   const { userId, getToken } = auth();
