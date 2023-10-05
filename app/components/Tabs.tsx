@@ -88,6 +88,8 @@ function classNames(...classes: string[]): string {
 export default function Home() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoading, setIsLoading] = useState(false);
+  const [isCcLoading, setIsCcLoading] = useState(false);
+
   const handleClick = async () => {
     setIsLoading(true);
     try {
@@ -102,6 +104,13 @@ export default function Home() {
       setIsLoading(false);
       window.location.reload(); // Refresh the page when the API request completes
     }
+  };
+
+  const handleCcClick = async () => {
+    setIsCcLoading(true);
+    // try {
+    //   const response = await fetch("insert channel chat call here")
+    // }
   };
 
   return (
@@ -158,9 +167,9 @@ export default function Home() {
           </NavbarContent>
           <NavbarContent justify="end">
             <div className="hidden lg:block">
-              <Button color="success" onClick={handleClick}>
-                {isLoading ? (
-                  <Spinner size="sm" color="success" />
+              <Button color="success" onClick={handleCcClick}>
+                {isCcLoading ? (
+                  <Spinner size="sm" color="warning" />
                 ) : (
                   "Channel Chat"
                 )}
@@ -254,7 +263,7 @@ export default function Home() {
           </NavbarContent>
         </Navbar>
         <div className="lg:hidden">
-          <Button color="success" onClick={handleClick}>
+          <Button color="success" onClick={handleClick} className="px-28">
             {isLoading ? <Spinner size="sm" color="success" /> : "Channel Chat"}
           </Button>
         </div>
