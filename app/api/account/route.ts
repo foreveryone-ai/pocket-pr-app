@@ -69,6 +69,4 @@ export async function POST() {
     console.error(error);
     return NextResponse.json({ error: "server error" }, { status: 500 });
   }
-
-  return NextResponse.json({ error: "server error" }, { status: 500 });
 }
