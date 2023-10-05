@@ -41,10 +41,13 @@ export async function GET() {
       });
 
       if (session) {
-        return NextResponse.json({ url: session.url });
+        return NextResponse.json({ url: session.url }, { status: 200 });
       }
+      console.log("this should not happen");
+      return NextResponse.json({ error: "server error" }, { status: 500 });
     }
   } catch (error) {
     console.error(error);
+    return NextResponse.json({ error: "server error" }, { status: 500 });
   }
 }

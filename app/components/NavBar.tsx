@@ -29,9 +29,15 @@ export default function NavBar() {
   };
 
   const handleStripe = async () => {
-    const res = await fetch("/api/account");
-    const url = (await res.json()).url;
-    router.replace(url);
+    let res, url;
+
+    try {
+      res = await fetch("/api/account");
+      url = (await res.json()).url;
+      router.replace(url);
+    } catch (error) {
+      console.error("server error");
+    }
   };
   return (
     <>
