@@ -24,8 +24,13 @@ export async function GET() {
       ],
       mode: "subscription",
       allow_promotion_codes: true, // hmm ....
+      metadata: {
+        userId: user.id, // store userId on customer object
+      },
       subscription_data: {
-        metadata: {}, // what goes here?
+        metadata: {
+          userId: user.id,
+        }, //  store userId on subscription object
       },
       success_url: `http://localhost:3000/Dashboard`,
       cancel_url: `http://localhost:3000/Dashboard`,
