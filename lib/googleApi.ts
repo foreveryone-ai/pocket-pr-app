@@ -26,10 +26,15 @@ export async function getOAuthData(userId: string, provider: string) {
 }
 
 export class GoogleApi {
-  static async getCaptions(token: string, videoId: string, userOAuth: string) {
+  static async getCaptions(
+    token: string,
+    videoId: string,
+    userOAuth: string,
+    channel_id: string
+  ) {
     console.log("getting captions from google...");
     console.log(
-      `token is ${token}, videoId: ${videoId}, userOAuth: ${userOAuth}`
+      `token is ${token}, videoId: ${videoId}, userOAuth: ${userOAuth}, Channel ID: ${channel_id}`
     );
     // fetch captions from YouTube API
     let captionsArr: StoreCaptionsParams[] = [];
@@ -69,6 +74,7 @@ export class GoogleApi {
             language: caption.snippet.language as string,
             captions: captionText as string,
             updatedAt: new Date(),
+            channel_id: channel_id,
           });
         }
         await storeCaptions(token as string, captionsArr);
@@ -166,6 +172,8 @@ export class GoogleApi {
             author_image_url: item.snippet.topLevelComment.snippet
               .authorProfileImageUrl as string,
             updatedAt: new Date(),
+            channel_id: item.snippet.topLevelComment.snippet
+              .authorChannelId as string,
           });
           if (item.replies) {
             for (let reply of item.replies.comments) {
@@ -179,6 +187,8 @@ export class GoogleApi {
                 author_display_name: reply.snippet.authorDisplayName as string,
                 author_image_url: reply.snippet.authorProfileImageUrl as string,
                 updatedAt: new Date(),
+                channel_id: item.snippet.topLevelComment.snippet
+                  .authorChannelId as string,
               });
             }
           }
