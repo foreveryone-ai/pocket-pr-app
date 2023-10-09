@@ -287,7 +287,10 @@ export async function getComments(authToken: string, videoId: string) {
 export async function getCaptions(authToken: string, videoId: string) {
   const db = createServerDbClient(authToken);
 
-  return await db.from("Captions").select().eq(`video_id`, videoId);
+  return await db
+    .from("Captions")
+    .select("*, channel_id")
+    .eq(`video_id`, videoId);
 }
 
 type CommentsResponse = Awaited<ReturnType<typeof getComments>>;
