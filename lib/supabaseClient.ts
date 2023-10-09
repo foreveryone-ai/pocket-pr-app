@@ -391,6 +391,17 @@ export async function storeCaptionsSummary(
   }
 }
 
+// lib/supabaseClient.ts
+
+export async function getCaptionSummaries(
+  authToken: string,
+  channel_id: string
+) {
+  const db = createServerDbClient(authToken);
+
+  return await db.from("CaptionSummary").select().eq(`channel_id`, channel_id);
+}
+
 // Stage A Pre-Processing -- Draft 1 -- 2021-07-21
 
 export type Comment = {

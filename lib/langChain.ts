@@ -10,6 +10,7 @@ import {
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { OpenAI } from "langchain/llms/openai";
 import { LLMChain, loadSummarizationChain } from "langchain/chains";
+import { getCaptionSummaries } from "./supabaseClient";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import type { SmallComment } from "./supabaseClient";
 export type CreateEmbeddingsArgs = {
@@ -293,229 +294,187 @@ export class PocketChain {
   }
 }
 
-// export class ChannelChain {
-//   userId: string;
+export class ChannelChain {
+  captions: string;
+  batches: SmallComment[][];
 
-//   constructor(userId: string) {
-//     this.userId = userId;
-//   }
+  constructor(videoCaptions?: string, commentBatches?: SmallComment[][]) {
+    this.captions = videoCaptions || "";
+    this.batches = commentBatches || [];
+  }
 
-//   async summarizeAllCaptions() {
-//     // Create the Supabase client
-//     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-//     const url = process.env.SUPABASE_URL;
-//     const client = createClient(url, supabaseKey);
+  async summarizeSummaries(channel_id: string) {
+    const authToken = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!authToken) throw new Error(`Expected SUPABASE_SERVICE_ROLE_KEY`);
 
-//     // Retrieve all caption summaries for the user's videos from the database
-//     const { data, error } = await client
-//       .from("Video")
-//       .select("caption_summary")
-//       .eq("user_id", this.userId);
+    // Fetch all captionSummary records for the channel_id
+    const response = await getCaptionSummaries(authToken, channel_id);
 
-//     if (error) {
-//       console.error(error);
-//       return;
-//     }
+    // If there are no captionSummary records, throw an error
+    if (!response.data || response.data.length === 0) {
+      throw new Error(
+        `No captionSummary records exist for channel_id: ${channel_id}`
+      );
+    }
 
-//     // Concatenate all caption summaries
-//     const allCaptions = data.map((video) => video.caption_summary).join("\n");
+    // Extract the summaryText from each captionSummary record
+    const summaries = response.data.map((summary) => summary.summaryText);
 
-//     // Create the OpenAI model
-//     const model = new OpenAI({
-//       openAIApiKey: process.env.OPENAI_API_KEY,
-//       temperature: 0,
-//       modelName: "gpt-4",
-//       maxConcurrency: 10,
-//     });
+    // Summarize the summaries
+    const model = new OpenAI({
+      openAIApiKey: process.env.OPENAI_API_KEY,
+      temperature: 0,
+      modelName: "gpt-4",
+      maxConcurrency: 100,
+    });
+    const text_splitter = new RecursiveCharacterTextSplitter({
+      chunkSize: 1000,
+    });
+    const docs = await text_splitter.createDocuments(summaries);
+    const chain = loadSummarizationChain(model, {
+      type: "map_reduce",
+      returnIntermediateSteps: true,
+    });
+    try {
+      const res = await chain.call({
+        input_documents: docs,
+      });
+      return res && res.text;
+    } catch (error) {
+      console.error("error on summarize summaries");
+      console.error(error);
+    }
+  }
 
-//     // Create the text splitter
-//     const text_splitter = new RecursiveCharacterTextSplitter({
-//       chunkSize: 1000,
-//     });
+  async summarizeChatHistory(history: string[]) {
+    const model = new OpenAI({
+      openAIApiKey: process.env.OPENAI_API_KEY,
+      temperature: 0,
+      modelName: "gpt-4",
+      maxConcurrency: 100,
+    });
+    const text_splitter = new RecursiveCharacterTextSplitter({
+      chunkSize: 1000,
+    });
+    const docs = await text_splitter.createDocuments(history);
+    const chain = loadSummarizationChain(model, {
+      type: "map_reduce",
+      returnIntermediateSteps: true,
+    });
+    try {
+      const res = await chain.call({
+        input_documents: docs,
+      });
+      return res && res.text;
+    } catch (error) {
+      console.error("error on summarize chat history");
+      console.error(error);
+    }
+  }
 
-//     // Create the documents
-//     const docs = await text_splitter.createDocuments([allCaptions]);
+  async chat(
+    userFirstName: string,
+    channel_id: string,
+    userMessage: string,
+    chatHistory: string[]
+  ) {
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!supabaseKey) throw new Error(`Expected SUPABASE_SERVICE_ROLE_KEY`);
 
-//     // Load the summarization chain
-//     const chain = loadSummarizationChain(model, {
-//       type: "map_reduce",
-//       returnIntermediateSteps: true,
-//     });
+    const url = process.env.SUPABASE_URL;
+    if (!url) throw new Error(`Expected env var SUPABASE_URL`);
 
-//     // Call the summarization chain
-//     try {
-//       const res = await chain.call({
-//         input_documents: docs,
-//       });
+    const summary = await this.summarizeChatHistory(chatHistory);
 
-//       // Return the summarized captions
-//       return res && res.text;
-//     } catch (error) {
-//       console.error("error on summarize all captions!");
-//       console.error(error);
-//     }
-//   }
+    const client = createClient(url, supabaseKey);
 
-//   async summarizeChatHistory(history: string[]) {
-//     // Create the OpenAI model
-//     const model = new OpenAI({
-//       openAIApiKey: process.env.OPENAI_API_KEY,
-//       temperature: 0,
-//       modelName: "gpt-4",
-//       maxConcurrency: 10,
-//     });
+    const vectorStore = await SupabaseVectorStore.fromExistingIndex(
+      new OpenAIEmbeddings(),
+      {
+        client,
+        tableName: "documents",
+      }
+    );
+    const foundDocuments = await vectorStore.similaritySearch(userMessage, 25, {
+      channel_id: channel_id,
+    });
+    const summarizedSummaries = await this.summarizeSummaries(channel_id);
+    const encoder = new TextEncoder();
+    const stream = new TransformStream();
+    const writer = stream.writable.getWriter();
 
-//     // Create the text splitter
-//     const text_splitter = new RecursiveCharacterTextSplitter({
-//       chunkSize: 1000,
-//     });
+    // Initialize the LLM to use to answer the question.
+    const chat = new ChatOpenAI({
+      openAIApiKey: process.env.OPENAI_API_KEY,
+      modelName: "gpt-4",
+      temperature: 0.6,
+      streaming: true,
+      callbackManager: CallbackManager.fromHandlers({
+        handleLLMNewToken: async (token: string) => {
+          await writer.ready;
+          await writer.write(encoder.encode(`data: ${token}\n\n`));
+        },
+        handleLLMEnd: async () => {
+          await writer.ready;
+          await writer.close();
+        },
+        handleLLMError: async (e: Error) => {
+          await writer.ready;
+          await writer.abort(e);
+        },
+      }),
+    });
 
-//     // Create the documents
-//     const docs = await text_splitter.createDocuments(history);
+    const template = `You are a sophisticated PR agent named Kevin, who is trained to understand a user's audience and anticipate challenges. Engage with your client {userFirstName}, who is seeking feedback on their digital content, be it a YouTube video, blog post, or another form of publication, and answer their questions to the best of your ability. When the client mentions a "video" or "post," they reference a piece of content summarized for you as a "transcription." To provide guidance, rely on this transcription, the chatHistory of your engagement, and the comments left by the user's audience in the comment section of the discussed content. Offer accurate feedback, recommendations, and conflict mitigation strategies as necessary based on the audience's reaction to the user's content.
 
-//     // Load the summarization chain
-//     const chain = loadSummarizationChain(model, {
-//       type: "map_reduce",
-//       returnIntermediateSteps: true,
-//     });
+    Guidelines:
+    
+    Formatting: Structure your responses using paragraph breaks to make the content clearer and more readable. Whenever you wish to create a new paragraph in your response, interject a double line break "||" to indicate a new paragraph.
+    Direct References: When referencing comments that are provided in the prompt, always offer them as direct examples to maintain clarity and authenticity.
+    Accuracy: Always ensure that feedback and responses provided are based on the information available. Do not invent or provide fictional feedback or comments.
+    Constructive Feedback: Prioritize offering constructive advice to the client instead of just being appealing.
+    Safety: Ensure all recommendations avoid causing psychological or physical harm.
+    Solution-Oriented Approach: Frame your responses to address potential issues or conflicts the client might encounter, taking cues from audience feedback. If speculating or hypothesizing, clearly indicate as such.
+    clientName: {userFirstName}
+    transcription: {transcription},
+    chatHistory: {chatHistory},
+    comments: {comments}
+    `;
 
-//     // Call the summarization chain
-//     try {
-//       const res = await chain.call({
-//         input_documents: docs,
-//       });
+    const systemMessagePrompt =
+      SystemMessagePromptTemplate.fromTemplate(template);
 
-//       // Return the summarized chat history
-//       return res && res.text;
-//     } catch (error) {
-//       console.error("error on summarize chat history");
-//       console.error(error);
-//     }
-//   }
+    const humanMessagePrompt =
+      HumanMessagePromptTemplate.fromTemplate(userMessage);
 
-//   async getUserVideoIds() {
-//     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-//     const url = process.env.SUPABASE_URL;
-//     const client = createClient(url, supabaseKey);
+    const chatPrompt = ChatPromptTemplate.fromPromptMessages([
+      systemMessagePrompt,
+      humanMessagePrompt,
+    ]);
+    // console.log("template: ", template);
+    // console.log("chatPrompt: ", chatPrompt);
+    console.log("creating chain...");
+    // ... rest of the chat method implementation
+    const chain = new LLMChain({
+      llm: chat,
+      prompt: chatPrompt,
+    });
 
-//     const { data, error } = await client
-//       .from("Video")
-//       .select("id")
-//       .eq("user_id", this.userId);
+    console.log(`Video captions: ` + this.captions);
 
-//     if (error) {
-//       console.error(error);
-//       return [];
-//     }
+    chain
+      .call({
+        userFirstName: userFirstName,
+        transcription: summarizedSummaries, // use summarizedSummaries as the transcription
+        chatHistory: summary,
+        comments: `
+${foundDocuments.map((document) => document.pageContent + "\n")}`,
+        channel_id: channel_id,
+      })
+      .catch((e: Error) => console.error(e));
 
-//     return data.map((video) => video.id);
-//   }
-
-//   async checkForEmbeddings(videoIds: string[]) {
-//     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-//     const url = process.env.SUPABASE_URL;
-//     const client = createClient(url, supabaseKey);
-
-//     const vectorStore = await SupabaseVectorStore.fromExistingIndex(
-//       new OpenAIEmbeddings(),
-//       {
-//         client,
-//         tableName: "documents",
-//       }
-//     );
-
-//     const embeddings = {};
-
-//     for (const videoId of videoIds) {
-//       const foundDocuments = await vectorStore.similaritySearch("Anything", 3, {
-//         video_id: videoId,
-//       });
-
-//       if (foundDocuments && foundDocuments.length > 0) {
-//         embeddings[videoId] = foundDocuments;
-//       }
-//     }
-
-//     return embeddings;
-//   }
-
-//   async initiateChat(embeddings: any, summary: string, userMessage: string) {
-//     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-//     const url = process.env.SUPABASE_URL;
-//     const client = createClient(url, supabaseKey);
-
-//     // Initialize the LLM to use to answer the question.
-//     const chat = new ChatOpenAI({
-//       openAIApiKey: process.env.OPENAI_API_KEY,
-//       modelName: "gpt-4",
-//       temperature: 0.6,
-//       streaming: true,
-//       callbackManager: CallbackManager.fromHandlers({
-//         handleLLMNewToken: async (token: string) => {
-//           await writer.ready;
-//           await writer.write(encoder.encode(`data: ${token}\n\n`));
-//         },
-//         handleLLMEnd: async () => {
-//           await writer.ready;
-//           await writer.close();
-//         },
-//         handleLLMError: async (e: Error) => {
-//           await writer.ready;
-//           await writer.abort(e);
-//         },
-//       }),
-//     });
-
-//     // convert the LLM's callback-based API into a stream-based API
-//     const encoder = new TextEncoder();
-//     const stream = new TransformStream();
-//     const writer = stream.writable.getWriter();
-
-//     const template = `You are a sophisticated PR agent named Kevin, who is trained to understand a user's audience and anticipate challenges. Engage with your client {userFirstName}, who is seeking feedback on their digital content, be it a YouTube video, blog post, or another form of publication, and answer their questions to the best of your ability. When the client mentions a "video" or "post," they reference a piece of content summarized for you as a "transcription." To provide guidance, rely on this transcription, the chatHistory of your engagement, and the comments left by the user's audience in the comment section of the discussed content. Offer accurate feedback, recommendations, and conflict mitigation strategies as necessary based on the audience's reaction to the user's content.
-
-//     Guidelines:
-
-//     Formatting: Structure your responses using paragraph breaks to make the content clearer and more readable. Whenever you wish to create a new paragraph in your response, interject a double line break "||" to indicate a new paragraph.
-//     Direct References: When referencing comments that are provided in the prompt, always offer them as direct examples to maintain clarity and authenticity.
-//     Accuracy: Always ensure that feedback and responses provided are based on the information available. Do not invent or provide fictional feedback or comments.
-//     Constructive Feedback: Prioritize offering constructive advice to the client instead of just being appealing.
-//     Safety: Ensure all recommendations avoid causing psychological or physical harm.
-//     Solution-Oriented Approach: Frame your responses to address potential issues or conflicts the client might encounter, taking cues from audience feedback. If speculating or hypothesizing, clearly indicate as such.
-//     clientName: {userFirstName}
-//     transcription: {transcription},
-//     chatHistory: {chatHistory},
-//     comments: {comments}
-//     `;
-
-//     const systemMessagePrompt =
-//       SystemMessagePromptTemplate.fromTemplate(template);
-
-//     const humanMessagePrompt =
-//       HumanMessagePromptTemplate.fromTemplate(userMessage);
-
-//     const chatPrompt = ChatPromptTemplate.fromPromptMessages([
-//       systemMessagePrompt,
-//       humanMessagePrompt,
-//     ]);
-
-//     const chain = new LLMChain({
-//       llm: chat,
-//       prompt: chatPrompt,
-//     });
-
-//     chain
-//       .call({
-//         userFirstName: this.userId, // Adjust this if you have the user's name
-//         transcription: summary,
-//         chatHistory: summary,
-//         comments: `${Object.values(embeddings).map(
-//           (embedding: any) => embedding.pageContent + "\n"
-//         )}`,
-//       })
-//       .catch((e: Error) => console.error(e));
-
-//     return new Response(stream.readable, {
-//       headers: { "Content-Type": "text/event-stream" },
-//     });
-//   }
-// }
+    return new Response(stream.readable, {
+      headers: { "Content-Type": "text/event-stream" },
+    });
+  }
+}
