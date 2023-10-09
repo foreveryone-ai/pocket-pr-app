@@ -72,6 +72,7 @@ export async function POST(req: Request) {
       author_image_url: comment.author_image_url,
       text_display: comment.text_display,
       like_count: comment.like_count,
+      channel_id: comment.channel_id,
     });
   }
 
