@@ -92,7 +92,7 @@ export class PocketChain {
     }
   }
 
-  async createEmbeddings(comments: CreateEmbeddingsArgs[]) {
+  async createEmbeddings(comments: CreateEmbeddingsArgs[]): Promise<boolean> {
     try {
       let vectorStore;
       console.log("comsums: ", comments);
