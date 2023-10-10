@@ -148,7 +148,6 @@ export type StoreAllCommentsParams = {
   video_id: string;
   author_display_name: string;
   author_image_url: string;
-  channel_id: string;
 };
 
 //-------------------------------Get Latest Video Date------------------------------------//
@@ -242,6 +241,7 @@ export async function storeAllComments(
     .from("Comments")
     .upsert(allComments)
     .select();
+  console.log("Storing comments to database:", data, error); // Add this line
 
   if (data) {
     return data;
@@ -260,7 +260,6 @@ export type StoreAllRepliesParams = {
   author_image_url: string;
   published_at: Date;
   comment_id: string;
-  channel_id: string;
 };
 
 export async function storeAllReplies(
@@ -270,6 +269,7 @@ export async function storeAllReplies(
   const db = createServerDbClient(authToken);
 
   const { data, error } = await db.from("Replies").upsert(allReplies).select();
+  console.log("Storing replies to database:", data, error); // Add this line
 
   if (data) {
     return data;
@@ -281,7 +281,11 @@ export async function storeAllReplies(
 export async function getComments(authToken: string, videoId: string) {
   const db = createServerDbClient(authToken);
 
-  return await db.from("Comments").select().eq(`video_id`, videoId);
+  const result = await db.from("Comments").select().eq(`video_id`, videoId);
+
+  console.log("Fetched comments from database:", result); // Add this line
+
+  return result;
 }
 
 export async function getCaptions(authToken: string, videoId: string) {
@@ -410,6 +414,7 @@ export type Comment = {
   like_count: number;
   author_display_name: string;
   channel_id: string;
+  video_id: string;
 };
 
 export type SmallComment = Pick<
@@ -419,6 +424,7 @@ export type SmallComment = Pick<
   | "like_count"
   | "author_display_name"
   | "channel_id"
+  | "video_id"
 >;
 
 // TODO: add a type for the batches
@@ -442,12 +448,14 @@ export class PreProcessorA {
         like_count,
         author_display_name,
         channel_id,
+        video_id,
       }) => ({
         comment_id,
         text_display,
         like_count,
         author_display_name,
         channel_id,
+        video_id,
       })
     );
     console.log("smallComments updated...");
@@ -517,4 +525,20 @@ export async function updateUserAgreed(
     return false;
   }
   return true;
+}
+
+export async function getChannelIdByVideoId(
+  authToken: string,
+  video_id: string
+) {
+  const db = createServerDbClient(authToken);
+  const { data, error } = await db
+    .from("Video")
+    .select("channel_id")
+    .eq("id", video_id);
+  if (error) {
+    console.error(error);
+    return null;
+  }
+  return data[0]?.channel_id;
 }

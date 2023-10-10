@@ -114,6 +114,7 @@ export class GoogleApi {
         );
         console.log("got response...");
         commentsOneVideo = await res.json();
+        console.log("YouTube API response:", commentsOneVideo); // Add this line
         console.log("nextPage token: ", commentsOneVideo.nextPageToken);
         // make this the last loop if there is not nextPageToken
         if (!commentsOneVideo.nextPageToken) {
@@ -172,8 +173,6 @@ export class GoogleApi {
             author_image_url: item.snippet.topLevelComment.snippet
               .authorProfileImageUrl as string,
             updatedAt: new Date(),
-            channel_id: item.snippet.topLevelComment.snippet
-              .authorChannelId as string,
           });
           if (item.replies) {
             for (let reply of item.replies.comments) {
@@ -187,8 +186,6 @@ export class GoogleApi {
                 author_display_name: reply.snippet.authorDisplayName as string,
                 author_image_url: reply.snippet.authorProfileImageUrl as string,
                 updatedAt: new Date(),
-                channel_id: item.snippet.topLevelComment.snippet
-                  .authorChannelId as string,
               });
             }
           }
@@ -196,7 +193,10 @@ export class GoogleApi {
         console.log("storing to database", times);
         console.log(commentsArr.length);
         console.log(repliesArr.length);
+        console.log("Storing comments to database:", commentsArr); // Add this line
         await storeAllComments(token as string, commentsArr);
+
+        console.log("Storing replies to database:", repliesArr); // Add this line
         await storeAllReplies(token as string, repliesArr);
       }
     }

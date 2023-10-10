@@ -20,16 +20,22 @@ export type CreateEmbeddingsArgs = {
   author_image_url: string;
   text_display: string;
   like_count: number;
-  channel_id: string;
+  channelId: string;
 };
 
 export class PocketChain {
   // captions can be the OG captions or the a summary that has already been created
   captions: string;
+  channelId: string;
   batches: SmallComment[][];
 
-  constructor(videoCaptions?: string, commentBatches?: SmallComment[][]) {
+  constructor(
+    videoCaptions?: string,
+    channelId?: string,
+    commentBatches?: SmallComment[][]
+  ) {
     this.captions = videoCaptions || "";
+    this.channelId = channelId || "";
     this.batches = commentBatches || [];
   }
   async summarizeCaptions() {
@@ -104,7 +110,7 @@ export class PocketChain {
         author_display_name: obj.author_display_name,
         author_image_url: obj.author_image_url,
         like_count: obj.like_count,
-        channel_id: obj.channel_id,
+        channel_id: obj.channelId,
       }));
 
       console.log("comSum length: ", comSum.length);

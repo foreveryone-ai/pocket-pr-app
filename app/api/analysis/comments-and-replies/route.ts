@@ -12,7 +12,7 @@ export async function POST(req: Request) {
   if (!userId) NextResponse.rewrite("/sign-in");
   if (!body || !body.videoid)
     return NextResponse.json({ message: "No video id included" });
-
+  console.log("Executing comments-and-replies route"); // Add this line
   //--------- check if comments already exist start-------------//
   const { data: commentData, error: commentError } = await getComments(
     token as string,
