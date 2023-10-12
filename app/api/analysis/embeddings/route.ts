@@ -47,6 +47,7 @@ export async function POST(req: Request) {
 
   // check if embeddings exist
   const channelId = await getChannelIdByVideoId(token as string, body.videoid);
+  console.log("Retrieved channelId: ", channelId);
   const pc = new PocketChain(videoCaptionSummaryData[0].summaryText, channelId);
   const hasEmbeddings = await pc.hasEmbeddings(body.videoid);
   console.log(hasEmbeddings);

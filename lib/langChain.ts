@@ -13,6 +13,7 @@ import { LLMChain, loadSummarizationChain } from "langchain/chains";
 import { getCaptionSummaries } from "./supabaseClient";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import type { SmallComment } from "./supabaseClient";
+
 export type CreateEmbeddingsArgs = {
   video_id: string;
   id: string;
@@ -37,6 +38,7 @@ export class PocketChain {
     this.captions = videoCaptions || "";
     this.channelId = channelId || "";
     this.batches = commentBatches || [];
+    console.log("Passed channelId: ", this.channelId);
   }
   async summarizeCaptions() {
     // created the class here to set the maxConcurrency property
@@ -103,6 +105,7 @@ export class PocketChain {
     try {
       let vectorStore;
       console.log("comsums: ", comments);
+      console.log("Used channelId: ", this.channelId);
       const comSum = comments.map((comment) => comment.text_display);
       const comSumMeta = comments.map((obj) => ({
         video_id: obj.video_id,
