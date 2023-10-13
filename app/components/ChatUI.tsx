@@ -63,6 +63,7 @@ export default function ChatUI({
           ]);
         },
       });
+      //TODO: save history here?
       console.log(output);
     } catch (error) {
       console.error(error);
