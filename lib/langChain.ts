@@ -113,7 +113,7 @@ export class PocketChain {
         author_display_name: obj.author_display_name,
         author_image_url: obj.author_image_url,
         like_count: obj.like_count,
-        channel_id: obj.channelId,
+        channel_id: this.channelId,
       }));
 
       console.log("comSum length: ", comSum.length);

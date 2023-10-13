@@ -16,6 +16,7 @@ export async function POST(req: Request) {
   if (!token) NextResponse.rewrite("/sign-in");
   if (!userId) NextResponse.rewrite("/sign-in");
   if (!body || !body.videoid)
+    //TODO: give proper status code
     return NextResponse.json({ message: "No video id included" });
   console.log("Executing embeddings route"); // Add this line
   //------------ get comments from db start ----------------//
@@ -50,7 +51,7 @@ export async function POST(req: Request) {
   console.log("Retrieved channelId: ", channelId);
   const pc = new PocketChain(videoCaptionSummaryData[0].summaryText, channelId);
   const hasEmbeddings = await pc.hasEmbeddings(body.videoid);
-  console.log(hasEmbeddings);
+  console.log("We have embeddings? ", hasEmbeddings);
 
   if (hasEmbeddings) {
     // update bool on Video

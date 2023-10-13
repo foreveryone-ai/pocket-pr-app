@@ -36,6 +36,7 @@ export default async function Onboarding() {
         user?.firstName,
         user?.emailAddresses[0].emailAddress,
         user?.profileImageUrl
+        // TODO: add channel id here
       );
       console.log("create user status: ", dbUser);
     } catch (error) {

@@ -53,8 +53,8 @@ export async function createUser(
   googleId: string,
   name: string,
   email: string,
-  imageUrl: string,
-  channel_id: string
+  imageUrl: string
+  //  channel_id: string
 ) {
   try {
     // auth token is here ...
@@ -70,7 +70,7 @@ export async function createUser(
         email,
         image_url: imageUrl,
         subscriptionStatus: SubscriptionStatus.NONE,
-        channel_id,
+        //       channel_id,
       })
       .select();
 
