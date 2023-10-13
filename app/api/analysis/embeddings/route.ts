@@ -4,6 +4,7 @@ import {
   getComments,
   getCaptionSummary,
   updateVideoHasEmbeddings,
+  getChannelIdByVideoId,
 } from "@/lib/supabaseClient";
 import { CreateEmbeddingsArgs, PocketChain } from "@/lib/langChain";
 
@@ -15,7 +16,9 @@ export async function POST(req: Request) {
   if (!token) NextResponse.rewrite("/sign-in");
   if (!userId) NextResponse.rewrite("/sign-in");
   if (!body || !body.videoid)
+    //TODO: give proper status code
     return NextResponse.json({ message: "No video id included" });
+  console.log("Executing embeddings route"); // Add this line
   //------------ get comments from db start ----------------//
   const { data: commentData, error: commentError } = await getComments(
     token as string,
@@ -44,9 +47,11 @@ export async function POST(req: Request) {
   //--------------- check if caption summary exists end ------------------//
 
   // check if embeddings exist
-  const pc = new PocketChain(videoCaptionSummaryData[0].summaryText);
+  const channelId = await getChannelIdByVideoId(token as string, body.videoid);
+  console.log("Retrieved channelId: ", channelId);
+  const pc = new PocketChain(videoCaptionSummaryData[0].summaryText, channelId);
   const hasEmbeddings = await pc.hasEmbeddings(body.videoid);
-  console.log(hasEmbeddings);
+  console.log("We have embeddings? ", hasEmbeddings);
 
   if (hasEmbeddings) {
     // update bool on Video
@@ -72,6 +77,7 @@ export async function POST(req: Request) {
       author_image_url: comment.author_image_url,
       text_display: comment.text_display,
       like_count: comment.like_count,
+      channelId: comment.channel_id,
     });
   }
 

@@ -37,9 +37,11 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: "Unable to retrieve captions" });
   }
 
+  let channelId;
   if (videoCaptionData && videoCaptionData.length > 0) {
     // create summary of captions
     pc = new PocketChain(videoCaptionData[0].captions);
+    channelId = videoCaptionData[0].channel_id; // Extract channel_id
   }
 
   if (!pc) {
@@ -48,14 +50,14 @@ export async function POST(req: Request) {
 
   const captions = await pc.summarizeCaptions();
   if (captions) {
+    // Pass channel_id to storeCaptionsSummary
     await storeCaptionsSummary(
       token as string,
       videoCaptionData[0].id,
       captions,
-      body.videoid
+      body.videoid,
+      channelId
     );
     return NextResponse.json({ message: "success" });
   }
-
-  return NextResponse.json({ message: "Unable to process caption summary" });
 }

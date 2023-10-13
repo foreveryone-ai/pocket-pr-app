@@ -80,18 +80,19 @@ export async function GET() {
   } while (nextPageToken);
 
   // Get the date of the latest video in the database
-  const latestVideoDate = await getLatestVideoDate(
-    token as string,
-    userId as string
-  );
+  // const latestVideoDate = await getLatestVideoDate(
+  //   token as string,
+  //   userId as string
+  // );
 
   // Filter out the videos that are newer than the latest video in the database
-  const newVideos = videos.filter((video) =>
-    latestVideoDate ? new Date(video.publishedAt) > latestVideoDate : true
-  );
+  // const newVideos = videos.filter((video) =>
+  //   latestVideoDate ? new Date(video.publishedAt) > latestVideoDate : true
+  // );
 
   // Store the new videos in the database
-  const videosToStore: StoreOrUpdateParams[] = newVideos.map((video) => ({
+  //const videosToStore: StoreOrUpdateParams[] = newVideos.map((video) => ({
+  const videosToStore: StoreOrUpdateParams[] = videos.map((video) => ({
     id: video.resourceId.videoId as string,
     video_id: video.resourceId.videoId as string,
     title: video.title as string,
@@ -117,7 +118,12 @@ export async function GET() {
     console.log(`getting all captions for ${videosToStore.length} videos`);
     for (let video of videosToStore) {
       try {
-        await GoogleApi.getCaptions(token, video.id, userOAuth[0].token);
+        await GoogleApi.getCaptions(
+          token,
+          video.id,
+          userOAuth[0].token,
+          video.channel_id
+        );
       } catch (error) {
         console.error(error);
       }
@@ -126,9 +132,5 @@ export async function GET() {
 
   return NextResponse.json({
     message: "New videos and their captions have been stored successfully",
-  });
-
-  return NextResponse.json({
-    message: "New videos have been stored successfully",
   });
 }

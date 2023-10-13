@@ -26,10 +26,15 @@ export async function getOAuthData(userId: string, provider: string) {
 }
 
 export class GoogleApi {
-  static async getCaptions(token: string, videoId: string, userOAuth: string) {
+  static async getCaptions(
+    token: string,
+    videoId: string,
+    userOAuth: string,
+    channel_id: string
+  ) {
     console.log("getting captions from google...");
     console.log(
-      `token is ${token}, videoId: ${videoId}, userOAuth: ${userOAuth}`
+      `token is ${token}, videoId: ${videoId}, userOAuth: ${userOAuth}, Channel ID: ${channel_id}`
     );
     // fetch captions from YouTube API
     let captionsArr: StoreCaptionsParams[] = [];
@@ -69,6 +74,7 @@ export class GoogleApi {
             language: caption.snippet.language as string,
             captions: captionText as string,
             updatedAt: new Date(),
+            channel_id: channel_id,
           });
         }
         await storeCaptions(token as string, captionsArr);
@@ -108,6 +114,7 @@ export class GoogleApi {
         );
         console.log("got response...");
         commentsOneVideo = await res.json();
+        console.log("YouTube API response:", commentsOneVideo); // Add this line
         console.log("nextPage token: ", commentsOneVideo.nextPageToken);
         // make this the last loop if there is not nextPageToken
         if (!commentsOneVideo.nextPageToken) {
@@ -186,7 +193,10 @@ export class GoogleApi {
         console.log("storing to database", times);
         console.log(commentsArr.length);
         console.log(repliesArr.length);
+        console.log("Storing comments to database:", commentsArr); // Add this line
         await storeAllComments(token as string, commentsArr);
+
+        console.log("Storing replies to database:", repliesArr); // Add this line
         await storeAllReplies(token as string, repliesArr);
       }
     }

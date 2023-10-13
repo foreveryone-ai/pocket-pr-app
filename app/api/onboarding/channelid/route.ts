@@ -49,13 +49,16 @@ export async function GET() {
     const idList = chList?.data.items?.map((item) => item.id) || new Array(0);
     youtube_channel_id = idList.length > 0 ? idList[0] : "";
     console.log(youtube_channel_id, "youtube channel id");
+
+    const channel_id = youtube_channel_id;
     // if the channel id was found, store it in the database
-    if (youtube_channel_id) {
+    if (youtube_channel_id && channel_id) {
       try {
         await storeChannelId(
           token as string,
           userId as string,
-          youtube_channel_id
+          youtube_channel_id,
+          channel_id as string
         );
       } catch (error) {
         console.error("Error storing the channel ID: ", error);

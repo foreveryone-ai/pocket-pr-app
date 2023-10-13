@@ -45,6 +45,7 @@ export default function App() {
     switch (step) {
       case 1:
         {
+          //TODO: add try catch to all of these
           await getChannelOnboarding();
         }
         break;
