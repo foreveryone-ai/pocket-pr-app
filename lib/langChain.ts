@@ -13,6 +13,7 @@ import { LLMChain, loadSummarizationChain } from "langchain/chains";
 import { getCaptionSummaries } from "./supabaseClient";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import type { SmallComment } from "./supabaseClient";
+import { storeAllCaptionSummary } from "@/lib/supabaseClient";
 
 export type CreateEmbeddingsArgs = {
   video_id: string;
@@ -353,6 +354,10 @@ export class ChannelChain {
       console.error("error on summarize summaries");
       console.error(error);
     }
+    const authToken = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    await storeAllCaptionSummary(authToken, channel_id, summarizedText);
+
+    return summarizedText;
   }
 
   async summarizeChatHistory(history: string[]) {
