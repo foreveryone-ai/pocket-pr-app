@@ -406,6 +406,50 @@ export async function getCaptionSummaries(
   return await db.from("CaptionSummary").select().eq(`channel_id`, channel_id);
 }
 
+// store and retrieve the AllCaptionSummary
+export async function storeAllCaptionSummary(
+  authToken: string,
+  channel_id: string,
+  allCaptionSummary: string
+) {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db
+    .from("AllCaptionSummary")
+    .upsert({
+      channel_id,
+      body: allCaptionSummary,
+      updatedAt: new Date(),
+    })
+    .select();
+
+  if (data) {
+    return data;
+  } else {
+    console.error("Error storing AllCaptionSummary:", error);
+    return error;
+  }
+}
+
+export async function getAllCaptionSummary(
+  authToken: string,
+  channel_id: string
+) {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db
+    .from("AllCaptionSummary")
+    .select("body")
+    .eq("channel_id", channel_id);
+
+  if (data) {
+    return data;
+  } else {
+    console.error("Error retrieving AllCaptionSummary:", error);
+    return error;
+  }
+}
+
 // Stage A Pre-Processing -- Draft 1 -- 2021-07-21
 
 export type Comment = {
