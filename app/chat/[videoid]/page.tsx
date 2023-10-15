@@ -5,6 +5,7 @@ import { getCaptionSummary } from "@/lib/supabaseClient";
 import { auth, currentUser } from "@clerk/nextjs";
 import { useState } from "react";
 import NavBar from "../../components/NavBar";
+import { getOrCreateChatHistory } from "@/lib/api";
 
 export default async function ChatPage({
   params,
@@ -32,13 +33,25 @@ export default async function ChatPage({
     return NextResponse.json({ message: "Error on chat" });
   }
   if (captionsData && captionsData.length > 0) {
-    console.log("get captions summary on video id page!");
+    console.log("got captions summary on video id page!");
     captions = captionsData[0].summaryText;
   }
 
   const truncateTitle = (title: string, limit: number = 10) => {
     return title.length > limit ? `${title.substring(0, limit)}...` : title;
   };
+
+  const { data: chatHistoryData, error: chatHistoryError } =
+    await getOrCreateChatHistory(params.videoid);
+
+  if (chatHistoryError) {
+    console.error(chatHistoryError);
+    return NextResponse.json({ message: "Error on chat" });
+  }
+  if (chatHistoryData && chatHistoryData.length > 0) {
+    console.log("got captions summary on video id page!");
+    captions = chatHistoryData[0].summaryText;
+  }
 
   // Get the current user's name
   const user = await currentUser();

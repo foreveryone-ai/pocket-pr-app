@@ -81,3 +81,19 @@ export async function getOrCreateEmbeddings(videoid: string) {
     console.error(error);
   }
 }
+
+export async function getOrCreateChatHistory(videoid: string) {
+  try {
+    const res = await fetch("/api/chat/create-history", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ videoid }),
+    });
+    const data = await res.json();
+    return data.message;
+  } catch (error) {
+    console.error(error);
+  }
+}

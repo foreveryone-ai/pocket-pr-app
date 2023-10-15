@@ -1,5 +1,6 @@
 import { SubscriptionStatus } from "@prisma/client";
 import { createClient } from "@supabase/supabase-js";
+import { NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
@@ -21,6 +22,102 @@ function createServerDbClient(accessToken?: string) {
   });
 }
 //-------------------------------Create------------------------------------//
+export async function updateChatHistory(
+  authToken: string,
+  conversationId: string,
+  content: string,
+  userId: string,
+  channelId: string
+) {
+  try {
+    // auth token is here ...
+    const db = createServerDbClient(authToken);
+
+    const { data: aiChatData, error: aiChatError } = await db
+      .from("AiChatMessage")
+      .insert({
+        content: content,
+        user_id: userId,
+        conversation_id: conversationId,
+        channel_id: channelId,
+      })
+      .eq("id", conversationId)
+      .select();
+
+    const { data: userChatData, error: userChatError } = await db
+      .from("UserChatMessage")
+      .insert({
+        content: content,
+        user_id: userId,
+        conversation_id: conversationId,
+        channel_id: channelId,
+      })
+      .eq("id", conversationId)
+      .select();
+
+    return {
+      data: [aiChatData, userChatData],
+      error: [aiChatError, userChatError],
+    };
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function updateCoversationSummary(
+  authToken: string,
+  conversationId: string,
+  summary: string
+) {
+  try {
+    // auth token is here ...
+    const db = createServerDbClient(authToken);
+
+    return await db
+      .from("conversation")
+      .update({ summary: summary })
+      .eq("id", conversationId)
+      .select();
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function getConversation(authToken: string, video_id: string) {
+  try {
+    // auth token is here ...
+    const db = createServerDbClient(authToken);
+
+    return await db
+      .from("conversation")
+      .select("id, summary")
+      .eq("video_id", video_id);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function createConversation(
+  authToken: string,
+  video_id: string,
+  user_id: string
+) {
+  try {
+    // auth token is here ...
+    const db = createServerDbClient(authToken);
+
+    return await db
+      .from("conversation")
+      .insert({
+        video_id: video_id,
+        user_id: user_id,
+      })
+      .select();
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 export async function createStripeUser(
   authToken: string,
   userId: string,
