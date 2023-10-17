@@ -349,15 +349,22 @@ export class ChannelChain {
       const res = await chain.call({
         input_documents: docs,
       });
-      return res && res.text;
+
+      // Assign the result of the summarization to summarizedText
+      const summarizedText = res && res.text;
+
+      // Now you can use summarizedText
+      const authToken = process.env.SUPABASE_SERVICE_ROLE_KEY;
+      if (!authToken) {
+        throw new Error("SUPABASE_SERVICE_ROLE_KEY is not set");
+      }
+      await storeAllCaptionSummary(authToken, channel_id, summarizedText);
+
+      return summarizedText;
     } catch (error) {
       console.error("error on summarize summaries");
       console.error(error);
     }
-    const authToken = process.env.SUPABASE_SERVICE_ROLE_KEY;
-    await storeAllCaptionSummary(authToken, channel_id, summarizedText);
-
-    return summarizedText;
   }
 
   async summarizeChatHistory(history: string[]) {
