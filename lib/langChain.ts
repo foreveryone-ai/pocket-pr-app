@@ -14,6 +14,7 @@ import { getCaptionSummaries } from "./supabaseClient";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import type { SmallComment } from "./supabaseClient";
 import { storeAllCaptionSummary } from "@/lib/supabaseClient";
+import { getAllCaptionSummary } from "./supabaseClient";
 
 export type CreateEmbeddingsArgs = {
   video_id: string;
@@ -317,53 +318,57 @@ export class ChannelChain {
     const authToken = process.env.SUPABASE_SERVICE_ROLE_KEY;
     if (!authToken) throw new Error(`Expected SUPABASE_SERVICE_ROLE_KEY`);
 
-    // Fetch all captionSummary records for the channel_id
-    const response = await getCaptionSummaries(authToken, channel_id);
+    const existingSummary = await getAllCaptionSummary(authToken, channel_id);
 
-    // If there are no captionSummary records, throw an error
-    if (!response.data || response.data.length === 0) {
-      throw new Error(
-        `No captionSummary records exist for channel_id: ${channel_id}`
-      );
-    }
+    if (Array.isArray(existingSummary) && existingSummary.length > 0) {
+      return existingSummary[0].body as string;
+    } else {
+      const response = await getCaptionSummaries(authToken, channel_id);
 
-    // Extract the summaryText from each captionSummary record
-    const summaries = response.data.map((summary) => summary.summaryText);
+      if (!response.data || response.data.length === 0) {
+        throw new Error(
+          `No captionSummary records exist for channel_id: ${channel_id}`
+        );
+      }
 
-    // Summarize the summaries
-    const model = new OpenAI({
-      openAIApiKey: process.env.OPENAI_API_KEY,
-      temperature: 0,
-      modelName: "gpt-4",
-      maxConcurrency: 100,
-    });
-    const text_splitter = new RecursiveCharacterTextSplitter({
-      chunkSize: 1000,
-    });
-    const docs = await text_splitter.createDocuments(summaries);
-    const chain = loadSummarizationChain(model, {
-      type: "map_reduce",
-      returnIntermediateSteps: true,
-    });
-    try {
-      const res = await chain.call({
-        input_documents: docs,
+      const summaries = response.data.map((summary) => summary.summaryText);
+
+      const model = new OpenAI({
+        openAIApiKey: process.env.OPENAI_API_KEY,
+        temperature: 0,
+        modelName: "gpt-4",
+        maxConcurrency: 100,
       });
 
-      // Assign the result of the summarization to summarizedText
-      const summarizedText = res && res.text;
+      const text_splitter = new RecursiveCharacterTextSplitter({
+        chunkSize: 1000,
+      });
 
-      // Now you can use summarizedText
-      const authToken = process.env.SUPABASE_SERVICE_ROLE_KEY;
-      if (!authToken) {
-        throw new Error("SUPABASE_SERVICE_ROLE_KEY is not set");
+      const docs = await text_splitter.createDocuments(summaries);
+
+      const chain = loadSummarizationChain(model, {
+        type: "map_reduce",
+        returnIntermediateSteps: true,
+      });
+
+      try {
+        const res = await chain.call({
+          input_documents: docs,
+        });
+
+        const summarizedText = res && res.text;
+
+        const authToken = process.env.SUPABASE_SERVICE_ROLE_KEY;
+        if (!authToken) {
+          throw new Error("SUPABASE_SERVICE_ROLE_KEY is not set");
+        }
+        await storeAllCaptionSummary(authToken, channel_id, summarizedText);
+
+        return summarizedText;
+      } catch (error) {
+        console.error("error on summarize summaries");
+        console.error(error);
       }
-      await storeAllCaptionSummary(authToken, channel_id, summarizedText);
-
-      return summarizedText;
-    } catch (error) {
-      console.error("error on summarize summaries");
-      console.error(error);
     }
   }
 
@@ -408,7 +413,6 @@ export class ChannelChain {
     const summary = await this.summarizeChatHistory(chatHistory);
 
     const client = createClient(url, supabaseKey);
-
     const vectorStore = await SupabaseVectorStore.fromExistingIndex(
       new OpenAIEmbeddings(),
       {
@@ -416,15 +420,15 @@ export class ChannelChain {
         tableName: "documents",
       }
     );
+
     const foundDocuments = await vectorStore.similaritySearch(userMessage, 25, {
       channel_id: channel_id,
     });
+
     const summarizedSummaries = await this.summarizeSummaries(channel_id);
     const encoder = new TextEncoder();
     const stream = new TransformStream();
     const writer = stream.writable.getWriter();
-
-    // Initialize the LLM to use to answer the question.
     const chat = new ChatOpenAI({
       openAIApiKey: process.env.OPENAI_API_KEY,
       modelName: "gpt-4",

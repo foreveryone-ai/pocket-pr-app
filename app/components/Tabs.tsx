@@ -17,6 +17,8 @@ import {
 } from "@nextui-org/modal";
 import { UserIcon, ChatBubbleLeftRightIcon } from "@heroicons/react/20/solid";
 import { Accordion, AccordionItem } from "@nextui-org/accordion";
+import { user } from "@nextui-org/react";
+import { Router } from "next/router";
 
 const timeline = [
   {
@@ -108,9 +110,13 @@ export default function Home() {
 
   const handleCcClick = async () => {
     setIsCcLoading(true);
-    // try {
-    //   const response = await fetch("insert channel chat call here")
-    // }
+    try {
+      const response = await fetch("insert channel chat call here");
+    } catch (error) {
+      console.log("channel-chat failed");
+    } finally {
+      // redirect user to /channel-chat
+    }
   };
 
   return (
@@ -219,7 +225,7 @@ export default function Home() {
                                                 <span
                                                   className={classNames(
                                                     event.iconBackground,
-                                                    "h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white",
+                                                    "h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white"
                                                   )}
                                                 >
                                                   <event.icon
