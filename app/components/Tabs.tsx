@@ -18,7 +18,7 @@ import {
 import { UserIcon, ChatBubbleLeftRightIcon } from "@heroicons/react/20/solid";
 import { Accordion, AccordionItem } from "@nextui-org/accordion";
 import { user } from "@nextui-org/react";
-import { Router } from "next/router";
+import { useRouter } from "next/navigation";
 
 const timeline = [
   {
@@ -87,7 +87,7 @@ function classNames(...classes: string[]): string {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Home() {
+export default function Home({ channelId }: { channelId: string }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoading, setIsLoading] = useState(false);
   const [isCcLoading, setIsCcLoading] = useState(false);
@@ -107,15 +107,32 @@ export default function Home() {
       window.location.reload(); // Refresh the page when the API request completes
     }
   };
+  const router = useRouter();
 
   const handleCcClick = async () => {
     setIsCcLoading(true);
     try {
-      const response = await fetch("insert channel chat call here");
+      const response = await fetch(`/api/channel-chat/${channelId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        // Include any necessary data in the body of the request
+        body: JSON.stringify({
+          // Your data here
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Channel chat failed");
+      }
+
+      // If the request was successful, redirect to the channel chat page
+      router.push(`/channel-chat/${channelId}`);
     } catch (error) {
-      console.log("channel-chat failed");
+      console.error(error);
     } finally {
-      // redirect user to /channel-chat
+      setIsCcLoading(false);
     }
   };
 

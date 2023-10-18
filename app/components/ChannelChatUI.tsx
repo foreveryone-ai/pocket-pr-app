@@ -11,13 +11,13 @@ export const runtime = "edge";
 
 type ChatUIProps = {
   channelid: string;
-  captionsSummary: string;
+  allCaptionSummary: string;
   userName: string | null | undefined;
 };
 
 export default function ChatUI({
   channelid,
-  captionsSummary,
+  allCaptionSummary,
   userName = "User",
 }: ChatUIProps) {
   const [inputValue, setInputValue] = useState("");
@@ -50,7 +50,7 @@ export default function ChatUI({
         body: JSON.stringify({
           message: userMessage,
           messageHistory: messages,
-          captionsSummary: captionsSummary,
+          allCaptionSummary: allCaptionSummary,
         }),
         headers: {
           "Content-Type": "application/json",

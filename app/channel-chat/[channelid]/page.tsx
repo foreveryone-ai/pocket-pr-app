@@ -1,11 +1,9 @@
 import { NextResponse } from "next/server";
 import ChannelChatUI from "@/app/components/ChatUI";
-// to-do: write channel-chat/[channelid]route.ts
 import { ChannelChain } from "@/lib/langChain";
 import { auth, currentUser } from "@clerk/nextjs";
-import { useState } from "react";
 import NavBar from "../../components/NavBar";
-import { getAllCaptionSummaries } from "@/lib/supabaseClient";
+import { getAllCaptionSummary } from "@/lib/supabaseClient";
 
 export default async function ChannelChatPage({
   params,
@@ -13,10 +11,9 @@ export default async function ChannelChatPage({
   params: { channelid: string };
 }) {
   const { userId, getToken } = auth();
-  console.log(userId);
   const token = await getToken({ template: "supabase" });
 
-  let captions;
+  let allCaptionSummary;
 
   if (!token) return NextResponse.rewrite("/sign-in");
 
@@ -24,31 +21,49 @@ export default async function ChannelChatPage({
   const channelChain = new ChannelChain();
 
   // First, try to get the AllCaptionSummary from the database
-  const { data: allCaptionSummaryData, error: allCaptionSummaryError } =
-    await getAllCaptionSummaries(token, params.channelid);
+  // First, try to get the AllCaptionSummary from the database
+  const allCaptionSummaryResult = await getAllCaptionSummary(
+    token,
+    params.channelid
+  );
 
-  if (allCaptionSummaryError) {
-    console.error(allCaptionSummaryError);
+  if (Array.isArray(allCaptionSummaryResult)) {
+    if (allCaptionSummaryResult.length > 0) {
+      // If the AllCaptionSummary exists in the database, use it
+      allCaptionSummary = allCaptionSummaryResult[0].body;
+    } else {
+      // If the AllCaptionSummary does not exist in the database, call the summarizeSummaries method
+      const summarizedSummariesResult = await channelChain.summarizeSummaries(
+        params.channelid
+      );
+
+      if (
+        Array.isArray(summarizedSummariesResult) &&
+        summarizedSummariesResult.length > 0
+      ) {
+        allCaptionSummary = summarizedSummariesResult[0].summaryText;
+      }
+    }
+  } else {
+    console.error(allCaptionSummaryResult);
     return NextResponse.json({ message: "Error on chat" });
   }
 
-  if (allCaptionSummaryData && allCaptionSummaryData.length > 0) {
+  if (allCaptionSummaryResult.length > 0) {
     // If the AllCaptionSummary exists in the database, use it
-    captions = allCaptionSummaryData[0].body;
+    allCaptionSummary = allCaptionSummaryResult[0].body;
   } else {
     // If the AllCaptionSummary does not exist in the database, call the summarizeSummaries method
-    const { data: captionsData, error: captionsError } =
-      await channelChain.summarizeSummaries(params.channelid);
+    const summarizedSummariesResult = await channelChain.summarizeSummaries(
+      params.channelid
+    );
 
-    console.log("captionsSummary Data: ", captionsData);
-
-    if (captionsError) {
-      console.error(captionsError);
+    if (summarizedSummariesResult instanceof Error) {
+      console.error(summarizedSummariesResult);
       return NextResponse.json({ message: "Error on chat" });
     }
-    if (captionsData && captionsData.length > 0) {
-      console.log("get captions summary on video id page!");
-      captions = captionsData[0].summaryText;
+    if (summarizedSummariesResult.length > 0) {
+      allCaptionSummary = summarizedSummariesResult[0].summaryText;
     }
   }
 
@@ -61,7 +76,7 @@ export default async function ChannelChatPage({
       <NavBar />
       <ChannelChatUI
         channelid={params.channelid}
-        captionsSummary={captions}
+        allCaptionSummary={allCaptionSummary}
         userName={userName}
       />
     </div>
