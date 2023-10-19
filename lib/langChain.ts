@@ -411,6 +411,12 @@ export class ChannelChain {
     userMessage: string,
     chatHistory: string[]
   ) {
+    console.log("Chat method called with parameters:");
+    console.log("User First Name: ", userFirstName);
+    console.log("Channel ID: ", channel_id);
+    console.log("Message: ", userMessage);
+    console.log("Message History: ", chatHistory);
+
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
     if (!supabaseKey) throw new Error(`Expected SUPABASE_SERVICE_ROLE_KEY`);
 
@@ -485,25 +491,30 @@ export class ChannelChain {
     ]);
     // console.log("template: ", template);
     // console.log("chatPrompt: ", chatPrompt);
-    console.log("creating chain...");
-    // ... rest of the chat method implementation
-    const chain = new LLMChain({
-      llm: chat,
-      prompt: chatPrompt,
-    });
+    try {
+      console.log("creating chain...");
+      // ... rest of the chat method implementation
+      const chain = new LLMChain({
+        llm: chat,
+        prompt: chatPrompt,
+      });
 
-    console.log(`Video captions: ` + this.captions);
+      console.log(`Video captions: ` + this.captions);
 
-    chain
-      .call({
+      chain.call({
         userFirstName: userFirstName,
         transcription: summarizedSummaries, // use summarizedSummaries as the transcription
         chatHistory: summary,
         comments: `
-${foundDocuments.map((document) => document.pageContent + "\n")}`,
+  ${foundDocuments.map((document) => document.pageContent + "\n")}`,
         channel_id: channel_id,
-      })
-      .catch((e: Error) => console.error(e));
+      });
+    } catch (e: any) {
+      console.error(
+        "error occured while creating or calling the LLMChain: ",
+        e
+      );
+    }
 
     return new Response(stream.readable, {
       headers: { "Content-Type": "text/event-stream" },

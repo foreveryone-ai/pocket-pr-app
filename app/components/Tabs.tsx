@@ -19,6 +19,7 @@ import { UserIcon, ChatBubbleLeftRightIcon } from "@heroicons/react/20/solid";
 import { Accordion, AccordionItem } from "@nextui-org/accordion";
 import { user } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import { getChannelId, getOrCreateAllCaptionSummary } from "@/lib/api";
 
 const timeline = [
   {
@@ -107,23 +108,28 @@ export default function Home({ channelId }: { channelId: string }) {
       window.location.reload(); // Refresh the page when the API request completes
     }
   };
+
   const router = useRouter();
 
   const handleCcClick = async () => {
+    console.log("handleCcClick called"); // Add console log here
     setIsCcLoading(true);
     try {
-      const response = await fetch(`/api/channel-chat/${channelId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        // Include any necessary data in the body of the request
-        body: JSON.stringify({
-          // Your data here
-        }),
-      });
+      let channelId;
+      try {
+        channelId = await getChannelId();
+      } catch (error) {
+        console.error("Error getting channel id:", error);
+      }
+      console.log("handleCcClick channelId:", channelId); // Add console log here
 
-      if (!response.ok) {
+      if (!channelId) {
+        throw new Error("Failed to get channel id");
+      }
+
+      const message = await getOrCreateAllCaptionSummary(channelId);
+
+      if (message !== "success") {
         throw new Error("Channel chat failed");
       }
 

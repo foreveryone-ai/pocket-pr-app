@@ -434,7 +434,7 @@ export async function storeAllCaptionSummary(
 export async function getAllCaptionSummary(
   authToken: string,
   channel_id: string
-) {
+): Promise<{ data: any; error: any }> {
   const db = createServerDbClient(authToken);
 
   const { data, error } = await db
@@ -443,11 +443,24 @@ export async function getAllCaptionSummary(
     .eq("channel_id", channel_id);
 
   if (data) {
-    return data;
+    return { data, error: null };
   } else {
     console.error("Error retrieving AllCaptionSummary:", error);
-    return error;
+    return { data: null, error };
   }
+}
+
+export async function getChannelIdByUserId(authToken: string, user_id: string) {
+  const db = createServerDbClient(authToken);
+  const { data, error } = await db
+    .from("User")
+    .select("channel_id")
+    .eq("id", user_id);
+  if (error) {
+    console.error(error);
+    return null;
+  }
+  return data[0]?.channel_id;
 }
 
 // Stage A Pre-Processing -- Draft 1 -- 2021-07-21
