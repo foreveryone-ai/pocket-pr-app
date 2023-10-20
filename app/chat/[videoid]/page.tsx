@@ -1,7 +1,12 @@
 // app/chat/[videoid]/page.tsx
 import { NextResponse } from "next/server";
 import ChatUI from "@/app/components/ChatUI";
-import { getCaptionSummary } from "@/lib/supabaseClient";
+import {
+  getAllAiChatMessages,
+  getAllUserChatMessages,
+  getCaptionSummary,
+  getConversation,
+} from "@/lib/supabaseClient";
 import { auth, currentUser } from "@clerk/nextjs";
 import { useState } from "react";
 import NavBar from "../../components/NavBar";
@@ -15,6 +20,10 @@ export default async function ChatPage({
   const { userId, getToken } = auth();
   console.log(userId);
   const token = await getToken({ template: "supabase" });
+
+  if (!userId) {
+    return <div>please login</div>;
+  }
 
   let captions;
 
@@ -56,6 +65,32 @@ export default async function ChatPage({
   // Get the current user's name
   const user = await currentUser();
   const userName = user?.firstName;
+
+  // get conversation
+  let aiMessages, userMessages;
+  try {
+    const res = await getConversation(token, params.videoid);
+    if (res && res.data && res.data.length > 0) {
+      // get all AiChatMessage and UserChatMessage
+      const res = await getAllAiChatMessages(token, params.videoid);
+      if (res && res.data && res.data.length > 0) {
+        aiMessages = [...res.data];
+      }
+      if (res && res.error) {
+        console.error(res.error);
+      }
+
+      const userRes = await getAllUserChatMessages(token, params.videoid);
+      if (userRes && userRes.data && userRes.data.length > 0) {
+        userMessages = [...userRes.data];
+      }
+      if (userRes && userRes.error) {
+        console.error(userRes.error);
+      }
+    }
+  } catch (error) {
+    console.error(error);
+  }
 
   return (
     <div className="min-h-screen bg-green-800">

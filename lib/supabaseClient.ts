@@ -88,10 +88,33 @@ export async function getConversation(authToken: string, video_id: string) {
     // auth token is here ...
     const db = createServerDbClient(authToken);
 
-    return await db
-      .from("conversation")
-      .select("id, summary")
-      .eq("video_id", video_id);
+    return await db.from("conversation").select().eq("video_id", video_id);
+  } catch (error) {
+    console.error(error);
+  }
+}
+export async function getAllAiChatMessages(
+  authToken: string,
+  video_id: string
+) {
+  try {
+    // auth token is here ...
+    const db = createServerDbClient(authToken);
+
+    return await db.from("AiChatMessage").select().eq("video_id", video_id);
+  } catch (error) {
+    console.error(error);
+  }
+}
+export async function getAllUserChatMessages(
+  authToken: string,
+  video_id: string
+) {
+  try {
+    // auth token is here ...
+    const db = createServerDbClient(authToken);
+
+    return await db.from("UserChatMessage").select().eq("video_id", video_id);
   } catch (error) {
     console.error(error);
   }
