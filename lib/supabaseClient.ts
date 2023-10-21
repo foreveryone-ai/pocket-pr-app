@@ -409,25 +409,26 @@ export async function getCaptionSummaries(
 // store and retrieve the AllCaptionSummary
 export async function storeAllCaptionSummary(
   authToken: string,
-  channel_id: string,
-  allCaptionSummary: string
+  allCaptionsSummary: string,
+  channel_id: string
 ) {
-  const db = createServerDbClient(authToken);
+  try {
+    const db = createServerDbClient(authToken);
 
-  const { data, error } = await db
-    .from("AllCaptionSummary")
-    .upsert({
-      channel_id,
-      body: allCaptionSummary,
-      updatedAt: new Date(),
-    })
-    .select();
+    const updatedSummary = await db
+      .from("AllCaptionSummary")
+      .upsert({
+        channel_id,
+        all_captions_summary: allCaptionsSummary,
+        updated_at: new Date(), // Set updated_at to the current date and time
+      })
+      .select();
 
-  if (data) {
-    return data;
-  } else {
-    console.error("Error storing AllCaptionSummary:", error);
-    return error;
+    console.log("updated summary: ", updatedSummary);
+    return updatedSummary.status; // 201
+  } catch (error) {
+    console.error(error);
+    return 400;
   }
 }
 
