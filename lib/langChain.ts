@@ -441,10 +441,9 @@ export class ChannelChain {
       channel_id: channel_id,
     });
 
-    const newAllSummaryHandler = new AllSummaryHandler();
-    const summarizedSummaries = await newAllSummaryHandler.summarizeSummaries(
-      channel_id
-    );
+    const authToken = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!authToken) throw new Error(`Expected SUPABASE_SERVICE_ROLE_KEY`);
+
     const encoder = new TextEncoder();
     const stream = new TransformStream();
     const writer = stream.writable.getWriter();

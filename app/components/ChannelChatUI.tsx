@@ -11,13 +11,11 @@ export const runtime = "edge";
 
 type ChannelChatUIProps = {
   channelid: string;
-  allCaptionSummary: string;
   userName: string | null | undefined;
 };
 
 export default function ChatUI({
   channelid,
-  allCaptionSummary,
   userName = "User",
 }: ChannelChatUIProps) {
   const [inputValue, setInputValue] = useState("");
@@ -50,7 +48,6 @@ export default function ChatUI({
         body: JSON.stringify({
           message: userMessage,
           messageHistory: messages,
-          allCaptionSummary: allCaptionSummary,
         }),
         headers: {
           "Content-Type": "application/json",
@@ -68,6 +65,7 @@ export default function ChatUI({
       console.error(error);
     }
   };
+
   return (
     <div className="flex pt-12 justify-center bg-green-800">
       <div className="px-4 sm:px-6 lg:px-8 w-full sm:max-w-2xl lg:max-w-3xl mx-auto">
