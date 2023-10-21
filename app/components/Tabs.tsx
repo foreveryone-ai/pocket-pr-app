@@ -88,7 +88,7 @@ function classNames(...classes: string[]): string {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Home({ channelId }: { channelId: string }) {
+export default function Home() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoading, setIsLoading] = useState(false);
   const [isCcLoading, setIsCcLoading] = useState(false);
