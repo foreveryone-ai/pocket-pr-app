@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import {
   getAllCaptionSummary,
   storeAllCaptionSummary,
+  getMostRecentCaptionSummary,
 } from "@/lib/supabaseClient";
 import { ChannelChain } from "@/lib/langChain";
 
@@ -23,11 +24,23 @@ export async function POST(req: Request) {
     token as string,
     body.channelid
   );
-  console.log("All Caption Summary Data:", allCaptionSummaryData);
-  if (allCaptionSummaryData.error) {
-    throw new Error("error on all caption summary");
-  }
-  if (allCaptionSummaryData.data && allCaptionSummaryData.data.length > 0) {
+
+  // Fetch the most recent CaptionSummary for the given channel_id
+  // Fetch the most recent CaptionSummary for the given channel_id
+  const mostRecentCaptionSummary = await getMostRecentCaptionSummary(
+    token as string,
+    body.channelid
+  );
+
+  // If an AllCaptionSummary already exists and the most recent CaptionSummary is not more recent, return a message
+  // If an AllCaptionSummary already exists and the most recent CaptionSummary is not more recent, return a message
+  if (
+    allCaptionSummaryData.data &&
+    allCaptionSummaryData.data.length > 0 &&
+    mostRecentCaptionSummary && // Check if mostRecentCaptionSummary is not null
+    mostRecentCaptionSummary.createdAt <=
+      allCaptionSummaryData.data[0].created_at
+  ) {
     return NextResponse.json({ message: "Already have all caption summary" });
   }
   //--------------- check if all caption summary already exists end ------------------//
