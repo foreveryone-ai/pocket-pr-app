@@ -19,6 +19,7 @@ export async function POST(req: Request) {
   if (!userId) NextResponse.rewrite("/sign-in");
   if (!body || !body.channelid) throw new Error("No channel id included");
 
+  console.log("Passed channelId: ", body.channelid); // Add this line
   //--------------- check if all caption summary already exists start ------------------//
   const allCaptionSummaryData = await getAllCaptionSummary(
     token as string,
@@ -26,13 +27,11 @@ export async function POST(req: Request) {
   );
 
   // Fetch the most recent CaptionSummary for the given channel_id
-  // Fetch the most recent CaptionSummary for the given channel_id
   const mostRecentCaptionSummary = await getMostRecentCaptionSummary(
     token as string,
     body.channelid
   );
 
-  // If an AllCaptionSummary already exists and the most recent CaptionSummary is not more recent, return a message
   // If an AllCaptionSummary already exists and the most recent CaptionSummary is not more recent, return a message
   if (
     allCaptionSummaryData.data &&
@@ -47,14 +46,23 @@ export async function POST(req: Request) {
 
   cc = new ChannelChain();
 
-  const allCaptionsSummary = await cc.summarizeSummaries(body.channelid);
-  if (allCaptionsSummary) {
-    // Store allCaptionsSummary
-    await storeAllCaptionSummary(
-      token as string,
-      allCaptionsSummary,
-      body.channelid
-    );
-    return NextResponse.json({ message: "success" });
+  // Only call summarizeSummaries if a new CaptionSummary has been created
+  if (
+    !allCaptionSummaryData.data ||
+    allCaptionSummaryData.data.length === 0 ||
+    (mostRecentCaptionSummary &&
+      mostRecentCaptionSummary.createdAt >
+        allCaptionSummaryData.data[0].created_at)
+  ) {
+    const allCaptionsSummary = await cc.summarizeSummaries(body.channelid);
+    if (allCaptionsSummary) {
+      // Store allCaptionsSummary
+      await storeAllCaptionSummary(
+        token as string,
+        allCaptionsSummary,
+        body.channelid
+      );
+      return NextResponse.json({ message: "success" });
+    }
   }
 }
