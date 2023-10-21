@@ -72,8 +72,9 @@ export async function getOrCreateAllCaptionSummary(channelid: string) {
       },
       body: JSON.stringify({ channelid }),
     });
-    console.log(res); // Add console log here
+    console.log("Response status:", res.status); // Add console log here
     const data = await res.json();
+    console.log("Response data:", data); // Add console log here
     return data.message;
   } catch (error) {
     console.error(error);

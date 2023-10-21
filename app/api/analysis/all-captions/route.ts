@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     token as string,
     body.channelid
   );
-
+  console.log("All Caption Summary Data:", allCaptionSummaryData);
   if (allCaptionSummaryData.error) {
     throw new Error("error on all caption summary");
   }
