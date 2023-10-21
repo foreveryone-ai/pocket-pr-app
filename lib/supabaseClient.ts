@@ -451,6 +451,31 @@ export async function getAllCaptionSummary(
   }
 }
 
+export async function getMostRecentCaptionSummary(
+  authToken: string,
+  channel_id: string
+) {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db
+    .from("CaptionSummary")
+    .select("createdAt")
+    .eq("channel_id", channel_id)
+    .order("createdAt", { ascending: false })
+    .limit(1);
+
+  if (error) {
+    console.error("Error fetching most recent CaptionSummary:", error);
+    return null;
+  }
+
+  if (data && data.length > 0) {
+    return data[0];
+  } else {
+    return null;
+  }
+}
+
 export async function getChannelIdByUserId(authToken: string, user_id: string) {
   const db = createServerDbClient(authToken);
   const { data, error } = await db
