@@ -46,6 +46,8 @@ export async function POST(req: Request) {
 
   cc = new ChannelChain();
 
+  const allCaptionsSummary = await cc.summarizeSummaries(body.channelid);
+  // Only call summarizeSummaries if a new CaptionSummary has been created
   // Only call summarizeSummaries if a new CaptionSummary has been created
   if (
     !allCaptionSummaryData.data ||
@@ -62,7 +64,9 @@ export async function POST(req: Request) {
         allCaptionsSummary,
         body.channelid
       );
-      return NextResponse.json({ message: "success" });
     }
   }
+
+  // Always return a success message
+  return NextResponse.json({ message: "success" });
 }
