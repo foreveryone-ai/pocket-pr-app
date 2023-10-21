@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth, clerkClient } from "@clerk/nextjs";
 import { ChannelChain } from "@/lib/langChain";
+import { getAllCaptionSummary } from "@/lib/supabaseClient";
 
 type Params = {
   params: {
@@ -10,6 +11,7 @@ type Params = {
 };
 
 export async function POST(req: NextRequest, context: Params) {
+  console.log("channel-chat/route method called");
   const channelid = context.params.channelid;
   const { userId, getToken } = auth();
   const userData = await req.json();
@@ -34,11 +36,22 @@ export async function POST(req: NextRequest, context: Params) {
     console.log("calling chat after confirming embeddings");
     try {
       // return the return from chat
+      const allCaptionSummaryData = await getAllCaptionSummary(
+        token as string,
+        channelid
+      );
+      const allCaptionsSummary =
+        allCaptionSummaryData.data && allCaptionSummaryData.data.length > 0
+          ? allCaptionSummaryData.data[0].body
+          : "";
+
+      // Pass allCaptionsSummary to the chat method
       return await channelChat.chat(
         user.firstName as string,
         channelid,
         userData.message,
-        userData.messageHistory
+        userData.messageHistory,
+        allCaptionsSummary // Pass allCaptionsSummary here
       );
     } catch (error) {
       console.error("error on chat!", error);

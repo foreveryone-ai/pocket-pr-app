@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import ChannelChatUI from "@/app/components/ChannelChatUI";
-import { ChannelChain } from "@/lib/langChain";
+import { ChannelChain, AllSummaryHandler } from "@/lib/langChain";
 import { auth, currentUser } from "@clerk/nextjs";
 import NavBar from "../../components/NavBar";
 import { getAllCaptionSummary } from "@/lib/supabaseClient";
@@ -34,15 +34,13 @@ export default async function ChannelChatPage({
     allCaptionSummary = allCaptionSummaryResult[0].body;
   } else {
     // If the AllCaptionSummary does not exist in the database, call the summarizeSummaries method
-    const summarizedSummariesResult = await channelChain.summarizeSummaries(
+    const summaryHandler = new AllSummaryHandler();
+    const summarizedSummaries = await summaryHandler.summarizeSummaries(
       params.channelid
     );
 
-    if (
-      Array.isArray(summarizedSummariesResult) &&
-      summarizedSummariesResult.length > 0
-    ) {
-      allCaptionSummary = summarizedSummariesResult[0].summaryText;
+    if (Array.isArray(summarizedSummaries) && summarizedSummaries.length > 0) {
+      allCaptionSummary = summarizedSummaries[0].summaryText;
     }
   }
 

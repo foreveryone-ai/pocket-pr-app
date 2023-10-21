@@ -440,7 +440,7 @@ export async function getAllCaptionSummary(
 
   const { data, error } = await db
     .from("AllCaptionSummary")
-    .select("body")
+    .select("body, created_at") // Add created_at here
     .eq("channel_id", channel_id);
 
   if (data) {

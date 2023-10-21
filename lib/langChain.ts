@@ -305,22 +305,7 @@ export class PocketChain {
   }
 }
 
-export class ChannelChain {
-  captions: string;
-  channelId: string;
-  batches: SmallComment[][];
-
-  constructor(
-    videoCaptions?: string,
-    channelId?: string,
-    commentBatches?: SmallComment[][]
-  ) {
-    this.captions = videoCaptions || "";
-    this.channelId = channelId || "";
-    this.batches = commentBatches || [];
-    console.log("Passed channelId: ", this.channelId);
-  }
-
+export class AllSummaryHandler {
   async summarizeSummaries(channel_id: string) {
     const authToken = process.env.SUPABASE_SERVICE_ROLE_KEY;
     if (!authToken) throw new Error(`Expected SUPABASE_SERVICE_ROLE_KEY`);
@@ -378,6 +363,23 @@ export class ChannelChain {
       }
     }
   }
+}
+
+export class ChannelChain {
+  captions: string;
+  channelId: string;
+  batches: SmallComment[][];
+
+  constructor(
+    videoCaptions?: string,
+    channelId?: string,
+    commentBatches?: SmallComment[][]
+  ) {
+    this.captions = videoCaptions || "";
+    this.channelId = channelId || "";
+    this.batches = commentBatches || [];
+    console.log("Passed channelId: ", this.channelId);
+  }
 
   async summarizeChatHistory(history: string[]) {
     const model = new OpenAI({
@@ -409,7 +411,8 @@ export class ChannelChain {
     userFirstName: string,
     channel_id: string,
     userMessage: string,
-    chatHistory: string[]
+    chatHistory: string[],
+    allCaptionsSummary: string
   ) {
     console.log("Chat method called with parameters:");
     console.log("User First Name: ", userFirstName);
@@ -438,7 +441,10 @@ export class ChannelChain {
       channel_id: channel_id,
     });
 
-    const summarizedSummaries = await this.summarizeSummaries(channel_id);
+    const newAllSummaryHandler = new AllSummaryHandler();
+    const summarizedSummaries = await newAllSummaryHandler.summarizeSummaries(
+      channel_id
+    );
     const encoder = new TextEncoder();
     const stream = new TransformStream();
     const writer = stream.writable.getWriter();
@@ -503,10 +509,10 @@ export class ChannelChain {
 
       chain.call({
         userFirstName: userFirstName,
-        transcription: summarizedSummaries, // use summarizedSummaries as the transcription
+        transcription: allCaptionsSummary, // Use allCaptionsSummary as the transcription
         chatHistory: summary,
         comments: `
-  ${foundDocuments.map((document) => document.pageContent + "\n")}`,
+      ${foundDocuments.map((document) => document.pageContent + "\n")}`,
         channel_id: channel_id,
       });
     } catch (e: any) {

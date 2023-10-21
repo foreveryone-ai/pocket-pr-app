@@ -5,9 +5,10 @@ import {
   storeAllCaptionSummary,
   getMostRecentCaptionSummary,
 } from "@/lib/supabaseClient";
-import { ChannelChain } from "@/lib/langChain";
+import { ChannelChain, AllSummaryHandler } from "@/lib/langChain"; // Import AllSummaryHandler
 
 export async function POST(req: Request) {
+  console.log("analysis/all-captions method called");
   const body = await req.json();
   console.log(body);
   const { userId, getToken } = auth();
@@ -41,19 +42,21 @@ export async function POST(req: Request) {
       allCaptionSummaryData.data[0].created_at
   ) {
     return NextResponse.json({ message: "Already have all caption summary" });
-  }
-  //--------------- check if all caption summary already exists end ------------------//
-
-  cc = new ChannelChain();
-
-  const allCaptionsSummary = await cc.summarizeSummaries(body.channelid);
-  if (allCaptionsSummary) {
-    // Store allCaptionsSummary
-    await storeAllCaptionSummary(
-      token as string,
-      allCaptionsSummary,
+  } else {
+    // Create an instance of AllSummaryHandler and call the summarizeSummaries method
+    const summaryHandler = new AllSummaryHandler();
+    const allCaptionsSummary = await summaryHandler.summarizeSummaries(
       body.channelid
     );
-    return NextResponse.json({ message: "success" });
+
+    if (allCaptionsSummary) {
+      // Store allCaptionsSummary
+      await storeAllCaptionSummary(
+        token as string,
+        allCaptionsSummary,
+        body.channelid
+      );
+      return NextResponse.json({ message: "success" });
+    }
   }
 }
