@@ -129,7 +129,10 @@ export default function Home({ channelId }: { channelId: string }) {
 
       const message = await getOrCreateAllCaptionSummary(channelId);
 
-      if (message !== "success") {
+      if (
+        message !== "success" &&
+        message !== "Already have all caption summary"
+      ) {
         throw new Error("Channel chat failed");
       }
 

@@ -9,7 +9,7 @@ import NavBar from "./NavBar";
 
 export const runtime = "edge";
 
-type ChatUIProps = {
+type ChannelChatUIProps = {
   channelid: string;
   allCaptionSummary: string;
   userName: string | null | undefined;
@@ -19,7 +19,7 @@ export default function ChatUI({
   channelid,
   allCaptionSummary,
   userName = "User",
-}: ChatUIProps) {
+}: ChannelChatUIProps) {
   const [inputValue, setInputValue] = useState("");
   const [output, setOutput] = useState("");
   const [messages, setMessages] = useState<string[]>([]);
