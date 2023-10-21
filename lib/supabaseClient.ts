@@ -419,8 +419,8 @@ export async function storeAllCaptionSummary(
       .from("AllCaptionSummary")
       .upsert({
         channel_id,
-        all_captions_summary: allCaptionsSummary,
-        updated_at: new Date(), // Set updated_at to the current date and time
+        body: allCaptionsSummary,
+        created_at: new Date(), // Set updated_at to the current date and time
       })
       .select();
 
