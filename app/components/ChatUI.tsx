@@ -13,6 +13,8 @@ type ChatUIProps = {
   videoid: string;
   captionsSummary: string;
   userName: string | null | undefined;
+  chatHistory?: string[];
+  conversationId: string;
 };
 
 export default function ChatUI({

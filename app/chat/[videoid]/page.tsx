@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server";
 import ChatUI from "@/app/components/ChatUI";
 import {
+  createConversation,
   getAllAiChatMessages,
   getAllUserChatMessages,
   getCaptionSummary,
@@ -67,25 +68,48 @@ export default async function ChatPage({
   const userName = user?.firstName;
 
   // get conversation
-  let aiMessages, userMessages;
+  let aiMessages, userMessages, conversationId;
+  let allMessages: string[] = [];
   try {
-    const res = await getConversation(token, params.videoid);
-    if (res && res.data && res.data.length > 0) {
+    const convoRes = await getConversation(token, params.videoid);
+    if (convoRes && convoRes.data && convoRes.data.length > 0) {
+      conversationId = convoRes.data[0].id;
       // get all AiChatMessage and UserChatMessage
-      const res = await getAllAiChatMessages(token, params.videoid);
-      if (res && res.data && res.data.length > 0) {
-        aiMessages = [...res.data];
+      const chatRes = await getAllAiChatMessages(token, params.videoid);
+      if (chatRes && chatRes.data && chatRes.data.length > 0) {
+        aiMessages = chatRes.data; //reference?
       }
-      if (res && res.error) {
-        console.error(res.error);
+      if (chatRes && chatRes.error) {
+        console.error(chatRes.error);
       }
 
       const userRes = await getAllUserChatMessages(token, params.videoid);
       if (userRes && userRes.data && userRes.data.length > 0) {
-        userMessages = [...userRes.data];
+        userMessages = userRes.data; //reference?
       }
       if (userRes && userRes.error) {
         console.error(userRes.error);
+      }
+      if (userMessages && aiMessages) {
+        for (let i = 0; i < userMessages.length; i++) {
+          allMessages.push(userMessages[i].content);
+          allMessages.push(aiMessages[i].content);
+        }
+      }
+    } else {
+      // create a new conversation
+      const newConversation = await createConversation(
+        token,
+        params.videoid,
+        userId
+      );
+      if (
+        newConversation &&
+        newConversation.data &&
+        newConversation.data.length > 0
+      ) {
+        console.log("new conversation created");
+        conversationId = newConversation.data[0].id;
       }
     }
   } catch (error) {
@@ -99,6 +123,8 @@ export default async function ChatPage({
         videoid={params.videoid}
         captionsSummary={captions}
         userName={userName}
+        chatHistory={allMessages}
+        conversationId={conversationId}
       />
     </div>
   );
