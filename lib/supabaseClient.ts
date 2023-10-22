@@ -526,6 +526,89 @@ export async function getCaptionSummaries(
   return await db.from("CaptionSummary").select().eq(`channel_id`, channel_id);
 }
 
+// store and retrieve the AllCaptionSummary
+export async function storeAllCaptionSummary(
+  authToken: string,
+  allCaptionsSummary: string,
+  channel_id: string
+) {
+  try {
+    const db = createServerDbClient(authToken);
+
+    const updatedSummary = await db
+      .from("AllCaptionSummary")
+      .upsert({
+        channel_id,
+        body: allCaptionsSummary,
+        created_at: new Date(), // Set updated_at to the current date and time
+      })
+      .select();
+
+    console.log("updated summary: ", updatedSummary);
+    return updatedSummary.status; // 201
+  } catch (error) {
+    console.error(error);
+    return 400;
+  }
+}
+
+export async function getAllCaptionSummary(
+  authToken: string,
+  channel_id: string
+): Promise<{ data: any; error: any }> {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db
+    .from("AllCaptionSummary")
+    .select("body, created_at") // Add created_at here
+    .eq("channel_id", channel_id);
+
+  if (data) {
+    return { data, error: null };
+  } else {
+    console.error("Error retrieving AllCaptionSummary:", error);
+    return { data: null, error };
+  }
+}
+
+export async function getMostRecentCaptionSummary(
+  authToken: string,
+  channel_id: string
+) {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db
+    .from("CaptionSummary")
+    .select("createdAt")
+    .eq("channel_id", channel_id)
+    .order("createdAt", { ascending: false })
+    .limit(1);
+
+  if (error) {
+    console.error("Error fetching most recent CaptionSummary:", error);
+    return null;
+  }
+
+  if (data && data.length > 0) {
+    return data[0];
+  } else {
+    return null;
+  }
+}
+
+export async function getChannelIdByUserId(authToken: string, user_id: string) {
+  const db = createServerDbClient(authToken);
+  const { data, error } = await db
+    .from("User")
+    .select("channel_id")
+    .eq("id", user_id);
+  if (error) {
+    console.error(error);
+    return null;
+  }
+  return data[0]?.channel_id;
+}
+
 // Stage A Pre-Processing -- Draft 1 -- 2021-07-21
 
 export type Comment = {

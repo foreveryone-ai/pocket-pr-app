@@ -17,6 +17,9 @@ import {
 } from "@nextui-org/modal";
 import { UserIcon, ChatBubbleLeftRightIcon } from "@heroicons/react/20/solid";
 import { Accordion, AccordionItem } from "@nextui-org/accordion";
+import { user } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
+import { getChannelId, getOrCreateAllCaptionSummary } from "@/lib/api";
 
 const timeline = [
   {
@@ -106,11 +109,40 @@ export default function Home() {
     }
   };
 
+  const router = useRouter();
+
   const handleCcClick = async () => {
+    console.log("handleCcClick called"); // Add console log here
     setIsCcLoading(true);
-    // try {
-    //   const response = await fetch("insert channel chat call here")
-    // }
+    try {
+      let channelId;
+      try {
+        channelId = await getChannelId();
+      } catch (error) {
+        console.error("Error getting channel id:", error);
+      }
+      console.log("handleCcClick channelId:", channelId); // Add console log here
+
+      if (!channelId) {
+        throw new Error("Failed to get channel id");
+      }
+
+      const message = await getOrCreateAllCaptionSummary(channelId);
+
+      if (
+        message !== "success" &&
+        message !== "Already have all caption summary"
+      ) {
+        throw new Error("Channel chat failed");
+      }
+
+      // If the request was successful, redirect to the channel chat page
+      router.push(`/channel-chat/${channelId}`);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsCcLoading(false);
+    }
   };
 
   return (
@@ -219,7 +251,7 @@ export default function Home() {
                                                 <span
                                                   className={classNames(
                                                     event.iconBackground,
-                                                    "h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white",
+                                                    "h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white"
                                                   )}
                                                 >
                                                   <event.icon
