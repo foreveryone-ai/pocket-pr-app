@@ -5,7 +5,7 @@ import {
   storeAllCaptionSummary,
   getMostRecentCaptionSummary,
 } from "@/lib/supabaseClient";
-import { ChannelChain, AllSummaryHandler } from "@/lib/langChain"; // Import AllSummaryHandler
+import { ChannelChain } from "@/lib/langChain"; // Import AllSummaryHandler
 
 export async function POST(req: Request) {
   console.log("analysis/all-captions method called");
@@ -44,8 +44,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: "Already have all caption summary" });
   } else {
     // Create an instance of AllSummaryHandler and call the summarizeSummaries method
-    const summaryHandler = new AllSummaryHandler();
-    const allCaptionsSummary = await summaryHandler.summarizeSummaries(
+    // Create an instance of ChannelChain and call the summarizeSummaries method
+    const channelChain = new ChannelChain();
+    const allCaptionsSummary = await channelChain.summarizeSummaries(
       body.channelid
     );
 
