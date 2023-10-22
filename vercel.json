@@ -3,5 +3,23 @@
     "app/api/**/*.ts": {
       "maxDuration": 60
     }
-  }
+  },
+  "crons": [
+    {
+      "path": "/api/cron-jobs/yt-update-free",
+      "schedule": "0 1 * * *"
+    },
+    {
+      "path": "/api/cron-jobs/yt-update-free",
+      "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/api/cron-jobs/yt-update-pro",
+      "schedule": "0 1 * * *"
+    },
+    {
+      "path": "/api/cron-jobs/yt-update-pro",
+      "schedule": "0 9 * * *"
+    }
+  ]
 }
