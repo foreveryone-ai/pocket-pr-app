@@ -141,6 +141,51 @@ export async function createConversation(
   }
 }
 
+export async function storeChatMessages(
+  authToken: string,
+  conversationId: string,
+  userMessage: string,
+  aiMessage: string,
+  userId: string,
+  channelId: string,
+  videoid: string
+) {
+  try {
+    // auth token is here ...
+    const db = createServerDbClient(authToken);
+
+    const { data: aiChatData, error: aiChatError } = await db
+      .from("AiChatMessage")
+      .insert({
+        content: aiMessage,
+        user_id: userId,
+        conversation_id: conversationId,
+        channel_id: channelId,
+        video_id: videoid,
+      })
+      .select("id");
+
+    const { data: userChatData, error: userChatError } = await db
+      .from("UserChatMessage")
+      .insert({
+        content: userMessage,
+        user_id: userId,
+        conversation_id: conversationId,
+        channel_id: channelId,
+        video_id: videoid,
+      })
+      .select("id");
+
+    if (userChatError || aiChatError) {
+      throw new Error("couldn't save chat messages");
+    }
+
+    return userChatData;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 export async function createStripeUser(
   authToken: string,
   userId: string,

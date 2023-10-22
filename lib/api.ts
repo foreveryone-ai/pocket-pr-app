@@ -113,14 +113,26 @@ export async function getOrCreateEmbeddings(videoid: string) {
   }
 }
 
-export async function getOrCreateChatHistory(videoid: string) {
+export async function updateChatHistory(
+  videoid: string,
+  conversationId: string,
+  userMessage: string,
+  aiMessage: string,
+  channelId: string
+) {
   try {
-    const res = await fetch("/api/chat/create-history", {
+    const res = await fetch("/api/chat/update-history", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ videoid }),
+      body: JSON.stringify({
+        videoid,
+        conversationId,
+        userMessage,
+        aiMessage,
+        channelId,
+      }),
     });
     const data = await res.json();
     return data.message;

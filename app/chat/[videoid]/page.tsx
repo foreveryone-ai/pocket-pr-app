@@ -9,9 +9,7 @@ import {
   getConversation,
 } from "@/lib/supabaseClient";
 import { auth, currentUser } from "@clerk/nextjs";
-import { useState } from "react";
 import NavBar from "../../components/NavBar";
-import { getOrCreateChatHistory } from "@/lib/api";
 
 export default async function ChatPage({
   params,
@@ -50,18 +48,6 @@ export default async function ChatPage({
   const truncateTitle = (title: string, limit: number = 10) => {
     return title.length > limit ? `${title.substring(0, limit)}...` : title;
   };
-
-  const { data: chatHistoryData, error: chatHistoryError } =
-    await getOrCreateChatHistory(params.videoid);
-
-  if (chatHistoryError) {
-    console.error(chatHistoryError);
-    return NextResponse.json({ message: "Error on chat" });
-  }
-  if (chatHistoryData && chatHistoryData.length > 0) {
-    console.log("got captions summary on video id page!");
-    captions = chatHistoryData[0].summaryText;
-  }
 
   // Get the current user's name
   const user = await currentUser();
@@ -125,6 +111,7 @@ export default async function ChatPage({
         userName={userName}
         chatHistory={allMessages}
         conversationId={conversationId}
+        channelId={captionsData[0].channel_id}
       />
     </div>
   );

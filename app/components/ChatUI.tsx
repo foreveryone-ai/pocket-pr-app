@@ -6,6 +6,7 @@ import { BaseSyntheticEvent, useState } from "react";
 import { GrSend } from "react-icons/gr";
 import { BiSolidCopy } from "react-icons/bi";
 import NavBar from "./NavBar";
+import { updateChatHistory } from "@/lib/api";
 
 export const runtime = "edge";
 
@@ -15,12 +16,16 @@ type ChatUIProps = {
   userName: string | null | undefined;
   chatHistory?: string[];
   conversationId: string;
+  channelId: string;
 };
 
 export default function ChatUI({
   videoid,
   captionsSummary,
   userName = "User",
+  chatHistory,
+  conversationId,
+  channelId,
 }: ChatUIProps) {
   const [inputValue, setInputValue] = useState("");
   const [output, setOutput] = useState("");
@@ -65,6 +70,14 @@ export default function ChatUI({
           ]);
         },
       });
+      // save messages here
+      await updateChatHistory(
+        videoid,
+        conversationId,
+        messages[messages.length - 2],
+        messages[messages.length - 1],
+        channelId
+      );
       console.log(output);
     } catch (error) {
       console.error(error);
