@@ -352,6 +352,31 @@ export async function getVideos(authToken: string, channel_id: string) {
     .order("published_at", { ascending: false });
 }
 
+// lib/supabaseClient.ts
+
+export async function getUserSubscriptionStatus(
+  authToken: string,
+  userId: string
+) {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db
+    .from("Stripe")
+    .select("subscription_active")
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error("Error fetching user subscription status:", error);
+    return null;
+  }
+
+  if (data && data.length > 0) {
+    return data[0].subscription_active;
+  } else {
+    return null;
+  }
+}
+
 export async function getVideosByUserId(authToken: string, user_id: string) {
   const db = createServerDbClient(authToken);
 

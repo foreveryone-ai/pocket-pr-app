@@ -134,13 +134,81 @@ export async function GET() {
           userOAuth[0].token,
           video.channel_id
         );
+
+        // After storing captions, make calls to the other routes
+        const videoId = video.id;
+        const channelId = video.channel_id;
+
+        // Call /analysis/captions
+        try {
+          const response = await fetch("/api/analysis/captions", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ videoid: videoId }),
+          });
+          if (!response.ok) {
+            throw new Error(
+              `Error in /api/analysis/captions: ${response.statusText}`
+            );
+          }
+        } catch (error) {
+          console.error(error);
+        }
+
+        // Call /analysis/all-captions
+        try {
+          const response = await fetch("/api/analysis/all-captions", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ channelid: channelId }),
+          });
+          if (!response.ok) {
+            throw new Error(
+              `Error in /api/analysis/all-captions: ${response.statusText}`
+            );
+          }
+        } catch (error) {
+          console.error(error);
+        }
+
+        // Call /analysis/comments-and-replies
+        try {
+          const response = await fetch("/api/analysis/comments-and-replies", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ videoid: videoId }),
+          });
+          if (!response.ok) {
+            throw new Error(
+              `Error in /api/analysis/comments-and-replies: ${response.statusText}`
+            );
+          }
+        } catch (error) {
+          console.error(error);
+        }
+
+        // Call /analysis/embeddings
+        try {
+          const response = await fetch("/api/analysis/embeddings", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ videoid: videoId }),
+          });
+          if (!response.ok) {
+            throw new Error(
+              `Error in /api/analysis/embeddings: ${response.statusText}`
+            );
+          }
+        } catch (error) {
+          console.error(error);
+        }
       } catch (error) {
         console.error(error);
       }
     }
   }
 
-  // return success message
+  // Return success message
   return NextResponse.json({
     message: "New videos and their captions have been stored successfully",
   });
