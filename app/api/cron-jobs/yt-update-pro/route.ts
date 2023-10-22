@@ -7,9 +7,11 @@ import {
   getChannelId,
   storeOrUpdateVideo,
   getLatestVideoDate,
+  getUserSubscriptionStatus,
 } from "@/lib/supabaseClient";
 
 export async function GET() {
+  // get user authentication details
   // get user authentication details
   const { userId, getToken } = auth();
   const token = await getToken({ template: "supabase" });
@@ -17,6 +19,17 @@ export async function GET() {
   // redirect user to sign-in if token or userId is not found
   if (!token) return NextResponse.rewrite("/sign-in");
   if (!userId) return NextResponse.rewrite("/sign-in");
+
+  // check user subscription status
+  const subscriptionStatus = await getUserSubscriptionStatus(
+    token as string,
+    userId as string
+  );
+  if (subscriptionStatus === null || subscriptionStatus === false) {
+    return NextResponse.json({
+      message: "User does not have an active subscription",
+    });
+  }
 
   let userOAuth, yt;
 
