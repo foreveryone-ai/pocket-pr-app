@@ -56,7 +56,7 @@ export async function GET() {
     });
   }
 
-  // get YT channeel data
+  // get YT channel data
   const { data: youtubeChannelData, error: youtubeError } = await getChannelId(
     token as string,
     userId as string
