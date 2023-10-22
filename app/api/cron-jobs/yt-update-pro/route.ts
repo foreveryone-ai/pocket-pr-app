@@ -27,7 +27,8 @@ export async function GET() {
   );
   if (subscriptionStatus === null || subscriptionStatus === false) {
     return NextResponse.json({
-      message: "User does not have an active subscription",
+      message:
+        "User does not have an active subscription, detonating yt-update-pro/route",
     });
   }
 
