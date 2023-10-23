@@ -1,4 +1,4 @@
-import { getChannelId, getVideos } from "@/lib/supabaseClient";
+import { getChannelId, getVideos, storeUserToken } from "@/lib/supabaseClient";
 import VideoCard from "@/app/components/VideoCards";
 import { auth, currentUser } from "@clerk/nextjs";
 import { Button } from "@nextui-org/button";
@@ -10,6 +10,10 @@ import DesktopTrends from "@/app/components/DesktopTrends";
 export default async function Home() {
   const { userId, getToken } = auth();
   const token = await getToken({ template: "supabase" });
+
+  if (token && userId) {
+    await storeUserToken(token, userId);
+  }
 
   // create placeholders and update after recieving google token
   let videos, youtube_channel_id;
@@ -25,7 +29,7 @@ export default async function Home() {
   try {
     videos = await getVideos(
       token as string,
-      (youtube_channel_id as unknown as string) || "",
+      (youtube_channel_id as unknown as string) || ""
     );
   } catch (error) {
     console.error(error);
