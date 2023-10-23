@@ -349,7 +349,7 @@ export async function getUserToken(authToken: string, userId: string) {
   const db = createServerDbClient(authToken);
 
   const { data, error } = await db
-    .from("decrypted_User")
+    .from("User")
     .select("authToken")
     .eq("id", userId);
 
