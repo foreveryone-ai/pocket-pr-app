@@ -328,6 +328,47 @@ export async function getInactiveSubscribers(authToken: string) {
   }
 }
 
+// store and retrieve encrypted authToken from "User" table
+export async function storeUserToken(
+  authToken: string,
+  userId: string,
+  userToken: string
+) {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db
+    .from("User")
+    .update({ authToken: userToken })
+    .eq("id", userId);
+
+  if (error) {
+    console.error("Error storing user token:", error);
+    return null;
+  }
+
+  return data;
+}
+
+export async function getUserToken(authToken: string, userId: string) {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db
+    .from("decrypted_User")
+    .select("authToken")
+    .eq("id", userId);
+
+  if (error) {
+    console.error("error fetching user token:", error);
+    return null;
+  }
+
+  if (data && data.length > 0) {
+    return data[0].authToken;
+  } else {
+    return null;
+  }
+}
+
 export async function getCaptions(authToken: string, videoId: string) {
   const db = createServerDbClient(authToken);
 
