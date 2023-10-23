@@ -288,6 +288,46 @@ export async function getComments(authToken: string, videoId: string) {
   return result;
 }
 
+export async function getActiveSubscribers(authToken: string) {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db
+    .from("Stripe")
+    .select("user_id")
+    .eq("subscription_active", true);
+
+  if (error) {
+    console.error("Error fetching active subscribers:", error);
+    return null;
+  }
+
+  if (data && data.length > 0) {
+    return data.map((item) => item.user_id);
+  } else {
+    return null;
+  }
+}
+
+export async function getInactiveSubscribers(authToken: string) {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db
+    .from("Stripe")
+    .select("user_id")
+    .eq("subscription_active", false);
+
+  if (error) {
+    console.error("Error fetching inactive subscribers:", error);
+    return null;
+  }
+
+  if (data && data.length > 0) {
+    return data.map((item) => item.user_id);
+  } else {
+    return null;
+  }
+}
+
 export async function getCaptions(authToken: string, videoId: string) {
   const db = createServerDbClient(authToken);
 
