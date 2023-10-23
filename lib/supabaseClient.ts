@@ -289,8 +289,8 @@ export async function getComments(authToken: string, videoId: string) {
   return result;
 }
 
-export async function getActiveSubscribers(authToken: string) {
-  const db = createServerDbClient(authToken);
+export async function getActiveSubscribers() {
+  const db = createClient(supabaseUrl as string, supabaseKey as string);
 
   const { data, error } = await db
     .from("Stripe")
@@ -309,8 +309,8 @@ export async function getActiveSubscribers(authToken: string) {
   }
 }
 
-export async function getInactiveSubscribers(authToken: string) {
-  const db = createServerDbClient(authToken);
+export async function getInactiveSubscribers() {
+  const db = createClient(supabaseUrl as string, supabaseKey as string);
 
   const { data, error } = await db
     .from("Stripe")

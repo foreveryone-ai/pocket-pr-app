@@ -13,24 +13,17 @@ import {
 } from "@/lib/supabaseClient";
 
 export async function GET() {
-  // get user authentication details
-  const { userId, getToken } = auth();
-  const token = await getUserToken(userId as string);
-
-  // redirect user to sign-in if token or userId is not found
-  if (!token) return NextResponse.rewrite("/sign-in");
-  if (!userId) return NextResponse.rewrite("/sign-in");
-
   // get all active subscribers
-  const activeSubscribers = await getActiveSubscribers(token as string);
+  const activeSubscribers = await getActiveSubscribers();
   if (!activeSubscribers) {
     return NextResponse.json({ message: "No active subscribers found" });
   }
 
   for (const userId of activeSubscribers) {
+    const token = await getUserToken(userId as string);
     let userOAuth, yt;
 
-    // get oauth ddata if userId and token are available
+    // get oauth data if userId and token are available
     if (userId && token) {
       try {
         userOAuth = await getOAuthData(userId, "oauth_google");
