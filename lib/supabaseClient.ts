@@ -5,6 +5,9 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
 
 function createServerDbClient(accessToken?: string) {
+  const headers = accessToken
+    ? { Authorization: `Bearer ${accessToken}` }
+    : undefined;
   return createClient(supabaseUrl as string, supabaseKey as string, {
     db: {
       schema: "public",
@@ -14,9 +17,7 @@ function createServerDbClient(accessToken?: string) {
       autoRefreshToken: false,
     },
     global: {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+      headers: headers,
     },
   });
 }
@@ -345,8 +346,8 @@ export async function storeUserToken(authToken: string, userId: string) {
   return data;
 }
 
-export async function getUserToken(authToken: string, userId: string) {
-  const db = createServerDbClient(authToken);
+export async function getUserToken(userId: string) {
+  const db = createServerDbClient();
 
   const { data, error } = await db
     .from("User")

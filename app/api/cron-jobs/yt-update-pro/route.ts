@@ -8,13 +8,14 @@ import {
   storeOrUpdateVideo,
   getLatestVideoDate,
   getUserSubscriptionStatus,
+  getActiveSubscribers,
+  getUserToken,
 } from "@/lib/supabaseClient";
-import { getActiveSubscribers } from "@/lib/supabaseClient";
 
 export async function GET() {
   // get user authentication details
   const { userId, getToken } = auth();
-  const token = await getToken({ template: "supabase" });
+  const token = await getUserToken(userId as string);
 
   // redirect user to sign-in if token or userId is not found
   if (!token) return NextResponse.rewrite("/sign-in");
