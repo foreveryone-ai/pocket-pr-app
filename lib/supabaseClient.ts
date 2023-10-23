@@ -329,16 +329,12 @@ export async function getInactiveSubscribers(authToken: string) {
 }
 
 // store and retrieve encrypted authToken from "User" table
-export async function storeUserToken(
-  authToken: string,
-  userId: string,
-  userToken: string
-) {
+export async function storeUserToken(authToken: string, userId: string) {
   const db = createServerDbClient(authToken);
 
   const { data, error } = await db
     .from("User")
-    .update({ authToken: userToken })
+    .update({ authToken })
     .eq("id", userId);
 
   if (error) {
