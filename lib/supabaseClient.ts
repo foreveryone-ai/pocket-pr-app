@@ -5,6 +5,9 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
 
 function createServerDbClient(accessToken?: string) {
+  const headers = accessToken
+    ? { Authorization: `Bearer ${accessToken}` }
+    : undefined;
   return createClient(supabaseUrl as string, supabaseKey as string, {
     db: {
       schema: "public",
@@ -14,9 +17,7 @@ function createServerDbClient(accessToken?: string) {
       autoRefreshToken: false,
     },
     global: {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+      headers: headers,
     },
   });
 }
@@ -288,8 +289,8 @@ export async function getComments(authToken: string, videoId: string) {
   return result;
 }
 
-export async function getActiveSubscribers(authToken: string) {
-  const db = createServerDbClient(authToken);
+export async function getActiveSubscribers() {
+  const db = createClient(supabaseUrl as string, supabaseKey as string);
 
   const { data, error } = await db
     .from("Stripe")
@@ -308,8 +309,8 @@ export async function getActiveSubscribers(authToken: string) {
   }
 }
 
-export async function getInactiveSubscribers(authToken: string) {
-  const db = createServerDbClient(authToken);
+export async function getInactiveSubscribers() {
+  const db = createClient(supabaseUrl as string, supabaseKey as string);
 
   const { data, error } = await db
     .from("Stripe")
@@ -323,6 +324,43 @@ export async function getInactiveSubscribers(authToken: string) {
 
   if (data && data.length > 0) {
     return data.map((item) => item.user_id);
+  } else {
+    return null;
+  }
+}
+
+// store and retrieve encrypted authToken from "User" table
+export async function storeUserToken(authToken: string, userId: string) {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db
+    .from("User")
+    .update({ authToken })
+    .eq("id", userId);
+
+  if (error) {
+    console.error("Error storing user token:", error);
+    return null;
+  }
+
+  return data;
+}
+
+export async function getUserToken(userId: string) {
+  const db = createServerDbClient();
+
+  const { data, error } = await db
+    .from("User")
+    .select("authToken")
+    .eq("id", userId);
+
+  if (error) {
+    console.error("error fetching user token:", error);
+    return null;
+  }
+
+  if (data && data.length > 0) {
+    return data[0].authToken;
   } else {
     return null;
   }

@@ -8,28 +8,22 @@ import {
   storeOrUpdateVideo,
   getLatestVideoDate,
   getUserSubscriptionStatus,
+  getInactiveSubscribers,
+  getUserToken,
 } from "@/lib/supabaseClient";
-import { getInactiveSubscribers } from "@/lib/supabaseClient";
 
 export async function GET() {
-  // get user authentication details
-  const { userId, getToken } = auth();
-  const token = await getToken({ template: "supabase" });
-
-  // redirect user to sign-in if token or userId is not found
-  if (!token) return NextResponse.rewrite("/sign-in");
-  if (!userId) return NextResponse.rewrite("/sign-in");
-
   // get all inactive subscribers
-  const inactiveSubscribers = await getInactiveSubscribers(token as string);
+  const inactiveSubscribers = await getInactiveSubscribers();
   if (!inactiveSubscribers) {
     return NextResponse.json({ message: "No inactive subscribers found" });
   }
 
   for (const userId of inactiveSubscribers) {
+    const token = await getUserToken(userId as string);
     let userOAuth, yt;
 
-    // get oauth ddata if userId and token are available
+    // get oauth data if userId and token are available
     if (userId && token) {
       try {
         userOAuth = await getOAuthData(userId, "oauth_google");
