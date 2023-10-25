@@ -305,7 +305,22 @@ export class PocketChain {
   }
 }
 
-export class AllSummaryHandler {
+export class ChannelChain {
+  captions: string;
+  channelId: string;
+  batches: SmallComment[][];
+
+  constructor(
+    videoCaptions?: string,
+    channelId?: string,
+    commentBatches?: SmallComment[][]
+  ) {
+    this.captions = videoCaptions || "";
+    this.channelId = channelId || "";
+    this.batches = commentBatches || [];
+    console.log("Passed channelId: ", this.channelId);
+  }
+
   async summarizeSummaries(channel_id: string) {
     const authToken = process.env.SUPABASE_SERVICE_ROLE_KEY;
     if (!authToken) throw new Error(`Expected SUPABASE_SERVICE_ROLE_KEY`);
@@ -362,23 +377,6 @@ export class AllSummaryHandler {
         console.error(error);
       }
     }
-  }
-}
-
-export class ChannelChain {
-  captions: string;
-  channelId: string;
-  batches: SmallComment[][];
-
-  constructor(
-    videoCaptions?: string,
-    channelId?: string,
-    commentBatches?: SmallComment[][]
-  ) {
-    this.captions = videoCaptions || "";
-    this.channelId = channelId || "";
-    this.batches = commentBatches || [];
-    console.log("Passed channelId: ", this.channelId);
   }
 
   async summarizeChatHistory(history: string[]) {

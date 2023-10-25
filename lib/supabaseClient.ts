@@ -6,6 +6,9 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
 
 function createServerDbClient(accessToken?: string) {
+  const headers = accessToken
+    ? { Authorization: `Bearer ${accessToken}` }
+    : undefined;
   return createClient(supabaseUrl as string, supabaseKey as string, {
     db: {
       schema: "public",
@@ -15,9 +18,7 @@ function createServerDbClient(accessToken?: string) {
       autoRefreshToken: false,
     },
     global: {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+      headers: headers,
     },
   });
 }
@@ -453,6 +454,83 @@ export async function getComments(authToken: string, videoId: string) {
   return result;
 }
 
+export async function getActiveSubscribers() {
+  const db = createClient(supabaseUrl as string, supabaseKey as string);
+
+  const { data, error } = await db
+    .from("Stripe")
+    .select("user_id")
+    .eq("subscription_active", true);
+
+  if (error) {
+    console.error("Error fetching active subscribers:", error);
+    return null;
+  }
+
+  if (data && data.length > 0) {
+    return data.map((item) => item.user_id);
+  } else {
+    return null;
+  }
+}
+
+export async function getInactiveSubscribers() {
+  const db = createClient(supabaseUrl as string, supabaseKey as string);
+
+  const { data, error } = await db
+    .from("Stripe")
+    .select("user_id")
+    .eq("subscription_active", false);
+
+  if (error) {
+    console.error("Error fetching inactive subscribers:", error);
+    return null;
+  }
+
+  if (data && data.length > 0) {
+    return data.map((item) => item.user_id);
+  } else {
+    return null;
+  }
+}
+
+// store and retrieve encrypted authToken from "User" table
+export async function storeUserToken(authToken: string, userId: string) {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db
+    .from("User")
+    .update({ authToken })
+    .eq("id", userId);
+
+  if (error) {
+    console.error("Error storing user token:", error);
+    return null;
+  }
+
+  return data;
+}
+
+export async function getUserToken(userId: string) {
+  const db = createServerDbClient();
+
+  const { data, error } = await db
+    .from("User")
+    .select("authToken")
+    .eq("id", userId);
+
+  if (error) {
+    console.error("error fetching user token:", error);
+    return null;
+  }
+
+  if (data && data.length > 0) {
+    return data[0].authToken;
+  } else {
+    return null;
+  }
+}
+
 export async function getCaptions(authToken: string, videoId: string) {
   const db = createServerDbClient(authToken);
 
@@ -515,6 +593,31 @@ export async function getVideos(authToken: string, channel_id: string) {
     .select()
     .eq(`channel_id`, channel_id)
     .order("published_at", { ascending: false });
+}
+
+// lib/supabaseClient.ts
+
+export async function getUserSubscriptionStatus(
+  authToken: string,
+  userId: string
+) {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db
+    .from("Stripe")
+    .select("subscription_active")
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error("Error fetching user subscription status:", error);
+    return null;
+  }
+
+  if (data && data.length > 0) {
+    return data[0].subscription_active;
+  } else {
+    return null;
+  }
 }
 
 export async function getVideosByUserId(authToken: string, user_id: string) {
