@@ -57,6 +57,7 @@ export default async function ChatPage({
   let aiMessages, userMessages, conversationId;
   let allMessages: string[] = [];
   try {
+    // is there a prior conversation?
     const convoRes = await getConversation(token, params.videoid);
     if (convoRes && convoRes.data && convoRes.data.length > 0) {
       conversationId = convoRes.data[0].id;
@@ -77,6 +78,12 @@ export default async function ChatPage({
         console.error(userRes.error);
       }
       if (userMessages && aiMessages) {
+        // they should always be the same length
+        if (userMessages.length !== aiMessages.length) {
+          throw new Error(
+            "User messages don't match up with ai messages. This should never happen"
+          );
+        }
         for (let i = 0; i < userMessages.length; i++) {
           allMessages.push(userMessages[i].content);
           allMessages.push(aiMessages[i].content);

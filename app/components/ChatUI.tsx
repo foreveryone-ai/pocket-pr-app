@@ -31,6 +31,11 @@ export default function ChatUI({
   const [output, setOutput] = useState("");
   const [messages, setMessages] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [historicalMessages, setHistoricalMessages] = useState<string[]>(
+    chatHistory ? chatHistory : []
+  );
+
+  console.log(historicalMessages);
 
   const handleSubmit = (event: BaseSyntheticEvent) => {
     event.preventDefault();
@@ -78,7 +83,6 @@ export default function ChatUI({
         messages[messages.length - 1],
         channelId
       );
-      console.log(output);
     } catch (error) {
       console.error(error);
     }
