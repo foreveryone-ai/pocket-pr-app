@@ -59,6 +59,7 @@ export default async function ChatPage({
   try {
     // is there a prior conversation?
     const convoRes = await getConversation(token, params.videoid);
+    console.log(convoRes);
     if (convoRes && convoRes.data && convoRes.data.length > 0) {
       conversationId = convoRes.data[0].id;
       // get all AiChatMessage and UserChatMessage
@@ -90,12 +91,14 @@ export default async function ChatPage({
         }
       }
     } else {
+      console.log("creating new convo");
       // create a new conversation
       const newConversation = await createConversation(
         token,
         params.videoid,
         userId
       );
+      console.log(newConversation);
       if (
         newConversation &&
         newConversation.data &&

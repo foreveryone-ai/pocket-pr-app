@@ -89,7 +89,7 @@ export async function getConversation(authToken: string, video_id: string) {
     // auth token is here ...
     const db = createServerDbClient(authToken);
 
-    return await db.from("conversation").select().eq("video_id", video_id);
+    return await db.from("Conversation").select().eq("video_id", video_id);
   } catch (error) {
     console.error(error);
   }
@@ -131,7 +131,7 @@ export async function createConversation(
     const db = createServerDbClient(authToken);
 
     return await db
-      .from("conversation")
+      .from("Conversation")
       .insert({
         video_id: video_id,
         user_id: user_id,
@@ -178,6 +178,7 @@ export async function storeChatMessages(
       .select("id");
 
     if (userChatError || aiChatError) {
+      console.error(userChatError, aiChatError);
       throw new Error("couldn't save chat messages");
     }
 

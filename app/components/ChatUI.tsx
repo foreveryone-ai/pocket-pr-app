@@ -2,7 +2,7 @@
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { Button } from "@nextui-org/button";
 import { Spinner } from "@nextui-org/spinner";
-import { BaseSyntheticEvent, useState } from "react";
+import { BaseSyntheticEvent, useState, useEffect } from "react";
 import { GrSend } from "react-icons/gr";
 import { BiSolidCopy } from "react-icons/bi";
 import NavBar from "./NavBar";
@@ -31,11 +31,26 @@ export default function ChatUI({
   const [output, setOutput] = useState("");
   const [messages, setMessages] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(true);
   const [historicalMessages, setHistoricalMessages] = useState<string[]>(
     chatHistory ? chatHistory : []
   );
 
-  console.log(historicalMessages);
+  useEffect(() => {
+    if (messages.length > 0) {
+      const lastMessage = messages[messages.length - 1];
+      const secondLastMessage = messages[messages.length - 2];
+      if (isUpdating === false) {
+        updateChatHistory(
+          videoid,
+          conversationId,
+          secondLastMessage,
+          lastMessage,
+          channelId
+        );
+      }
+    }
+  }, [channelId, conversationId, isUpdating, messages, videoid]);
 
   const handleSubmit = (event: BaseSyntheticEvent) => {
     event.preventDefault();
@@ -55,6 +70,7 @@ export default function ChatUI({
   };
 
   const getGPTResponse = async (userMessage: string) => {
+    setIsUpdating(true);
     try {
       console.log(messages[messages.length - 1]);
       await fetchEventSource(`/api/chat/${videoid}`, {
@@ -73,16 +89,13 @@ export default function ChatUI({
             prevMessages[prevMessages.length - 1].replace("loading", "") +
               ev.data,
           ]);
+          setIsUpdating(true);
         },
       });
-      // save messages here
-      await updateChatHistory(
-        videoid,
-        conversationId,
-        messages[messages.length - 2],
-        messages[messages.length - 1],
-        channelId
-      );
+
+      setIsUpdating(false);
+
+      console.log(historicalMessages);
     } catch (error) {
       console.error(error);
     }
