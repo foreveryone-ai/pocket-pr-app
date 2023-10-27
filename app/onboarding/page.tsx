@@ -1,4 +1,3 @@
-import UpdateDatabase from "../components/UpdateDatabase";
 import { auth, currentUser } from "@clerk/nextjs";
 import { createUser, storeUserToken } from "@/lib/supabaseClient";
 import OnboardingPage from "../components/OnboardingPage";
@@ -74,7 +73,7 @@ export default async function Onboarding() {
               </div>
               <Button className="mt-6 rounded-2xl">Get Free</Button>
             </div>
-            <div className="flex flex-col justify-between p-6 from-gray-300 via-gray-500 to-gray-700 rounded-3xl shadow-2xl bg-gradient-radial ">
+            <div className="flex flex-col justify-between p-6 from-yellow-300 via-yellow-500 to-yellow-700 rounded-3xl shadow-2xl bg-gradient-radial ">
               <div>
                 <h3 className="text-3xl font-bold text-white mb-4">Pro</h3>
                 <p className="text-lg text-white mb-6">$29 / month</p>
