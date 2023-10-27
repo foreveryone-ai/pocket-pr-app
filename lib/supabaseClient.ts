@@ -101,12 +101,15 @@ export async function getConversation(
     // auth token is here ...
     const db = createServerDbClient(authToken);
 
+    console.log(`videoId: ${video_id}, channelId: ${channel_id}`);
+
     if (channel_id) {
+      console.log("channelId exists...");
       return await db
         .from("Conversation")
         .select()
         .eq("channel_id", channel_id)
-        .eq("video_id", null);
+        .is("video_id", null);
     }
 
     if (video_id) {

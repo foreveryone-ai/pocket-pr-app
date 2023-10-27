@@ -31,8 +31,10 @@ export default async function ChannelChatPage({
   try {
     // Really??
     const convoRes = await getConversation(token, undefined, params.channelid);
-    console.log(convoRes);
+    console.log("convoRes", convoRes);
     if (convoRes && convoRes.data && convoRes.data.length > 0) {
+      console.log("got convo...");
+      console.log(convoRes.data);
       conversationId = convoRes.data[0].id;
       // get all AiChatMessage and UserChatMessage
       const chatRes = await getAllAiChatMessages(

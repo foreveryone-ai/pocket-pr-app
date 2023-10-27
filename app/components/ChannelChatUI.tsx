@@ -112,6 +112,42 @@ export default function ChatUI({
                 Assistant. Ask me anything to get started.
               </div>
             </div>
+            {archivedChat &&
+              archivedChat.map((mes, idx) =>
+                idx % 2 === 0 ? (
+                  <div className="chat chat-end" key={idx}>
+                    <div className="text-white chat-bubble">
+                      {mes.split("||").map((paragraph, i) => (
+                        <p key={i}>
+                          {paragraph}
+                          <br />
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="chat chat-start" key={idx}>
+                    <div className="flex items-center">
+                      <div className="chat-bubble bg-gray-200 text-black">
+                        <>
+                          {mes.split("||").map((paragraph, i) => (
+                            <p key={i}>{paragraph}</p>
+                          ))}
+                        </>
+                      </div>
+                      <Button
+                        isIconOnly
+                        size="lg"
+                        variant="light"
+                        className="flex-none rounded-md ml-2"
+                        onClick={() => navigator.clipboard.writeText(mes)}
+                      >
+                        <BiSolidCopy />
+                      </Button>
+                    </div>
+                  </div>
+                )
+              )}
             {messages &&
               messages.map((message, index) =>
                 index % 2 === 0 ? (
