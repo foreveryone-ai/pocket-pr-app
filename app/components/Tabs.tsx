@@ -88,7 +88,11 @@ function classNames(...classes: string[]): string {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Home() {
+type ChannelChatParams = {
+  channelId?: string;
+};
+
+export default function Home({ channelId }: ChannelChatParams) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoading, setIsLoading] = useState(false);
   const [isCcLoading, setIsCcLoading] = useState(false);
@@ -115,11 +119,12 @@ export default function Home() {
     console.log("handleCcClick called"); // Add console log here
     setIsCcLoading(true);
     try {
-      let channelId;
-      try {
-        channelId = await getChannelId();
-      } catch (error) {
-        console.error("Error getting channel id:", error);
+      if (!channelId) {
+        try {
+          channelId = await getChannelId();
+        } catch (error) {
+          console.error("Error getting channel id:", error);
+        }
       }
       console.log("handleCcClick channelId:", channelId); // Add console log here
 

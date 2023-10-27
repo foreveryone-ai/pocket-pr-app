@@ -2,26 +2,51 @@
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { Button } from "@nextui-org/button";
 import { Spinner } from "@nextui-org/spinner";
-import { BaseSyntheticEvent, useState } from "react";
+import { BaseSyntheticEvent, useEffect, useState } from "react";
 import { GrSend } from "react-icons/gr";
 import { BiSolidCopy } from "react-icons/bi";
 import NavBar from "./NavBar";
+import { updateChatHistory } from "@/lib/api";
 
 export const runtime = "edge";
 
 type ChannelChatUIProps = {
   channelid: string;
   userName: string | null | undefined;
+  chatHistory?: string[];
+  conversationId: string;
 };
 
 export default function ChatUI({
   channelid,
   userName = "User",
+  chatHistory,
+  conversationId,
 }: ChannelChatUIProps) {
   const [inputValue, setInputValue] = useState("");
   const [output, setOutput] = useState("");
   const [messages, setMessages] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(true);
+  const [archivedChat, setArchivedChat] = useState<string[]>(
+    chatHistory ? chatHistory : []
+  );
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      const lastMessage = messages[messages.length - 1];
+      const secondLastMessage = messages[messages.length - 2];
+      if (isUpdating === false) {
+        updateChatHistory(
+          "" /*videoid*/,
+          conversationId,
+          secondLastMessage,
+          lastMessage,
+          channelid
+        );
+      }
+    }
+  }, [channelid, conversationId, isUpdating, messages]);
 
   const handleSubmit = (event: BaseSyntheticEvent) => {
     event.preventDefault();
@@ -41,6 +66,7 @@ export default function ChatUI({
   };
 
   const getGPTResponse = async (userMessage: string) => {
+    setIsUpdating(true);
     try {
       console.log(messages[messages.length - 1]);
       await fetchEventSource(`/api/channel-chat/${channelid}`, {
@@ -58,8 +84,10 @@ export default function ChatUI({
             prevMessages[prevMessages.length - 1].replace("loading", "") +
               ev.data,
           ]);
+          setIsUpdating(true);
         },
       });
+      setIsUpdating(false);
       console.log(output);
     } catch (error) {
       console.error(error);

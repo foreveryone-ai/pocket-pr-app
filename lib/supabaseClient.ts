@@ -84,38 +84,90 @@ export async function updateCoversationSummary(
   }
 }
 
-export async function getConversation(authToken: string, video_id: string) {
+/**
+ *
+ * @param authToken supabase token
+ * @param video_id if for video chat
+ * @param channel_id if for channel chat, will change the behavior of the query
+ * @returns either the conversation for a video or channel
+ */
+
+export async function getConversation(
+  authToken: string,
+  video_id?: string,
+  channel_id?: string
+) {
   try {
     // auth token is here ...
     const db = createServerDbClient(authToken);
 
-    return await db.from("Conversation").select().eq("video_id", video_id);
+    if (channel_id) {
+      return await db
+        .from("Conversation")
+        .select()
+        .eq("channel_id", channel_id)
+        .eq("video_id", null);
+    }
+
+    if (video_id) {
+      return await db.from("Conversation").select().eq("video_id", video_id);
+    }
+
+    throw new Error("badness on getConversation");
   } catch (error) {
     console.error(error);
   }
 }
 export async function getAllAiChatMessages(
   authToken: string,
-  video_id: string
+  video_id?: string,
+  channel_id?: string,
+  conversation_id?: string
 ) {
   try {
     // auth token is here ...
     const db = createServerDbClient(authToken);
 
-    return await db.from("AiChatMessage").select().eq("video_id", video_id);
+    if (channel_id) {
+      return await db
+        .from("AiChatMessage")
+        .select()
+        .eq("channel_id", channel_id)
+        .eq("conversation_id", conversation_id);
+    }
+
+    if (video_id) {
+      return await db.from("AiChatMessage").select().eq("video_id", video_id);
+    }
+
+    throw new Error("badness on get all ai chat messages");
   } catch (error) {
     console.error(error);
   }
 }
 export async function getAllUserChatMessages(
   authToken: string,
-  video_id: string
+  video_id?: string,
+  channel_id?: string,
+  conversation_id?: string
 ) {
   try {
     // auth token is here ...
     const db = createServerDbClient(authToken);
 
-    return await db.from("UserChatMessage").select().eq("video_id", video_id);
+    if (channel_id) {
+      return await db
+        .from("UserChatMessage")
+        .select()
+        .eq("channel_id", channel_id)
+        .eq("conversation_id", conversation_id);
+    }
+
+    if (video_id) {
+      return await db.from("UserChatMessage").select().eq("video_id", video_id);
+    }
+
+    throw new Error("badness on get all user messages");
   } catch (error) {
     console.error(error);
   }
@@ -123,8 +175,9 @@ export async function getAllUserChatMessages(
 
 export async function createConversation(
   authToken: string,
-  video_id: string,
-  user_id: string
+  user_id: string,
+  channel_id: string,
+  video_id?: string | undefined | null
 ) {
   try {
     // auth token is here ...
@@ -133,8 +186,9 @@ export async function createConversation(
     return await db
       .from("Conversation")
       .insert({
-        video_id: video_id,
+        video_id: video_id ?? null,
         user_id: user_id,
+        channel_id: channel_id,
       })
       .select();
   } catch (error) {
@@ -149,40 +203,73 @@ export async function storeChatMessages(
   aiMessage: string,
   userId: string,
   channelId: string,
-  videoid: string
+  videoid?: string
 ) {
   try {
     // auth token is here ...
     const db = createServerDbClient(authToken);
 
-    const { data: aiChatData, error: aiChatError } = await db
-      .from("AiChatMessage")
-      .insert({
-        content: aiMessage,
-        user_id: userId,
-        conversation_id: conversationId,
-        channel_id: channelId,
-        video_id: videoid,
-      })
-      .select("id");
+    let res;
 
-    const { data: userChatData, error: userChatError } = await db
-      .from("UserChatMessage")
-      .insert({
-        content: userMessage,
-        user_id: userId,
-        conversation_id: conversationId,
-        channel_id: channelId,
-        video_id: videoid,
-      })
-      .select("id");
+    if (videoid) {
+      const { data: aiChatData, error: aiChatError } = await db
+        .from("AiChatMessage")
+        .insert({
+          content: aiMessage,
+          user_id: userId,
+          conversation_id: conversationId,
+          channel_id: channelId,
+          video_id: videoid,
+        })
+        .select("id");
 
-    if (userChatError || aiChatError) {
-      console.error(userChatError, aiChatError);
-      throw new Error("couldn't save chat messages");
+      const { data: userChatData, error: userChatError } = await db
+        .from("UserChatMessage")
+        .insert({
+          content: userMessage,
+          user_id: userId,
+          conversation_id: conversationId,
+          channel_id: channelId,
+          video_id: videoid,
+        })
+        .select("id");
+
+      res = userChatData;
+
+      if (userChatError || aiChatError) {
+        console.error(userChatError, aiChatError);
+        throw new Error("couldn't save chat messages");
+      }
+    } else {
+      const { data: aiChatData, error: aiChatError } = await db
+        .from("AiChatMessage")
+        .insert({
+          content: aiMessage,
+          user_id: userId,
+          conversation_id: conversationId,
+          channel_id: channelId,
+        })
+        .select("id");
+
+      const { data: userChatData, error: userChatError } = await db
+        .from("UserChatMessage")
+        .insert({
+          content: userMessage,
+          user_id: userId,
+          conversation_id: conversationId,
+          channel_id: channelId,
+        })
+        .select("id");
+
+      res = userChatData;
+
+      if (userChatError || aiChatError) {
+        console.error(userChatError, aiChatError);
+        throw new Error("couldn't save chat messages");
+      }
     }
 
-    return userChatData;
+    return res;
   } catch (error) {
     console.error(error);
   }

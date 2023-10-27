@@ -36,14 +36,6 @@ export default function ChatUI({
     chatHistory ? chatHistory : []
   );
 
-  // useEffect(()=> {
-  //   if (chatHistory && chatHistory.length > 0){
-  //     chatHistory.forEach((mes)=>{
-  //     setMessages(prev=> [...prev, mes]);
-  //     });
-  //   }
-  // }, [chatHistory]);
-
   useEffect(() => {
     if (messages.length > 0) {
       const lastMessage = messages[messages.length - 1];
