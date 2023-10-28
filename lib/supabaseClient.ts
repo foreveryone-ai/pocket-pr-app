@@ -402,6 +402,26 @@ export async function getVideoIdsWithoutCaptionSummary(
 
   return videoIdsWithoutCaptionSummary;
 }
+// ------------------Embeddings Function-----------------
+// get all comments for a given userId
+export async function getAllCommentsByUserId(
+  authToken: string,
+  user_id: string
+) {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db
+    .from("Commeents")
+    .select("*")
+    .eq("user_id", user_id);
+
+  if (error) {
+    console.error("Error fetching comments:", error);
+    return null;
+  }
+
+  return data;
+}
 
 export async function getActiveSubscribers() {
   const db = createClient(supabaseUrl as string, supabaseKey as string);
