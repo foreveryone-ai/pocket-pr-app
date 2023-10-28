@@ -289,7 +289,7 @@ export async function getComments(authToken: string, videoId: string) {
   return result;
 }
 
-// -----------------------UPGRADING FUNCTIONS-----------------------
+// ------------------------UPGRADING METHODS------------------------
 
 // ------------------Comments-and-Replies Functions-----------------
 
@@ -411,7 +411,7 @@ export async function getAllCommentsByUserId(
   const db = createServerDbClient(authToken);
 
   const { data, error } = await db
-    .from("Commeents")
+    .from("Comments")
     .select("*")
     .eq("user_id", user_id);
 
