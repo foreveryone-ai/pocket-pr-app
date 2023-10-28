@@ -289,6 +289,22 @@ export async function getComments(authToken: string, videoId: string) {
   return result;
 }
 
+export async function getVideoIdsByUserId(authToken: string, user_id: string) {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db
+    .from("Video")
+    .select("id")
+    .eq(`user_id`, user_id);
+
+  if (error) {
+    console.error(error);
+    return null;
+  }
+
+  return data?.map((video) => video.id);
+}
+
 export async function getActiveSubscribers() {
   const db = createClient(supabaseUrl as string, supabaseKey as string);
 
