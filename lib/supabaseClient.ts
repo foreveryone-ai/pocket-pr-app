@@ -289,6 +289,10 @@ export async function getComments(authToken: string, videoId: string) {
   return result;
 }
 
+// -----------------------UPGRADING FUNCTIONS-----------------------
+
+// ------------------Comments-and-Replies Functions-----------------
+
 export async function getVideoIdsByUserId(authToken: string, user_id: string) {
   const db = createServerDbClient(authToken);
 
@@ -334,6 +338,28 @@ export async function getVideoIdsWithoutComments(
   );
 
   return videoIdsWithoutComments;
+}
+
+// ------------------Comments-and-Replies Functions-----------------
+// get all video_ids for a user from the Captions table
+export async function getCaptionVideoIdsByUserId(
+  authToken: string,
+  user_id: string
+) {
+  const db = createServerDbClient(authToken);
+  const channel_id = await getChannelIdByUserId(authToken, user_id);
+
+  const { data, error } = await db
+    .from("Captions")
+    .select("video_id")
+    .eq(`channel_id`, channel_id);
+
+  if (error) {
+    console.error(error);
+    return null;
+  }
+
+  return data?.map((caption) => caption.video_id);
 }
 
 export async function getActiveSubscribers() {
