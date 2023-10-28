@@ -40,7 +40,6 @@ export class PocketChain {
     this.captions = videoCaptions || "";
     this.channelId = channelId || "";
     this.batches = commentBatches || [];
-    console.log("Passed channelId: ", this.channelId);
   }
   async summarizeCaptions() {
     // created the class here to set the maxConcurrency property
@@ -63,7 +62,6 @@ export class PocketChain {
       const res = await chain.call({
         input_documents: docs,
       });
-      console.log(res);
       // update summary?
       this.captions = res && res.text;
       return this.captions;
@@ -94,7 +92,6 @@ export class PocketChain {
       const res = await chain.call({
         input_documents: docs,
       });
-      console.log(res);
       // update summary?
       return res && res.text;
     } catch (error) {
@@ -106,8 +103,6 @@ export class PocketChain {
   async createEmbeddings(comments: CreateEmbeddingsArgs[]): Promise<boolean> {
     try {
       let vectorStore;
-      console.log("comsums: ", comments);
-      console.log("Used channelId: ", this.channelId);
       const comSum = comments.map((comment) => comment.text_display);
       const comSumMeta = comments.map((obj) => ({
         video_id: obj.video_id,
@@ -118,8 +113,6 @@ export class PocketChain {
         channel_id: this.channelId,
       }));
 
-      console.log("comSum length: ", comSum.length);
-      console.log("comSumMeta length: ", comSumMeta.length);
       // use chunkSize and chunkOverlap to adjust how the text is being
       // split, it will group by \n\n then \n then " "
       const textSplitter = new RecursiveCharacterTextSplitter({
@@ -281,13 +274,10 @@ export class PocketChain {
     ]);
     // console.log("template: ", template);
     // console.log("chatPrompt: ", chatPrompt);
-    console.log("creating chain...");
     const chain = new LLMChain({
       llm: chat,
       prompt: chatPrompt,
     });
-
-    console.log(`Video captions: ` + this.captions);
 
     chain
       .call({
@@ -318,7 +308,6 @@ export class ChannelChain {
     this.captions = videoCaptions || "";
     this.channelId = channelId || "";
     this.batches = commentBatches || [];
-    console.log("Passed channelId: ", this.channelId);
   }
 
   async summarizeSummaries(channel_id: string) {
@@ -412,12 +401,6 @@ export class ChannelChain {
     chatHistory: string[],
     allCaptionsSummary: string
   ) {
-    console.log("Chat method called with parameters:");
-    console.log("User First Name: ", userFirstName);
-    console.log("Channel ID: ", channel_id);
-    console.log("Message: ", userMessage);
-    console.log("Message History: ", chatHistory);
-
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
     if (!supabaseKey) throw new Error(`Expected SUPABASE_SERVICE_ROLE_KEY`);
 
