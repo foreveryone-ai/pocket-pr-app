@@ -318,6 +318,24 @@ export async function getVideoIdsFromComments(authToken: string) {
   return data?.map((comment) => comment.video_id);
 }
 
+export async function getVideoIdsWithoutComments(
+  authToken: string,
+  user_id: string
+) {
+  const userVideoIds = await getVideoIdsByUserId(authToken, user_id);
+  const commentVideoIds = await getVideoIdsFromComments(authToken);
+
+  if (!userVideoIds || !commentVideoIds) {
+    return null;
+  }
+
+  const videoIdsWithoutComments = userVideoIds.filter(
+    (videoId) => !commentVideoIds.includes(videoId)
+  );
+
+  return videoIdsWithoutComments;
+}
+
 export async function getActiveSubscribers() {
   const db = createClient(supabaseUrl as string, supabaseKey as string);
 
