@@ -305,6 +305,19 @@ export async function getVideoIdsByUserId(authToken: string, user_id: string) {
   return data?.map((video) => video.id);
 }
 
+export async function getVideoIdsFromComments(authToken: string) {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db.from("Comments").select("video_id");
+
+  if (error) {
+    console.error(error);
+    return null;
+  }
+
+  return data?.map((comment) => comment.video_id);
+}
+
 export async function getActiveSubscribers() {
   const db = createClient(supabaseUrl as string, supabaseKey as string);
 
