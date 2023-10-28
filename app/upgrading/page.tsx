@@ -9,19 +9,29 @@ export default function upgrading() {
   const fetchUpgradeData = async () => {
     setIsLoading(true);
     try {
-      // api calls go here
+      // Call /upgrading/comments-and-replies route
+      await fetch("/api/upgrading/comments-and-replies", { method: "POST" });
+
+      // Call /upgrading/captions route
+      await fetch("/api/upgrading/captions", { method: "POST" });
+
+      // Call /upgrading/embeddings route
+      await fetch("/api/upgrading/embeddings", { method: "POST" });
+
+      // Call /upgrading/all-captions route
+      await fetch("/api/upgrading/all-captions", { method: "POST" });
     } catch (error) {
       console.error(
-        "An error occured while fetching the user's upgrade data",
+        "An error occurred while fetching the user's upgrade data",
         error
       );
       // if any API call fails, redirect to "/Dashboard"
-      router.push("/Dashboard");
+      router.push("/");
     } finally {
       setIsLoading(false);
+      router.push("/Dashboard");
     }
   };
-
   return (
     <>
       <Button isDisabled={isLoading} onPress={fetchUpgradeData}>
