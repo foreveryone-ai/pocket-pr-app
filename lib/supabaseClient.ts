@@ -340,7 +340,7 @@ export async function getVideoIdsWithoutComments(
   return videoIdsWithoutComments;
 }
 
-// ------------------Comments-and-Replies Functions-----------------
+// ------------------Captions Functions-----------------
 // get all video_ids for a user from the Captions table
 export async function getCaptionVideoIdsByUserId(
   authToken: string,
