@@ -361,6 +361,26 @@ export async function getCaptionVideoIdsByUserId(
 
   return data?.map((caption) => caption.video_id);
 }
+// get all video_ids that exist in the CaptionSummary table
+export async function getCaptionSummaryVideoIdsByUserId(
+  authToken: string,
+  user_id: string
+) {
+  const db = createServerDbClient(authToken);
+  const channel_id = await getChannelIdByUserId(authToken, user_id);
+
+  const { data, error } = await db
+    .from("CaptionSummary")
+    .select("video_id")
+    .eq(`channel_id`, channel_id);
+
+  if (error) {
+    console.error(error);
+    return null;
+  }
+
+  return data?.map((captionSummary) => captionSummary.video_id);
+}
 
 export async function getActiveSubscribers() {
   const db = createClient(supabaseUrl as string, supabaseKey as string);
