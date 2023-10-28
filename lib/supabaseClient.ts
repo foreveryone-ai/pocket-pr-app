@@ -381,6 +381,27 @@ export async function getCaptionSummaryVideoIdsByUserId(
 
   return data?.map((captionSummary) => captionSummary.video_id);
 }
+// get all videoIds that exist iin the Captions table but not in the CaptionSummary Table
+export async function getVideoIdsWithoutCaptionSummary(
+  authToken: string,
+  user_id: string
+) {
+  const captionVideoIds = await getCaptionVideoIdsByUserId(authToken, user_id);
+  const captionSummaryVideoIds = await getCaptionSummaryVideoIdsByUserId(
+    authToken,
+    user_id
+  );
+
+  if (!captionVideoIds || !captionSummaryVideoIds) {
+    return null;
+  }
+
+  const videoIdsWithoutCaptionSummary = captionVideoIds.filter(
+    (videoId) => !captionSummaryVideoIds.includes(videoId)
+  );
+
+  return videoIdsWithoutCaptionSummary;
+}
 
 export async function getActiveSubscribers() {
   const db = createClient(supabaseUrl as string, supabaseKey as string);
