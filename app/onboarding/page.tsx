@@ -4,15 +4,13 @@ import OnboardingPage from "../components/OnboardingPage";
 import NavBar from "@/app/components/NavBar";
 import { Playfair_Display } from "next/font/google";
 import { Button } from "@nextui-org/button";
+import Link from "next/link";
 
 const playFairDisplay500 = Playfair_Display({
   weight: ["400"],
   subsets: ["latin"],
 });
-const playFairDisplay650 = Playfair_Display({
-  weight: ["600"],
-  subsets: ["latin"],
-});
+
 const playFairDisplay800 = Playfair_Display({
   weight: ["900"],
   subsets: ["latin"],
@@ -22,6 +20,7 @@ export default async function Onboarding() {
   const { userId, getToken } = auth();
   const user = await currentUser();
   const token = await getToken({ template: "supabase" });
+
   console.log("first name: ", user?.firstName);
   console.log(userId);
   console.log("token ", token);
@@ -95,7 +94,10 @@ export default async function Onboarding() {
             </div>
           </div>
         </div>
-        <OnboardingPage />
+        <Link href="/onboarding/agreement">
+          Start
+          {/* <OnboardingPage /> */}
+        </Link>
       </div>
     </>
   );

@@ -57,8 +57,7 @@ export async function GET() {
         await storeChannelId(
           token as string,
           userId as string,
-          youtube_channel_id,
-          channel_id as string
+          youtube_channel_id as string
         );
       } catch (error) {
         console.error("Error storing the channel ID: ", error);

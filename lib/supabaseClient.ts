@@ -178,25 +178,45 @@ export type StoreOrUpdateParams = {
 export async function storeChannelId(
   authToken: string,
   user_id: string,
-  youtube_channel_id: string,
-  channel_id: string
+  youtube_channel_id: string
 ) {
   try {
-    // auth token is here ...
     const db = createServerDbClient(authToken);
 
-    const updatedUser = await db
-      .from("User")
-      .update({
-        channel_id,
-        youtube_channel_id,
-        updatedAt: new Date(),
+    // Store the youtube_channel_id in the Channel table
+    const { data: channelData, error: channelError } = await db
+      .from("Channel")
+      .upsert({
+        id: youtube_channel_id,
+        user_id: user_id,
       })
-      .match({ id: user_id })
       .select();
 
-    console.log("updated user: ", updatedUser);
-    return updatedUser.status; // 201
+    if (channelError) {
+      console.error("Error storing the channel ID: ", channelError);
+      return channelError;
+    }
+
+    // Update the youtube_channel_id in the `User` table
+    const { data: userData, error: userError } = await db
+      .from("User")
+      .update({
+        youtube_channel_id: youtube_channel_id,
+      })
+      .eq("id", user_id)
+      .select();
+
+    if (userError) {
+      console.error(
+        "Error updating the user's youtube_channel_id: ",
+        userError
+      );
+      return userError;
+    }
+
+    console.log("updated channel: ", channelData);
+    console.log("updated usr: ", userData);
+    return { channelData, userData };
   } catch (error) {
     console.error(error);
     return 400;
