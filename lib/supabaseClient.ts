@@ -424,17 +424,36 @@ export async function getAllCommentsByUserId(
 ) {
   const db = createServerDbClient(authToken);
 
-  const { data, error } = await db
-    .from("Comments")
-    .select("*")
-    .eq("user_id", user_id);
+  // fetch th channel_id from the `User` table
+  const { data: userData, error: userError } = await db
+    .from("User")
+    .select("channel_id")
+    .eq("id", user_id);
 
-  if (error) {
-    console.error("Error fetching comments:", error);
+  if (userError) {
+    console.error("Error fetching user:", userError);
     return null;
   }
 
-  return data;
+  const channel_id = userData[0]?.channel_id;
+
+  if (!channel_id) {
+    console.error("No channel_id found for user:", user_id);
+    return null;
+  }
+
+  // Fetch all comments for the channel_id
+  const { data: commentsData, error: commentsError } = await db
+    .from("Comments")
+    .select("*")
+    .eq("channel_id", channel_id);
+
+  if (commentsError) {
+    console.error("Error fetching comments:", commentsError);
+    return null;
+  }
+
+  return commentsData;
 }
 
 //---------------------------- gett active subscribers -------------------------//
