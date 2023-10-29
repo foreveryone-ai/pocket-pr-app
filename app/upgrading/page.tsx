@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@nextui-org/button";
 
-export default function upgrading() {
+export default function Upgrading() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const fetchUpgradeData = async () => {
