@@ -1,7 +1,7 @@
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import {
-  getAllCommentsByUserId,
+  getAllCommentsByChannelId,
   updateVideoHasEmbeddings,
   getChannelIdByVideoId,
 } from "@/lib/supabaseClient";
@@ -17,7 +17,7 @@ export async function POST(req: Request) {
   console.log("Executing embeddings route");
 
   // get all comments for the user
-  const commentData = await getAllCommentsByUserId(
+  const commentData = await getAllCommentsByChannelId(
     token as string,
     userId as string
   );
