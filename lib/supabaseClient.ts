@@ -418,7 +418,7 @@ export async function getVideoIdsWithoutCaptionSummary(
 }
 //------------------------------ Embeddings Function ---------------------------//
 // get all comments for a given userId
-export async function getAllCommentsByUserId(
+export async function getAllCommentsByChannelId(
   authToken: string,
   user_id: string
 ) {
