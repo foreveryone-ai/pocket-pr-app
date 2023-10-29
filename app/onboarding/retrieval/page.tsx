@@ -7,6 +7,7 @@ import {
   getCaptionsOnboarding,
 } from "@/lib/api";
 import { Button } from "@nextui-org/react";
+import NavBar from "@/app/components/NavBar";
 
 export default function RetrievalPage() {
   const router = useRouter();
@@ -33,10 +34,13 @@ export default function RetrievalPage() {
   };
 
   return (
-    <div>
-      <Button isDisabled={isLoading} onPress={fetchOnboardingData}>
-        {isLoading ? "Loading..." : "Start Retrieval"}
-      </Button>
+    <div className="min-h-screen bg-black">
+      <NavBar />
+      <div className="flex justify-center py-32 align-center">
+        <Button isDisabled={isLoading} onPress={fetchOnboardingData}>
+          {isLoading ? "Loading..." : "Start Retrieval"}
+        </Button>
+      </div>
     </div>
   );
 }
