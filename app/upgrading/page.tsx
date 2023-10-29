@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@nextui-org/button";
+import NavBar from "@/app/components/NavBar";
 
 export default function Upgrading() {
   const router = useRouter();
@@ -34,9 +35,14 @@ export default function Upgrading() {
   };
   return (
     <>
-      <Button isDisabled={isLoading} onPress={fetchUpgradeData}>
-        {isLoading ? "Loading..." : "Start Upgrade"}
-      </Button>
+      <div className="min-h-screen bg-black">
+        <NavBar />
+        <div className="flex justify-center align-center py-32">
+          <Button isDisabled={isLoading} onPress={fetchUpgradeData}>
+            {isLoading ? "Loading..." : "Start Upgrade"}
+          </Button>
+        </div>
+      </div>
     </>
   );
 }
