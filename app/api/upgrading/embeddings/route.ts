@@ -6,8 +6,6 @@ import {
   getChannelIdByVideoId,
 } from "@/lib/supabaseClient";
 import { CreateEmbeddingsArgs, PocketChain } from "@/lib/langChain";
-import { jobs } from "googleapis/build/src/apis/jobs";
-import { stringify } from "querystring";
 
 export async function POST(req: Request) {
   const { userId, getToken } = auth();
