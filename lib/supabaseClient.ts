@@ -184,6 +184,7 @@ export async function storeChannelId(
     const db = createServerDbClient(authToken);
 
     // Store the youtube_channel_id in the Channel table
+    console.log("Storing channel ID...");
     const { data: channelData, error: channelError } = await db
       .from("Channel")
       .upsert({
@@ -197,28 +198,31 @@ export async function storeChannelId(
       return channelError;
     }
 
-    // Update the youtube_channel_id in the `User` table
+    console.log("Stored channel ID: ", channelData);
+
+    // Update the youtube_channel_id and channel_id in the User table
+    console.log("Updating user's youtube_channel_id and channel_id...");
     const { data: userData, error: userError } = await db
       .from("User")
       .update({
         youtube_channel_id: youtube_channel_id,
+        channel_id: youtube_channel_id, // Update the channel_id as well
       })
       .eq("id", user_id)
       .select();
 
     if (userError) {
       console.error(
-        "Error updating the user's youtube_channel_id: ",
+        "Error updating the user's youtube_channel_id and channel_id: ",
         userError
       );
       return userError;
     }
 
-    console.log("updated channel: ", channelData);
-    console.log("updated usr: ", userData);
+    console.log("Updated user's youtube_channel_id and channel_id: ", userData);
     return { channelData, userData };
   } catch (error) {
-    console.error(error);
+    console.error("Error in storeChannelId: ", error);
     return 400;
   }
 }
@@ -247,6 +251,7 @@ export type StoreAllCommentsParams = {
   video_id: string;
   author_display_name: string;
   author_image_url: string;
+  channel_id: string;
 };
 //----------------------------- store all comments -----------------------------//
 export async function storeAllComments(
@@ -255,11 +260,28 @@ export async function storeAllComments(
 ) {
   const db = createServerDbClient(authToken);
 
+  // FFfetch the channel_id for each video_id
+  for (const comment of allComments) {
+    const { data: videoData, error: videoError } = await db
+      .from("Video")
+      .select("channel_id")
+      .eq("id", comment.video_id);
+
+    if (videoError) {
+      console.error("Error fetching video: ", videoError);
+      return videoError;
+    }
+
+    // Set the channel_id for the comment
+    comment.channel_id = videoData[0]?.channel_id;
+  }
+
   const { data, error } = await db
     .from("Comments")
     .upsert(allComments)
     .select();
-  console.log("Storing comments to database:", data, error);
+
+  console.log("storing comments to database:", data, error);
 
   if (data) {
     return data;
