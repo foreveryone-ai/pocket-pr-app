@@ -163,6 +163,7 @@ export class GoogleApi {
             token,
             item.snippet.topLevelComment.snippet.videoId
           );
+
           commentsArr.push({
             id: item.snippet.topLevelComment.id as string,
             comment_id: item.snippet.topLevelComment.id as string,
@@ -178,7 +179,7 @@ export class GoogleApi {
             author_image_url: item.snippet.topLevelComment.snippet
               .authorProfileImageUrl as string,
             updatedAt: new Date(),
-            channel_id: channelId,
+            channel_id: channelId, // Include the channelId here
           });
           if (item.replies) {
             for (let reply of item.replies.comments) {
@@ -192,6 +193,7 @@ export class GoogleApi {
                 author_display_name: reply.snippet.authorDisplayName as string,
                 author_image_url: reply.snippet.authorProfileImageUrl as string,
                 updatedAt: new Date(),
+                channel_id: channelId,
               });
             }
           }

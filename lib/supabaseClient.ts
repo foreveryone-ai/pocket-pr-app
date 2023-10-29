@@ -557,6 +557,7 @@ export type StoreAllRepliesParams = {
   author_image_url: string;
   published_at: Date;
   comment_id: string;
+  channel_id: string;
 };
 //---------------------------- store all replies -------------------------------//
 export async function storeAllReplies(
