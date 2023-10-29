@@ -1,10 +1,11 @@
 import { SubscriptionStatus } from "@prisma/client";
 import { createClient } from "@supabase/supabase-js";
 import { v4 as uuidv4 } from "uuid";
+
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
 
-//------------------------------- Create Server Db Client ------------------------------------//
+//------------------------ Create Server Db Client -----------------------------//
 function createServerDbClient(accessToken?: string) {
   const headers = accessToken
     ? { Authorization: `Bearer ${accessToken}` }
@@ -22,36 +23,7 @@ function createServerDbClient(accessToken?: string) {
     },
   });
 }
-
-//------------------------------- Create Stripe User ------------------------------------//
-export async function createStripeUser(
-  authToken: string,
-  userId: string,
-  subscriptionActive: boolean,
-  plan?: string
-) {
-  try {
-    // auth token is here ...
-    const db = createServerDbClient(authToken);
-
-    const stripeUser = await db
-      .from("stripe")
-      .insert({
-        user_id: userId,
-        supscription_active: subscriptionActive,
-        plan: plan || null,
-      })
-      .select();
-
-    console.log("new stripe user!: ", stripeUser);
-    return stripeUser.status; // 201
-  } catch (error) {
-    console.error(error);
-    return 400;
-  }
-}
-
-//------------------------------- Create PocketPR User ------------------------------------//
+//----------------------- Create User / Stripe User ----------------------------//
 export async function createUser(
   authToken: string,
   userId: string,
@@ -86,8 +58,123 @@ export async function createUser(
     return 400;
   }
 }
+export async function createStripeUser(
+  authToken: string,
+  userId: string,
+  subscriptionActive: boolean,
+  plan?: string
+) {
+  try {
+    // auth token is here ...
+    const db = createServerDbClient(authToken);
 
-//------------------------------- Store YT Channel Id ------------------------------------//
+    const stripeUser = await db
+      .from("stripe")
+      .insert({
+        user_id: userId,
+        supscription_active: subscriptionActive,
+        plan: plan || null,
+      })
+      .select();
+
+    console.log("new stripe user!: ", stripeUser);
+    return stripeUser.status; // 201
+  } catch (error) {
+    console.error(error);
+    return 400;
+  }
+}
+//--------------------------- get caption summary ------------------------------//
+export async function getCaptionSummary(
+  authToken: string,
+  caption_id: string,
+  video_id?: string,
+  channel_id?: string
+) {
+  const db = createServerDbClient(authToken);
+  if (video_id) {
+    return await db.from("CaptionSummary").select().eq(`video_id`, video_id);
+  }
+  return await db.from("CaptionSummary").select().eq(`caption_id`, caption_id);
+}
+//------------------------------ get stripe id ---------------------------------//
+export async function getStripeId(authToken: string, userId: string) {
+  const db = createServerDbClient(authToken);
+
+  return await db.from("Stripe").select().eq("user_id", userId);
+}
+//-------------------------- get latest video date -----------------------------//
+export async function getLatestVideoDate(
+  authToken: string,
+  user_id: string
+): Promise<Date | null> {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db
+    .from("Video")
+    .select("published_at")
+    .eq("user_id", user_id)
+    .order("published_at", { ascending: false })
+    .limit(1);
+
+  if (error) {
+    console.error(error);
+    return null;
+  }
+
+  if (data && data.length > 0) {
+    const latestVideoDate = new Date(data[0].published_at);
+    console.log("Latest video date:", latestVideoDate);
+    return latestVideoDate;
+  } else {
+    return null;
+  }
+}
+//----------------------- Update Subscription Status ---------------------------//
+export async function updateStripeUserSubscriptionStatus(
+  authToken: string,
+  subscriptionActive: boolean,
+  userId: string
+) {
+  const db = createServerDbClient(authToken);
+
+  return await db
+    .from("stripe")
+    .update({
+      subscription_active: subscriptionActive,
+    })
+    .eq("user_id", userId)
+    .select();
+}
+//-------------------------- Store or Update Video -----------------------------//
+export async function storeOrUpdateVideo(
+  authToken: string,
+  video: StoreOrUpdateParams[]
+) {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db.from("Video").upsert(video).select();
+
+  if (data) {
+    return data;
+  } else {
+    return error;
+  }
+}
+//--------------------------- Type: StoreOrUpdate ------------------------------//
+export type StoreOrUpdateParams = {
+  id: string;
+  video_id: string;
+  updatedAt: Date;
+  title: string;
+  description: string;
+  published_at: string;
+  thumbnail_url: string;
+  channel_title: string;
+  channel_id: string;
+  user_id: string;
+};
+//----------------------------- Store Channel_Id -------------------------------//
 export async function storeChannelId(
   authToken: string,
   user_id: string,
@@ -115,105 +202,7 @@ export async function storeChannelId(
     return 400;
   }
 }
-
-//------------------------------- TYPE: Store or Update Parameters ------------------------------------//
-export type StoreOrUpdateParams = {
-  id: string;
-  video_id: string;
-  updatedAt: Date;
-  title: string;
-  description: string;
-  published_at: string;
-  thumbnail_url: string;
-  channel_title: string;
-  channel_id: string;
-  user_id: string;
-};
-
-//------------------------------- Store or Update Video ------------------------------------//
-export async function storeOrUpdateVideo(
-  authToken: string,
-  video: StoreOrUpdateParams[]
-) {
-  const db = createServerDbClient(authToken);
-
-  const { data, error } = await db.from("Video").upsert(video).select();
-
-  if (data) {
-    return data;
-  } else {
-    return error;
-  }
-}
-
-//-------------------------------Get Latest Video Date------------------------------------//
-
-export async function getLatestVideoDate(
-  authToken: string,
-  user_id: string
-): Promise<Date | null> {
-  const db = createServerDbClient(authToken);
-
-  const { data, error } = await db
-    .from("Video")
-    .select("published_at")
-    .eq("user_id", user_id)
-    .order("published_at", { ascending: false })
-    .limit(1);
-
-  if (error) {
-    console.error(error);
-    return null;
-  }
-
-  if (data && data.length > 0) {
-    const latestVideoDate = new Date(data[0].published_at);
-    console.log("Latest video date:", latestVideoDate);
-    return latestVideoDate;
-  } else {
-    return null;
-  }
-}
-
-//------------------------------- Get Stripe Id ------------------------------------//
-export async function getStripeId(authToken: string, userId: string) {
-  const db = createServerDbClient(authToken);
-
-  return await db.from("Stripe").select().eq("user_id", userId);
-}
-
-//------------------------------- get caption summary ------------------------------------//
-export async function getCaptionSummary(
-  authToken: string,
-  caption_id: string,
-  video_id?: string,
-  channel_id?: string
-) {
-  const db = createServerDbClient(authToken);
-  if (video_id) {
-    return await db.from("CaptionSummary").select().eq(`video_id`, video_id);
-  }
-  return await db.from("CaptionSummary").select().eq(`caption_id`, caption_id);
-}
-
-//------------------------------- update stripe user subscription status ------------------------------------//
-export async function updateStripeUserSubscriptionStatus(
-  authToken: string,
-  subscriptionActive: boolean,
-  userId: string
-) {
-  const db = createServerDbClient(authToken);
-
-  return await db
-    .from("stripe")
-    .update({
-      subscription_active: subscriptionActive,
-    })
-    .eq("user_id", userId)
-    .select();
-}
-
-//------------------------------- update "video has embeddings" ------------------------------------//
+//----------------------- update "video has embeddings" ------------------------//
 export async function updateVideoHasEmbeddings(
   authToken: string,
   video_id: string,
@@ -227,8 +216,7 @@ export async function updateVideoHasEmbeddings(
     .eq("id", video_id)
     .select();
 }
-
-//------------------------------- TYPE: store all comments parameters ------------------------------------//
+//--------------------- TYPE: store all comments parameters --------------------//
 export type StoreAllCommentsParams = {
   id: string;
   comment_id: string;
@@ -240,8 +228,7 @@ export type StoreAllCommentsParams = {
   author_display_name: string;
   author_image_url: string;
 };
-
-//------------------------------- store all comments ------------------------------------//
+//----------------------------- store all comments -----------------------------//
 export async function storeAllComments(
   authToken: string,
   allComments: StoreAllCommentsParams[]
@@ -260,8 +247,7 @@ export async function storeAllComments(
     return error;
   }
 }
-
-//------------------------------- TYPE: store all replies parameters ------------------------------------//
+//---------------------- TYPE: store all replies parameters --------------------//
 export type StoreAllRepliesParams = {
   id: string;
   reply_id: string;
@@ -273,8 +259,7 @@ export type StoreAllRepliesParams = {
   published_at: Date;
   comment_id: string;
 };
-
-//------------------------------- store all replies ------------------------------------//
+//---------------------------- store all replies -------------------------------//
 export async function storeAllReplies(
   authToken: string,
   allReplies: StoreAllRepliesParams[]
@@ -290,8 +275,7 @@ export async function storeAllReplies(
     return error;
   }
 }
-
-//------------------------------- get comments ------------------------------------//
+//------------------------------- get comments ---------------------------------//
 export async function getComments(authToken: string, videoId: string) {
   const db = createServerDbClient(authToken);
 
@@ -301,9 +285,8 @@ export async function getComments(authToken: string, videoId: string) {
 
   return result;
 }
-
-// ------------------------UPGRADING METHODS------------------------
-// ------------------Comments-and-Replies Functions-----------------
+//----------------------------- UPGRADING METHODS ------------------------------//
+//----------------------- Comments-and-Replies Functions -----------------------//
 // get all video ids that belong to a user id
 export async function getVideoIdsByUserId(authToken: string, user_id: string) {
   const db = createServerDbClient(authToken);
@@ -351,7 +334,7 @@ export async function getVideoIdsWithoutComments(
 
   return videoIdsWithoutComments;
 }
-// ------------------Captions Functions-----------------
+//----------------------------- Captions Functions -----------------------------//
 // get all video_ids for a user from the Captions table
 export async function getCaptionVideoIdsByUserId(
   authToken: string,
@@ -413,7 +396,7 @@ export async function getVideoIdsWithoutCaptionSummary(
 
   return videoIdsWithoutCaptionSummary;
 }
-// ------------------Embeddings Function-----------------
+//------------------------------ Embeddings Function ---------------------------//
 // get all comments for a given userId
 export async function getAllCommentsByUserId(
   authToken: string,
@@ -434,7 +417,7 @@ export async function getAllCommentsByUserId(
   return data;
 }
 
-//------------------------------- gett active subscribers ------------------------------------//
+//---------------------------- gett active subscribers -------------------------//
 export async function getActiveSubscribers() {
   const db = createClient(supabaseUrl as string, supabaseKey as string);
 
@@ -455,7 +438,7 @@ export async function getActiveSubscribers() {
   }
 }
 
-//------------------------------- get inactive subscribers ------------------------------------//
+//---------------------------- get inactive subscribers ------------------------//
 export async function getInactiveSubscribers() {
   const db = createClient(supabaseUrl as string, supabaseKey as string);
 
@@ -476,7 +459,7 @@ export async function getInactiveSubscribers() {
   }
 }
 
-//------------------------------- AUTH TOKEN METHODS ------------------------------------//
+//------------------------------- AUTH TOKEN METHODS ---------------------------//
 // store user's token
 export async function storeUserToken(authToken: string, userId: string) {
   const db = createServerDbClient(authToken);
@@ -514,7 +497,7 @@ export async function getUserToken(userId: string) {
   }
 }
 
-//------------------------------- get all captions from a channel_id ------------------------------------//
+//------------------------ get all captions from a channel_id ------------------//
 export async function getCaptions(authToken: string, videoId: string) {
   const db = createServerDbClient(authToken);
 
@@ -524,12 +507,12 @@ export async function getCaptions(authToken: string, videoId: string) {
     .eq(`video_id`, videoId);
 }
 
-//------------------------------- TYPE: comments response ------------------------------------//
+//---------------------------- TYPE: comments response -------------------------//
 type CommentsResponse = Awaited<ReturnType<typeof getComments>>;
 export type CommentsResponseSuccess = CommentsResponse["data"];
 export type CommentsResponseError = CommentsResponse["error"];
 
-//------------------------------- TYPE: store captions parameters ------------------------------------//
+//-------------------------- TYPE: store captions parameters -------------------//
 export type StoreCaptionsParams = {
   id: string;
   video_id: string;
@@ -539,7 +522,7 @@ export type StoreCaptionsParams = {
   channel_id: string;
 };
 
-//------------------------------- store captions ------------------------------------//
+//---------------------------------- store captions ----------------------------//
 export async function storeCaptions(
   authToken: string,
   captions: StoreCaptionsParams[]
@@ -555,13 +538,13 @@ export async function storeCaptions(
   }
 }
 
-//------------------------------- get channel id------------------------------------//
+//--------------------------------- get channel id -----------------------------//
 export async function getChannelId(authToken: string, user_id: string) {
   const db = createServerDbClient(authToken);
 
   return await db.from("User").select().eq(`id`, user_id);
 }
-
+//-------------------------------- get video by id -----------------------------//
 export async function getVideo(authToken: string, videoId: string) {
   const db = createServerDbClient(authToken);
   const res = await db.from("Video").select().eq("id", videoId);
@@ -573,7 +556,7 @@ export async function getVideo(authToken: string, videoId: string) {
   }
 }
 
-//------------------------------- get videos ------------------------------------//
+//----------------------------- get videos by channel id -----------------------//
 export async function getVideos(authToken: string, channel_id: string) {
   const db = createServerDbClient(authToken);
 
@@ -584,7 +567,7 @@ export async function getVideos(authToken: string, channel_id: string) {
     .order("published_at", { ascending: false });
 }
 
-//------------------------------- get user subscription status------------------------------------//
+//---------------------------- get user subscription status---------------------//
 export async function getUserSubscriptionStatus(
   authToken: string,
   userId: string
@@ -608,21 +591,21 @@ export async function getUserSubscriptionStatus(
   }
 }
 
-//------------------------------- get videos by user id------------------------------------//
+//------------------------------ get videos by user id--------------------------//
 export async function getVideosByUserId(authToken: string, user_id: string) {
   const db = createServerDbClient(authToken);
 
   return await db.from("Video").select().eq(`user_id`, user_id);
 }
 
-//------------------------------- TYPE: store comment summary parameters------------------------------------//
+//------------------------ TYPE: store comment summary parameters---------------//
 export type StoreCommentSummaryParams = {
   id: string;
   sentiment: string;
   summary: string;
 };
 
-//------------------------------- store caption summary ------------------------------------//
+//------------------------------- store caption summary ------------------------//
 export async function storeCaptionsSummary(
   authToken: string,
   caption_id: string,
@@ -654,7 +637,7 @@ export async function storeCaptionsSummary(
   }
 }
 
-//------------------------------- get caption summaries------------------------------------//
+//-------------------------------- get caption summaries------------------------//
 export async function getCaptionSummaries(
   authToken: string,
   channel_id: string
@@ -664,7 +647,7 @@ export async function getCaptionSummaries(
   return await db.from("CaptionSummary").select().eq(`channel_id`, channel_id);
 }
 
-//------------------------------- ALL CAPTION SUMMARY METHODS ------------------------------------//
+//----------------------------- ALL CAPTION SUMMARY METHODS --------------------//
 // store all caption summary
 export async function storeAllCaptionSummary(
   authToken: string,
@@ -735,7 +718,7 @@ export async function getMostRecentCaptionSummary(
   }
 }
 
-//------------------------------- get channel id by user id ------------------------------------//
+//----------------------------- get channel id by user id -----------------------//
 export async function getChannelIdByUserId(authToken: string, user_id: string) {
   const db = createServerDbClient(authToken);
   const { data, error } = await db
@@ -749,7 +732,7 @@ export async function getChannelIdByUserId(authToken: string, user_id: string) {
   return data[0]?.channel_id;
 }
 
-//------------------------------- TYPE: comment------------------------------------//
+//------------------------------------- TYPE: comment----------------------------//
 export type Comment = {
   comment_id: string;
   text_display: string;
@@ -759,7 +742,7 @@ export type Comment = {
   video_id: string;
 };
 
-//------------------------------- TYPE: SmallComment ------------------------------------//
+//--------------------------------- TYPE: SmallComment --------------------------//
 export type SmallComment = Pick<
   Comment,
   | "comment_id"
@@ -835,11 +818,7 @@ export class PreProcessorA {
     return this.createBatches();
   }
 }
-
-//-------------------------------Delete------------------------------------//
-
-//-------------------------------Update 'Agreed' Bool (does user agree to have their chat history utilized for training)------------------------------------//
-
+//---------------------------------- Get 'Agreed' Bool -------------------------//
 export async function getUserAgreed(authToken: string, user_id: string) {
   const db = createServerDbClient(authToken);
   const { data, error } = await db
@@ -852,7 +831,7 @@ export async function getUserAgreed(authToken: string, user_id: string) {
   }
   return data[0]?.agreed;
 }
-
+//-------------------------------- Update 'Agreed' Bool ------------------------//
 export async function updateUserAgreed(
   authToken: string,
   user_id: string,
@@ -869,8 +848,7 @@ export async function updateUserAgreed(
   }
   return true;
 }
-
-//------------------------------- get channel id by video id ------------------------------------//
+//----------------------------- get channel id by video id ---------------------//
 export async function getChannelIdByVideoId(
   authToken: string,
   video_id: string
