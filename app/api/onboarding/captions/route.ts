@@ -16,8 +16,13 @@ export async function GET() {
   if (userId && token) {
     try {
       userOAuth = await getOAuthData(userId, "oauth_google");
+      console.log("userOAuth:", userOAuth); // Add this line
+      if (!userOAuth || userOAuth.length === 0) {
+        return NextResponse.json({ message: "No OAuth data found" });
+      }
     } catch (error) {
-      return NextResponse.json({ message: "No oath found" });
+      console.error("Error retrieving OAuth data:", error); // Modify this line to log the error
+      return NextResponse.json({ message: "Error retrieving OAuth data" });
     }
   }
 
