@@ -153,13 +153,13 @@ export default function Home({ channelId }: ChannelChatParams) {
   return (
     <>
       <div className="flex flex-col items-center">
-        <Navbar>
-          <NavbarBrand>
+        <div>
+          <div>
             <Button color="warning" onClick={handleClick}>
               {isLoading ? <Spinner size="sm" color="success" /> : "Update"}
             </Button>
-          </NavbarBrand>
-          <NavbarContent justify="center">
+          </div>
+          <div>
             <Tabs
               disabledKeys={[
                 "Facebook",
@@ -201,8 +201,8 @@ export default function Home({ channelId }: ChannelChatParams) {
                 }
               />
             </Tabs>
-          </NavbarContent>
-          <NavbarContent justify="end">
+          </div>
+          <div>
             <div className="hidden lg:block">
               {/* <Button color="success" onClick={handleCcClick}>
                 {isCcLoading ? (
@@ -297,8 +297,8 @@ export default function Home({ channelId }: ChannelChatParams) {
                 </ModalContent>
               </Modal> */}
             </div>
-          </NavbarContent>
-        </Navbar>
+          </div>
+        </div>
         <div className="lg:hidden">
           {/* <Button color="success" onClick={handleClick} className="px-28">
             {isLoading ? <Spinner size="lg" color="success" /> : "Channel Chat"}

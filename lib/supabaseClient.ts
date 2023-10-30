@@ -288,7 +288,6 @@ export async function createUser(
   name: string,
   email: string,
   imageUrl: string
-  //  channel_id: string
 ) {
   try {
     // auth token is here ...
@@ -304,7 +303,6 @@ export async function createUser(
         email,
         image_url: imageUrl,
         subscriptionStatus: SubscriptionStatus.NONE,
-        //       channel_id,
       })
       .select();
 
