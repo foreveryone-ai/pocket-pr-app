@@ -14,6 +14,7 @@ import {
 import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import "animate.css";
 
 export default function App() {
   const router = useRouter();
@@ -36,12 +37,29 @@ export default function App() {
               className="sm:hidden"
             />
             <NavbarBrand>
-              <Link href="/">
+              <Link href="/" className="flex">
                 <Image
-                  src="/gunmetal-logo-full.svg"
+                  src="/gunmetal-pocket-asset.svg"
                   alt="logo"
-                  width="150"
+                  width="125"
                   height="100"
+                  className="px-1 animate__animated animate__backInLeft"
+                />
+                <Image
+                  src="/gunmetal-panda-asset.svg"
+                  alt="logo"
+                  width="30"
+                  height="40"
+                  className="pb-1 animate__animated animate__backInLeft"
+                  style={{ animationDelay: "0.4s" }}
+                />
+                <Image
+                  src="/gunmetal-pr-asset.svg"
+                  alt="logo"
+                  width="50"
+                  height="50"
+                  className="px-1 pb-1.5 animate__animated animate__backInLeft"
+                  style={{ animationDelay: "0.8s" }}
                 />
               </Link>
             </NavbarBrand>
@@ -95,12 +113,29 @@ export default function App() {
               className="sm:hidden"
             />
             <NavbarBrand>
-              <Link href="/">
+              <Link href="/" className="flex">
                 <Image
-                  src="/gunmetal-logo-full.svg"
+                  src="/gunmetal-pocket-asset.svg"
                   alt="logo"
-                  width="150"
+                  width="125"
                   height="100"
+                  className="px-1 animate__animated animate__backInLeft"
+                />
+                <Image
+                  src="/gunmetal-panda-asset.svg"
+                  alt="logo"
+                  width="30"
+                  height="40"
+                  className="pb-1 animate__animated animate__backInLeft"
+                  style={{ animationDelay: "0.4s" }}
+                />
+                <Image
+                  src="/gunmetal-pr-asset.svg"
+                  alt="logo"
+                  width="50"
+                  height="50"
+                  className="px-1 pb-1.5 animate__animated animate__backInLeft"
+                  style={{ animationDelay: "0.8s" }}
                 />
               </Link>
             </NavbarBrand>
