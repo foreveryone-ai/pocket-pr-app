@@ -1196,9 +1196,11 @@ export async function updateUserCredits(
   amount: number
 ) {
   const db = createServerDbClient(authToken);
+  let sign = action === CreditAction.Add ? "+" : "-";
+
   return await db
     .from("User")
-    .update({ credits: db.rpc("credits - 1") })
+    .update({ credits: db.rpc(`credits ${sign} ${amount}`) })
     .eq("id", userId)
     .select("credits");
 }
