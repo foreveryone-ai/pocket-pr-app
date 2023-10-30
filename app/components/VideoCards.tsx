@@ -92,20 +92,6 @@ export default function VideoCard({
     }
   };
 
-  const handlePay = async () => {
-    console.log("to checkout...");
-
-    try {
-      const res = await fetch("/api/checkout");
-
-      const data = await res.json();
-
-      router.replace(data.sessionUrl);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const handleChatRedirect = async () => {
     setIsRedirecting(true);
     router.replace(`/chat/${videoId}`);
@@ -195,9 +181,6 @@ export default function VideoCard({
                   onPress={handleModalClose}
                 >
                   Get Started
-                </Button>
-                <Button onPress={handlePay} className="text-black">
-                  buy keegan sushi 🍣
                 </Button>
               </ModalFooter>
             </>
