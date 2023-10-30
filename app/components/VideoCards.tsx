@@ -33,6 +33,7 @@ type VideoCardProps = {
   title: string;
   imageUrl: string;
   hasEmbeddings: boolean;
+  subscriptionStatus: boolean;
 };
 
 export default function VideoCard({
@@ -41,6 +42,7 @@ export default function VideoCard({
   imageUrl,
   videoId,
   hasEmbeddings,
+  subscriptionStatus,
 }: VideoCardProps) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -90,20 +92,6 @@ export default function VideoCard({
     }
   };
 
-  const handlePay = async () => {
-    console.log("to checkout...");
-
-    try {
-      const res = await fetch("/api/checkout");
-
-      const data = await res.json();
-
-      router.replace(data.sessionUrl);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const handleChatRedirect = async () => {
     setIsRedirecting(true);
     router.replace(`/chat/${videoId}`);
@@ -134,11 +122,12 @@ export default function VideoCard({
               </h4>
             </Skeleton>
           </div>
-          {!showChat ? (
+
+          {!showChat && !subscriptionStatus ? ( // Render the "Analyze" button for non-subscribers when showChat is false
             <Button variant="ghost" className="text-white" onPress={onOpen}>
               Analyze
             </Button>
-          ) : (
+          ) : showChat ? ( // Render the "Chat" button for all users when showChat is true
             <Button
               variant="ghost"
               className="text-white"
@@ -147,7 +136,7 @@ export default function VideoCard({
             >
               Chat
             </Button>
-          )}
+          ) : null}
         </CardHeader>
 
         <CardBody className="overflow-visible py-2 max-h-480">
@@ -192,9 +181,6 @@ export default function VideoCard({
                   onPress={handleModalClose}
                 >
                   Get Started
-                </Button>
-                <Button onPress={handlePay} className="text-black">
-                  buy keegan sushi 🍣
                 </Button>
               </ModalFooter>
             </>

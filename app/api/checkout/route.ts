@@ -32,7 +32,7 @@ export async function GET() {
           userId: user.id,
         }, //  store userId on subscription object
       },
-      success_url: `http://localhost:3000/Dashboard`,
+      success_url: `http://localhost:3000/onboarding/agreement`,
       cancel_url: `http://localhost:3000/Dashboard`,
     });
     console.log(`Session: ${session}  SessionId: ${session?.id}`);

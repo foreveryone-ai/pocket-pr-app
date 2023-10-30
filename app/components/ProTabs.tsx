@@ -204,13 +204,13 @@ export default function Home({ channelId }: ChannelChatParams) {
           </NavbarContent>
           <NavbarContent justify="end">
             <div className="hidden lg:block">
-              {/* <Button color="success" onClick={handleCcClick}>
+              <Button color="success" onClick={handleCcClick}>
                 {isCcLoading ? (
                   <Spinner size="sm" color="warning" />
                 ) : (
                   "Channel Chat"
                 )}
-              </Button> */}
+              </Button>
             </div>
             <div className="lg:hidden">
               {/* <Button onPress={onOpen}>Trends</Button> */}
@@ -300,9 +300,9 @@ export default function Home({ channelId }: ChannelChatParams) {
           </NavbarContent>
         </Navbar>
         <div className="lg:hidden">
-          {/* <Button color="success" onClick={handleClick} className="px-28">
+          <Button color="success" onClick={handleClick} className="px-28">
             {isLoading ? <Spinner size="lg" color="success" /> : "Channel Chat"}
-          </Button> */}
+          </Button>
         </div>
       </div>
     </>

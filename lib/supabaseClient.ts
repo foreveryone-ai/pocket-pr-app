@@ -888,10 +888,10 @@ export async function getVideos(authToken: string, channel_id: string) {
 
 //---------------------------- get user subscription status---------------------//
 export async function getUserSubscriptionStatus(
-  authToken: string,
+  // authToken: string,
   userId: string
 ) {
-  const db = createServerDbClient(authToken);
+  const db = createServerDbClient();
 
   const { data, error } = await db
     .from("Stripe")
@@ -904,7 +904,7 @@ export async function getUserSubscriptionStatus(
   }
 
   if (data && data.length > 0) {
-    return data[0].subscription_active;
+    return data[0].subscription_active === true; // Ensure this is a boolean
   } else {
     return null;
   }
