@@ -36,6 +36,7 @@ export default function App() {
               aria-label={isMenuOpen ? "Close menu" : "Open menu"}
               className="sm:hidden"
             />
+
             <NavbarBrand>
               <Link href="/" className="flex">
                 <Image
@@ -48,17 +49,17 @@ export default function App() {
                 <Image
                   src="/gunmetal-panda-asset.svg"
                   alt="logo"
-                  width="30"
-                  height="40"
-                  className="pb-1 animate__animated animate__backInLeft"
+                  width="25"
+                  height="30"
+                  className="pb-2 animate__animated animate__backInLeft"
                   style={{ animationDelay: "0.4s" }}
                 />
                 <Image
                   src="/gunmetal-pr-asset.svg"
                   alt="logo"
-                  width="50"
-                  height="50"
-                  className="px-1 pb-1.5 animate__animated animate__backInLeft"
+                  width="51"
+                  height="48"
+                  className="px-1 pb-2 animate__animated animate__backInLeft"
                   style={{ animationDelay: "0.8s" }}
                 />
               </Link>
@@ -110,7 +111,7 @@ export default function App() {
           <NavbarContent>
             <NavbarMenuToggle
               aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-              className="sm:hidden"
+              className="hidden"
             />
             <NavbarBrand>
               <Link href="/" className="flex">
@@ -124,17 +125,17 @@ export default function App() {
                 <Image
                   src="/gunmetal-panda-asset.svg"
                   alt="logo"
-                  width="30"
-                  height="40"
-                  className="pb-1 animate__animated animate__backInLeft"
+                  width="25"
+                  height="30"
+                  className="pb-2 animate__animated animate__backInLeft"
                   style={{ animationDelay: "0.4s" }}
                 />
                 <Image
                   src="/gunmetal-pr-asset.svg"
                   alt="logo"
-                  width="50"
-                  height="50"
-                  className="px-1 pb-1.5 animate__animated animate__backInLeft"
+                  width="51"
+                  height="48"
+                  className="px-1 pb-2 animate__animated animate__backInLeft"
                   style={{ animationDelay: "0.8s" }}
                 />
               </Link>
