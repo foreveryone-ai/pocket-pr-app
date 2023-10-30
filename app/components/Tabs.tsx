@@ -152,14 +152,13 @@ export default function Home({ channelId }: ChannelChatParams) {
 
   return (
     <>
-      <div className="flex flex-col items-center">
-        <div>
-          <div>
-            <Button color="warning" onClick={handleClick}>
-              {isLoading ? <Spinner size="sm" color="success" /> : "Update"}
-            </Button>
-          </div>
-          <div>
+      <div className="flex flex-col-3 items-center justify-center">
+        <div className="px-4">
+          <Button color="warning" onClick={handleClick}>
+            {isLoading ? <Spinner size="sm" color="success" /> : "Update"}
+          </Button>
+        </div>
+        {/* <div>
             <Tabs
               disabledKeys={[
                 "Facebook",
@@ -201,20 +200,20 @@ export default function Home({ channelId }: ChannelChatParams) {
                 }
               />
             </Tabs>
-          </div>
-          <div>
-            <div className="hidden lg:block">
-              {/* <Button color="success" onClick={handleCcClick}>
+          </div> */}
+        <div>
+          <div className="">
+            {/* <Button color="success" onClick={handleCcClick}>
                 {isCcLoading ? (
                   <Spinner size="sm" color="warning" />
                 ) : (
                   "Channel Chat"
                 )}
               </Button> */}
-            </div>
-            <div className="lg:hidden">
-              {/* <Button onPress={onOpen}>Trends</Button> */}
-              {/* <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+          </div>
+          <div className="lg:hidden">
+            {/* <Button onPress={onOpen}>Trends</Button> */}
+            {/* <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
                 <ModalContent>
                   {(onClose) => (
                     <>
@@ -223,7 +222,7 @@ export default function Home({ channelId }: ChannelChatParams) {
                       </ModalHeader>
                       <ModalBody>
                         {/* --------------------Hidden on LARGE screens and above-------------------- */}
-              {/* <div className="flow-root lg:hidden">
+            {/* <div className="flow-root lg:hidden">
                           <h1 className="font-playfair pb-2 text-green-800 font-black text-2xl flex justify-center ">
                             Channel Trends
                           </h1>
@@ -296,13 +295,7 @@ export default function Home({ channelId }: ChannelChatParams) {
                   )}
                 </ModalContent>
               </Modal> */}
-            </div>
           </div>
-        </div>
-        <div className="lg:hidden">
-          {/* <Button color="success" onClick={handleClick} className="px-28">
-            {isLoading ? <Spinner size="lg" color="success" /> : "Channel Chat"}
-          </Button> */}
         </div>
       </div>
     </>
