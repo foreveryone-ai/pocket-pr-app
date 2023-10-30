@@ -59,10 +59,10 @@ export default async function Home() {
               : "no videos found"}
           </div>
 
-          <div className="hidden lg:block lg:px-4" />
+          {/* <div className="hidden lg:block lg:px-4" /> */}
 
           {/* --------------------Visible on LARGE screens and above-------------------- */}
-          <DesktopTrends />
+          {/* <DesktopTrends /> */}
         </div>
       </div>
     </div>

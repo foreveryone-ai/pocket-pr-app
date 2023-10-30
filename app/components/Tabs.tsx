@@ -213,8 +213,8 @@ export default function Home({ channelId }: ChannelChatParams) {
               </Button>
             </div>
             <div className="lg:hidden">
-              <Button onPress={onOpen}>Trends</Button>
-              <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+              {/* <Button onPress={onOpen}>Trends</Button> */}
+              {/* <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
                 <ModalContent>
                   {(onClose) => (
                     <>
@@ -223,7 +223,7 @@ export default function Home({ channelId }: ChannelChatParams) {
                       </ModalHeader>
                       <ModalBody>
                         {/* --------------------Hidden on LARGE screens and above-------------------- */}
-                        <div className="flow-root lg:hidden">
+              {/* <div className="flow-root lg:hidden">
                           <h1 className="font-playfair pb-2 text-green-800 font-black text-2xl flex justify-center ">
                             Channel Trends
                           </h1>
@@ -295,7 +295,7 @@ export default function Home({ channelId }: ChannelChatParams) {
                     </>
                   )}
                 </ModalContent>
-              </Modal>
+              </Modal> */}
             </div>
           </NavbarContent>
         </Navbar>
