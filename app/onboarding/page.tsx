@@ -1,6 +1,5 @@
 import { auth, currentUser } from "@clerk/nextjs";
 import { createUser, storeUserToken } from "@/lib/supabaseClient";
-import OnboardingPage from "../components/OnboardingPage";
 import NavBar from "@/app/components/NavBar";
 import { Playfair_Display } from "next/font/google";
 import { Button } from "@nextui-org/button";
