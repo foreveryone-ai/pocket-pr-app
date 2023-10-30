@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg id="uuid-02ddd2c1-5776-4c80-955a-91c5c8555ae6" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 72.72 42.3">
+<svg id="uuid-211e430d-d61a-46c9-9c9f-c3f9cdcf8fb5" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 72.72 42.3">
   <defs>
-    <linearGradient id="uuid-dba48686-ac2e-476a-8321-3ecbbcb588c2" x1="-82.62" y1="151.97" x2="-82.62" y2="-98.03" gradientUnits="userSpaceOnUse">
+    <linearGradient id="uuid-ac8eb74d-81a7-4389-a476-25803f4f377f" x1="-82.62" y1="151.97" x2="-82.62" y2="-98.03" gradientUnits="userSpaceOnUse">
       <stop offset=".32" stop-color="#fff"/>
       <stop offset=".32" stop-color="#fdfdfd"/>
       <stop offset=".42" stop-color="#bbbaba"/>
@@ -11,12 +11,12 @@
       <stop offset=".75" stop-color="#292526"/>
       <stop offset=".79" stop-color="#231f20"/>
     </linearGradient>
-    <mask id="uuid-4ffabbb1-690e-4b9b-b0a6-07a6234275d1" data-name="mask" x="-332.62" y="-98.03" width="500" height="250" maskUnits="userSpaceOnUse">
-      <rect x="-332.62" y="-98.03" width="500" height="250" style="fill: url(#uuid-dba48686-ac2e-476a-8321-3ecbbcb588c2); mix-blend-mode: difference;"/>
+    <mask id="uuid-054dfac7-f6c0-48ee-9f92-f089ee0cd3af" data-name="mask" x="-332.62" y="-98.03" width="500" height="250" maskUnits="userSpaceOnUse">
+      <rect x="-332.62" y="-98.03" width="500" height="250" style="fill: url(#uuid-ac8eb74d-81a7-4389-a476-25803f4f377f); mix-blend-mode: difference;"/>
     </mask>
   </defs>
-  <g id="uuid-3c9bc513-52e9-44b9-9508-3078cbc3cc7d" data-name="PR">
-    <g style="mask: url(#uuid-4ffabbb1-690e-4b9b-b0a6-07a6234275d1);">
+  <g id="uuid-ca688c4d-4770-44eb-8ab4-e95010fe307d" data-name="PR">
+    <g style="mask: url(#uuid-054dfac7-f6c0-48ee-9f92-f089ee0cd3af);">
       <g>
         <path d="m26.25,1.8c-2.38-1.2-5.27-1.8-8.67-1.8H0v42.3h11.76v-14.28h5.82c3.44,0,6.35-.63,8.73-1.89,2.38-1.26,4.16-2.94,5.34-5.04s1.77-4.43,1.77-6.99c0-2.76-.6-5.2-1.8-7.32-1.2-2.12-2.99-3.78-5.37-4.98Zm-9.81,16.86h-4.68v-9.18h4.68c3.32,0,4.98,1.54,4.98,4.62s-1.66,4.56-4.98,4.56Z" style="fill: #fff;"/>
         <path d="m63.18,25.8c3.04-.92,5.35-2.47,6.93-4.65,1.58-2.18,2.37-4.71,2.37-7.59,0-2.56-.6-4.87-1.8-6.93-1.2-2.06-2.98-3.68-5.34-4.86-2.36-1.18-5.24-1.77-8.64-1.77h-18.54v42.3h11.76v-15.6h1.26l8.4,15.6h13.14l-9.54-16.5Zm-3.84-8.28c-.8.76-2,1.14-3.6,1.14h-5.82v-8.82h5.82c1.56,0,2.75.39,3.57,1.17.82.78,1.23,1.85,1.23,3.21,0,1.44-.4,2.54-1.2,3.3Z" style="fill: #fff;"/>
