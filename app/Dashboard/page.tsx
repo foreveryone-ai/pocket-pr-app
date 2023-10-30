@@ -62,6 +62,7 @@ export default async function Home() {
                     title={video.title as string}
                     imageUrl={video.thumbnail_url as string}
                     hasEmbeddings={video.hasEmbeddings}
+                    subscriptionStatus={subscriptionStatus as boolean} // Pass subscriptionStatus as a prop
                   />
                 ))
               : "no videos found"}
