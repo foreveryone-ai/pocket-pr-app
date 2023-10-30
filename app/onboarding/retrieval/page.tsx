@@ -3,10 +3,10 @@ import NavBar from "@/app/components/NavBar";
 import RetrievalButton from "@/app/components/OnboardingRetrievalButton";
 
 export default async function RetrievalPage() {
-  const { userId, getToken } = await auth();
-  const token = await getToken({ template: "supabase" });
-
-  if (!userId || !token) {
+  const { userId, getToken } = auth();
+  const authToken = await getToken({ template: "supabase" });
+  console.log("got authToken for sub status server side", authToken);
+  if (!userId || !authToken) {
     return <div>Loading...</div>;
   }
 
@@ -14,7 +14,7 @@ export default async function RetrievalPage() {
     <div className="min-h-screen bg-black">
       <NavBar />
       <div className="flex justify-center py-32 align-center">
-        <RetrievalButton userId={userId} token={token} />{" "}
+        <RetrievalButton userId={userId} authToken={authToken} />{" "}
       </div>
     </div>
   );

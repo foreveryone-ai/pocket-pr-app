@@ -12,12 +12,12 @@ import { getUserSubscriptionStatus } from "@/lib/supabaseClient";
 
 interface RetrievalButtonProps {
   userId: string;
-  token: string;
+  authToken: string;
 }
 
 export default function RetrievalButton({
   userId,
-  token,
+  authToken,
 }: RetrievalButtonProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -25,13 +25,17 @@ export default function RetrievalButton({
   const fetchOnboardingData = async () => {
     setIsLoading(true);
     try {
+      console.log(authToken);
       await getChannelOnboarding();
       await getVideoOnboarding();
       await getCaptionsOnboarding();
 
       // Get the user's subscription status
-      const subscriptionStatus = await getUserSubscriptionStatus(userId, token);
-
+      const subscriptionStatus = await getUserSubscriptionStatus(
+        userId
+        // authToken
+      );
+      console.log("subscriptionStatus:", subscriptionStatus);
       // If the user is an active subscriber, redirect to "/upgrading"
       // Otherwise, redirect to "/dashboard"
       const redirectPath = subscriptionStatus ? "/upgrading" : "/Dashboard";
