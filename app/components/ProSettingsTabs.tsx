@@ -1,12 +1,12 @@
 "use client";
 import React from "react";
+import { useState } from "react";
 import { Tabs, Tab } from "@nextui-org/tabs";
 import { Card, CardBody } from "@nextui-org/card";
 import { Button } from "@nextui-org/button";
-import { useRouter } from "next/navigation";
+import { Radio, RadioGroup } from "@nextui-org/radio";
 
 export default function App() {
-  const router = useRouter();
   return (
     <div className="flex w-full flex-col items-center pt-10">
       <Tabs aria-label="Options">
@@ -14,22 +14,12 @@ export default function App() {
           <Card>
             <CardBody>
               <Button
-                color="success"
-                onPress={async () => {
-                  console.log("to checkout...");
-
-                  try {
-                    const res = await fetch("/api/checkout");
-
-                    const data = await res.json();
-
-                    router.replace(data.sessionUrl);
-                  } catch (error) {
-                    console.error(error);
-                  }
+                color="danger"
+                onPress={() => {
+                  /* Downgrade to Free logic here */
                 }}
               >
-                Upgrade to Pro
+                Downgrade to Free
               </Button>
             </CardBody>
           </Card>
