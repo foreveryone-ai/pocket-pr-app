@@ -140,3 +140,15 @@ export async function updateChatHistory(
     console.error(error);
   }
 }
+
+export async function decrementCredits() {
+  try {
+    const res = await fetch("/api/account/update-credits", {
+      method: "POST",
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+}

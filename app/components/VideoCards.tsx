@@ -20,6 +20,7 @@ import {
   getOrCreateCaptionSummary,
   getAllComments,
   getOrCreateEmbeddings,
+  decrementCredits,
 } from "@/lib/api";
 
 const playfairDisplay500 = Playfair_Display({
@@ -82,6 +83,11 @@ export default function VideoCard({
       // check if all was successful and decrement the users credits
       if (summaryRes && summaryRes && embeddingsRes) {
         setShowChat(true);
+        try {
+          const credits = await decrementCredits();
+        } catch (error) {
+          console.error("problem with credits");
+        }
       } else {
         openNoCommentsModal();
       }

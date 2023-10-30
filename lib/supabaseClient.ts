@@ -1183,3 +1183,22 @@ export async function getChannelIdByVideoId(
   }
   return data[0]?.channel_id;
 }
+
+export enum CreditAction {
+  Subtract,
+  Add,
+}
+
+export async function updateUserCredits(
+  userId: string,
+  authToken: string,
+  action: CreditAction,
+  amount: number
+) {
+  const db = createServerDbClient(authToken);
+  return await db
+    .from("User")
+    .update({ credits: db.rpc("credits - 1") })
+    .eq("id", userId)
+    .select("credits");
+}
