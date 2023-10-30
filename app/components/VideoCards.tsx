@@ -33,6 +33,7 @@ type VideoCardProps = {
   title: string;
   imageUrl: string;
   hasEmbeddings: boolean;
+  credits: number;
 };
 
 export default function VideoCard({
@@ -41,6 +42,7 @@ export default function VideoCard({
   imageUrl,
   videoId,
   hasEmbeddings,
+  credits,
 }: VideoCardProps) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoaded, setIsLoaded] = useState(false);

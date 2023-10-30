@@ -17,10 +17,12 @@ export default async function Home() {
 
   // create placeholders and update after recieving google token
   let videos, youtube_channel_id;
+  let credits: number;
 
   try {
     const user = await getChannelId(token as string, userId as string);
     youtube_channel_id = user?.data && user.data[0].youtube_channel_id;
+    credits = user?.data && user.data[0].credits;
     //console.log("ch id: ", youtube_channel_id);
   } catch (error) {
     console.error("error on get channel id.. ", error);
@@ -53,6 +55,7 @@ export default async function Home() {
                     title={video.title as string}
                     imageUrl={video.thumbnail_url as string}
                     hasEmbeddings={video.hasEmbeddings}
+                    credits={credits}
                     //TODO: store this in database
                   />
                 ))
