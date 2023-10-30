@@ -44,7 +44,7 @@ export default async function Home() {
   const subscriptionStatus = await getUserSubscriptionStatus(userId as string);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="bg-white">
       <NavBar />
       <div className="pt-6">
         {subscriptionStatus ? (
