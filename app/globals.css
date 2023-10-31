@@ -10,6 +10,23 @@
   --background-end-rgb: 255, 255, 255;
 }
 
+@layer utilities {
+  .gradient-text-fame {
+    background: linear-gradient(to right, silver, rgb(0, 50, 200));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  .gradient-text-feedback {
+    background: linear-gradient(to right, rgb(0, 50, 200), silver);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
