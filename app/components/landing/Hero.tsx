@@ -11,15 +11,15 @@ export default function Hero() {
   };
   return (
     <>
-      <section className="bg-black lg:pt-36 lg:pb-12 smooth-scroll">
+      <section className="bg-black pt-32 lg:pt-36 lg:pb-12 smooth-scroll">
         <div className="grid max-w-screen-xl px-8 xl:pl-36 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-11">
           <div className="place-self-center lg:col-span-7">
-            <h1 className="max-w-3xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl text-white">
+            <h1 className="max-w-3xl mb-4 font-extrabold tracking-tight leading-none text-5xl lg:text-6xl text-white">
               Silence the noise; <br />
               Turn <a className="gradient-text-feedback">feedback</a> into{" "}
               <a className="gradient-text-fame">fame</a>.
             </h1>
-            <p className="max-w-2xl mb-6 font-light lg:mb-8 md:text-lg lg:text-3xl text-gray-300">
+            <p className="max-w-2xl mb-6 font-light lg:mb-8 text-2xl lg:text-3xl text-gray-300">
               Automated PR assistants for content creators, influencers, and
               businesses.
             </p>
