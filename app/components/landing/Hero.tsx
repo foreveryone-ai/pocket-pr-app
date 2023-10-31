@@ -24,14 +24,19 @@ export default function Hero() {
               businesses.
             </p>
             <div className="space-x-4">
-              <Button as={Link} variant="shadow" href="/sign-up">
+              <Button
+                as={Link}
+                variant="shadow"
+                color="warning"
+                href="/sign-up"
+              >
                 Join Beta
               </Button>
 
               <Button
                 onPress={scrollToLearnMore}
-                variant="ghost"
-                className="text-white"
+                variant="shadow"
+                className="text-black"
               >
                 Learn More
               </Button>
