@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Button } from "@nextui-org/react";
 export default function Hero() {
   return (
     <>
@@ -16,11 +17,8 @@ export default function Hero() {
               relations agents for content creators, influencers, and businesses
               alike.
             </p>
-            <Link
-              href="/sign-up"
-              className="inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-900"
-            >
-              Get started
+            <Button as={Link} variant="shadow" href="/sign-up">
+              Get Started
               <svg
                 className="w-5 h-5 ml-2 -mr-1"
                 fill="currentColor"
@@ -33,7 +31,7 @@ export default function Hero() {
                   clip-rule="evenodd"
                 ></path>
               </svg>
-            </Link>
+            </Button>
           </div>
           <div className="hidden lg:col-span-3 lg:flex xl:pl-12 xl:pr-2">
             <Image
