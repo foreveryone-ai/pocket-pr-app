@@ -25,6 +25,9 @@
     background-clip: text;
     color: transparent;
   }
+  .smooth-scroll {
+    scroll-behavior: smooth;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
