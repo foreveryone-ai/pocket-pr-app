@@ -19,7 +19,7 @@
     color: transparent;
   }
   .gradient-text-feedback {
-    background: linear-gradient(to right, skyblue, blue);
+    background: linear-gradient(to right, skyblue, rgb(35, 57, 255));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
