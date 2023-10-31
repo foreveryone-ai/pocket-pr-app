@@ -35,7 +35,7 @@ export default function Hero() {
               </svg>
             </Link>
           </div>
-          <div className="hidden lg:col-span-3 lg:flex xl:pl-8 xl:pr-6">
+          <div className="hidden lg:col-span-3 lg:flex xl:pl-12 xl:pr-2">
             <Image
               src="/gunmetal-panda-asset.svg"
               alt="panga"
