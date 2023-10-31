@@ -4,7 +4,7 @@ import { Button } from "@nextui-org/react";
 export default function Hero() {
   return (
     <>
-      <section className="bg-black">
+      <section className="bg-black lg:pt-32 lg:pb-12">
         <div className="grid max-w-screen-xl px-8 xl:pl-36 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-11">
           <div className="place-self-center lg:col-span-7">
             <h1 className="max-w-3xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl text-white">
@@ -12,13 +12,13 @@ export default function Hero() {
               Turn <a className="gradient-text-feedback">feedback</a> into{" "}
               <a className="gradient-text-fame">fame</a>.
             </h1>
-            <p className="max-w-2xl mb-6 font-light lg:mb-8 md:text-lg lg:text-xl text-gray-400">
+            <p className="max-w-2xl mb-6 font-light lg:mb-8 md:text-lg lg:text-xl text-gray-300">
               A happy audience is a happy life. We're building automated public
               relations agents for content creators, influencers, and businesses
               alike.
             </p>
             <Button as={Link} variant="shadow" href="/sign-up">
-              Get Started
+              Join Beta
               <svg
                 className="w-5 h-5 ml-2 -mr-1"
                 fill="currentColor"
