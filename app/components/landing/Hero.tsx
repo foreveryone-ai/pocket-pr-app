@@ -19,15 +19,15 @@ export default function Hero() {
               Turn <a className="gradient-text-feedback">feedback</a> into{" "}
               <a className="gradient-text-fame">fame</a>.
             </h1>
-            <p className="max-w-2xl mb-6 font-light lg:mb-8 md:text-lg lg:text-xl text-gray-300">
-              Automated PR agents for content creators, influencers, and
+            <p className="max-w-2xl mb-6 font-light lg:mb-8 md:text-lg lg:text-3xl text-gray-300">
+              Automated PR assistants for content creators, influencers, and
               businesses.
             </p>
             <div className="space-x-4">
               <Button
                 as={Link}
                 variant="shadow"
-                color="warning"
+                className="bg-gradient-to-tr from-green-500 to-pink-500 text-white shadow-lg text-lg"
                 href="/sign-up"
               >
                 Join Beta
@@ -36,7 +36,7 @@ export default function Hero() {
               <Button
                 onPress={scrollToLearnMore}
                 variant="shadow"
-                className="text-black"
+                className="text-black text-lg"
               >
                 Learn More
               </Button>

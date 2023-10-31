@@ -5,7 +5,7 @@ export default function About() {
       {/* -----------STEP 1------------ */}
 
       <section className="bg-black">
-        <div className="gap-8 items-center py-8 px-4 mx-auto max-w-screen-lg md:grid md:grid-cols-2 sm:py-16 lg:px-6">
+        <div className="gap-8 min-h-screen items-center py-8 px-4 mx-auto max-w-screen-lg md:grid md:grid-cols-2 sm:py-16 lg:px-6">
           <Image
             className="w-1/4"
             src="/step-1.svg"

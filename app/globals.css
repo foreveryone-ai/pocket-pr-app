@@ -12,14 +12,14 @@
 
 @layer utilities {
   .gradient-text-fame {
-    background: linear-gradient(to right, gold, orange);
+    background: linear-gradient(to right, pink, fuchsia);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
   }
   .gradient-text-feedback {
-    background: linear-gradient(to right, skyblue, rgb(35, 57, 255));
+    background: linear-gradient(to right, lawngreen, green);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
