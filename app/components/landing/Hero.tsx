@@ -11,7 +11,7 @@ export default function Hero() {
   };
   return (
     <>
-      <section className="bg-black lg:pt-40 lg:pb-12 smooth-scroll">
+      <section className="bg-black lg:pt-36 lg:pb-12 smooth-scroll">
         <div className="grid max-w-screen-xl px-8 xl:pl-36 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-11">
           <div className="place-self-center lg:col-span-7">
             <h1 className="max-w-3xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl text-white">
@@ -26,8 +26,8 @@ export default function Hero() {
             <div className="space-x-4">
               <Button
                 as={Link}
-                variant="shadow"
-                className="bg-gradient-to-tr from-green-500 to-pink-500 text-white shadow-lg text-lg"
+                variant="flat"
+                className="bg-gradient-to-tr from-blue-400 to-yellow-500 text-black shadow-lg text-lg"
                 href="/sign-up"
               >
                 Join Beta
@@ -35,8 +35,8 @@ export default function Hero() {
 
               <Button
                 onPress={scrollToLearnMore}
-                variant="shadow"
-                className="text-black text-lg"
+                variant="ghost"
+                className="text-white text-lg"
               >
                 Learn More
               </Button>
