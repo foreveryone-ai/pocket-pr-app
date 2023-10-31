@@ -27,7 +27,7 @@ export default function App() {
       {/* -------------------------SIGNED-IN------------------------- */}
       <SignedIn>
         <Navbar
-          className="bg-black"
+          className="bg-black py-1"
           onMenuOpenChange={setIsMenuOpen}
           style={{ zIndex: 9999 }}
         >
@@ -104,7 +104,7 @@ export default function App() {
       {/* -------------------------SIGNED-OUT------------------------- */}
       <SignedOut>
         <Navbar
-          className="bg-black"
+          className="bg-black py-1"
           onMenuOpenChange={setIsMenuOpen}
           style={{ zIndex: 9999 }}
         >
