@@ -1184,23 +1184,29 @@ export async function getChannelIdByVideoId(
   return data[0]?.channel_id;
 }
 
-export enum CreditAction {
-  Subtract,
-  Add,
+export async function decrementUserCredits(userId: string, authToken: string) {
+  const db = createServerDbClient(authToken);
+
+  return await db.rpc(`decrement_credits`, { user_id: userId });
 }
 
-export async function updateUserCredits(
-  userId: string,
+export async function getUserById(
   authToken: string,
-  action: CreditAction,
-  amount: number
+  userId: string,
+  requestedResources?: string[]
 ) {
   const db = createServerDbClient(authToken);
-  let sign = action === CreditAction.Add ? "+" : "-";
 
+  let resources;
+
+  if (requestedResources && requestedResources.length > 1) {
+    resources = requestedResources.join(", ");
+  }
+  if (requestedResources && requestedResources.length === 1) {
+    resources = requestedResources?.join("");
+  }
   return await db
     .from("User")
-    .update({ credits: db.rpc(`credits ${sign} ${amount}`) })
-    .eq("id", userId)
-    .select("credits");
+    .select(resources && resources)
+    .eq("id", userId);
 }

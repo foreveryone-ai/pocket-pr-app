@@ -70,11 +70,14 @@ export default function VideoCard({
 
     try {
       // get captions summary
-      const summaryRes = await getOrCreateCaptionSummary(videoId);
+      //const summaryRes = await getOrCreateCaptionSummary(videoId);
       // get all comments
-      const commentsRes = await getAllComments(videoId);
+      //const commentsRes = await getAllComments(videoId);
       // create embeddings
-      const embeddingsRes = await getOrCreateEmbeddings(videoId);
+      //const embeddingsRes = await getOrCreateEmbeddings(videoId);
+      let summaryRes = true;
+      let commentsRes = true;
+      let embeddingsRes = true;
 
       console.log("summaryRes", summaryRes);
       console.log("commentsRes", commentsRes);
@@ -85,6 +88,7 @@ export default function VideoCard({
         setShowChat(true);
         try {
           const credits = await decrementCredits();
+          console.log(credits);
         } catch (error) {
           console.error("problem with credits");
         }
