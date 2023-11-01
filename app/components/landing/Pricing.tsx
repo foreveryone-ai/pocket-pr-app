@@ -2,15 +2,15 @@ import Link from "next/link";
 import { Button } from "@nextui-org/button";
 export default function Pricing() {
   return (
-    <section className="bg-black min-h-screen">
+    <section className="bg-black min-h-screen pb-40">
       <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
         <div className="mx-auto max-w-screen-md text-center mb-8 lg:mb-12">
           <h2 className="mb-4 text-5xl tracking-tight font-extrabold text-white">
             A plan that fits your growth
           </h2>
           <p className="pt-2 font-light text-3xl text-gray-300">
-            Whether you're just here to explore, or you're ready to grow, we got
-            you.
+            Whether you&apos;re just here to explore, or you&apos;re ready to
+            grow, we got you.
           </p>
         </div>
         <div className="space-y-8 lg:grid lg:grid-cols-2 sm:gap-6 xl:gap-10 lg:space-y-0">

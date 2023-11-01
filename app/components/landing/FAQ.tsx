@@ -1,13 +1,13 @@
 export default function FAQ() {
   return (
     <>
-      <section className="bg-black pt-40 min-h-screen">
+      <section className="bg-black pt-44 pb-24 min-h-screen">
         <div className="px-12">
           <div className="bg-gradient-to-r rounded-3xl from-blue-400 to-yellow-500 p-4">
             <div className="bg-black rounded-2xl">
               <div className="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
                 <h2 className="text-center pb-8 text-6xl tracking-tight font-extrabold  text-white">
-                  FAQ's
+                  FAQ&apos;s
                 </h2>
                 <div className="grid pt-8 text-left  md:gap-16  md:grid-cols-2">
                   <div>
@@ -25,7 +25,7 @@ export default function FAQ() {
                             clip-rule="evenodd"
                           ></path>
                         </svg>
-                        What do you mean by "Figma assets"?
+                        What do you mean by &quot;Figma assets&quot;?
                       </h3>
                       <p className="text-gray-300 text-xl">
                         You will have access to download the full Figma project
@@ -48,7 +48,7 @@ export default function FAQ() {
                             clip-rule="evenodd"
                           ></path>
                         </svg>
-                        What does "lifetime access" exactly mean?
+                        What does &quot;lifetime&quot; access" exactly mean?
                       </h3>
                       <p className="text-gray-300 text-xl">
                         Once you have purchased either the design, code, or both
@@ -73,9 +73,9 @@ export default function FAQ() {
                         How does support work?
                       </h3>
                       <p className="text-gray-300 text-xl">
-                        We're aware of the importance of well qualified support,
-                        that is why we decided that support will only be
-                        provided by the authors that actually worked on this
+                        We&apos;re aware of the importance of well qualified
+                        support, that is why we decided that support will only
+                        be provided by the authors that actually worked on this
                         project.
                       </p>
                       <p className="text-gray-300 text-xl">
@@ -88,7 +88,7 @@ export default function FAQ() {
                         >
                           contact us
                         </a>{" "}
-                        and we'll help you out as soon as we can.
+                        and we&apos;ll help you out as soon as we can.
                       </p>
                     </div>
                   </div>
@@ -107,7 +107,7 @@ export default function FAQ() {
                             clip-rule="evenodd"
                           ></path>
                         </svg>
-                        What do you mean by "Figma assets"?
+                        What do you mean by &quot;Figma assets&quot;?
                       </h3>
                       <p className="text-gray-300 text-xl">
                         You will have access to download the full Figma project
@@ -155,9 +155,9 @@ export default function FAQ() {
                         How does support work?
                       </h3>
                       <p className="text-gray-300 text-xl">
-                        We're aware of the importance of well qualified support,
-                        that is why we decided that support will only be
-                        provided by the authors that actually worked on this
+                        We&apos;re aware of the importance of well qualified
+                        support, that is why we decided that support will only
+                        be provided by the authors that actually worked on this
                         project.
                       </p>
                       <p className="text-gray-300 text-xl">
@@ -170,7 +170,7 @@ export default function FAQ() {
                         >
                           contact us
                         </a>{" "}
-                        and we'll help you out as soon as we can.
+                        and we&apos;ll help you out as soon as we can.
                       </p>
                     </div>
                   </div>

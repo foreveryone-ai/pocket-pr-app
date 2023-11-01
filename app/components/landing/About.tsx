@@ -27,9 +27,9 @@ export default function About() {
                   Beyond listening.
                 </h1>
                 <p className="px-8 pb-4 text-center font-light text-2xl lg:text-3xl text-gray-300">
-                  From your audience's communications, to the context of your
-                  posts; from the latest pop culture trends, to the most urgent
-                  news; PocketPR knows all.
+                  From your audience&apos;s communications, to the context of
+                  your posts; from the latest pop culture trends, to the most
+                  urgent news; PocketPR knows all.
                   <div className="py-2" />
                 </p>
               </div>
@@ -44,9 +44,9 @@ export default function About() {
                   Cross-platform.
                 </h1>
                 <p className="px-8 pb-4 text-center font-light text-2xl lg:text-3xl text-gray-300">
-                  Today we support YouTube. Soon, we'll support Instagram,
-                  Facebook, and X. Then, it's up to y'all. Join now to get a
-                  say.
+                  Today we support YouTube. Soon, we&apos;ll support Instagram,
+                  Facebook, and X. Then, it&apos;s up to y&apos;all. Join now to
+                  get a say.
                   <div className="py-2" />
                 </p>
               </div>
