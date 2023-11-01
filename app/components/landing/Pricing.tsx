@@ -18,10 +18,10 @@ export default function Pricing() {
             <div className="bg-gradient-to-r max-w-lg rounded-3xl from-blue-400 to-yellow-500 p-2">
               <div className="bg-black rounded-2xl p-6">
                 <div>
-                  <h2 className="text-center text-3xl lg:text-4xl font-extrabold gradient-text-dual">
+                  <h2 className="text-center text-xl font-extrabold gradient-text-dual">
                     Hobbyist
                   </h2>
-                  <h1 className="text-center text-5xl py-2 ">Free</h1>
+                  <h1 className="text-center text-5xl py-4 ">$0/month</h1>
                   <h3 className="font-light text-2xl text-gray-300 py-2">
                     Explore the platform and see the benefits of PocketPR.
                   </h3>
@@ -44,7 +44,7 @@ export default function Pricing() {
                       href="/sign-up"
                       className="bg-gradient-to-tr from-blue-400 to-yellow-500 text-black shadow-lg text-lg"
                     >
-                      Get Free
+                      Get Hobbyist
                     </Button>
                   </div>
                 </div>
@@ -55,10 +55,10 @@ export default function Pricing() {
             <div className="bg-gradient-to-r max-w-lg rounded-3xl from-yellow-500 to-blue-400 p-2">
               <div className="bg-black rounded-2xl p-6">
                 <div>
-                  <h2 className="text-center text-3xl lg:text-4xl font-extrabold gradient-text-dual-reverse">
+                  <h2 className="text-center text-xl font-extrabold gradient-text-dual-reverse">
                     Creator
                   </h2>
-                  <h1 className="text-center text-5xl py-2 ">$25/month</h1>
+                  <h1 className="text-center text-5xl py-4 ">$25/month</h1>
                   <h3 className="font-light text-2xl text-gray-300 py-2">
                     Take your online presence to the next level with PocketPR
                     Pro.
