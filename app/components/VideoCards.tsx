@@ -85,9 +85,11 @@ export default function VideoCard({
 
       // check if all was successful and decrement the users credits
       if (summaryRes && summaryRes && embeddingsRes) {
-        setShowChat(true);
         try {
           const credits = await decrementCredits();
+          if (!credits.error) {
+            setShowChat(true);
+          }
           console.log(credits);
         } catch (error) {
           console.error("problem with credits");

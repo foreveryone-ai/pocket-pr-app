@@ -6,6 +6,7 @@ import { getUserById, decrementUserCredits } from "@/lib/supabaseClient";
 export async function POST() {
   const { userId, getToken } = auth();
   let token = await getToken({ template: "supabase" });
+  let nextStart: string;
 
   if (!token) {
     return NextResponse.json(
@@ -27,42 +28,44 @@ export async function POST() {
     console.error(error);
   }
   try {
-    const { data: userData, error: userError } = await getUserById(
-      token,
-      userId,
-      ["credits", "createdAt"]
-    );
-    if (userError) {
-      throw new Error("error on getting credits" + userError);
+    const userData = await getUserById(token, userId, ["credits", "createdAt"]);
+    if (!userData) {
+      throw new Error("error on getting credits");
     }
-    if (
-      userData &&
-      userData[0] &&
-      userData[0].createdAt &&
-      userData[0].length > 0
-    ) {
-      const nextStart = getNextBillingStartDate(
-        new Date(userData[0].createdAt)
+    console.log("userData: ", userData);
+    // @ts-ignore
+    if (userData && userData.credits) {
+      // @ts-ignore
+      nextStart = getNextBillingStartDate(new Date(userData.createdAt));
+      return NextResponse.json(
+        {
+          message:
+            // @ts-ignore
+            `You have ${userData.credits} left. Next credits available on ` +
+            (nextStart ?? ""),
+        },
+        { status: 200 }
+      );
+    } else {
+      // @ts-ignore
+      nextStart = getNextBillingStartDate(new Date(userData.createdAt));
+      return NextResponse.json(
+        {
+          error:
+            // @ts-ignore
+            `You have ${userData.credits} left. Next credits available on ` +
+            (nextStart ?? ""),
+        },
+        { status: 402 }
       );
     }
-    return NextResponse.json(
-      {
-        error: "no available credits, next credits available on " + nextStart,
-      },
-      { status: 404 }
-    );
   } catch (error) {
     console.error("error getting currentUser info", error);
     return null;
   }
 }
 
-if (data && data.length > 0) {
-  console.log(data);
-  console.log(data[0]);
-  console.log(data[0].createdAt);
-  const startDate = getNextBillingStartDate(new Date(data[0].createdAt));
-  return NextResponse.json({
-    message: `Analyzed video, you have ${data[0].credits} remaining. Credits will renew on ${startDate}`,
-  });
-}
+// const startDate = getNextBillingStartDate(new Date(data[0].createdAt));
+// return NextResponse.json({
+//   message: `Analyzed video, you have ${data[0].credits} remaining. Credits will renew on ${startDate}`,
+// });

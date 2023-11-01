@@ -1205,8 +1205,15 @@ export async function getUserById(
   if (requestedResources && requestedResources.length === 1) {
     resources = requestedResources?.join("");
   }
-  return await db
+  const { data, error } = await db
     .from("User")
     .select(resources && resources)
     .eq("id", userId);
+
+  if (error) {
+    console.error(error);
+    return null;
+  }
+
+  return data[0];
 }
