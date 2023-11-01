@@ -15,7 +15,7 @@ export default function Pricing() {
         </div>
         <div className="space-y-8 lg:grid lg:grid-cols-2 sm:gap-6 xl:gap-10 lg:space-y-0">
           <div className="justify-self-center">
-            <div className="bg-gradient-to-r max-w-lg rounded-3xl from-blue-400 to-yellow-500 p-2">
+            <div className="bg-gradient-to-r max-w-lg rounded-3xl from-blue-400 to-yellow-500 p-4">
               <div className="bg-black rounded-2xl p-6">
                 <div>
                   <h2 className="text-center text-xl font-extrabold gradient-text-dual">
@@ -52,7 +52,7 @@ export default function Pricing() {
             </div>
           </div>
           <div className="justify-self-center">
-            <div className="bg-gradient-to-r max-w-lg rounded-3xl from-yellow-500 to-blue-400 p-2">
+            <div className="bg-gradient-to-r max-w-lg rounded-3xl from-yellow-500 to-blue-400 p-4">
               <div className="bg-black rounded-2xl p-6">
                 <div>
                   <h2 className="text-center text-xl font-extrabold gradient-text-dual-reverse">

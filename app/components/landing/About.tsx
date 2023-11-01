@@ -5,15 +5,14 @@ export default function About() {
       <div className="flex flex-col justify-center align-center max-w-2xl mx-auto bg-black">
         <div className="min-h-screen">
           <div className="pt-32">
-            <div className="bg-gradient-to-r rounded-3xl from-blue-400 to-yellow-500 p-2">
+            <div className="bg-gradient-to-r rounded-3xl from-blue-400 to-yellow-500 p-4">
               <div className="bg-black rounded-2xl">
                 <h1 className="px-6 pb-4 pt-8 text-4xl flex justify-center align-center md:text-5xl font-extrabold gradient-text-dual">
                   More than a chat-bot.
                 </h1>
                 <p className="px-8 pb-4 text-center font-light text-2xl lg:text-3xl text-gray-300">
                   PocketPR combines the familiar chat interface with a
-                  personalized public relations experience. Join today, and see
-                  your PR Agent in action.
+                  personalized public relations experience. But how?
                   <div className="py-2" />
                 </p>
               </div>
@@ -22,7 +21,7 @@ export default function About() {
         </div>
         <div className="min-h-screen">
           <div className="pt-40">
-            <div className="bg-gradient-to-r rounded-3xl from-blue-400 to-yellow-500 p-2">
+            <div className="bg-gradient-to-r rounded-3xl from-blue-400 to-yellow-500 p-4">
               <div className="bg-black rounded-2xl">
                 <h1 className="px-6 pb-4 pt-8 text-4xl flex justify-center align-center md:text-5xl font-extrabold gradient-text-dual">
                   Beyond listening.
@@ -30,7 +29,7 @@ export default function About() {
                 <p className="px-8 pb-4 text-center font-light text-2xl lg:text-3xl text-gray-300">
                   From your audience's communications, to the context of your
                   posts; from the latest pop culture trends, to the most urgent
-                  news, PocketPR doesn't miss a beat.
+                  news; PocketPR knows all.
                   <div className="py-2" />
                 </p>
               </div>
@@ -39,7 +38,7 @@ export default function About() {
         </div>
         <div className="min-h-screen">
           <div className="pt-40">
-            <div className="bg-gradient-to-r rounded-3xl from-blue-400 to-yellow-500 p-2">
+            <div className="bg-gradient-to-r rounded-3xl from-blue-400 to-yellow-500 p-4">
               <div className="bg-black rounded-2xl">
                 <h1 className="px-6 pb-4 pt-8 text-4xl flex justify-center align-center md:text-5xl font-extrabold gradient-text-dual">
                   Cross-platform.
