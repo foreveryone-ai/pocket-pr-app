@@ -18,7 +18,7 @@ export default function Footer() {
           </p>
 
           <span className="text-sm sm:text-center text-gray-300">
-            © 2023
+            © 2023{" "}
             <a href="#" className="hover:underline">
               ForEveryone.AI{" "}
             </a>

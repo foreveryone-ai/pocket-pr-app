@@ -1,3 +1,4 @@
+import Link from "next/link";
 export default function FAQ() {
   return (
     <>
@@ -25,13 +26,12 @@ export default function FAQ() {
                             clip-rule="evenodd"
                           ></path>
                         </svg>
-                        What do you mean by &quot;Figma assets&quot;?
+                        How does PocketPR work?
                       </h3>
                       <p className="text-gray-300 text-xl">
-                        You will have access to download the full Figma project
-                        including all of the pages, the components, responsive
-                        pages, and also the icons, illustrations, and images
-                        included in the screens.
+                        We collect data from your social media platforms and
+                        conglomerate said data into a custom knowledge base for
+                        your personal LLM assistant, powered by GPT-4.
                       </p>
                     </div>
                     <div className="mb-10">
@@ -48,12 +48,12 @@ export default function FAQ() {
                             clip-rule="evenodd"
                           ></path>
                         </svg>
-                        What does &quot;lifetime access&quot; exactly mean?
+                        Do you train your models on my chat data?
                       </h3>
                       <p className="text-gray-300 text-xl">
-                        Once you have purchased either the design, code, or both
-                        packages, you will have access to all of the future
-                        updates based on the roadmap, free of charge.
+                        Message data is anonymized and stored for the purpose of
+                        fine-tuning our models. Pro users have the option to
+                        opt-out from the settings page.
                       </p>
                     </div>
                     <div className="mb-10">
@@ -70,25 +70,13 @@ export default function FAQ() {
                             clip-rule="evenodd"
                           ></path>
                         </svg>
-                        How does support work?
+                        I used all my free credits; how can I upgrade?
                       </h3>
                       <p className="text-gray-300 text-xl">
-                        We&apos;re aware of the importance of well qualified
-                        support, that is why we decided that support will only
-                        be provided by the authors that actually worked on this
-                        project.
-                      </p>
-                      <p className="text-gray-300 text-xl">
-                        Feel free to{" "}
-                        <a
-                          href="#"
-                          className="font-medium underline  text-primary-500 hover:no-underline"
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          contact us
-                        </a>{" "}
-                        and we&apos;ll help you out as soon as we can.
+                        Easy! Visit the settings page and click upgrade under
+                        the "subscription" tab. After paying, you'll be
+                        redirected back to PocketPR to upgrade your account and
+                        onboard your comments and replies.
                       </p>
                     </div>
                   </div>
@@ -107,13 +95,12 @@ export default function FAQ() {
                             clip-rule="evenodd"
                           ></path>
                         </svg>
-                        What do you mean by &quot;Figma assets&quot;?
+                        Do you offer creator partnerships?
                       </h3>
                       <p className="text-gray-300 text-xl">
-                        You will have access to download the full Figma project
-                        including all of the pages, the components, responsive
-                        pages, and also the icons, illustrations, and images
-                        included in the screens.
+                        We are actively onboarding creator partners. If you have
+                        a large following and want to work with us, shoot us a
+                        message at <u>business@foreveryone.ai</u>.
                       </p>
                     </div>
                     <div className="mb-10">
@@ -130,12 +117,12 @@ export default function FAQ() {
                             clip-rule="evenodd"
                           ></path>
                         </svg>
-                        What does &quot;lifetime access&quot; exactly mean?
+                        When will PocketPR support other platforms?
                       </h3>
                       <p className="text-gray-300 text-xl">
-                        Once you have purchased either the design, code, or both
-                        packages, you will have access to all of the future
-                        updates based on the roadmap, free of charge.
+                        We are currently building support for Instagram, X, and
+                        Facebook. Pro users will get priority access to new
+                        platforms and features as they are tested and released.
                       </p>
                     </div>
                     <div className="mb-10">
@@ -155,22 +142,14 @@ export default function FAQ() {
                         How does support work?
                       </h3>
                       <p className="text-gray-300 text-xl">
-                        We&apos;re aware of the importance of well qualified
-                        support, that is why we decided that support will only
-                        be provided by the authors that actually worked on this
-                        project.
-                      </p>
-                      <p className="text-gray-300 text-xl">
-                        Feel free to{" "}
-                        <a
-                          href="#"
-                          className="font-medium underline  text-primary-500 hover:no-underline"
-                          target="_blank"
-                          rel="noreferrer"
+                        Email us at <u>help@foreveryone.ai</u> or hop in our{" "}
+                        <Link
+                          href="https://discord.gg/hRZjjCZr87"
+                          className="text-blue-500"
                         >
-                          contact us
-                        </a>{" "}
-                        and we&apos;ll help you out as soon as we can.
+                          <u>Discord server</u>
+                        </Link>{" "}
+                        to chat directly with our founding team.
                       </p>
                     </div>
                   </div>
