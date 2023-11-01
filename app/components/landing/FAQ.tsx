@@ -74,9 +74,9 @@ export default function FAQ() {
                       </h3>
                       <p className="text-gray-300 text-xl">
                         Easy! Visit the settings page and click upgrade under
-                        the &quot;Subscription&quot; tab. After paying, you'll
-                        be redirected back to PocketPR to upgrade your account
-                        and onboard your comments and replies.
+                        the &quot;Subscription&quot; tab. After paying,
+                        you&apos;ll be redirected back to PocketPR to upgrade
+                        your account and onboard your comments and replies.
                       </p>
                     </div>
                   </div>
