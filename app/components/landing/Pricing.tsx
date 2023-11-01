@@ -1,220 +1,78 @@
+import { AiFillWechat } from "react-icons/ai";
 export default function Pricing() {
   return (
-    <section className="bg-black" id="pricing">
+    <section className="bg-black min-h-screen">
       <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
         <div className="mx-auto max-w-screen-md text-center mb-8 lg:mb-12">
-          <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-white">
-            Designed for business teams like yours
+          <h2 className="mb-4 text-5xl tracking-tight font-extrabold text-white">
+            A plan that fits your growth
           </h2>
-          <p className="mb-5 font-light text-gray-500 sm:text-xl dark:text-gray-300">
-            Here at Flowbite we focus on markets where technology, innovation,
-            and capital can unlock long-term value and drive economic growth.
+          <p className="pt-2 font-light text-3xl text-gray-300">
+            Whether you're just here to explore, or you're ready to grow, we got
+            you.
           </p>
         </div>
         <div className="space-y-8 lg:grid lg:grid-cols-2 sm:gap-6 xl:gap-10 lg:space-y-0">
-          <div className="flex flex-col p-6 mx-auto max-w-lg text-center text-gray-900 bg-white rounded-lg border  shadow border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white">
-            <h3 className="mb-4 text-2xl font-semibold">Starter</h3>
-            <p className="font-light text-gray-500 sm:text-lg dark:text-gray-400">
-              Best option for personal use & for your next project.
-            </p>
-            <div className="flex justify-center items-baseline my-8">
-              <span className="mr-2 text-5xl font-extrabold">$29</span>
-              <span className="text-gray-500 dark:text-gray-400">/month</span>
+          <div className="justify-self-center">
+            <div className="bg-gradient-to-r max-w-lg rounded-3xl from-blue-400 to-yellow-500 p-2">
+              <div className="bg-black rounded-2xl p-6">
+                <div>
+                  <h2 className="text-center text-3xl lg:text-4xl font-extrabold gradient-text-dual">
+                    Hobbyist
+                  </h2>
+                  <h1 className="text-center text-5xl py-2 font-extralight ">
+                    Free
+                  </h1>
+                  <h3 className="font-light text-2xl text-gray-300 py-2">
+                    Explore the platform, and see the benefits of PocketPR.
+                  </h3>
+                  <div className="flex flex-col">
+                    <ul>
+                      <li className="font-medium text-large text-gray-300 py-1">
+                        Chat with 4 videos per month
+                      </li>
+                      <li className="font-medium text-large text-gray-300 py-1">
+                        Explore the platform
+                      </li>
+                      <li className="font-medium text-large text-gray-300 py-1">
+                        Weekly video updates
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
             </div>
-
-            <ul role="list" className="mb-8 space-y-4 text-left">
-              <li className="flex items-center space-x-3">
-                <svg
-                  className="flex-shrink-0 w-5 h-5 text-green-500 dark:text-green-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <span>Individual configuration</span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <svg
-                  className="flex-shrink-0 w-5 h-5 text-green-500 dark:text-green-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <span>No setup, or hidden fees</span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <svg
-                  className="flex-shrink-0 w-5 h-5 text-green-500 dark:text-green-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <span>
-                  Team size: <span className="font-semibold">1 developer</span>
-                </span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <svg
-                  className="flex-shrink-0 w-5 h-5 text-green-500 dark:text-green-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <span>
-                  Premium support:{" "}
-                  <span className="font-semibold">6 months</span>
-                </span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <svg
-                  className="flex-shrink-0 w-5 h-5 text-green-500 dark:text-green-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <span>
-                  Free updates: <span className="font-semibold">6 months</span>
-                </span>
-              </li>
-            </ul>
-            <a
-              href="#"
-              className="text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-white  dark:focus:ring-primary-900"
-            >
-              Get started
-            </a>
           </div>
-
-          <div className="flex flex-col p-6 mx-auto max-w-lg text-center text-gray-900 bg-white rounded-lg border border-gray-100 shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white">
-            <h3 className="mb-4 text-2xl font-semibold">Enterprise</h3>
-            <p className="font-light text-gray-500 sm:text-lg dark:text-gray-400">
-              Best for large scale uses and extended redistribution rights.
-            </p>
-            <div className="flex justify-center items-baseline my-8">
-              <span className="mr-2 text-5xl font-extrabold">$499</span>
-              <span className="text-gray-500 dark:text-gray-400">/month</span>
+          <div className="justify-self-center">
+            <div className="bg-gradient-to-r max-w-lg rounded-3xl from-blue-400 to-yellow-500 p-2">
+              <div className="bg-black rounded-2xl p-6">
+                <div>
+                  <h2 className="text-center text-3xl lg:text-4xl font-extrabold gradient-text-dual">
+                    Creator
+                  </h2>
+                  <h1 className="text-center text-5xl py-2 font-extralight ">
+                    $25/month
+                  </h1>
+                  <h3 className="font-light text-2xl text-gray-300 py-2">
+                    Take your online presence to the next level with PocketPR
+                    Pro.
+                  </h3>
+                  <div className="flex flex-col">
+                    <ul>
+                      <li className="font-medium text-large text-gray-300 py-1">
+                        Chat with unlimited videos
+                      </li>
+                      <li className="font-medium text-large text-gray-300 py-1">
+                        Chat with your channel
+                      </li>
+                      <li className="font-medium text-large text-gray-300 py-1">
+                        Daily video updates
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
             </div>
-
-            <ul role="list" className="mb-8 space-y-4 text-left">
-              <li className="flex items-center space-x-3">
-                <svg
-                  className="flex-shrink-0 w-5 h-5 text-green-500 dark:text-green-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <span>Individual configuration</span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <svg
-                  className="flex-shrink-0 w-5 h-5 text-green-500 dark:text-green-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <span>No setup, or hidden fees</span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <svg
-                  className="flex-shrink-0 w-5 h-5 text-green-500 dark:text-green-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <span>
-                  Team size:{" "}
-                  <span className="font-semibold">100+ developers</span>
-                </span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <svg
-                  className="flex-shrink-0 w-5 h-5 text-green-500 dark:text-green-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <span>
-                  Premium support:{" "}
-                  <span className="font-semibold">36 months</span>
-                </span>
-              </li>
-              <li className="flex items-center space-x-3">
-                <svg
-                  className="flex-shrink-0 w-5 h-5 text-green-500 dark:text-green-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                <span>
-                  Free updates: <span className="font-semibold">36 months</span>
-                </span>
-              </li>
-            </ul>
-            <a
-              href="#"
-              className="text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-white  dark:focus:ring-primary-900"
-            >
-              Get started
-            </a>
           </div>
         </div>
       </div>
