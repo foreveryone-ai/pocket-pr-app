@@ -32,6 +32,13 @@
     background-clip: text;
     color: transparent;
   }
+  .gradient-text-dual-reverse {
+    background: linear-gradient(to right, goldenrod, dodgerblue);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+  }
   .smooth-scroll {
     scroll-behavior: smooth;
   }
