@@ -48,7 +48,7 @@ export default function FAQ() {
                             clip-rule="evenodd"
                           ></path>
                         </svg>
-                        What does &quot;lifetime&quot; access" exactly mean?
+                        What does &quot;lifetime access&quot; exactly mean?
                       </h3>
                       <p className="text-gray-300 text-xl">
                         Once you have purchased either the design, code, or both
