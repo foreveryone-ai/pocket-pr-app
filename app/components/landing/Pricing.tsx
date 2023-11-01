@@ -1,4 +1,5 @@
-import { AiFillWechat } from "react-icons/ai";
+import Link from "next/link";
+import { Button } from "@nextui-org/button";
 export default function Pricing() {
   return (
     <section className="bg-black min-h-screen">
@@ -24,20 +25,29 @@ export default function Pricing() {
                     Free
                   </h1>
                   <h3 className="font-light text-2xl text-gray-300 py-2">
-                    Explore the platform, and see the benefits of PocketPR.
+                    Explore the platform and see the benefits of PocketPR.
                   </h3>
                   <div className="flex flex-col">
                     <ul>
-                      <li className="font-medium text-large text-gray-300 py-1">
+                      <li className="font-medium text-large text-white py-1">
                         Chat with 4 videos per month
                       </li>
-                      <li className="font-medium text-large text-gray-300 py-1">
+                      <li className="font-medium text-large text-white py-1">
                         Explore the platform
                       </li>
-                      <li className="font-medium text-large text-gray-300 py-1">
+                      <li className="font-medium text-large text-white py-1">
                         Weekly video updates
                       </li>
                     </ul>
+                  </div>
+                  <div className="flex flex-col pt-5 pb-3">
+                    <Button
+                      as={Link}
+                      href="/sign-up"
+                      className="bg-gradient-to-tr from-blue-400 to-yellow-500 text-black shadow-lg text-lg"
+                    >
+                      Get Free
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -59,16 +69,25 @@ export default function Pricing() {
                   </h3>
                   <div className="flex flex-col">
                     <ul>
-                      <li className="font-medium text-large text-gray-300 py-1">
+                      <li className="font-medium text-large text-white py-1">
                         Chat with unlimited videos
                       </li>
-                      <li className="font-medium text-large text-gray-300 py-1">
+                      <li className="font-medium text-large text-white py-1">
                         Chat with your channel
                       </li>
-                      <li className="font-medium text-large text-gray-300 py-1">
+                      <li className="font-medium text-large text-white py-1">
                         Daily video updates
                       </li>
                     </ul>
+                  </div>
+                  <div className="flex flex-col pt-5 pb-3">
+                    <Button
+                      as={Link}
+                      href="/sign-up"
+                      className="bg-gradient-to-tr from-blue-400 to-yellow-500 text-black shadow-lg text-lg"
+                    >
+                      Get Pro
+                    </Button>
                   </div>
                 </div>
               </div>
