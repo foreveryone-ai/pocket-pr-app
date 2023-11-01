@@ -1,15 +1,15 @@
 export default function FAQ() {
   return (
     <>
-      <section className="bg-black">
+      <section className="bg-black pt-40 min-h-screen">
         <div className="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
-          <h2 className="mb-8 text-4xl tracking-tight font-extrabold  text-white">
-            Frequently asked questions
+          <h2 className="text-center pb-8 text-6xl tracking-tight font-extrabold  text-white">
+            FAQ's
           </h2>
-          <div className="grid pt-8 text-left border-t  md:gap-16 border-gray-700 md:grid-cols-2">
+          <div className="grid pt-8 text-left  md:gap-16  md:grid-cols-2">
             <div>
               <div className="mb-10">
-                <h3 className="flex items-center mb-4 text-lg font-medium  text-white">
+                <h3 className="flex items-center mb-4 text-2xl font-medium  text-white">
                   <svg
                     className="flex-shrink-0 mr-2 w-5 h-5 text-gray-300"
                     fill="currentColor"
@@ -24,7 +24,7 @@ export default function FAQ() {
                   </svg>
                   What do you mean by "Figma assets"?
                 </h3>
-                <p className=" text-gray-300">
+                <p className="text-gray-300 text-xl">
                   You will have access to download the full Figma project
                   including all of the pages, the components, responsive pages,
                   and also the icons, illustrations, and images included in the
@@ -32,7 +32,7 @@ export default function FAQ() {
                 </p>
               </div>
               <div className="mb-10">
-                <h3 className="flex items-center mb-4 text-lg font-medium  text-white">
+                <h3 className="flex items-center mb-4 text-2xl font-medium  text-white">
                   <svg
                     className="flex-shrink-0 mr-2 w-5 h-5  text-gray-300"
                     fill="currentColor"
@@ -47,14 +47,14 @@ export default function FAQ() {
                   </svg>
                   What does "lifetime access" exactly mean?
                 </h3>
-                <p className=" text-gray-300">
+                <p className="text-gray-300 text-xl">
                   Once you have purchased either the design, code, or both
                   packages, you will have access to all of the future updates
                   based on the roadmap, free of charge.
                 </p>
               </div>
               <div className="mb-10">
-                <h3 className="flex items-center mb-4 text-lg font-medium  text-white">
+                <h3 className="flex items-center mb-4 text-2xl font-medium  text-white">
                   <svg
                     className="flex-shrink-0 mr-2 w-5 h-5  text-gray-300"
                     fill="currentColor"
@@ -69,12 +69,12 @@ export default function FAQ() {
                   </svg>
                   How does support work?
                 </h3>
-                <p className=" text-gray-300">
+                <p className="text-gray-300 text-xl">
                   We're aware of the importance of well qualified support, that
                   is why we decided that support will only be provided by the
                   authors that actually worked on this project.
                 </p>
-                <p className=" text-gray-300">
+                <p className="text-gray-300 text-xl">
                   Feel free to{" "}
                   <a
                     href="#"
@@ -90,7 +90,7 @@ export default function FAQ() {
             </div>
             <div>
               <div className="mb-10">
-                <h3 className="flex items-center mb-4 text-lg font-medium  text-white">
+                <h3 className="flex items-center mb-4 text-2xl font-medium  text-white">
                   <svg
                     className="flex-shrink-0 mr-2 w-5 h-5 text-gray-300"
                     fill="currentColor"
@@ -105,7 +105,7 @@ export default function FAQ() {
                   </svg>
                   What do you mean by "Figma assets"?
                 </h3>
-                <p className=" text-gray-300">
+                <p className="text-gray-300 text-xl">
                   You will have access to download the full Figma project
                   including all of the pages, the components, responsive pages,
                   and also the icons, illustrations, and images included in the
@@ -113,7 +113,7 @@ export default function FAQ() {
                 </p>
               </div>
               <div className="mb-10">
-                <h3 className="flex items-center mb-4 text-lg font-medium  text-white">
+                <h3 className="flex items-center mb-4 text-2xl font-medium  text-white">
                   <svg
                     className="flex-shrink-0 mr-2 w-5 h-5  text-gray-300"
                     fill="currentColor"
@@ -128,14 +128,14 @@ export default function FAQ() {
                   </svg>
                   What does "lifetime access" exactly mean?
                 </h3>
-                <p className=" text-gray-300">
+                <p className="text-gray-300 text-xl">
                   Once you have purchased either the design, code, or both
                   packages, you will have access to all of the future updates
                   based on the roadmap, free of charge.
                 </p>
               </div>
               <div className="mb-10">
-                <h3 className="flex items-center mb-4 text-lg font-medium  text-white">
+                <h3 className="flex items-center mb-4 text-2xl font-medium  text-white">
                   <svg
                     className="flex-shrink-0 mr-2 w-5 h-5  text-gray-300"
                     fill="currentColor"
@@ -150,12 +150,12 @@ export default function FAQ() {
                   </svg>
                   How does support work?
                 </h3>
-                <p className=" text-gray-300">
+                <p className="text-gray-300 text-xl">
                   We're aware of the importance of well qualified support, that
                   is why we decided that support will only be provided by the
                   authors that actually worked on this project.
                 </p>
-                <p className=" text-gray-300">
+                <p className="text-gray-300 text-xl">
                   Feel free to{" "}
                   <a
                     href="#"
