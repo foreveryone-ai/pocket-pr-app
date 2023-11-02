@@ -110,48 +110,53 @@ export default function VideoCard({
 
   return (
     <div className="relative">
-      <Card className="py-3 bg-green-800">
-        <CardHeader className="pb-0 pt-2 px-5 flex justify-between items-start">
-          <div>
-            <Skeleton isLoaded={isLoaded} className="rounded-md">
-              <p className="text-tiny text-red-500 font-md">YouTube</p>
-            </Skeleton>
-            <Skeleton isLoaded={isLoaded} className="rounded-lg">
-              <h4 className="font-playfair font-bold text-white text-md">
-                {truncateTitle(title)}
-              </h4>
-            </Skeleton>
-          </div>
+      <Card className="bg-gradient-to-tr rounded-3xl from-yellow-200 to-blue-400 p-4">
+        <Card className="py-3 text-black bg-black shadow-lg text-lg">
+          <CardHeader className="pb-0 pt-2 px-5 flex justify-between items-start">
+            <div>
+              <Skeleton isLoaded={isLoaded} className="rounded-md">
+                <p className="text-tiny text-red-500 font-md">YouTube</p>
+              </Skeleton>
+              <Skeleton isLoaded={isLoaded} className="rounded-lg">
+                <h4 className="font-playfair font-bold text-white text-md">
+                  {truncateTitle(title)}
+                </h4>
+              </Skeleton>
+            </div>
 
-          {!showChat && !subscriptionStatus ? ( // Render the "Analyze" button for non-subscribers when showChat is false
-            <Button variant="ghost" className="text-white" onPress={onOpen}>
-              Analyze
-            </Button>
-          ) : showChat ? ( // Render the "Chat" button for all users when showChat is true
-            <Button
-              variant="ghost"
-              className="text-white"
-              onPress={handleChatRedirect}
-              isLoading={isRedirecting}
-            >
-              Chat
-            </Button>
-          ) : null}
-        </CardHeader>
+            {!showChat && !subscriptionStatus ? ( // Render the "Analyze" button for non-subscribers when showChat is false
+              <Button variant="ghost" className="text-white" onPress={onOpen}>
+                Analyze
+              </Button>
+            ) : showChat ? ( // Render the "Chat" button for all users when showChat is true
+              <Button
+                variant="ghost"
+                className="text-white"
+                onPress={handleChatRedirect}
+                isLoading={isRedirecting}
+              >
+                Chat
+              </Button>
+            ) : null}
+          </CardHeader>
 
-        <CardBody className="overflow-visible py-2 max-h-480">
-          <div className="h-56 w-full flex items-center justify-center">
-            <Skeleton isLoaded={isLoaded} className="rounded-large h-56 w-full">
-              <Image
-                alt={title}
-                className="object-cover pt-2 rounded-xl"
-                src={imageUrl}
-                width={270}
-                height={480}
-              />
-            </Skeleton>
-          </div>
-        </CardBody>
+          <CardBody className="overflow-visible py-2 max-h-480">
+            <div className="h-56 w-full flex items-center justify-center">
+              <Skeleton
+                isLoaded={isLoaded}
+                className="rounded-large h-56 w-full"
+              >
+                <Image
+                  alt={title}
+                  className="object-cover pt-2 rounded-xl"
+                  src={imageUrl}
+                  width={270}
+                  height={480}
+                />
+              </Skeleton>
+            </div>
+          </CardBody>
+        </Card>
       </Card>
 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
