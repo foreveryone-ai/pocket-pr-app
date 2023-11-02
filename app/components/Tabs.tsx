@@ -154,8 +154,11 @@ export default function Home({ channelId }: ChannelChatParams) {
     <>
       <div className="flex flex-col-3 items-center justify-center">
         <div className="px-4">
-          <Button color="warning" onClick={handleClick}>
-            {isLoading ? <Spinner size="sm" color="success" /> : "Update"}
+          <Button
+            className="bg-gradient-to-tr from-blue-400 to-yellow-500 text-black shadow-lg text-lg"
+            onClick={handleClick}
+          >
+            {isLoading ? <Spinner size="sm" /> : "Update"}
           </Button>
         </div>
         {/* <div>

@@ -174,29 +174,36 @@ export default function VideoCard({
       </Card>
 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent>
+        <ModalContent className="bg-gray-900">
           {() => (
             <>
-              <ModalHeader className="flex flex-col gap-1 text-black font-black">
-                Confirm Analysis of &quot;{title}&quot;
+              <ModalHeader className="flex flex-col gap-1 text-white font-extrabold text-2xl">
+                Confirm Analysis of:
+                <span className="text-xl font-light">
+                  <i>&quot;{title}&quot;</i>
+                </span>
               </ModalHeader>
               <ModalBody className="">
-                <p className="text-black ">
+                <p className="font-light text-large text-white ">
                   If you&apos;d like to analyze this video, click on &quot;Get
                   Started&quot; below.
                 </p>
-                <p className="text-black ">
+                <p className="font-light text-large text-white ">
                   Once you do, the analysis process will begin. This typically
                   takes a couple of minutes, depending on the number of comments
                   on your video.
                 </p>
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="light" onPress={onOpenChange}>
+                <Button
+                  variant="ghost"
+                  className="text-red-500 text-large"
+                  onPress={onOpenChange}
+                >
                   Close
                 </Button>
                 <Button
-                  className="bg-green-600 text-white"
+                  className="bg-gradient-to-tr from-blue-400 to-yellow-500 text-black text-large"
                   onPress={handleModalClose}
                 >
                   Get Started
@@ -211,14 +218,14 @@ export default function VideoCard({
         isOpen={isNoCommentsModalOpen}
         onOpenChange={toggleNoCommentsModal}
       >
-        <ModalContent>
+        <ModalContent className="bg-black">
           {() => (
             <>
-              <ModalHeader className="flex flex-col gap-1 text-black font-black">
+              <ModalHeader className="flex flex-col gap-1 text-white font-extrabold text-2xl">
                 Not Enough Comments
               </ModalHeader>
               <ModalBody className="">
-                <p className="text-black ">
+                <p className="text-white text-large font-light">
                   Unfortunately, this video does not have enough comments to
                   perform an analysis. When your video has more comments, click
                   the &quot;Update&quot; button at the top of the dashboard to
