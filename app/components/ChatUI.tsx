@@ -99,7 +99,7 @@ export default function ChatUI({
     }
   };
   return (
-    <div className="flex pt-12 justify-center bg-green-800">
+    <div className="flex pt-12 justify-center bg-black">
       <div className="px-4 sm:px-6 lg:px-8 w-full sm:max-w-2xl lg:max-w-3xl mx-auto">
         <div className="bg-white rounded-lg shadow-lg">
           <div className="p-4 text-center border-b border-gray-200 text-black font-semibold">
