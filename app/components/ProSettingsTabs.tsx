@@ -25,8 +25,8 @@ export default function App() {
           </Card>
         </Tab>
         <Tab key="terms" title="Terms">
-          <Card>
-            <CardBody className="bg-green-800">
+          <Card className="mx-4">
+            <CardBody className="bg-black px-2">
               <article className="prose lg:prose-xl p-12 text-white">
                 <h1 className="pb-4 font-black text-2xl">User Agreement</h1>
                 <ol>

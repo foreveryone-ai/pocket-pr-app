@@ -114,7 +114,7 @@ export default async function ChatPage({
   }
 
   return (
-    <div className="min-h-screen bg-green-800">
+    <div className="min-h-screen bg-black">
       <NavBar />
       <ChatUI
         videoid={params.videoid}

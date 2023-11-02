@@ -1,4 +1,5 @@
 import "./globals.css";
+import { dark } from "@clerk/themes";
 import { Public_Sans } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import NavBar from "./components/NavBar";
@@ -50,13 +51,14 @@ export default function RootLayout({
       </head>
       <ClerkProvider
         appearance={{
-          layout: {
-            logoPlacement: "inside",
-          },
-          variables: {
-            colorPrimary: "green",
-            colorText: "green",
-          },
+          baseTheme: dark,
+          // layout: {
+          //   logoPlacement: "inside",
+          // },
+          // variables: {
+          //   colorPrimary: "green",
+          //   colorText: "green",
+          // },
         }}
       >
         <body className={publicSans.className}>

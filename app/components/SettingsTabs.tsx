@@ -9,12 +9,12 @@ export default function App() {
   const router = useRouter();
   return (
     <div className="flex w-full flex-col items-center pt-10">
-      <Tabs aria-label="Options">
+      <Tabs aria-label="Options" size="lg">
         <Tab key="subscription" title="Subscription">
           <Card>
             <CardBody>
               <Button
-                color="success"
+                className="bg-gradient-to-tr from-blue-400 to-yellow-500 text-black shadow-lg text-lg"
                 onPress={async () => {
                   console.log("to checkout...");
 
@@ -35,8 +35,8 @@ export default function App() {
           </Card>
         </Tab>
         <Tab key="terms" title="Terms">
-          <Card>
-            <CardBody className="bg-green-800">
+          <Card className="mx-4">
+            <CardBody className="bg-black">
               <article className="prose lg:prose-xl p-12 text-white">
                 <h1 className="pb-4 font-black text-2xl">User Agreement</h1>
                 <ol>

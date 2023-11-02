@@ -95,7 +95,7 @@ export default function ChatUI({
   };
 
   return (
-    <div className="flex pt-12 justify-center bg-green-800">
+    <div className="flex pt-12 justify-center bg-black">
       <div className="px-4 sm:px-6 lg:px-8 w-full sm:max-w-2xl lg:max-w-3xl mx-auto">
         <div className="bg-white rounded-lg shadow-lg">
           <div className="p-4 text-center border-b border-gray-200 text-black font-semibold">
@@ -106,17 +106,12 @@ export default function ChatUI({
             className="p-4 overflow-y-auto"
             style={{ maxHeight: "500px", minHeight: "500px" }}
           >
-            <div className="chat chat-start">
-              <div className="text-black chat-bubble bg-gray-200">
-                Hey {userName}, I&apos;m Keusel! Your friendly, Kangaroo PR
-                Assistant. Ask me anything to get started.
-              </div>
-            </div>
+            <div className="chat chat-start"></div>
             {archivedChat &&
               archivedChat.map((mes, idx) =>
                 idx % 2 === 0 ? (
-                  <div className="chat chat-end" key={idx}>
-                    <div className="text-white chat-bubble">
+                  <div className="flex justify-end py-4" key={idx}>
+                    <div className="bg-black text-white rounded-xl p-2 pl-3">
                       {mes.split("||").map((paragraph, i) => (
                         <p key={i}>
                           {paragraph}
@@ -128,7 +123,7 @@ export default function ChatUI({
                 ) : (
                   <div className="chat chat-start" key={idx}>
                     <div className="flex items-center">
-                      <div className="chat-bubble bg-gray-200 text-black">
+                      <div className="rounded-xl p-2 pl-3 bg-gray-200 text-black">
                         <>
                           {mes.split("||").map((paragraph, i) => (
                             <p key={i}>{paragraph}</p>
@@ -151,8 +146,8 @@ export default function ChatUI({
             {messages &&
               messages.map((message, index) =>
                 index % 2 === 0 ? (
-                  <div className="chat chat-end" key={index}>
-                    <div className="text-white chat-bubble">
+                  <div className="flex justify-end py-4" key={index}>
+                    <div className="bg-black text-white rounded-xl p-2 pl-3">
                       {message.split("||").map((paragraph, i) => (
                         <p key={i}>
                           {paragraph}
@@ -164,7 +159,7 @@ export default function ChatUI({
                 ) : (
                   <div className="chat chat-start" key={index}>
                     <div className="flex items-center">
-                      <div className="chat-bubble bg-gray-200 text-black">
+                      <div className="rounded-xl p-2 pl-3 bg-gray-200 text-black">
                         {message === "loading" ? (
                           <Spinner />
                         ) : (
@@ -199,22 +194,24 @@ export default function ChatUI({
                 onChange={handleInput}
                 value={inputValue}
                 placeholder="Type here"
-                className="input w-full pr-20 bg-gray-800"
+                className="input w-full rounded-xl pr-20 bg-gray-800"
                 maxLength={500}
               />
               <div className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 text-small">
                 {inputValue.length}/500
               </div>
             </div>
-            <Button
-              isIconOnly
-              size="lg"
-              variant="light"
-              className="flex-none rounded-md"
-              type="submit"
-            >
-              <GrSend />
-            </Button>
+            <div className="px-1">
+              <Button
+                isIconOnly
+                size="md"
+                variant="light"
+                className="flex-none rounded-md p-1"
+                type="submit"
+              >
+                <GrSend />
+              </Button>
+            </div>
           </form>
         </div>
       </div>

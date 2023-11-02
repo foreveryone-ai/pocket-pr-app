@@ -97,7 +97,7 @@ export default async function ChannelChatPage({
   }
 
   return (
-    <div className="min-h-screen bg-green-800">
+    <div className="min-h-screen bg-black">
       <NavBar />
       <ChannelChatUI
         channelid={params.channelid}

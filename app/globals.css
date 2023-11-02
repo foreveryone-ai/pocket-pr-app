@@ -10,6 +10,40 @@
   --background-end-rgb: 255, 255, 255;
 }
 
+@layer utilities {
+  .gradient-text-fame {
+    background: linear-gradient(to right, palegoldenrod, goldenrod);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  .gradient-text-feedback {
+    background: linear-gradient(to right, dodgerblue, aqua);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+  }
+  .gradient-text-dual {
+    background: linear-gradient(to right, dodgerblue, goldenrod);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+  }
+  .gradient-text-dual-reverse {
+    background: linear-gradient(to right, goldenrod, dodgerblue);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+  }
+  .smooth-scroll {
+    scroll-behavior: smooth;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
