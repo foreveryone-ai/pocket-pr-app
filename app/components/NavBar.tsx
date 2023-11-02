@@ -10,17 +10,14 @@ import {
   NavbarMenu,
   NavbarMenuItem,
   Button,
+  Chip,
 } from "@nextui-org/react";
 import { useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import "animate.css";
 
 export default function App() {
-  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const menuItems = ["Dashboard", "settings", "help"];
 
   return (
     <>
@@ -63,6 +60,12 @@ export default function App() {
                   style={{ animationDelay: "0.8s" }}
                 />
               </Link>
+              <Chip
+                size="sm"
+                className="hidden lg:block font-light text-gray-500 ml-1 mb-1"
+              >
+                Beta
+              </Chip>
             </NavbarBrand>
           </NavbarContent>
 
@@ -84,6 +87,14 @@ export default function App() {
             </NavbarItem>
           </NavbarContent>
           <NavbarContent justify="end">
+            <NavbarItem>
+              <Chip
+                size="sm"
+                className=" lg:hidden font-light text-gray-500 mb-1"
+              >
+                Beta
+              </Chip>
+            </NavbarItem>
             <NavbarItem>
               <UserButton />
             </NavbarItem>
@@ -139,26 +150,19 @@ export default function App() {
                   style={{ animationDelay: "0.8s" }}
                 />
               </Link>
+              <Chip
+                size="sm"
+                className="hidden lg:block font-light text-gray-500 ml-1 mb-1"
+              >
+                Beta
+              </Chip>
             </NavbarBrand>
           </NavbarContent>
 
-          <NavbarContent className="hidden sm:flex gap-4" justify="center">
-            {/* <NavbarItem>
-              <Link color="foreground" href="#">
-                Features
-              </Link>
-            </NavbarItem>
-            <NavbarItem isActive>
-              <Link href="#" aria-current="page">
-                Customers
-              </Link>
-            </NavbarItem>
-            <NavbarItem>
-              <Link color="foreground" href="#">
-                Integrations
-              </Link>
-            </NavbarItem> */}
-          </NavbarContent>
+          <NavbarContent
+            className="hidden sm:flex gap-4"
+            justify="center"
+          ></NavbarContent>
           <NavbarContent justify="end">
             <NavbarItem className="hidden lg:flex">
               <Button
