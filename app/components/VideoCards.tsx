@@ -3,7 +3,8 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@nextui-org/button";
-import { Card, CardHeader, CardBody } from "@nextui-org/card";
+import { Chip } from "@nextui-org/chip";
+import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
 import { useRouter } from "next/navigation";
 import {
   Modal,
@@ -98,7 +99,7 @@ export default function VideoCard({
     setIsRedirecting(false);
   };
 
-  const truncateTitle = (title: string, limit: number = 10) => {
+  const truncateTitle = (title: string, limit: number = 20) => {
     return title.length > limit ? `${title.substring(0, limit)}...` : title;
   };
 
@@ -115,37 +116,21 @@ export default function VideoCard({
           <CardHeader className="pb-0 pt-2 px-5 flex justify-between items-start">
             <div>
               <Skeleton isLoaded={isLoaded} className="rounded-md">
-                <p className="text-tiny text-red-500 font-md">YouTube</p>
+                <Chip className="bg-red-700" size="sm">
+                  <p className="text-tiny text-white font-md">YouTube</p>
+                </Chip>
               </Skeleton>
               <Skeleton isLoaded={isLoaded} className="rounded-lg">
-                <h4 className="font-playfair font-bold text-white text-md">
+                <h4 className="font-light pt-2 text-white text-xl">
                   {truncateTitle(title)}
                 </h4>
               </Skeleton>
             </div>
-
-            {!showChat && !subscriptionStatus ? ( // Render the "Analyze" button for non-subscribers when showChat is false
-              <Button variant="ghost" className="text-white" onPress={onOpen}>
-                Analyze
-              </Button>
-            ) : showChat ? ( // Render the "Chat" button for all users when showChat is true
-              <Button
-                variant="ghost"
-                className="text-white"
-                onPress={handleChatRedirect}
-                isLoading={isRedirecting}
-              >
-                Chat
-              </Button>
-            ) : null}
           </CardHeader>
 
           <CardBody className="overflow-visible max-h-480">
-            <div className="h-44 w-full flex items-center justify-center">
-              <Skeleton
-                isLoaded={isLoaded}
-                className="rounded-large h-56 w-full"
-              >
+            <div className="h-36 w-full flex items-center justify-center">
+              <Skeleton isLoaded={isLoaded} className="rounded-large w-full">
                 <Image
                   alt={title}
                   className="object-cover pt-2 rounded-xl"
@@ -156,6 +141,35 @@ export default function VideoCard({
               </Skeleton>
             </div>
           </CardBody>
+          <CardFooter className="flex">
+            {!showChat && !subscriptionStatus ? ( // Render the "Analyze" button for non-subscribers when showChat is false
+              <Button
+                className="bg-gradient-to-tr from-blue-400 to-yellow-500 text-black shadow-lg text-lg mx-2 mb-2"
+                fullWidth
+                onPress={onOpen}
+              >
+                Analyze
+              </Button>
+            ) : showChat ? ( // Render the "Chat" button for all users when showChat is true
+              <Button
+                fullWidth
+                className="bg-gradient-to-tr from-blue-400 to-yellow-500 text-black shadow-lg text-lg mx-2 mb-2"
+                onPress={handleChatRedirect}
+                isLoading={isRedirecting}
+              >
+                Chat
+              </Button>
+            ) : (
+              <Button
+                variant="ghost"
+                fullWidth
+                className="text-white text-lg mx-2 mb-2"
+                isDisabled
+              >
+                No Comments
+              </Button>
+            )}
+          </CardFooter>
         </Card>
       </Card>
 
