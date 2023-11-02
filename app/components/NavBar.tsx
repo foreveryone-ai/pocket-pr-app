@@ -62,9 +62,9 @@ export default function App() {
               </Link>
               <Chip
                 size="sm"
-                className="hidden lg:block font-light text-gray-500 ml-1 mb-1"
+                className="hidden lg:block font-light text-gray-500 ml-1 mb-1 text-medium"
               >
-                Beta
+                v0.0.1
               </Chip>
             </NavbarBrand>
           </NavbarContent>
@@ -152,7 +152,7 @@ export default function App() {
               </Link>
               <Chip
                 size="sm"
-                className="hidden lg:block font-light text-gray-500 ml-1 mb-1"
+                className="hidden lg:block font-light text-gray-500 ml-1 mb-1 text-medium"
               >
                 Beta
               </Chip>

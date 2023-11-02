@@ -155,8 +155,8 @@ export default function Home({ channelId }: ChannelChatParams) {
       <div className="flex flex-col-3 items-center justify-center">
         <div className="px-4">
           <Button
-            variant="flat"
-            className="bg-gradient-to-tr from-yellow-500 to-blue-400 text-black shadow-lg text-lg"
+            variant="ghost"
+            className="text-white shadow-lg text-lg"
             onPress={handleClick}
           >
             {isLoading ? <Spinner size="sm" color="success" /> : "Update"}
