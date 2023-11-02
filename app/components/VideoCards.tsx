@@ -110,8 +110,8 @@ export default function VideoCard({
 
   return (
     <div className="relative">
-      <Card className="bg-gradient-to-tr rounded-3xl from-yellow-200 to-blue-400 p-4">
-        <Card className="py-3 text-black bg-black shadow-lg text-lg">
+      <Card className="bg-gradient-to-tr rounded-3xl from-yellow-200 to-blue-400 p-3">
+        <Card className="pt-3 text-black bg-black shadow-lg text-lg">
           <CardHeader className="pb-0 pt-2 px-5 flex justify-between items-start">
             <div>
               <Skeleton isLoaded={isLoaded} className="rounded-md">
@@ -140,8 +140,8 @@ export default function VideoCard({
             ) : null}
           </CardHeader>
 
-          <CardBody className="overflow-visible py-2 max-h-480">
-            <div className="h-56 w-full flex items-center justify-center">
+          <CardBody className="overflow-visible max-h-480">
+            <div className="h-44 w-full flex items-center justify-center">
               <Skeleton
                 isLoaded={isLoaded}
                 className="rounded-large h-56 w-full"

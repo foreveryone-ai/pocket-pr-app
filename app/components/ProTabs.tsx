@@ -154,56 +154,21 @@ export default function Home({ channelId }: ChannelChatParams) {
     <>
       <div className="flex flex-col-3 items-center justify-center">
         <div className="px-4">
-          <Button color="warning" onClick={handleClick}>
+          <Button
+            variant="flat"
+            className="bg-gradient-to-tr from-yellow-500 to-blue-400 text-black shadow-lg text-lg"
+            onPress={handleClick}
+          >
             {isLoading ? <Spinner size="sm" color="success" /> : "Update"}
           </Button>
         </div>
-        {/* <div>
-          <Tabs
-            disabledKeys={[
-              "Facebook",
-              "Discord",
-              "Instagram",
-              "Twitch",
-              "LinkedIn",
-              "Twitter",
-            ]}
-            aria-label="Options"
-            color="default"
-            variant="solid"
-          >
-            <Tab
-              key="Instagram"
-              title={
-                <div className="flex items-center space-x-2">
-                  <AiFillInstagram />
-                  <span className="hidden md:inline">Instagram</span>
-                </div>
-              }
-            />
-            <Tab
-              key="YouTube"
-              title={
-                <div className="flex items-center space-x-2">
-                  <BsYoutube />
-                  <span className="hidden md:inline">YouTube</span>
-                </div>
-              }
-            />
-            <Tab
-              key="LinkedIn"
-              title={
-                <div className="flex items-center space-x-2">
-                  <BsLinkedin />
-                  <span className="hidden md:inline">LinkedIn</span>
-                </div>
-              }
-            />
-          </Tabs>
-        </div> */}
         <div className="px-4">
           <div className="">
-            <Button color="success" onClick={handleCcClick}>
+            <Button
+              onPress={handleCcClick}
+              variant="flat"
+              className="bg-gradient-to-tr from-blue-400 to-yellow-500 text-black shadow-lg text-lg"
+            >
               {isCcLoading ? (
                 <Spinner size="sm" color="warning" />
               ) : (
