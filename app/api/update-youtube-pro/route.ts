@@ -130,6 +130,7 @@ export async function GET() {
   }
 
   // Get captions for the new videos
+  // Get captions for the new videos
   if (userOAuth && token) {
     console.log(`getting all captions for ${videosToStore.length} videos`);
     for (let video of videosToStore) {
@@ -144,9 +145,28 @@ export async function GET() {
         console.error(error);
       }
     }
-  }
 
+    // Execute the upgrading routes
+    const upgradingRoutes = [
+      "/api/upgrading/comments-and-replies",
+      "/api/upgrading/embeddings",
+      "/api/upgrading/captions",
+      "/api/upgrading/all-captions",
+    ];
+
+    for (const route of upgradingRoutes) {
+      await fetch(route, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // Include the token in the headers if needed
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    }
+  }
   return NextResponse.json({
-    message: "New videos and their captions have been stored successfully",
+    message:
+      "New videos and their captions, comments and replies have been stored, embeddings, caption summaries, and all caption summary have been created and stored successfully",
   });
 }
