@@ -5,6 +5,7 @@ import { Checkbox } from "@nextui-org/checkbox";
 import { useRouter } from "next/navigation";
 import NavBar from "@/app/components/NavBar";
 import React from "react";
+import Link from "next/link";
 
 export default function Agreement() {
   const router = useRouter();
@@ -12,323 +13,357 @@ export default function Agreement() {
 
   return (
     <>
-      <div className="min-h-screen">
+      <div className="min-h-screen bg-black text-white">
         <NavBar />
-        <div className="flex justify-center align-center px-8 pt-24 lg:p-24">
-          <Card className="max-w-4xl bg-gray-600">
-            <CardHeader className="text-white font-light text-2xl">
-              User Terms, Conditions, & Privacy Agreement
+        <div className="flex justify-center align-center px-8 pt-12">
+          <Card className="max-w-4xl  bg-black">
+            <CardHeader className="gradient-text-dual-reverse font-extrabold text-5xl">
+              User Terms, Conditions, & Privacy
             </CardHeader>
-            <CardBody
-              className="rounded-xl"
-              style={{
-                overflowY: "auto",
-                maxHeight: "400px",
-                borderRadius: "2rem",
-              }}
-            >
-              {/* privacy and use terms and agreement */}
-              <article className="prose lg:prose-xl rounded-xl p-4 lg:p-12 bg-white">
-                <h1 className="pb-4 font-black text-2xl">User Agreement</h1>
-                <ol>
-                  <li>
-                    <h2 className="font-bold text-xl pt-4 pb-1 underline">
-                      Welcome to PocketPR!
-                    </h2>
-                    <p>
-                      This User Agreement (&quot;Agreement&quot;) governs your
-                      use of the PocketPR application (&quot;App&quot;). By
-                      accessing or using the App, you agree to be bound by the
-                      terms of this Agreement. If you do not agree with these
-                      terms, please do not use the App.
-                    </p>
-                  </li>
-                  <li>
-                    <h2 className="font-bold text-xl pt-4 pb-1 underline">
-                      User Conduct
-                    </h2>
-                    <p>You agree not to use the App to:</p>
-                    <ul>
-                      <li>Engage in or promote any illegal activities.</li>
-                      <li>
-                        Transmit or post any content that is violent, offensive,
-                        racist, discriminatory, hateful, or otherwise
-                        objectionable.
-                      </li>
-                      <li>Harass, threaten, or defame any person or entity.</li>
-                      <li>
-                        Transmit or post any content that infringes upon the
-                        rights of others, including intellectual property
-                        rights.
-                      </li>
-                      <li>
-                        Engage in any activity that disrupts or interferes with
-                        the proper working of the App.
-                      </li>
-                    </ul>
-                  </li>
-                  <li>
-                    <h2 className="font-bold text-xl pt-4 pb-1 underline">
-                      Chat Messages
-                    </h2>
-                    <ul>
-                      <li>
-                        All chat messages exchanged with the App&quot;s chatbot
-                        are saved by PocketPR.
-                      </li>
-                      <li>
-                        Saved chat messages are used for the purpose of
-                        improving and training future models.
-                      </li>
-                      <li>
-                        All saved chat messages are anonymized to protect user
-                        privacy. Personal identifiers are removed to ensure that
-                        individual users cannot be identified from the saved
-                        data.
-                      </li>
-                    </ul>
-                  </li>
-                  <li>
-                    <h2 className="font-bold text-xl pt-4 pb-1 underline">
-                      Privacy
-                    </h2>
-                    <p>
-                      Your privacy is important to us. Please review our Privacy
-                      Policy, which is incorporated into this Agreement by
-                      reference, to understand how we collect, use, and disclose
-                      information.
-                    </p>
-                  </li>
-                  <li>
-                    <h2 className="font-bold text-xl pt-4 pb-1 underline">
-                      Termination
-                    </h2>
-                    <p>
-                      PocketPR reserves the right to terminate or suspend your
-                      access to the App without prior notice if you violate any
-                      terms of this Agreement or for any other reason at our
-                      sole discretion.
-                    </p>
-                  </li>
-                  <li>
-                    <h2 className="font-bold text-xl pt-4 pb-1 underline">
-                      Disclaimers
-                    </h2>
-                    <p>
-                      The App is provided &quot;as is&quot; and without
-                      warranties of any kind, either express or implied.
-                      PocketPR disclaims all warranties, express or implied,
-                      including, but not limited to, implied warranties of
-                      merchantability, fitness for a particular purpose, and
-                      non-infringement.
-                    </p>
-                  </li>
-                  <li>
-                    <h2 className="font-bold text-xl pt-4 pb-1 underline">
-                      Limitation of Liability
-                    </h2>
-                    <p>
-                      To the fullest extent permitted by applicable law,
-                      PocketPR shall not be liable for any indirect, incidental,
-                      special, consequential, or punitive damages, or any loss
-                      of profits or revenues, whether incurred directly or
-                      indirectly, or any loss of data, use, goodwill, or other
-                      intangible losses, resulting from your use or inability to
-                      use the App.
-                    </p>
-                  </li>
-                  <li>
-                    <h2 className="font-bold text-xl pt-4 pb-1 underline">
-                      Changes to Agreement
-                    </h2>
-                    <p>
-                      PocketPR reserves the right to modify this Agreement at
-                      any time. Changes will be effective immediately upon
-                      posting. Your continued use of the App after changes are
-                      posted constitutes your acceptance of the revised
-                      Agreement.
-                    </p>
-                  </li>
-                  <li>
-                    <h2 className="font-bold text-xl pt-4 pb-1 underline">
-                      Governing Law
-                    </h2>
-                    <p>
-                      This Agreement is governed by the laws of the jurisdiction
-                      in which PocketPR is based, without regard to its conflict
-                      of law provisions.
-                    </p>
-                  </li>
-                  <li>
-                    <h2 className="font-bold text-xl pt-4 pb-1 underline">
-                      Contact
-                    </h2>
-                    <p>
-                      For any questions or concerns regarding this Agreement,
-                      please contact us at
-                      <a href="mailto:help@pocketpr.app">help@pocketpr.app</a>.
-                      By using the PocketPR App, you acknowledge that you have
-                      read, understood, and agree to be bound by the terms of
-                      this User Agreement.
-                    </p>
-                  </li>
-                </ol>
+            <div className="border border-white py-4 rounded-xl ">
+              <CardBody
+                className="rounded-xl"
+                style={{
+                  overflowY: "auto",
+                  maxHeight: "400px",
+                  borderRadius: "1rem",
+                }}
+              >
+                {/* privacy and use terms and agreement */}
+                <article className="prose lg:prose-xl p-12">
+                  <h1 className="py-8 gradient-text-dual-reverse text-5xl font-extrabold ">
+                    Google's Limited Use Policy
+                  </h1>
+                  <div className="font-light text-3xl text-gray-300">
+                    PocketPR&apos;s use and transfer to any other app of
+                    information received from Google APIs will adhere to{" "}
+                    <u>
+                      <Link
+                        className="gradient-text-dual-reverse"
+                        href="https://developers.google.com/terms/api-services-user-data-policy#additional_requirements_for_specific_api_scopes"
+                      >
+                        Google API Services User Data Policy
+                      </Link>
+                    </u>
+                    , including the Limited Use requirements.
+                  </div>
+                  <h1 className="py-8 gradient-text-dual-reverse text-5xl font-extrabold ">
+                    User Agreement
+                  </h1>
+                  <ol>
+                    <li>
+                      <h2 className="font-light text-3xl pt-4 pb-1 text-white">
+                        Welcome to PocketPR!
+                      </h2>
+                      <p className="font-light text-xl text-gray-300">
+                        This User Agreement (&quot;Agreement&quot;) governs your
+                        use of the PocketPR application (&quot;App&quot;). By
+                        accessing or using the App, you agree to be bound by the
+                        terms of this Agreement. If you do not agree with these
+                        terms, please do not use the App.
+                      </p>
+                    </li>
+                    <li>
+                      <h2 className="font-light text-3xl pt-4 pb-1 text-white">
+                        User Conduct
+                      </h2>
+                      <p className="font-light text-xl text-gray-300">
+                        You agree not to use the App to:
+                      </p>
+                      <ul className="font-light text-xl text-gray-300">
+                        <li>Engage in or promote any illegal activities.</li>
+                        <li>
+                          Transmit or post any content that is violent,
+                          offensive, racist, discriminatory, hateful, or
+                          otherwise objectionable.
+                        </li>
+                        <li>
+                          Harass, threaten, or defame any person or entity.
+                        </li>
+                        <li>
+                          Transmit or post any content that infringes upon the
+                          rights of others, including intellectual property
+                          rights.
+                        </li>
+                        <li>
+                          Engage in any activity that disrupts or interferes
+                          with the proper working of the App.
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <h2 className="font-light text-3xl pt-4 pb-1 text-white">
+                        Chat Messages
+                      </h2>
+                      <ul className="font-light text-xl text-gray-300">
+                        <li>
+                          All chat messages exchanged with the App&apos;s
+                          chatbot are saved by PocketPR.
+                        </li>
+                        <li>
+                          Saved chat messages are used for the purpose of
+                          improving and training future models.
+                        </li>
+                        <li>
+                          All saved chat messages are anonymized to protect user
+                          privacy. Personal identifiers are removed to ensure
+                          that individual users cannot be identified from the
+                          saved data.
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <h2 className="font-light text-3xl pt-4 pb-1 text-white">
+                        Privacy
+                      </h2>
+                      <p className="font-light text-xl text-gray-300">
+                        Your privacy is important to us. Please review our
+                        Privacy Policy, which is incorporated into this
+                        Agreement by reference, to understand how we collect,
+                        use, and disclose information.
+                      </p>
+                    </li>
+                    <li>
+                      <h2 className="font-light text-3xl pt-4 pb-1 text-white">
+                        Termination
+                      </h2>
+                      <p className="font-light text-xl text-gray-300">
+                        PocketPR reserves the right to terminate or suspend your
+                        access to the App without prior notice if you violate
+                        any terms of this Agreement or for any other reason at
+                        our sole discretion.
+                      </p>
+                    </li>
+                    <li>
+                      <h2 className="font-light text-3xl pt-4 pb-1 text-white">
+                        Disclaimers
+                      </h2>
+                      <p className="font-light text-xl text-gray-300">
+                        The App is provided &quot;as is&quot; and without
+                        warranties of any kind, either express or implied.
+                        PocketPR disclaims all warranties, express or implied,
+                        including, but not limited to, implied warranties of
+                        merchantability, fitness for a particular purpose, and
+                        non-infringement.
+                      </p>
+                    </li>
+                    <li>
+                      <h2 className="font-light text-3xl pt-4 pb-1 text-white">
+                        Limitation of Liability
+                      </h2>
+                      <p className="font-light text-xl text-gray-300">
+                        To the fullest extent permitted by applicable law,
+                        PocketPR shall not be liable for any indirect,
+                        incidental, special, consequential, or punitive damages,
+                        or any loss of profits or revenues, whether incurred
+                        directly or indirectly, or any loss of data, use,
+                        goodwill, or other intangible losses, resulting from
+                        your use or inability to use the App.
+                      </p>
+                    </li>
+                    <li>
+                      <h2 className="font-light text-3xl pt-4 pb-1 text-white">
+                        Changes to Agreement
+                      </h2>
+                      <p className="font-light text-xl text-gray-300">
+                        PocketPR reserves the right to modify this Agreement at
+                        any time. Changes will be effective immediately upon
+                        posting. Your continued use of the App after changes are
+                        posted constitutes your acceptance of the revised
+                        Agreement.
+                      </p>
+                    </li>
+                    <li>
+                      <h2 className="font-light text-3xl pt-4 pb-1 text-white">
+                        Governing Law
+                      </h2>
+                      <p className="font-light text-xl text-gray-300">
+                        This Agreement is governed by the laws of the
+                        jurisdiction in which PocketPR is based, without regard
+                        to its conflict of law provisions.
+                      </p>
+                    </li>
+                    <li>
+                      <h2 className="font-light text-3xl pt-4 pb-1 text-white">
+                        Contact
+                      </h2>
+                      <p className="font-light text-xl text-gray-300">
+                        For any questions or concerns regarding this Agreement,
+                        please contact us at
+                        <a href="mailto:help@pocketpr.app">help@pocketpr.app</a>
+                        . By using the PocketPR App, you acknowledge that you
+                        have read, understood, and agree to be bound by the
+                        terms of this User Agreement.
+                      </p>
+                    </li>
+                  </ol>
 
-                <h1 className="pt-12 pb-4 font-black text-2xl">
-                  Privacy Policy
-                </h1>
-                <ol>
-                  <li>
-                    <h2 className="font-bold text-xl pt-4 pb-1 underline">
-                      Introduction
-                    </h2>
-                    <p>
-                      Thank you for using the PocketPR application
-                      (&quot;App&quot;). Your privacy is of utmost importance to
-                      us. This Privacy Policy describes how PocketPR collects,
-                      uses, and protects your information. By accessing or using
-                      the App, you agree to this Privacy Policy in addition to
-                      the User Agreement. If there&quot;s any inconsistency
-                      between this Privacy Policy and the User Agreement, this
-                      Privacy Policy will prevail.
-                    </p>
-                  </li>
-                  <li>
-                    <h2 className="font-bold text-xl pt-4 pb-1 underline">
-                      Information Collection
-                    </h2>
-                    <p>When you use the App, we collect:</p>
-                    <ul>
-                      <li>
-                        Chat messages exchanged with the App&quot;s chatbot.
-                      </li>
-                      <li>
-                        Basic usage data like frequency, duration, and features
-                        accessed.
-                      </li>
-                    </ul>
-                  </li>
-                  <li>
-                    <h2 className="font-bold text-xl pt-4 pb-1 underline">
-                      Use of Information
-                    </h2>
-                    <p>We use the collected information for:</p>
-                    <ul>
-                      <li>
-                        Improving the App&quot;s performance and features.
-                      </li>
-                      <li>Training and improving future models.</li>
-                      <li>
-                        Understanding user behavior and preferences to enhance
-                        user experience.
-                      </li>
-                    </ul>
-                  </li>
-                  <li>
-                    <h2 className="font-bold text-xl pt-4 pb-1 underline">
-                      Data Anonymization
-                    </h2>
-                    <p>
-                      All chat messages exchanged with the App&quot;s chatbot
-                      are stored in an anonymized manner. We remove all personal
-                      identifiers to ensure that individual users cannot be
-                      identified from the saved data.
-                    </p>
-                  </li>
-                  <li>
-                    <h2 className="font-bold text-xl pt-4 pb-1 underline">
-                      Data Sharing and Disclosure
-                    </h2>
-                    <p>
-                      We do not sell, trade, or rent your personal data to third
-                      parties. We may share anonymized and aggregated
-                      information with third-party partners for research and
-                      development purposes.
-                    </p>
-                  </li>
-                  <li>
-                    <h2 className="font-bold text-xl pt-4 pb-1 underline">
-                      Data Protection
-                    </h2>
-                    <p>
-                      We use appropriate security measures to protect the
-                      information we collect and store. While no system is
-                      completely secure, we strive to protect your data from
-                      unauthorized access, use, or disclosure.
-                    </p>
-                  </li>
-                  <li>
-                    <h2 className="font-bold text-xl pt-4 pb-1 underline">
-                      Children&apos;s Privacy
-                    </h2>
-                    <p>
-                      The App is not intended for use by children under the age
-                      of 16. We do not knowingly collect or solicit personal
-                      information from anyone under the age of 16. If you are a
-                      parent or guardian and you believe your child has provided
-                      us with personal information, please contact us at{" "}
-                      <a href="mailto:help@pocketpr.app">help@pocketpr.app</a>.
-                    </p>
-                  </li>
-                  <li>
-                    <h2 className="font-bold text-xl pt-4 pb-1 underline">
-                      Changes to Privacy Policy
-                    </h2>
-                    <p>
-                      From time to time, we may update this Privacy Policy. We
-                      encourage you to review it periodically. By continuing to
-                      use the App after any changes, you are expressing your
-                      acceptance of the updated policy.
-                    </p>
-                  </li>
-                  <li>
-                    <h2 className="font-bold text-xl pt-4 pb-1 underline">
-                      Your Rights
-                    </h2>
-                    <p>You have the right to:</p>
-                    <ul>
-                      <li>Access your personal data.</li>
-                      <li>
-                        Request correction or deletion of your personal data.
-                      </li>
-                      <li>Object to the processing of your personal data.</li>
-                      <li>Request data portability.</li>
-                    </ul>
-                    <p>
-                      If you wish to exercise any of these rights, please
-                      contact us at{" "}
-                      <a href="mailto:help@pocketpr.app">help@pocketpr.app</a>.
-                    </p>
-                  </li>
-                  <li>
-                    <h2 className="font-bold text-xl pt-4 pb-1 underline">
-                      Contact Information
-                    </h2>
-                    <p>
-                      If you have any questions or concerns regarding this
-                      Privacy Policy or our data practices, please reach out to
-                      us: Email:{" "}
-                      <a href="mailto:help@pocketpr.app">help@pocketpr.app</a>.
-                      By using the PocketPR App, you acknowledge that you have
-                      read, understood, and agree to this Privacy Policy.
-                    </p>
-                  </li>
-                </ol>
-              </article>
-              <div className="py-2" />
-              <div className="flex flex-col rounded-xl bg-white p-4">
-                <Checkbox
-                  checked={isSelected}
-                  onChange={(e) => setIsSelected(e.target.checked)}
-                >
-                  I have read and agree to the terms & conditions
-                </Checkbox>
-              </div>
-            </CardBody>
-            <CardFooter className="pb-6">
+                  <h1 className="py-8 gradient-text-dual-reverse text-5xl font-extrabold ">
+                    Privacy Policy
+                  </h1>
+                  <ol>
+                    <li>
+                      <h2 className="font-light text-3xl pt-4 pb-1 text-white">
+                        Introduction
+                      </h2>
+                      <p className="font-light text-xl text-gray-300">
+                        Thank you for using the PocketPR application
+                        (&quot;App&quot;). Your privacy is of utmost importance
+                        to us. This Privacy Policy describes how PocketPR
+                        collects, uses, and protects your information. By
+                        accessing or using the App, you agree to this Privacy
+                        Policy in addition to the User Agreement. If
+                        there&apos;s any inconsistency between this Privacy
+                        Policy and the User Agreement, this Privacy Policy will
+                        prevail.
+                      </p>
+                    </li>
+                    <li>
+                      <h2 className="font-light text-3xl pt-4 pb-1 text-white">
+                        Information Collection
+                      </h2>
+                      <p className="font-light text-xl text-gray-300">
+                        When you use the App, we collect:
+                      </p>
+                      <ul className="font-light text-xl text-gray-300">
+                        <li>
+                          Chat messages exchanged with the App&apos;s chatbot.
+                        </li>
+                        <li>
+                          Basic usage data like frequency, duration, and
+                          features accessed.
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <h2 className="font-light text-3xl pt-4 pb-1 text-white">
+                        Use of Information
+                      </h2>
+                      <p className="font-light text-xl text-gray-300">
+                        We use the collected information for:
+                      </p>
+                      <ul className="font-light text-xl text-gray-300">
+                        <li>
+                          Improving the App&apos;s performance and features.
+                        </li>
+                        <li>Training and improving future models.</li>
+                        <li>
+                          Understanding user behavior and preferences to enhance
+                          user experience.
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      <h2 className="font-light text-3xl pt-4 pb-1 text-white">
+                        Data Anonymization
+                      </h2>
+                      <p className="font-light text-xl text-gray-300">
+                        All chat messages exchanged with the App&apos;s chatbot
+                        are stored in an anonymized manner. We remove all
+                        personal identifiers to ensure that individual users
+                        cannot be identified from the saved data.
+                      </p>
+                    </li>
+                    <li>
+                      <h2 className="font-light text-3xl pt-4 pb-1 text-white">
+                        Data Sharing and Disclosure
+                      </h2>
+                      <p className="font-light text-xl text-gray-300">
+                        We do not sell, trade, or rent your personal data to
+                        third parties. We may share anonymized and aggregated
+                        information with third-party partners for research and
+                        development purposes.
+                      </p>
+                    </li>
+                    <li>
+                      <h2 className="font-light text-3xl pt-4 pb-1 text-white">
+                        Data Protection
+                      </h2>
+                      <p className="font-light text-xl text-gray-300">
+                        We use appropriate security measures to protect the
+                        information we collect and store. While no system is
+                        completely secure, we strive to protect your data from
+                        unauthorized access, use, or disclosure.
+                      </p>
+                    </li>
+                    <li>
+                      <h2 className="font-light text-3xl pt-4 pb-1 text-white">
+                        Children&apos;s Privacy
+                      </h2>
+                      <p className="font-light text-xl text-gray-300">
+                        The App is not intended for use by children under the
+                        age of 16. We do not knowingly collect or solicit
+                        personal information from anyone under the age of 16. If
+                        you are a parent or guardian and you believe your child
+                        has provided us with personal information, please
+                        contact us at{" "}
+                        <a href="mailto:help@pocketpr.app">help@pocketpr.app</a>
+                        .
+                      </p>
+                    </li>
+                    <li>
+                      <h2 className="font-light text-3xl pt-4 pb-1 text-white">
+                        Changes to Privacy Policy
+                      </h2>
+                      <p className="font-light text-xl text-gray-300">
+                        From time to time, we may update this Privacy Policy. We
+                        encourage you to review it periodically. By continuing
+                        to use the App after any changes, you are expressing
+                        your acceptance of the updated policy.
+                      </p>
+                    </li>
+                    <li>
+                      <h2 className="font-light text-3xl pt-4 pb-1 text-white">
+                        Your Rights
+                      </h2>
+                      <p className="font-light text-xl text-gray-300">
+                        You have the right to:
+                      </p>
+                      <ul className="font-light text-xl text-gray-300">
+                        <li>Access your personal data.</li>
+                        <li>
+                          Request correction or deletion of your personal data.
+                        </li>
+                        <li>Object to the processing of your personal data.</li>
+                        <li>Request data portability.</li>
+                      </ul>
+                      <p className="font-light text-xl text-gray-300">
+                        If you wish to exercise any of these rights, please
+                        contact us at{" "}
+                        <a href="mailto:help@pocketpr.app">help@pocketpr.app</a>
+                        .
+                      </p>
+                    </li>
+                    <li>
+                      <h2 className="font-light text-3xl pt-4 pb-1 text-white">
+                        Contact Information
+                      </h2>
+                      <p className="font-light text-xl text-gray-300">
+                        If you have any questions or concerns regarding this
+                        Privacy Policy or our data practices, please reach out
+                        to us: Email:{" "}
+                        <a href="mailto:help@pocketpr.app">help@pocketpr.app</a>
+                        . By using the PocketPR App, you acknowledge that you
+                        have read, understood, and agree to this Privacy Policy.
+                      </p>
+                    </li>
+                  </ol>
+                </article>
+                <div className="py-2" />
+                <div className="flex flex-col rounded-xl bg-gray-300 p-4">
+                  <Checkbox
+                    checked={isSelected}
+                    onChange={(e) => setIsSelected(e.target.checked)}
+                  >
+                    I have read and agree to the terms & conditions
+                  </Checkbox>
+                </div>
+              </CardBody>
+            </div>
+            <CardFooter className="py-6">
               <Button
                 color="danger"
-                variant="light"
+                variant="ghost"
                 onClick={() => router.push("/")}
               >
                 Close
