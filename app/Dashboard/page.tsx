@@ -47,7 +47,7 @@ export default async function Home() {
   const subscriptionStatus = await getUserSubscriptionStatus(userId as string);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="bg-black min-h-screen">
       <NavBar />
       <div className="pt-6">
         {subscriptionStatus ? (
@@ -55,8 +55,8 @@ export default async function Home() {
         ) : (
           <Tabs channelId={youtube_channel_id} />
         )}
-        <div className="flex flex-col-1 items-center lg:flex-col-2 lg:items-start text-black justify-center pt-6 pb-6 bg-white ">
-          <div className="border rounded-xl bordered bg-gray-50  pt-5 lg:pt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12 px-4 md:px-8 lg:px-10 overflow-y-auto h-screen-65 lg:h-screen-75">
+        <div className="flex flex-col-1 items-center lg:flex-col-2 lg:items-start text-black justify-center pt-6 pb-6 bg-black ">
+          <div className=" rounded-xl  bg-black mx-4 mb-2 pt-5 lg:pt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12 px-4 md:px-8 lg:px-10 overflow-y-auto h-screen-65 lg:h-screen-75">
             {videos
               ? videos.data?.map((video, i) => (
                   <VideoCard

@@ -1,135 +1,211 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
 import { SignedIn, SignedOut, UserButton, SignInButton } from "@clerk/nextjs";
-import { Button } from "@nextui-org/button";
-import { Spacer } from "@nextui-org/spacer";
 import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownSection,
-  DropdownItem,
-} from "@nextui-org/dropdown";
-import { useRouter } from "next/navigation";
-import { FaCcStripe } from "react-icons/fa";
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+  NavbarMenuToggle,
+  NavbarMenu,
+  NavbarMenuItem,
+  Button,
+  Chip,
+} from "@nextui-org/react";
+import { useState } from "react";
+import Image from "next/image";
+import "animate.css";
 
-export default function NavBar() {
-  const router = useRouter();
+export default function App() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const toDashboard = () => {
-    router.push("/Dashboard");
-  };
-
-  const toSettings = () => {
-    router.push("/settings");
-  };
-
-  const toHelp = () => {
-    router.push("/help");
-  };
-
-  const handleStripe = async () => {
-    let res, url;
-
-    try {
-      res = await fetch("/api/account");
-    } catch (error) {
-      console.error("can't get stripe account");
-      return;
-    }
-
-    try {
-      url = (await res.json()).url;
-      router.replace(url);
-      return;
-    } catch (error) {
-      console.error("server error");
-      //TODO: either hide this or tell the user something...
-      return;
-    }
-  };
   return (
     <>
-      <div className="navbar isSticky bg-green-800 p-4">
-        {/* ----------------------------NAVBAR START---------------------------- */}
-        <div className="navbar-start">
-          <SignedIn>
-            <Dropdown backdrop="blur">
-              <DropdownTrigger>
-                <Button variant="flat" className="text-white">
-                  Menu
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                aria-label="Static Actions"
-                // disabledKeys={["settings"]}
-              >
-                <DropdownItem
-                  key="dashboard"
-                  onPress={toDashboard}
-                  className="text-black"
-                  color="default"
-                >
-                  Dashboard
-                </DropdownItem>
-                <DropdownItem
-                  key="settings"
-                  onPress={toSettings}
-                  className="text-black"
-                  color="default"
-                >
-                  Settings
-                </DropdownItem>
-                <DropdownItem
-                  key="help"
-                  onPress={toHelp}
-                  className="text-black"
-                  color="default"
-                >
-                  Get Help
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </SignedIn>
-        </div>
-
-        {/* ----------------------------NAVBAR CENTER---------------------------- */}
-        <Link href="/">
-          <Button className="navbar-center bg-gradient-to-tr from-orange-600 to-yellow-300 text-white shadow-lg">
-            <Image
-              src="/pocket-pr-text.svg"
-              alt="panda logo"
-              width={75}
-              height={50}
+      {/* -------------------------SIGNED-IN------------------------- */}
+      <SignedIn>
+        <Navbar
+          className="bg-black py-1"
+          onMenuOpenChange={setIsMenuOpen}
+          style={{ zIndex: 9999 }}
+        >
+          <NavbarContent>
+            <NavbarMenuToggle
+              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+              className="sm:hidden"
             />
-          </Button>
-        </Link>
 
-        {/* ----------------------------NAVBAR END---------------------------- */}
-        <div className="navbar-end mr-2">
-          <SignedIn>
-            <Button isIconOnly variant="light" onPress={handleStripe}>
-              <FaCcStripe size={40} color="white" />
-            </Button>
-            <div className="px-2" />
-            <UserButton />
-          </SignedIn>
-          <SignedOut>
-            <Link href="/sign-up">
-              <Button variant="light" className="hidden md:block text-white">
+            <NavbarBrand>
+              <Link href="/" className="flex">
+                <Image
+                  src="/gunmetal-pocket-asset.svg"
+                  alt="logo"
+                  width="125"
+                  height="100"
+                  className="px-1 animate__animated animate__backInLeft"
+                />
+                <Image
+                  src="/gunmetal-panda-asset.svg"
+                  alt="logo"
+                  width="25"
+                  height="30"
+                  className="pb-2 animate__animated animate__backInLeft"
+                  style={{ animationDelay: "0.4s" }}
+                />
+                <Image
+                  src="/gunmetal-pr-asset.svg"
+                  alt="logo"
+                  width="51"
+                  height="48"
+                  className="px-1 pb-2 animate__animated animate__backInLeft"
+                  style={{ animationDelay: "0.8s" }}
+                />
+              </Link>
+              <Chip
+                size="sm"
+                className="hidden lg:block font-light text-gray-500 ml-1 mb-1 text-medium"
+              >
+                v0.0.1
+              </Chip>
+            </NavbarBrand>
+          </NavbarContent>
+
+          <NavbarContent className="hidden sm:flex gap-4" justify="center">
+            <NavbarItem>
+              <Link color="foreground" href="/Dashboard">
+                Dashboard
+              </Link>
+            </NavbarItem>
+            <NavbarItem>
+              <Link color="foreground" href="/settings">
+                Settings
+              </Link>
+            </NavbarItem>
+            <NavbarItem>
+              <Link color="foreground" href="/help">
+                Help
+              </Link>
+            </NavbarItem>
+          </NavbarContent>
+          <NavbarContent justify="end">
+            <NavbarItem>
+              <Chip
+                size="sm"
+                className=" lg:hidden font-light text-gray-500 mb-1"
+              >
+                Beta
+              </Chip>
+            </NavbarItem>
+            <NavbarItem>
+              <UserButton />
+            </NavbarItem>
+          </NavbarContent>
+          <NavbarMenu className="bg-black">
+            <NavbarMenuItem>
+              <Link href="/Dashboard">Dashboard</Link>
+            </NavbarMenuItem>
+            <NavbarMenuItem>
+              <Link href="/settings">Settings</Link>
+            </NavbarMenuItem>
+            <NavbarMenuItem>
+              <Link href="/help">Help</Link>
+            </NavbarMenuItem>
+          </NavbarMenu>
+        </Navbar>
+      </SignedIn>
+      {/* -------------------------SIGNED-OUT------------------------- */}
+      <SignedOut>
+        <Navbar
+          className="bg-black py-1"
+          onMenuOpenChange={setIsMenuOpen}
+          style={{ zIndex: 9999 }}
+        >
+          <NavbarContent>
+            <NavbarMenuToggle
+              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+              className="hidden"
+            />
+            <NavbarBrand>
+              <Link href="/" className="flex">
+                <Image
+                  src="/gunmetal-pocket-asset.svg"
+                  alt="logo"
+                  width="125"
+                  height="100"
+                  className="px-1 animate__animated animate__backInLeft"
+                />
+                <Image
+                  src="/gunmetal-panda-asset.svg"
+                  alt="logo"
+                  width="25"
+                  height="30"
+                  className="pb-2 animate__animated animate__backInLeft"
+                  style={{ animationDelay: "0.4s" }}
+                />
+                <Image
+                  src="/gunmetal-pr-asset.svg"
+                  alt="logo"
+                  width="51"
+                  height="48"
+                  className="px-1 pb-2 animate__animated animate__backInLeft"
+                  style={{ animationDelay: "0.8s" }}
+                />
+              </Link>
+              <Chip
+                size="sm"
+                className="hidden lg:block font-light text-gray-500 ml-1 mb-1 text-medium"
+              >
+                Beta
+              </Chip>
+            </NavbarBrand>
+          </NavbarContent>
+
+          <NavbarContent
+            className="hidden sm:flex gap-4"
+            justify="center"
+          ></NavbarContent>
+          <NavbarContent justify="end">
+            <NavbarItem className="hidden lg:flex">
+              <Button
+                as={Link}
+                href="/sign-in"
+                variant="ghost"
+                className="text-lg text-white"
+              >
+                Login
+              </Button>
+            </NavbarItem>
+            <NavbarItem>
+              <Button
+                as={Link}
+                className="bg-gradient-to-tr from-blue-400 to-yellow-500 text-black shadow-lg text-lg"
+                href="/sign-up"
+                variant="flat"
+              >
                 Sign Up
               </Button>
-            </Link>
-            <Spacer x={1} />
-            <Link href="/sign-in">
-              <Button color="success" variant="solid">
-                Sign In
-              </Button>
-            </Link>
-          </SignedOut>
-        </div>
-      </div>
+            </NavbarItem>
+          </NavbarContent>
+          {/* <NavbarMenu className="bg-black">
+            {menuItems.map((item, index) => (
+              <NavbarMenuItem key={`${item}-${index}`}>
+                <Link
+                  color={
+                    index === 2
+                      ? "primary"
+                      : index === menuItems.length - 1
+                      ? "danger"
+                      : "foreground"
+                  }
+                  className="w-full"
+                  href="#"
+                >
+                  {item}
+                </Link>
+              </NavbarMenuItem>
+            ))}
+          </NavbarMenu> */}
+        </Navbar>
+      </SignedOut>
     </>
   );
 }

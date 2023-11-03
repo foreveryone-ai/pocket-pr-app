@@ -152,69 +152,33 @@ export default function Home({ channelId }: ChannelChatParams) {
 
   return (
     <>
-      <div className="flex flex-col items-center">
-        <Navbar>
-          <NavbarBrand>
-            <Button color="warning" onClick={handleClick}>
-              {isLoading ? <Spinner size="sm" color="success" /> : "Update"}
-            </Button>
-          </NavbarBrand>
-          <NavbarContent justify="center">
-            <Tabs
-              disabledKeys={[
-                "Facebook",
-                "Discord",
-                "Instagram",
-                "Twitch",
-                "LinkedIn",
-                "Twitter",
-              ]}
-              aria-label="Options"
-              color="default"
-              variant="solid"
+      <div className="flex flex-col-3 items-center justify-center">
+        <div className="px-4">
+          <Button
+            variant="ghost"
+            className="text-white shadow-lg text-lg"
+            onPress={handleClick}
+          >
+            {isLoading ? <Spinner size="sm" color="success" /> : "Update"}
+          </Button>
+        </div>
+        <div className="px-4">
+          <div className="">
+            <Button
+              onPress={handleCcClick}
+              variant="flat"
+              className="bg-gradient-to-tr from-blue-400 to-yellow-500 text-black shadow-lg text-lg"
             >
-              <Tab
-                key="Instagram"
-                title={
-                  <div className="flex items-center space-x-2">
-                    <AiFillInstagram />
-                    <span className="hidden md:inline">Instagram</span>
-                  </div>
-                }
-              />
-              <Tab
-                key="YouTube"
-                title={
-                  <div className="flex items-center space-x-2">
-                    <BsYoutube />
-                    <span className="hidden md:inline">YouTube</span>
-                  </div>
-                }
-              />
-              <Tab
-                key="LinkedIn"
-                title={
-                  <div className="flex items-center space-x-2">
-                    <BsLinkedin />
-                    <span className="hidden md:inline">LinkedIn</span>
-                  </div>
-                }
-              />
-            </Tabs>
-          </NavbarContent>
-          <NavbarContent justify="end">
-            <div className="hidden lg:block">
-              <Button color="success" onClick={handleCcClick}>
-                {isCcLoading ? (
-                  <Spinner size="sm" color="warning" />
-                ) : (
-                  "Channel Chat"
-                )}
-              </Button>
-            </div>
-            <div className="lg:hidden">
-              {/* <Button onPress={onOpen}>Trends</Button> */}
-              {/* <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+              {isCcLoading ? (
+                <Spinner size="sm" color="warning" />
+              ) : (
+                "Channel Chat"
+              )}
+            </Button>
+          </div>
+          <div className="lg:hidden">
+            {/* <Button onPress={onOpen}>Trends</Button> */}
+            {/* <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
                 <ModalContent>
                   {(onClose) => (
                     <>
@@ -223,7 +187,7 @@ export default function Home({ channelId }: ChannelChatParams) {
                       </ModalHeader>
                       <ModalBody>
                         {/* --------------------Hidden on LARGE screens and above-------------------- */}
-              {/* <div className="flow-root lg:hidden">
+            {/* <div className="flow-root lg:hidden">
                           <h1 className="font-playfair pb-2 text-green-800 font-black text-2xl flex justify-center ">
                             Channel Trends
                           </h1>
@@ -296,13 +260,7 @@ export default function Home({ channelId }: ChannelChatParams) {
                   )}
                 </ModalContent>
               </Modal> */}
-            </div>
-          </NavbarContent>
-        </Navbar>
-        <div className="lg:hidden">
-          <Button color="success" onClick={handleClick} className="px-28">
-            {isLoading ? <Spinner size="lg" color="success" /> : "Channel Chat"}
-          </Button>
+          </div>
         </div>
       </div>
     </>

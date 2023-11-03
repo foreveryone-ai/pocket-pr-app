@@ -33,7 +33,7 @@ module.exports = {
   darkMode: "class",
   plugins: [
     nextui(),
-    require("daisyui"),
+    // require("daisyui"),
     require("@tailwindcss/forms"),
     require("@tailwindcss/aspect-ratio"),
   ],
