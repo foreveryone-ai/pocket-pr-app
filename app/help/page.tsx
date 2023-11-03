@@ -53,7 +53,7 @@ export default function Home() {
     <div className="min-h-screen bg-black">
       <NavBar />
 
-      <div className="flex flex-col  items-center text-black justify-start pt-20 pb-5 ">
+      <div className="flex flex-col  items-center text-black justify-start p-12 ">
         <div className="mx-auto grid max-w-7xl grid-cols-1 lg:grid-cols-2">
           <div className="relative sm:pt-32 lg:static lg:px-8 lg:py-32">
             <div className="mx-auto max-w-xl lg:mx-0 lg:max-w-lg">
