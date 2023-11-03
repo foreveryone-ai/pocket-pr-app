@@ -38,8 +38,12 @@ export default function Upgrading() {
       <div className="min-h-screen bg-black">
         <NavBar />
         <div className="flex justify-center align-center py-32">
-          <Button isDisabled={isLoading} onPress={fetchUpgradeData}>
-            {isLoading ? "Loading..." : "Start Upgrade"}
+          <Button
+            isDisabled={isLoading}
+            onPress={fetchUpgradeData}
+            className="bg-gradient-to-tr from-blue-400 to-yellow-500 text-black shadow-lg text-lg"
+          >
+            {isLoading ? "Loading..." : "Start upgrade analysis"}
           </Button>
         </div>
       </div>

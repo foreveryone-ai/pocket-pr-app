@@ -53,8 +53,12 @@ export default function RetrievalButton({
   };
 
   return (
-    <Button isDisabled={isLoading} onPress={fetchOnboardingData}>
-      {isLoading ? "Loading..." : "Start Retrieval"}
+    <Button
+      isDisabled={isLoading}
+      onPress={fetchOnboardingData}
+      className="bg-gradient-to-tr from-blue-400 to-yellow-500 text-black shadow-lg text-lg"
+    >
+      {isLoading ? "Loading..." : "Get YouTube Videos"}
     </Button>
   );
 }

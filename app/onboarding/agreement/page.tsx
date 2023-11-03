@@ -338,7 +338,7 @@ export default function Agreement() {
                 isDisabled={!isSelected}
                 onPress={() => router.push("/onboarding/retrieval")}
               >
-                Sync YouTube
+                Proceed
               </Button>
             </CardFooter>
           </Card>
