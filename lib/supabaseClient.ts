@@ -1,10 +1,16 @@
 import { SubscriptionStatus } from "@prisma/client";
 import { createClient } from "@supabase/supabase-js";
+import { NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
+
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
 
+//------------------------ Create Server Db Client -----------------------------//
 function createServerDbClient(accessToken?: string) {
+  const headers = accessToken
+    ? { Authorization: `Bearer ${accessToken}` }
+    : undefined;
   return createClient(supabaseUrl as string, supabaseKey as string, {
     db: {
       schema: "public",
@@ -14,13 +20,267 @@ function createServerDbClient(accessToken?: string) {
       autoRefreshToken: false,
     },
     global: {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+      headers: headers,
     },
   });
 }
+
 //-------------------------------Create------------------------------------//
+export async function updateChatHistory(
+  authToken: string,
+  conversationId: string,
+  content: string,
+  userId: string,
+  channelId: string
+) {
+  try {
+    // auth token is here ...
+    const db = createServerDbClient(authToken);
+
+    const { data: aiChatData, error: aiChatError } = await db
+      .from("AiChatMessage")
+      .insert({
+        content: content,
+        user_id: userId,
+        conversation_id: conversationId,
+        channel_id: channelId,
+      })
+      .eq("id", conversationId)
+      .select();
+
+    const { data: userChatData, error: userChatError } = await db
+      .from("UserChatMessage")
+      .insert({
+        content: content,
+        user_id: userId,
+        conversation_id: conversationId,
+        channel_id: channelId,
+      })
+      .eq("id", conversationId)
+      .select();
+
+    return {
+      data: [aiChatData, userChatData],
+      error: [aiChatError, userChatError],
+    };
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function updateCoversationSummary(
+  authToken: string,
+  conversationId: string,
+  summary: string
+) {
+  try {
+    // auth token is here ...
+    const db = createServerDbClient(authToken);
+
+    return await db
+      .from("conversation")
+      .update({ summary: summary })
+      .eq("id", conversationId)
+      .select();
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+/**
+ *
+ * @param authToken supabase token
+ * @param video_id if for video chat
+ * @param channel_id if for channel chat, will change the behavior of the query
+ * @returns either the conversation for a video or channel
+ */
+
+export async function getConversation(
+  authToken: string,
+  video_id?: string,
+  channel_id?: string
+) {
+  try {
+    // auth token is here ...
+    const db = createServerDbClient(authToken);
+
+    console.log(`videoId: ${video_id}, channelId: ${channel_id}`);
+
+    if (channel_id) {
+      console.log("channelId exists...");
+      return await db
+        .from("Conversation")
+        .select()
+        .eq("channel_id", channel_id)
+        .is("video_id", null);
+    }
+
+    if (video_id) {
+      return await db.from("Conversation").select().eq("video_id", video_id);
+    }
+
+    throw new Error("badness on getConversation");
+  } catch (error) {
+    console.error(error);
+  }
+}
+export async function getAllAiChatMessages(
+  authToken: string,
+  video_id?: string,
+  channel_id?: string,
+  conversation_id?: string
+) {
+  try {
+    // auth token is here ...
+    const db = createServerDbClient(authToken);
+
+    if (channel_id) {
+      return await db
+        .from("AiChatMessage")
+        .select()
+        .eq("channel_id", channel_id)
+        .eq("conversation_id", conversation_id);
+    }
+
+    if (video_id) {
+      return await db.from("AiChatMessage").select().eq("video_id", video_id);
+    }
+
+    throw new Error("badness on get all ai chat messages");
+  } catch (error) {
+    console.error(error);
+  }
+}
+export async function getAllUserChatMessages(
+  authToken: string,
+  video_id?: string,
+  channel_id?: string,
+  conversation_id?: string
+) {
+  try {
+    // auth token is here ...
+    const db = createServerDbClient(authToken);
+
+    if (channel_id) {
+      return await db
+        .from("UserChatMessage")
+        .select()
+        .eq("channel_id", channel_id)
+        .eq("conversation_id", conversation_id);
+    }
+
+    if (video_id) {
+      return await db.from("UserChatMessage").select().eq("video_id", video_id);
+    }
+
+    throw new Error("badness on get all user messages");
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function createConversation(
+  authToken: string,
+  user_id: string,
+  channel_id: string,
+  video_id?: string | undefined | null
+) {
+  try {
+    // auth token is here ...
+    const db = createServerDbClient(authToken);
+
+    return await db
+      .from("Conversation")
+      .insert({
+        video_id: video_id ?? null,
+        user_id: user_id,
+        channel_id: channel_id,
+      })
+      .select();
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function storeChatMessages(
+  authToken: string,
+  conversationId: string,
+  userMessage: string,
+  aiMessage: string,
+  userId: string,
+  channelId: string,
+  videoid?: string
+) {
+  try {
+    // auth token is here ...
+    const db = createServerDbClient(authToken);
+
+    let res;
+
+    if (videoid) {
+      const { data: aiChatData, error: aiChatError } = await db
+        .from("AiChatMessage")
+        .insert({
+          content: aiMessage,
+          user_id: userId,
+          conversation_id: conversationId,
+          channel_id: channelId,
+          video_id: videoid,
+        })
+        .select("id");
+
+      const { data: userChatData, error: userChatError } = await db
+        .from("UserChatMessage")
+        .insert({
+          content: userMessage,
+          user_id: userId,
+          conversation_id: conversationId,
+          channel_id: channelId,
+          video_id: videoid,
+        })
+        .select("id");
+
+      res = userChatData;
+
+      if (userChatError || aiChatError) {
+        console.error(userChatError, aiChatError);
+        throw new Error("couldn't save chat messages");
+      }
+    } else {
+      const { data: aiChatData, error: aiChatError } = await db
+        .from("AiChatMessage")
+        .insert({
+          content: aiMessage,
+          user_id: userId,
+          conversation_id: conversationId,
+          channel_id: channelId,
+        })
+        .select("id");
+
+      const { data: userChatData, error: userChatError } = await db
+        .from("UserChatMessage")
+        .insert({
+          content: userMessage,
+          user_id: userId,
+          conversation_id: conversationId,
+          channel_id: channelId,
+        })
+        .select("id");
+
+      res = userChatData;
+
+      if (userChatError || aiChatError) {
+        console.error(userChatError, aiChatError);
+        throw new Error("couldn't save chat messages");
+      }
+    }
+
+    return res;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 export async function createUser(
   authToken: string,
   userId: string,
@@ -53,75 +313,52 @@ export async function createUser(
     return 400;
   }
 }
-
-export async function storeChannelId(
+export async function createStripeUser(
   authToken: string,
-  user_id: string,
-  youtube_channel_id: string
+  userId: string,
+  subscriptionActive: boolean,
+  plan?: string
 ) {
   try {
     // auth token is here ...
     const db = createServerDbClient(authToken);
 
-    const updatedUser = await db
-      .from("User")
-      .update({
-        youtube_channel_id,
-        updatedAt: new Date(),
+    const stripeUser = await db
+      .from("stripe")
+      .insert({
+        user_id: userId,
+        supscription_active: subscriptionActive,
+        plan: plan || null,
       })
-      .match({ id: user_id })
       .select();
 
-    console.log("updated user: ", updatedUser);
-    return updatedUser.status; // 201
+    console.log("new stripe user!: ", stripeUser);
+    return stripeUser.status; // 201
   } catch (error) {
     console.error(error);
     return 400;
   }
 }
-
-export type StoreOrUpdateParams = {
-  id: string;
-  video_id: string;
-  updatedAt: Date;
-  title: string;
-  description: string;
-  published_at: string;
-  thumbnail_url: string;
-  channel_title: string;
-  channel_id: string;
-  user_id: string;
-};
-
-export async function storeOrUpdateVideo(
+//--------------------------- get caption summary ------------------------------//
+export async function getCaptionSummary(
   authToken: string,
-  video: StoreOrUpdateParams[]
+  caption_id: string,
+  video_id?: string,
+  channel_id?: string
 ) {
   const db = createServerDbClient(authToken);
-
-  const { data, error } = await db.from("Video").upsert(video).select();
-
-  if (data) {
-    return data;
-  } else {
-    return error;
+  if (video_id) {
+    return await db.from("CaptionSummary").select().eq(`video_id`, video_id);
   }
+  return await db.from("CaptionSummary").select().eq(`caption_id`, caption_id);
 }
+//------------------------------ get stripe id ---------------------------------//
+export async function getStripeId(authToken: string, userId: string) {
+  const db = createServerDbClient(authToken);
 
-export type StoreAllCommentsParams = {
-  id: string;
-  comment_id: string;
-  text_display: string;
-  updatedAt: Date;
-  like_count: number;
-  published_at: Date;
-  video_id: string;
-  author_display_name: string;
-  author_image_url: string;
-};
-
-//-------------------------------Get Latest Video Date------------------------------------//
-
+  return await db.from("Stripe").select().eq("user_id", userId);
+}
+//-------------------------- get latest video date -----------------------------//
 export async function getLatestVideoDate(
   authToken: string,
   user_id: string
@@ -148,22 +385,103 @@ export async function getLatestVideoDate(
     return null;
   }
 }
-
-//-------------------------------Read------------------------------------//
-
-export async function getCaptionSummary(
+//----------------------- Update Subscription Status ---------------------------//
+export async function updateStripeUserSubscriptionStatus(
   authToken: string,
-  caption_id: string,
-  video_id?: string
+  subscriptionActive: boolean,
+  userId: string
 ) {
   const db = createServerDbClient(authToken);
-  if (video_id) {
-    return await db.from("CaptionSummary").select().eq(`video_id`, video_id);
-  }
-  return await db.from("CaptionSummary").select().eq(`caption_id`, caption_id);
-}
 
-//-------------------------------Update------------------------------------//
+  return await db
+    .from("stripe")
+    .update({
+      subscription_active: subscriptionActive,
+    })
+    .eq("user_id", userId)
+    .select();
+}
+//-------------------------- Store or Update Video -----------------------------//
+export async function storeOrUpdateVideo(
+  authToken: string,
+  video: StoreOrUpdateParams[]
+) {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db.from("Video").upsert(video).select();
+
+  if (data) {
+    return data;
+  } else {
+    return error;
+  }
+}
+//--------------------------- Type: StoreOrUpdate ------------------------------//
+export type StoreOrUpdateParams = {
+  id: string;
+  video_id: string;
+  updatedAt: Date;
+  title: string;
+  description: string;
+  published_at: string;
+  thumbnail_url: string;
+  channel_title: string;
+  channel_id: string;
+  user_id: string;
+};
+//----------------------------- Store Channel_Id -------------------------------//
+export async function storeChannelId(
+  authToken: string,
+  user_id: string,
+  youtube_channel_id: string
+) {
+  try {
+    const db = createServerDbClient(authToken);
+
+    // Store the youtube_channel_id in the Channel table
+    console.log("Storing channel ID...");
+    const { data: channelData, error: channelError } = await db
+      .from("Channel")
+      .upsert({
+        id: youtube_channel_id,
+        user_id: user_id,
+      })
+      .select();
+
+    if (channelError) {
+      console.error("Error storing the channel ID: ", channelError);
+      return channelError;
+    }
+
+    console.log("Stored channel ID: ", channelData);
+
+    // Update the youtube_channel_id and channel_id in the User table
+    console.log("Updating user's youtube_channel_id and channel_id...");
+    const { data: userData, error: userError } = await db
+      .from("User")
+      .update({
+        youtube_channel_id: youtube_channel_id,
+        channel_id: youtube_channel_id, // Update the channel_id as well
+      })
+      .eq("id", user_id)
+      .select();
+
+    if (userError) {
+      console.error(
+        "Error updating the user's youtube_channel_id and channel_id: ",
+        userError
+      );
+      return userError;
+    }
+
+    console.log("Updated user's youtube_channel_id and channel_id: ", userData);
+    return { channelData, userData };
+  } catch (error) {
+    console.error("Error in storeChannelId: ", error);
+    return 400;
+  }
+}
+//----------------------- update "video has embeddings" ------------------------//
 export async function updateVideoHasEmbeddings(
   authToken: string,
   video_id: string,
@@ -177,17 +495,48 @@ export async function updateVideoHasEmbeddings(
     .eq("id", video_id)
     .select();
 }
-
+//--------------------- TYPE: store all comments parameters --------------------//
+export type StoreAllCommentsParams = {
+  id: string;
+  comment_id: string;
+  text_display: string;
+  updatedAt: Date;
+  like_count: number;
+  published_at: Date;
+  video_id: string;
+  author_display_name: string;
+  author_image_url: string;
+  channel_id: string;
+};
+//----------------------------- store all comments -----------------------------//
 export async function storeAllComments(
   authToken: string,
   allComments: StoreAllCommentsParams[]
 ) {
   const db = createServerDbClient(authToken);
 
+  // FFfetch the channel_id for each video_id
+  for (const comment of allComments) {
+    const { data: videoData, error: videoError } = await db
+      .from("Video")
+      .select("channel_id")
+      .eq("id", comment.video_id);
+
+    if (videoError) {
+      console.error("Error fetching video: ", videoError);
+      return videoError;
+    }
+
+    // Set the channel_id for the comment
+    comment.channel_id = videoData[0]?.channel_id;
+  }
+
   const { data, error } = await db
     .from("Comments")
     .upsert(allComments)
     .select();
+
+  console.log("storing comments to database:", data, error);
 
   if (data) {
     return data;
@@ -195,7 +544,7 @@ export async function storeAllComments(
     return error;
   }
 }
-
+//---------------------- TYPE: store all replies parameters --------------------//
 export type StoreAllRepliesParams = {
   id: string;
   reply_id: string;
@@ -206,8 +555,9 @@ export type StoreAllRepliesParams = {
   author_image_url: string;
   published_at: Date;
   comment_id: string;
+  channel_id: string;
 };
-
+//---------------------------- store all replies -------------------------------//
 export async function storeAllReplies(
   authToken: string,
   allReplies: StoreAllRepliesParams[]
@@ -215,6 +565,7 @@ export async function storeAllReplies(
   const db = createServerDbClient(authToken);
 
   const { data, error } = await db.from("Replies").upsert(allReplies).select();
+  console.log("Storing replies to database:", data, error); // Add this line
 
   if (data) {
     return data;
@@ -222,31 +573,273 @@ export async function storeAllReplies(
     return error;
   }
 }
-
+//------------------------------- get comments ---------------------------------//
 export async function getComments(authToken: string, videoId: string) {
   const db = createServerDbClient(authToken);
 
-  return await db.from("Comments").select().eq(`video_id`, videoId);
+  const result = await db.from("Comments").select().eq(`video_id`, videoId);
+
+  console.log("Fetched comments from database:", result); // Add this line
+
+  return result;
+}
+//----------------------------- UPGRADING METHODS ------------------------------//
+//----------------------- Comments-and-Replies Functions -----------------------//
+// get all video ids that belong to a user id
+export async function getVideoIdsByUserId(authToken: string, user_id: string) {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db
+    .from("Video")
+    .select("id")
+    .eq(`user_id`, user_id);
+
+  if (error) {
+    console.error(error);
+    return null;
+  }
+
+  return data?.map((video) => video.id);
+}
+// get ids of videos that have comments stored
+export async function getVideoIdsFromComments(authToken: string) {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db.from("Comments").select("video_id");
+
+  if (error) {
+    console.error(error);
+    return null;
+  }
+
+  return data?.map((comment) => comment.video_id);
+}
+// get ids of videos that do not have comments stored
+export async function getVideoIdsWithoutComments(
+  authToken: string,
+  user_id: string
+) {
+  const userVideoIds = await getVideoIdsByUserId(authToken, user_id);
+  const commentVideoIds = await getVideoIdsFromComments(authToken);
+
+  if (!userVideoIds || !commentVideoIds) {
+    return null;
+  }
+
+  const videoIdsWithoutComments = userVideoIds.filter(
+    (videoId) => !commentVideoIds.includes(videoId)
+  );
+
+  return videoIdsWithoutComments;
+}
+//----------------------------- Captions Functions -----------------------------//
+// get all video_ids for a user from the Captions table
+export async function getCaptionVideoIdsByUserId(
+  authToken: string,
+  user_id: string
+) {
+  const db = createServerDbClient(authToken);
+  const channel_id = await getChannelIdByUserId(authToken, user_id);
+
+  const { data, error } = await db
+    .from("Captions")
+    .select("video_id")
+    .eq(`channel_id`, channel_id);
+
+  if (error) {
+    console.error(error);
+    return null;
+  }
+
+  return data?.map((caption) => caption.video_id);
+}
+// get all video_ids that exist in the CaptionSummary table
+export async function getCaptionSummaryVideoIdsByUserId(
+  authToken: string,
+  user_id: string
+) {
+  const db = createServerDbClient(authToken);
+  const channel_id = await getChannelIdByUserId(authToken, user_id);
+
+  const { data, error } = await db
+    .from("CaptionSummary")
+    .select("video_id")
+    .eq(`channel_id`, channel_id);
+
+  if (error) {
+    console.error(error);
+    return null;
+  }
+
+  return data?.map((captionSummary) => captionSummary.video_id);
+}
+// get all videoIds that exist iin the Captions table but not in the CaptionSummary Table
+export async function getVideoIdsWithoutCaptionSummary(
+  authToken: string,
+  user_id: string
+) {
+  const captionVideoIds = await getCaptionVideoIdsByUserId(authToken, user_id);
+  const captionSummaryVideoIds = await getCaptionSummaryVideoIdsByUserId(
+    authToken,
+    user_id
+  );
+
+  if (!captionVideoIds || !captionSummaryVideoIds) {
+    return null;
+  }
+
+  const videoIdsWithoutCaptionSummary = captionVideoIds.filter(
+    (videoId) => !captionSummaryVideoIds.includes(videoId)
+  );
+
+  return videoIdsWithoutCaptionSummary;
+}
+//------------------------------ Embeddings Function ---------------------------//
+// get all comments for a given userId
+export async function getAllCommentsByChannelId(
+  authToken: string,
+  user_id: string
+) {
+  const db = createServerDbClient(authToken);
+
+  // fetch th channel_id from the `User` table
+  const { data: userData, error: userError } = await db
+    .from("User")
+    .select("channel_id")
+    .eq("id", user_id);
+
+  if (userError) {
+    console.error("Error fetching user:", userError);
+    return null;
+  }
+
+  const channel_id = userData[0]?.channel_id;
+
+  if (!channel_id) {
+    console.error("No channel_id found for user:", user_id);
+    return null;
+  }
+
+  // Fetch all comments for the channel_id
+  const { data: commentsData, error: commentsError } = await db
+    .from("Comments")
+    .select("*")
+    .eq("channel_id", channel_id);
+
+  if (commentsError) {
+    console.error("Error fetching comments:", commentsError);
+    return null;
+  }
+
+  return commentsData;
 }
 
+//---------------------------- gett active subscribers -------------------------//
+export async function getActiveSubscribers() {
+  const db = createClient(supabaseUrl as string, supabaseKey as string);
+
+  const { data, error } = await db
+    .from("Stripe")
+    .select("user_id")
+    .eq("subscription_active", true);
+
+  if (error) {
+    console.error("Error fetching active subscribers:", error);
+    return null;
+  }
+
+  if (data && data.length > 0) {
+    return data.map((item) => item.user_id);
+  } else {
+    return null;
+  }
+}
+
+//---------------------------- get inactive subscribers ------------------------//
+export async function getInactiveSubscribers() {
+  const db = createClient(supabaseUrl as string, supabaseKey as string);
+
+  const { data, error } = await db
+    .from("Stripe")
+    .select("user_id")
+    .eq("subscription_active", false);
+
+  if (error) {
+    console.error("Error fetching inactive subscribers:", error);
+    return null;
+  }
+
+  if (data && data.length > 0) {
+    return data.map((item) => item.user_id);
+  } else {
+    return null;
+  }
+}
+
+//------------------------------- AUTH TOKEN METHODS ---------------------------//
+// store user's token
+export async function storeUserToken(authToken: string, userId: string) {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db
+    .from("User")
+    .update({ authToken })
+    .eq("id", userId);
+
+  if (error) {
+    console.error("Error storing user token:", error);
+    return null;
+  }
+
+  return data;
+}
+// get user's token
+export async function getUserToken(userId: string) {
+  const db = createServerDbClient();
+
+  const { data, error } = await db
+    .from("User")
+    .select("authToken")
+    .eq("id", userId);
+
+  if (error) {
+    console.error("error fetching user token:", error);
+    return null;
+  }
+
+  if (data && data.length > 0) {
+    return data[0].authToken;
+  } else {
+    return null;
+  }
+}
+
+//------------------------ get all captions from a channel_id ------------------//
 export async function getCaptions(authToken: string, videoId: string) {
   const db = createServerDbClient(authToken);
 
-  return await db.from("Captions").select().eq(`video_id`, videoId);
+  return await db
+    .from("Captions")
+    .select("*, channel_id")
+    .eq(`video_id`, videoId);
 }
 
+//---------------------------- TYPE: comments response -------------------------//
 type CommentsResponse = Awaited<ReturnType<typeof getComments>>;
 export type CommentsResponseSuccess = CommentsResponse["data"];
 export type CommentsResponseError = CommentsResponse["error"];
 
+//-------------------------- TYPE: store captions parameters -------------------//
 export type StoreCaptionsParams = {
   id: string;
   video_id: string;
   captions: string;
   updatedAt: Date;
   language: string;
+  channel_id: string;
 };
 
+//---------------------------------- store captions ----------------------------//
 export async function storeCaptions(
   authToken: string,
   captions: StoreCaptionsParams[]
@@ -262,12 +855,13 @@ export async function storeCaptions(
   }
 }
 
+//--------------------------------- get channel id -----------------------------//
 export async function getChannelId(authToken: string, user_id: string) {
   const db = createServerDbClient(authToken);
 
   return await db.from("User").select().eq(`id`, user_id);
 }
-
+//-------------------------------- get video by id -----------------------------//
 export async function getVideo(authToken: string, videoId: string) {
   const db = createServerDbClient(authToken);
   const res = await db.from("Video").select().eq("id", videoId);
@@ -279,6 +873,7 @@ export async function getVideo(authToken: string, videoId: string) {
   }
 }
 
+//----------------------------- get videos by channel id -----------------------//
 export async function getVideos(authToken: string, channel_id: string) {
   const db = createServerDbClient(authToken);
 
@@ -289,23 +884,51 @@ export async function getVideos(authToken: string, channel_id: string) {
     .order("published_at", { ascending: false });
 }
 
+//---------------------------- get user subscription status---------------------//
+export async function getUserSubscriptionStatus(
+  // authToken: string,
+  userId: string
+) {
+  const db = createServerDbClient();
+
+  const { data, error } = await db
+    .from("Stripe")
+    .select("subscription_active")
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error("Error fetching user subscription status:", error);
+    return null;
+  }
+
+  if (data && data.length > 0) {
+    return data[0].subscription_active === true; // Ensure this is a boolean
+  } else {
+    return null;
+  }
+}
+
+//------------------------------ get videos by user id--------------------------//
 export async function getVideosByUserId(authToken: string, user_id: string) {
   const db = createServerDbClient(authToken);
 
   return await db.from("Video").select().eq(`user_id`, user_id);
 }
 
+//------------------------ TYPE: store comment summary parameters---------------//
 export type StoreCommentSummaryParams = {
-  id: string; // in this case, commentId
+  id: string;
   sentiment: string;
   summary: string;
 };
 
+//------------------------------- store caption summary ------------------------//
 export async function storeCaptionsSummary(
   authToken: string,
   caption_id: string,
   summaryText: string,
-  video_id: string
+  video_id: string,
+  channel_id: string
 ) {
   const db = createServerDbClient(authToken);
   // default values are not being generated by prisma
@@ -317,6 +940,7 @@ export async function storeCaptionsSummary(
       summaryText,
       caption_id,
       video_id,
+      channel_id,
     })
     .select();
 
@@ -330,18 +954,120 @@ export async function storeCaptionsSummary(
   }
 }
 
-// Stage A Pre-Processing -- Draft 1 -- 2021-07-21
+//-------------------------------- get caption summaries------------------------//
+export async function getCaptionSummaries(
+  authToken: string,
+  channel_id: string
+) {
+  const db = createServerDbClient(authToken);
 
+  return await db.from("CaptionSummary").select().eq(`channel_id`, channel_id);
+}
+
+//----------------------------- ALL CAPTION SUMMARY METHODS --------------------//
+// store all caption summary
+export async function storeAllCaptionSummary(
+  authToken: string,
+  allCaptionsSummary: string,
+  channel_id: string
+) {
+  try {
+    const db = createServerDbClient(authToken);
+
+    const updatedSummary = await db
+      .from("AllCaptionSummary")
+      .upsert({
+        channel_id,
+        body: allCaptionsSummary,
+        created_at: new Date(), // Set updated_at to the current date and time
+      })
+      .select();
+
+    console.log("updated summary: ", updatedSummary);
+    return updatedSummary.status; // 201
+  } catch (error) {
+    console.error(error);
+    return 400;
+  }
+}
+// get all caption summary
+export async function getAllCaptionSummary(
+  authToken: string,
+  channel_id: string
+): Promise<{ data: any; error: any }> {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db
+    .from("AllCaptionSummary")
+    .select("body, created_at") // Add created_at here
+    .eq("channel_id", channel_id);
+
+  if (data) {
+    return { data, error: null };
+  } else {
+    console.error("Error retrieving AllCaptionSummary:", error);
+    return { data: null, error };
+  }
+}
+// get most recent caption summary
+export async function getMostRecentCaptionSummary(
+  authToken: string,
+  channel_id: string
+) {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db
+    .from("CaptionSummary")
+    .select("createdAt")
+    .eq("channel_id", channel_id)
+    .order("createdAt", { ascending: false })
+    .limit(1);
+
+  if (error) {
+    console.error("Error fetching most recent CaptionSummary:", error);
+    return null;
+  }
+
+  if (data && data.length > 0) {
+    return data[0];
+  } else {
+    return null;
+  }
+}
+
+//----------------------------- get channel id by user id -----------------------//
+export async function getChannelIdByUserId(authToken: string, user_id: string) {
+  const db = createServerDbClient(authToken);
+  const { data, error } = await db
+    .from("User")
+    .select("channel_id")
+    .eq("id", user_id);
+  if (error) {
+    console.error(error);
+    return null;
+  }
+  return data[0]?.channel_id;
+}
+
+//------------------------------------- TYPE: comment----------------------------//
 export type Comment = {
   comment_id: string;
   text_display: string;
   like_count: number;
   author_display_name: string;
+  channel_id: string;
+  video_id: string;
 };
 
+//--------------------------------- TYPE: SmallComment --------------------------//
 export type SmallComment = Pick<
   Comment,
-  "comment_id" | "text_display" | "like_count" | "author_display_name"
+  | "comment_id"
+  | "text_display"
+  | "like_count"
+  | "author_display_name"
+  | "channel_id"
+  | "video_id"
 >;
 
 // TODO: add a type for the batches
@@ -359,11 +1085,20 @@ export class PreProcessorA {
 
   createSmallCommentsArray() {
     this.smallComments = this.comments.map(
-      ({ comment_id, text_display, like_count, author_display_name }) => ({
+      ({
         comment_id,
         text_display,
         like_count,
         author_display_name,
+        channel_id,
+        video_id,
+      }) => ({
+        comment_id,
+        text_display,
+        like_count,
+        author_display_name,
+        channel_id,
+        video_id,
       })
     );
     console.log("smallComments updated...");
@@ -400,5 +1135,83 @@ export class PreProcessorA {
     return this.createBatches();
   }
 }
+//---------------------------------- Get 'Agreed' Bool -------------------------//
+export async function getUserAgreed(authToken: string, user_id: string) {
+  const db = createServerDbClient(authToken);
+  const { data, error } = await db
+    .from("User")
+    .select("agreed")
+    .eq("id", user_id);
+  if (error) {
+    console.error(error);
+    return null;
+  }
+  return data[0]?.agreed;
+}
+//-------------------------------- Update 'Agreed' Bool ------------------------//
+export async function updateUserAgreed(
+  authToken: string,
+  user_id: string,
+  agreed: boolean
+) {
+  const db = createServerDbClient(authToken);
+  const { data, error } = await db
+    .from("User")
+    .update({ agreed })
+    .eq("id", user_id);
+  if (error) {
+    console.error(error);
+    return false;
+  }
+  return true;
+}
+//----------------------------- get channel id by video id ---------------------//
+export async function getChannelIdByVideoId(
+  authToken: string,
+  video_id: string
+) {
+  const db = createServerDbClient(authToken);
+  const { data, error } = await db
+    .from("Video")
+    .select("channel_id")
+    .eq("id", video_id);
+  if (error) {
+    console.error(error);
+    return null;
+  }
+  return data[0]?.channel_id;
+}
 
-//-------------------------------Delete------------------------------------//
+export async function decrementUserCredits(userId: string, authToken: string) {
+  const db = createServerDbClient(authToken);
+
+  return await db.rpc(`decrement_credits`, { user_id: userId });
+}
+
+export async function getUserById(
+  authToken: string,
+  userId: string,
+  requestedResources?: string[]
+) {
+  const db = createServerDbClient(authToken);
+
+  let resources;
+
+  if (requestedResources && requestedResources.length > 1) {
+    resources = requestedResources.join(", ");
+  }
+  if (requestedResources && requestedResources.length === 1) {
+    resources = requestedResources?.join("");
+  }
+  const { data, error } = await db
+    .from("User")
+    .select(resources && resources)
+    .eq("id", userId);
+
+  if (error) {
+    console.error(error);
+    return null;
+  }
+
+  return data[0];
+}

@@ -1,21 +1,37 @@
-import { getChannelId, getVideos } from "@/lib/supabaseClient";
+// app/Dashboard/page.tsx
+import {
+  getChannelId,
+  getVideos,
+  storeUserToken,
+  getUserSubscriptionStatus,
+} from "@/lib/supabaseClient";
 import VideoCard from "@/app/components/VideoCards";
 import { auth, currentUser } from "@clerk/nextjs";
 import { Button } from "@nextui-org/button";
 import Tabs from "@/app/components/Tabs";
+import ProTabs from "@/app/components/ProTabs";
 import NavBar from "@/app/components/NavBar";
-// get the OAuth token from clerk
+import DesktopTrends from "@/app/components/DesktopTrends";
+
 export default async function Home() {
   const { userId, getToken } = auth();
-  console.log(userId);
   const token = await getToken({ template: "supabase" });
 
+  if (token && userId) {
+    await storeUserToken(token, userId);
+  }
+
   // create placeholders and update after recieving google token
-  let videos, youtube_channel_id;
+  let videos, youtube_channel_id, nextCreditsDate;
+  let credits: number = 0;
 
   try {
     const user = await getChannelId(token as string, userId as string);
     youtube_channel_id = user?.data && user.data[0].youtube_channel_id;
+    credits = user?.data && user.data[0].credits;
+    nextCreditsDate = new Date(
+      user?.data && user.data[0].updateCreditDate
+    ).toLocaleDateString();
     //console.log("ch id: ", youtube_channel_id);
   } catch (error) {
     console.error("error on get channel id.. ", error);
@@ -26,18 +42,28 @@ export default async function Home() {
       token as string,
       (youtube_channel_id as unknown as string) || ""
     );
-    console.log("videos from getVideos: ", videos);
   } catch (error) {
     console.error(error);
   }
 
+  // Get the user's subscription status
+  const subscriptionStatus = await getUserSubscriptionStatus(userId as string);
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="bg-black min-h-screen">
       <NavBar />
-      <div className="pt-8">
-        <Tabs />
-        <div className="flex flex-col items-center text-black justify-start xl:px-20 pt-10 pb-10 bg-white">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-12 gap-12 sm:px-4 md:px-8 lg:px-10 xl:px-20 2xl:px-32">
+      <div className="pt-6">
+        {subscriptionStatus ? (
+          <ProTabs channelId={youtube_channel_id} />
+        ) : (
+          <Tabs
+            channelId={youtube_channel_id}
+            credits={credits}
+            nextCreditsDate={nextCreditsDate}
+          />
+        )}
+        <div className="flex flex-col-1 items-center lg:flex-col-2 lg:items-start text-black justify-center pt-6 pb-6 bg-black ">
+          <div className=" rounded-xl  bg-black mx-4 mb-2 pt-5 lg:pt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12 px-4 md:px-8 lg:px-10 overflow-y-auto h-screen-65 lg:h-screen-75">
             {videos
               ? videos.data?.map((video, i) => (
                   <VideoCard
@@ -46,7 +72,9 @@ export default async function Home() {
                     title={video.title as string}
                     imageUrl={video.thumbnail_url as string}
                     hasEmbeddings={video.hasEmbeddings}
+                    credits={credits}
                     //TODO: store this in database
+                    subscriptionStatus={subscriptionStatus as boolean} // Pass subscriptionStatus as a prop
                   />
                 ))
               : "no videos found"}

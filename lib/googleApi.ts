@@ -5,6 +5,7 @@ import {
   StoreAllRepliesParams,
   storeCaptions,
   StoreCaptionsParams,
+  getChannelIdByVideoId,
 } from "./supabaseClient";
 import StringHelpers from "@/helpers/stringHelpers";
 
@@ -26,10 +27,15 @@ export async function getOAuthData(userId: string, provider: string) {
 }
 
 export class GoogleApi {
-  static async getCaptions(token: string, videoId: string, userOAuth: string) {
+  static async getCaptions(
+    token: string,
+    videoId: string,
+    userOAuth: string,
+    channel_id: string
+  ) {
     console.log("getting captions from google...");
     console.log(
-      `token is ${token}, videoId: ${videoId}, userOAuth: ${userOAuth}`
+      `token is ${token}, videoId: ${videoId}, userOAuth: ${userOAuth}, Channel ID: ${channel_id}`
     );
     // fetch captions from YouTube API
     let captionsArr: StoreCaptionsParams[] = [];
@@ -69,6 +75,7 @@ export class GoogleApi {
             language: caption.snippet.language as string,
             captions: captionText as string,
             updatedAt: new Date(),
+            channel_id: channel_id,
           });
         }
         await storeCaptions(token as string, captionsArr);
@@ -108,6 +115,7 @@ export class GoogleApi {
         );
         console.log("got response...");
         commentsOneVideo = await res.json();
+        console.log("YouTube API response:", commentsOneVideo); // Add this line
         console.log("nextPage token: ", commentsOneVideo.nextPageToken);
         // make this the last loop if there is not nextPageToken
         if (!commentsOneVideo.nextPageToken) {
@@ -151,6 +159,11 @@ export class GoogleApi {
         const repliesArr: StoreAllRepliesParams[] = [];
         console.log(commentsOneVideo.items.length);
         for (let item of commentsOneVideo.items) {
+          const channelId = await getChannelIdByVideoId(
+            token,
+            item.snippet.topLevelComment.snippet.videoId
+          );
+
           commentsArr.push({
             id: item.snippet.topLevelComment.id as string,
             comment_id: item.snippet.topLevelComment.id as string,
@@ -166,6 +179,7 @@ export class GoogleApi {
             author_image_url: item.snippet.topLevelComment.snippet
               .authorProfileImageUrl as string,
             updatedAt: new Date(),
+            channel_id: channelId, // Include the channelId here
           });
           if (item.replies) {
             for (let reply of item.replies.comments) {
@@ -179,6 +193,7 @@ export class GoogleApi {
                 author_display_name: reply.snippet.authorDisplayName as string,
                 author_image_url: reply.snippet.authorProfileImageUrl as string,
                 updatedAt: new Date(),
+                channel_id: channelId,
               });
             }
           }
@@ -186,7 +201,10 @@ export class GoogleApi {
         console.log("storing to database", times);
         console.log(commentsArr.length);
         console.log(repliesArr.length);
+        console.log("Storing comments to database:", commentsArr); // Add this line
         await storeAllComments(token as string, commentsArr);
+
+        console.log("Storing replies to database:", repliesArr); // Add this line
         await storeAllReplies(token as string, repliesArr);
       }
     }

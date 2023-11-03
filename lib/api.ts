@@ -50,6 +50,37 @@ export async function getOrCreateCaptionSummary(videoid: string) {
   }
 }
 
+export async function getChannelId() {
+  try {
+    const res = await fetch("/api/analysis/channel-id", {
+      method: "GET",
+    });
+    const data = await res.json();
+    console.log("getChannelId data:", data); // Add console log here
+    return data.channelId;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function getOrCreateAllCaptionSummary(channelid: string) {
+  try {
+    const res = await fetch("/api/analysis/all-captions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ channelid }),
+    });
+    console.log("Response status:", res.status); // Add console log here
+    const data = await res.json();
+    console.log("Response data:", data); // Add console log here
+    return data.message;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 export async function getAllComments(videoid: string) {
   try {
     const res = await fetch("/api/analysis/comments-and-replies", {
@@ -77,6 +108,46 @@ export async function getOrCreateEmbeddings(videoid: string) {
     });
     const data = await res.json();
     return data.message;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function updateChatHistory(
+  videoid: string,
+  conversationId: string,
+  userMessage: string,
+  aiMessage: string,
+  channelId: string
+) {
+  try {
+    const res = await fetch("/api/chat/update-history", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        videoid,
+        conversationId,
+        userMessage,
+        aiMessage,
+        channelId,
+      }),
+    });
+    const data = await res.json();
+    return data.message;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function decrementCredits() {
+  try {
+    const res = await fetch("/api/account/update-credits", {
+      method: "POST",
+    });
+    const data = await res.json();
+    return data;
   } catch (error) {
     console.error(error);
   }

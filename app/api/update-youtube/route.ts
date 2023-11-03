@@ -117,7 +117,12 @@ export async function GET() {
     console.log(`getting all captions for ${videosToStore.length} videos`);
     for (let video of videosToStore) {
       try {
-        await GoogleApi.getCaptions(token, video.id, userOAuth[0].token);
+        await GoogleApi.getCaptions(
+          token,
+          video.id,
+          userOAuth[0].token,
+          video.channel_id
+        );
       } catch (error) {
         console.error(error);
       }
@@ -126,9 +131,5 @@ export async function GET() {
 
   return NextResponse.json({
     message: "New videos and their captions have been stored successfully",
-  });
-
-  return NextResponse.json({
-    message: "New videos have been stored successfully",
   });
 }

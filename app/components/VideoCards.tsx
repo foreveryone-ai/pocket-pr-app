@@ -3,7 +3,8 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@nextui-org/button";
-import { Card, CardHeader, CardBody } from "@nextui-org/card";
+import { Chip } from "@nextui-org/chip";
+import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
 import { useRouter } from "next/navigation";
 import {
   Modal,
@@ -20,6 +21,7 @@ import {
   getOrCreateCaptionSummary,
   getAllComments,
   getOrCreateEmbeddings,
+  decrementCredits,
 } from "@/lib/api";
 
 const playfairDisplay500 = Playfair_Display({
@@ -33,6 +35,8 @@ type VideoCardProps = {
   title: string;
   imageUrl: string;
   hasEmbeddings: boolean;
+  credits: number;
+  subscriptionStatus: boolean;
 };
 
 export default function VideoCard({
@@ -41,6 +45,8 @@ export default function VideoCard({
   imageUrl,
   videoId,
   hasEmbeddings,
+  credits,
+  subscriptionStatus,
 }: VideoCardProps) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -63,6 +69,10 @@ export default function VideoCard({
     onOpenChange();
     setIsLoading(true);
 
+    if (!credits) {
+      throw new Error("no credits available");
+    }
+
     try {
       // get captions summary
       const summaryRes = await getOrCreateCaptionSummary(videoId);
@@ -71,18 +81,20 @@ export default function VideoCard({
       // create embeddings
       const embeddingsRes = await getOrCreateEmbeddings(videoId);
 
-      console.log("summaryRes", summaryRes);
-      console.log("commentsRes", commentsRes);
-      console.log("embeddingsRes", embeddingsRes);
-
       // check if all was successful and decrement the users credits
-      if (summaryRes && summaryRes && embeddingsRes) {
-        setShowChat(true);
+      if (summaryRes && commentsRes && embeddingsRes) {
+        try {
+          const credits = await decrementCredits();
+          if (!credits.error) {
+            setShowChat(true);
+          }
+          console.log(credits);
+        } catch (error) {
+          console.error("problem with credits");
+        }
       } else {
         openNoCommentsModal();
       }
-      //TODO: show modal saying no chat available because
-      //TODO: the video has not captions and/or comments
     } catch (error) {
       console.error("Error during API calls", error);
     } finally {
@@ -96,7 +108,7 @@ export default function VideoCard({
     setIsRedirecting(false);
   };
 
-  const truncateTitle = (title: string, limit: number = 10) => {
+  const truncateTitle = (title: string, limit: number = 20) => {
     return title.length > limit ? `${title.substring(0, limit)}...` : title;
   };
 
@@ -108,73 +120,99 @@ export default function VideoCard({
 
   return (
     <div className="relative">
-      <Card className="py-3 bg-green-800">
-        <CardHeader className="pb-0 pt-2 px-5 flex justify-between items-start">
-          <div>
-            <Skeleton isLoaded={isLoaded} className="rounded-md">
-              <p className="text-tiny text-red-500 font-md">YouTube</p>
-            </Skeleton>
-            <Skeleton isLoaded={isLoaded} className="rounded-lg">
-              <h4 className="font-playfair font-bold text-white text-md">
-                {truncateTitle(title)}
-              </h4>
-            </Skeleton>
-          </div>
-          {!showChat ? (
-            <Button variant="ghost" className="text-white" onPress={onOpen}>
-              Analyze
-            </Button>
-          ) : (
-            <Button
-              variant="ghost"
-              className="text-white"
-              onPress={handleChatRedirect}
-              isLoading={isRedirecting}
-            >
-              Chat
-            </Button>
-          )}
-        </CardHeader>
+      <Card className="bg-gradient-to-tr rounded-3xl from-yellow-200 to-blue-400 p-3">
+        <Card className="pt-3 text-black bg-black shadow-lg text-lg">
+          <CardHeader className="pb-0 pt-2 px-5 flex justify-between items-start">
+            <div>
+              <Skeleton isLoaded={isLoaded} className="rounded-md">
+                <Chip className="bg-red-700" size="sm">
+                  <p className="text-tiny text-white font-md">YouTube</p>
+                </Chip>
+              </Skeleton>
+              <Skeleton isLoaded={isLoaded} className="rounded-lg">
+                <h4 className="font-light pt-2 text-white text-xl">
+                  {truncateTitle(title)}
+                </h4>
+              </Skeleton>
+            </div>
+          </CardHeader>
 
-        <CardBody className="overflow-visible py-2 max-h-480">
-          <div className="h-56 w-full flex items-center justify-center">
-            <Skeleton isLoaded={isLoaded} className="rounded-large h-56 w-full">
-              <Image
-                alt={title}
-                className="object-cover pt-2 rounded-xl"
-                src={imageUrl}
-                width={270}
-                height={480}
-              />
-            </Skeleton>
-          </div>
-        </CardBody>
+          <CardBody className="overflow-visible max-h-480">
+            <div className="h-36 w-full flex items-center justify-center">
+              <Skeleton isLoaded={isLoaded} className="rounded-large w-full">
+                <Image
+                  alt={title}
+                  className="object-cover pt-2 rounded-xl"
+                  src={imageUrl}
+                  width={270}
+                  height={480}
+                />
+              </Skeleton>
+            </div>
+          </CardBody>
+          <CardFooter className="flex">
+            {!showChat && !subscriptionStatus ? ( // Render the "Analyze" button for non-subscribers when showChat is false
+              <Button
+                className="bg-gradient-to-tr from-blue-400 to-yellow-500 text-black shadow-lg text-lg mx-2 mb-2"
+                fullWidth
+                onPress={onOpen}
+              >
+                Analyze
+              </Button>
+            ) : showChat ? ( // Render the "Chat" button for all users when showChat is true
+              <Button
+                fullWidth
+                className="bg-gradient-to-tr from-blue-400 to-yellow-500 text-black shadow-lg text-lg mx-2 mb-2"
+                onPress={handleChatRedirect}
+                isLoading={isRedirecting}
+              >
+                Chat
+              </Button>
+            ) : (
+              <Button
+                variant="ghost"
+                fullWidth
+                className="text-white text-lg mx-2 mb-2"
+                isDisabled
+              >
+                No Comments
+              </Button>
+            )}
+          </CardFooter>
+        </Card>
       </Card>
 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent>
+        <ModalContent className="bg-gray-900">
           {() => (
             <>
-              <ModalHeader className="flex flex-col gap-1 text-black font-black">
-                Confirm Analysis of &quot;{title}&quot;
+              <ModalHeader className="flex flex-col gap-1 text-white font-extrabold text-2xl">
+                Confirm Analysis of:
+                <span className="text-xl font-light">
+                  <i>&quot;{title}&quot;</i>
+                </span>
               </ModalHeader>
               <ModalBody className="">
-                <p className="text-black ">
+                <p className="font-light text-large text-white ">
                   If you&apos;d like to analyze this video, click on &quot;Get
                   Started&quot; below.
                 </p>
-                <p className="text-black ">
+                <p className="font-light text-large text-white ">
                   Once you do, the analysis process will begin. This typically
                   takes a couple of minutes, depending on the number of comments
                   on your video.
                 </p>
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="light" onPress={onOpenChange}>
+                <Button
+                  variant="ghost"
+                  className="text-red-500 text-large"
+                  onPress={onOpenChange}
+                >
                   Close
                 </Button>
                 <Button
-                  className="bg-green-600 text-white"
+                  className="bg-gradient-to-tr from-blue-400 to-yellow-500 text-black text-large"
                   onPress={handleModalClose}
                 >
                   Get Started
@@ -189,17 +227,17 @@ export default function VideoCard({
         isOpen={isNoCommentsModalOpen}
         onOpenChange={toggleNoCommentsModal}
       >
-        <ModalContent>
+        <ModalContent className="bg-black">
           {() => (
             <>
-              <ModalHeader className="flex flex-col gap-1 text-black font-black">
+              <ModalHeader className="flex flex-col gap-1 text-white font-extrabold text-2xl">
                 Not Enough Comments
               </ModalHeader>
               <ModalBody className="">
-                <p className="text-black ">
+                <p className="text-white text-large font-light">
                   Unfortunately, this video does not have enough comments to
                   perform an analysis. When your video has more comments, click
-                  the &quot;Update&quot; button at the top left of the dashboard to
+                  the &quot;Update&quot; button at the top of the dashboard to
                   retrieve your latest feedback.
                 </p>
               </ModalBody>

@@ -11,6 +11,11 @@ module.exports = {
   ],
   theme: {
     extend: {
+      height: {
+        "screen-75": "75vh",
+        "screen-65": "65vh",
+        "screen-50": "50vh",
+      },
       fontFamily: {
         inter: ["Inter", "sans-serif"],
         playfair: ["Playfair Display", "serif"],
@@ -28,7 +33,7 @@ module.exports = {
   darkMode: "class",
   plugins: [
     nextui(),
-    require("daisyui"),
+    // require("daisyui"),
     require("@tailwindcss/forms"),
     require("@tailwindcss/aspect-ratio"),
   ],

@@ -16,8 +16,13 @@ export async function GET() {
   if (userId && token) {
     try {
       userOAuth = await getOAuthData(userId, "oauth_google");
+      console.log("userOAuth:", userOAuth); // Add this line
+      if (!userOAuth || userOAuth.length === 0) {
+        return NextResponse.json({ message: "No OAuth data found" });
+      }
     } catch (error) {
-      return NextResponse.json({ message: "No oath found" });
+      console.error("Error retrieving OAuth data:", error); // Modify this line to log the error
+      return NextResponse.json({ message: "Error retrieving OAuth data" });
     }
   }
 
@@ -31,17 +36,17 @@ export async function GET() {
       return NextResponse.json({ message: "Error on getVideosByUserId" });
     }
     if (videoData && videoData.length > 0) {
-      const videoIds = [];
-      console.log("getting video ids...");
+      console.log(`getting all captions for ${videoData.length} videos`);
       for (let video of videoData) {
-        videoIds.push(video.id);
-      }
-      console.log(`getting all captions for ${videoIds.length} videos`);
-      for (let vId of videoIds) {
         // Refresh the token
         //token = await getToken({ template: "supabase" });
         //userOAuth = await getOAuthData(userId as string, "oauth_google"); // Refresh the userOAuth
-        await GoogleApi.getCaptions(token as string, vId, userOAuth[0].token);
+        await GoogleApi.getCaptions(
+          token as string,
+          video.id,
+          userOAuth[0].token,
+          video.channel_id as string
+        );
       }
     }
   } catch (error) {
