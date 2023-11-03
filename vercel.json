@@ -6,10 +6,6 @@
   },
   "crons": [
     {
-      "path": "/api/cron-jobs/yt-update-free",
-      "schedule": "0 9 * * 0"
-    },
-    {
       "path": "/api/cron-jobs/yt-update-pro",
       "schedule": "0 9 * * *"
     }
