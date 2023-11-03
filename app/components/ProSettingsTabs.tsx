@@ -1,24 +1,35 @@
 "use client";
-import React from "react";
-import { useState } from "react";
 import { Tabs, Tab } from "@nextui-org/tabs";
 import { Card, CardBody } from "@nextui-org/card";
 import { Button } from "@nextui-org/button";
-import { Radio, RadioGroup } from "@nextui-org/radio";
+import Stripe from "stripe";
 
-export default function App() {
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
+  apiVersion: "2023-08-16",
+});
+interface AppProps {
+  customerId: string | null;
+}
+export default function App({ customerId }: AppProps) {
+  const handleDowngrade = async () => {
+    if (customerId) {
+      const session = await stripe.billingPortal.sessions.create({
+        customer: customerId,
+        return_url: "https://pocketpr.app/Dashboard",
+      });
+
+      window.location.href = session.url;
+    } else {
+      console.error("Failed to get Stripe customer id");
+    }
+  };
   return (
     <div className="flex w-full flex-col items-center pt-10">
       <Tabs aria-label="Options">
         <Tab key="subscription" title="Subscription">
           <Card>
             <CardBody>
-              <Button
-                color="danger"
-                onPress={() => {
-                  /* Downgrade to Free logic here */
-                }}
-              >
+              <Button color="danger" onPress={handleDowngrade}>
                 Downgrade to Free
               </Button>
             </CardBody>
