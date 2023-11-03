@@ -71,21 +71,14 @@ export default function VideoCard({
 
     try {
       // get captions summary
-      //const summaryRes = await getOrCreateCaptionSummary(videoId);
+      const summaryRes = await getOrCreateCaptionSummary(videoId);
       // get all comments
-      //const commentsRes = await getAllComments(videoId);
+      const commentsRes = await getAllComments(videoId);
       // create embeddings
-      //const embeddingsRes = await getOrCreateEmbeddings(videoId);
-      let summaryRes = true;
-      let commentsRes = true;
-      let embeddingsRes = true;
-
-      console.log("summaryRes", summaryRes);
-      console.log("commentsRes", commentsRes);
-      console.log("embeddingsRes", embeddingsRes);
+      const embeddingsRes = await getOrCreateEmbeddings(videoId);
 
       // check if all was successful and decrement the users credits
-      if (summaryRes && summaryRes && embeddingsRes) {
+      if (summaryRes && commentsRes && embeddingsRes) {
         try {
           const credits = await decrementCredits();
           if (!credits.error) {
@@ -98,8 +91,6 @@ export default function VideoCard({
       } else {
         openNoCommentsModal();
       }
-      //TODO: show modal saying no chat available because
-      //TODO: the video has not captions and/or comments
     } catch (error) {
       console.error("Error during API calls", error);
     } finally {

@@ -17,7 +17,7 @@ import {
 } from "@nextui-org/modal";
 import { UserIcon, ChatBubbleLeftRightIcon } from "@heroicons/react/20/solid";
 import { Accordion, AccordionItem } from "@nextui-org/accordion";
-import { user } from "@nextui-org/react";
+import { Chip, user } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { getChannelId, getOrCreateAllCaptionSummary } from "@/lib/api";
 
@@ -90,9 +90,15 @@ function classNames(...classes: string[]): string {
 
 type ChannelChatParams = {
   channelId?: string;
+  credits?: number;
+  nextCreditsDate?: string;
 };
 
-export default function Home({ channelId }: ChannelChatParams) {
+export default function Home({
+  channelId,
+  credits,
+  nextCreditsDate,
+}: ChannelChatParams) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoading, setIsLoading] = useState(false);
   const [isCcLoading, setIsCcLoading] = useState(false);
@@ -300,6 +306,11 @@ export default function Home({ channelId }: ChannelChatParams) {
               </Modal> */}
           </div>
         </div>
+      </div>
+      <div className="flex justify-end px-12">
+        <Chip size="sm" className="bg-red-700 text-white">
+          {credits} credits, 4 more on {nextCreditsDate}
+        </Chip>
       </div>
     </>
   );

@@ -22,13 +22,16 @@ export default async function Home() {
   }
 
   // create placeholders and update after recieving google token
-  let videos, youtube_channel_id;
-  let credits: number;
+  let videos, youtube_channel_id, nextCreditsDate;
+  let credits: number = 0;
 
   try {
     const user = await getChannelId(token as string, userId as string);
     youtube_channel_id = user?.data && user.data[0].youtube_channel_id;
     credits = user?.data && user.data[0].credits;
+    nextCreditsDate = new Date(
+      user?.data && user.data[0].updateCreditDate
+    ).toLocaleDateString();
     //console.log("ch id: ", youtube_channel_id);
   } catch (error) {
     console.error("error on get channel id.. ", error);
@@ -53,7 +56,11 @@ export default async function Home() {
         {subscriptionStatus ? (
           <ProTabs channelId={youtube_channel_id} />
         ) : (
-          <Tabs channelId={youtube_channel_id} />
+          <Tabs
+            channelId={youtube_channel_id}
+            credits={credits}
+            nextCreditsDate={nextCreditsDate}
+          />
         )}
         <div className="flex flex-col-1 items-center lg:flex-col-2 lg:items-start text-black justify-center pt-6 pb-6 bg-black ">
           <div className=" rounded-xl  bg-black mx-4 mb-2 pt-5 lg:pt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12 px-4 md:px-8 lg:px-10 overflow-y-auto h-screen-65 lg:h-screen-75">

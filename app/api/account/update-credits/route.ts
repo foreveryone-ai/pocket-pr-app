@@ -28,15 +28,18 @@ export async function POST() {
     console.error(error);
   }
   try {
-    const userData = await getUserById(token, userId, ["credits", "createdAt"]);
+    const userData = await getUserById(token, userId, [
+      "credits",
+      "updateCreditDate",
+    ]);
     if (!userData) {
       throw new Error("error on getting credits");
     }
     console.log("userData: ", userData);
     // @ts-ignore
-    if (userData && userData.credits) {
+    if (userData && userData.credits && userData.updateCreditDate) {
       // @ts-ignore
-      nextStart = getNextBillingStartDate(new Date(userData.createdAt));
+      nextStart = new Date(userData.updateCreditDate).toLocaleDateString();
       return NextResponse.json(
         {
           message:
@@ -48,12 +51,12 @@ export async function POST() {
       );
     } else {
       // @ts-ignore
-      nextStart = getNextBillingStartDate(new Date(userData.createdAt));
+      nextStart = new Date(userData.updateCreditDate).toLocaleDateString();
       return NextResponse.json(
         {
           error:
             // @ts-ignore
-            `You have ${userData.credits} left. Next credits available on ` +
+            `You have ${userData.credits} credits left. Next credits available on ` +
             (nextStart ?? ""),
         },
         { status: 402 }
