@@ -66,7 +66,7 @@ export default function Privacy() {
               <h2 className="font-light text-3xl pt-4 pb-1 ">Chat Messages</h2>
               <ul className="font-light text-xl text-gray-300">
                 <li>
-                  All chat messages exchanged with the App&quot;s chatbot are
+                  All chat messages exchanged with the App&apos;s chatbot are
                   saved by PocketPR.
                 </li>
                 <li>
@@ -163,7 +163,7 @@ export default function Privacy() {
                 describes how PocketPR collects, uses, and protects your
                 information. By accessing or using the App, you agree to this
                 Privacy Policy in addition to the User Agreement. If
-                there&quot;s any inconsistency between this Privacy Policy and
+                there&apos;s any inconsistency between this Privacy Policy and
                 the User Agreement, this Privacy Policy will prevail.
               </p>
             </li>
@@ -175,7 +175,7 @@ export default function Privacy() {
                 When you use the App, we collect:
               </p>
               <ul className="font-light text-xl text-gray-300">
-                <li>Chat messages exchanged with the App&quot;s chatbot.</li>
+                <li>Chat messages exchanged with the App&apos;s chatbot.</li>
                 <li>
                   Basic usage data like frequency, duration, and features
                   accessed.
@@ -190,7 +190,7 @@ export default function Privacy() {
                 We use the collected information for:
               </p>
               <ul className="font-light text-xl text-gray-300">
-                <li>Improving the App&quot;s performance and features.</li>
+                <li>Improving the App&apos;s performance and features.</li>
                 <li>Training and improving future models.</li>
                 <li>
                   Understanding user behavior and preferences to enhance user
@@ -203,7 +203,7 @@ export default function Privacy() {
                 Data Anonymization
               </h2>
               <p className="font-light text-xl text-gray-300">
-                All chat messages exchanged with the App&quot;s chatbot are
+                All chat messages exchanged with the App&apos;s chatbot are
                 stored in an anonymized manner. We remove all personal
                 identifiers to ensure that individual users cannot be identified
                 from the saved data.
