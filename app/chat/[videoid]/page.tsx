@@ -16,6 +16,8 @@ export default async function ChatPage({
 }: {
   params: { videoid: string };
 }) {
+  let videoid;
+
   const { userId, getToken } = auth();
   console.log(userId);
   const token = await getToken({ template: "supabase" });

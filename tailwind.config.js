@@ -18,7 +18,6 @@ module.exports = {
       },
       fontFamily: {
         inter: ["Inter", "sans-serif"],
-        playfair: ["Playfair Display", "serif"],
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

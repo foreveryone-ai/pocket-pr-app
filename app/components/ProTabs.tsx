@@ -100,7 +100,7 @@ export default function Home({ channelId }: ChannelChatParams) {
   const handleClick = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("/api/update-youtube", {
+      const response = await fetch("/api/update-youtube-pro", {
         method: "GET",
       });
       const data = await response.json();

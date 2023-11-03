@@ -11,7 +11,7 @@ export default function Hero() {
   };
   return (
     <>
-      <section className="bg-black pt-32 lg:pt-36 lg:pb-12 smooth-scroll px-16">
+      <section className="bg-black pt-24 lg:pt-36 lg:pb-12 smooth-scroll px-4 lg:px-16">
         <div className="grid max-w-screen-xl px-8 xl:pl-36 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-11">
           <div className="place-self-center lg:col-span-7">
             <h1 className="max-w-3xl mb-4 font-extrabold tracking-tight leading-none text-5xl lg:text-6xl text-white">
