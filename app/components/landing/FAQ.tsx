@@ -52,8 +52,7 @@ export default function FAQ() {
                       </h3>
                       <p className="text-gray-300 text-xl">
                         Message data is anonymized and stored for the purpose of
-                        fine-tuning our models. Pro users have the option to
-                        opt-out from the settings page.
+                        fine-tuning our models.
                       </p>
                     </div>
                     <div className="mb-10">
