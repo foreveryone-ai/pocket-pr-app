@@ -20,7 +20,7 @@ export default function About() {
           </div>
         </div>
         <div className="min-h-screen">
-          <div className="pt-40">
+          <div className="lg:pt-40">
             <div className="bg-gradient-to-r rounded-3xl from-blue-400 to-yellow-500 p-4">
               <div className="bg-black rounded-2xl">
                 <h1 className="px-6 pb-4 pt-8 text-4xl flex justify-start pl-8 lg:pl-0 lg:justify-center align-center md:text-5xl font-extrabold gradient-text-dual">
@@ -37,7 +37,7 @@ export default function About() {
           </div>
         </div>
         <div className="min-h-screen">
-          <div className="pt-40">
+          <div className="lg:pt-40">
             <div className="bg-gradient-to-r rounded-3xl from-blue-400 to-yellow-500 p-4">
               <div className="bg-black rounded-2xl">
                 <h1 className="px-6 pb-4 pt-8 text-4xl flex justify-start pl-8 lg:pl-0 lg:justify-center align-center md:text-5xl font-extrabold gradient-text-dual">
