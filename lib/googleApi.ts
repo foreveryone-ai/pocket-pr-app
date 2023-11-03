@@ -90,7 +90,7 @@ export class GoogleApi {
   static async getCommentsAndReplies(token: string, videoId: string) {
     // avoid infinite loop for you tube api calls
     let times = 0;
-    let failSafe = 10;
+    let failSafe = 100;
     let nextPage: string | undefined;
     let res;
     let morePages = true;
