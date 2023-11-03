@@ -167,6 +167,11 @@ export default function Home({
             {isLoading ? <Spinner size="sm" /> : "Update"}
           </Button>
         </div>
+        <div className="px-4">
+          <Chip size="sm" className="bg-red-700 text-white">
+            {credits} credits remaining. 4 more on {nextCreditsDate}
+          </Chip>
+        </div>
         {/* <div>
             <Tabs
               disabledKeys={[
@@ -306,11 +311,6 @@ export default function Home({
               </Modal> */}
           </div>
         </div>
-      </div>
-      <div className="flex justify-end px-12">
-        <Chip size="sm" className="bg-red-700 text-white">
-          {credits} credits, 4 more on {nextCreditsDate}
-        </Chip>
       </div>
     </>
   );

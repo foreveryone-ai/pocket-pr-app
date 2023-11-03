@@ -151,23 +151,36 @@ export default function VideoCard({
             </div>
           </CardBody>
           <CardFooter className="flex">
-            {!showChat && !subscriptionStatus ? ( // Render the "Analyze" button for non-subscribers when showChat is false
-              <Button
-                className="bg-gradient-to-tr from-blue-400 to-yellow-500 text-black shadow-lg text-lg mx-2 mb-2"
-                fullWidth
-                onPress={onOpen}
-              >
-                Analyze
-              </Button>
-            ) : showChat ? ( // Render the "Chat" button for all users when showChat is true
-              <Button
-                fullWidth
-                className="bg-gradient-to-tr from-blue-400 to-yellow-500 text-black shadow-lg text-lg mx-2 mb-2"
-                onPress={handleChatRedirect}
-                isLoading={isRedirecting}
-              >
-                Chat
-              </Button>
+            {credits > 0 ? (
+              <>
+                {!showChat && !subscriptionStatus ? (
+                  <Button
+                    className="bg-gradient-to-tr from-blue-400 to-yellow-500 text-black shadow-lg text-lg mx-2 mb-2"
+                    fullWidth
+                    onPress={onOpen}
+                  >
+                    Analyze
+                  </Button>
+                ) : showChat ? (
+                  <Button
+                    fullWidth
+                    className="bg-gradient-to-tr from-blue-400 to-yellow-500 text-black shadow-lg text-lg mx-2 mb-2"
+                    onPress={handleChatRedirect}
+                    isLoading={isRedirecting}
+                  >
+                    Chat
+                  </Button>
+                ) : (
+                  <Button
+                    variant="ghost"
+                    fullWidth
+                    className="text-white text-lg mx-2 mb-2"
+                    isDisabled
+                  >
+                    No Comments
+                  </Button>
+                )}
+              </>
             ) : (
               <Button
                 variant="ghost"
@@ -175,7 +188,7 @@ export default function VideoCard({
                 className="text-white text-lg mx-2 mb-2"
                 isDisabled
               >
-                No Comments
+                No Credits
               </Button>
             )}
           </CardFooter>
