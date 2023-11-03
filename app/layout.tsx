@@ -1,8 +1,6 @@
 import "./globals.css";
 import { dark } from "@clerk/themes";
-import { Public_Sans } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
-import NavBar from "./components/NavBar";
 import { Providers } from "./providers";
 
 export default function RootLayout({
@@ -14,10 +12,10 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <title>PocketPR - Simplify the Conversation</title>
-        <meta name="title" content="PocketPR - Simplify the Conversation" />
+        <meta name="title" content="PocketPR - Turn feedback into fame" />
         <meta
           name="description"
-          content="Automated public relations assistants for content creators, influencers, businesses, and you! "
+          content="Automated PR assistants for content creators, influencers, businesses, and you! "
         />
 
         <meta property="og:type" content="website" />
@@ -28,7 +26,7 @@ export default function RootLayout({
         />
         <meta
           property="og:description"
-          content="Automated public relations assistants for content creators, influencers, businesses, and you! "
+          content="Automated PR assistants for content creators, influencers, businesses, and you! "
         />
         <meta property="og:image" content="https://pocketpr.app/meta.png" />
 
@@ -40,7 +38,7 @@ export default function RootLayout({
         />
         <meta
           property="twitter:description"
-          content="Automated public relations assistants for content creators, influencers, businesses, and you! "
+          content="Automated PR assistants for content creators, influencers, businesses, and you! "
         />
         <meta
           property="twitter:image"
@@ -50,21 +48,11 @@ export default function RootLayout({
       <ClerkProvider
         appearance={{
           baseTheme: dark,
-          // layout: {
-          //   logoPlacement: "inside",
-          // },
-          // variables: {
-          //   colorPrimary: "green",
-          //   colorText: "green",
-          // },
         }}
       >
         <body>
           <main>
-            <Providers>
-              {/* <NavBar /> */}
-              {children}
-            </Providers>
+            <Providers>{children}</Providers>
           </main>
         </body>
       </ClerkProvider>
