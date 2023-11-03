@@ -339,6 +339,28 @@ export async function createStripeUser(
     return 400;
   }
 }
+
+// get current' user's customer id from the stripe table
+export async function getStripeCustomerId(authToken: string, userId: string) {
+  const db = createServerDbClient(authToken);
+
+  const { data, error } = await db
+    .from("Stripe")
+    .select("id")
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error("Error fetching Stripe customer Id", error);
+    return null;
+  }
+
+  if (data && data.length > 0) {
+    return data[0].id;
+  } else {
+    return null;
+  }
+}
+
 //--------------------------- get caption summary ------------------------------//
 export async function getCaptionSummary(
   authToken: string,

@@ -5,8 +5,6 @@ import { ClerkProvider } from "@clerk/nextjs";
 import NavBar from "./components/NavBar";
 import { Providers } from "./providers";
 
-const publicSans = Public_Sans({ subsets: ["latin"] });
-
 export default function RootLayout({
   children,
 }: {
@@ -61,7 +59,7 @@ export default function RootLayout({
           // },
         }}
       >
-        <body className={publicSans.className}>
+        <body>
           <main>
             <Providers>
               {/* <NavBar /> */}
