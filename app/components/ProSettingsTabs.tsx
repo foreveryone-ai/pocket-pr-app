@@ -2,23 +2,29 @@
 import { Tabs, Tab } from "@nextui-org/tabs";
 import { Card, CardBody } from "@nextui-org/card";
 import { Button } from "@nextui-org/button";
-import Stripe from "stripe";
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-  apiVersion: "2023-08-16",
-});
+import { useRouter } from "next/navigation";
 interface AppProps {
   customerId: string | null;
 }
 export default function App({ customerId }: AppProps) {
+  const router = useRouter();
+
   const handleDowngrade = async () => {
     if (customerId) {
-      const session = await stripe.billingPortal.sessions.create({
-        customer: customerId,
-        return_url: "https://pocketpr.app/Dashboard",
+      const response = await fetch("/api/account/downgrade", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ customerId }),
       });
 
-      window.location.href = session.url;
+      if (response.ok) {
+        const { url } = await response.json();
+        router.push(url);
+      } else {
+        console.error("Failed to downgrade");
+      }
     } else {
       console.error("Failed to get Stripe customer id");
     }

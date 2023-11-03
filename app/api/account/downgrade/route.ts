@@ -1,33 +1,47 @@
-import Stripe from "stripe";
-import type { NextApiRequest, NextApiResponse } from "next";
+// app/api/account/downgrade/route.ts
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs";
+import { stripe } from "@/lib/stripe";
+import { getStripeCustomerId } from "@/lib/supabaseClient";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-  apiVersion: "2023-08-16",
-});
+export async function POST(request: NextRequest): Promise<NextResponse> {
+  const { userId, getToken } = auth();
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method === "POST") {
-    const { customerId } = req.body;
-    if (!customerId) {
-      res.status(400).json({ error: "Missing customer id" });
-      return;
-    }
+  if (!userId) return NextResponse.json({ url: "/sign-in" });
 
-    try {
-      const session = await stripe.billingPortal.sessions.create({
-        customer: customerId,
-        return_url: "https://pocketpr.app/Dashboard",
-      });
+  // Get the auth token for Supabase
+  let token = await getToken({ template: "supabase" });
 
-      res.status(200).json({ url: session.url });
-    } catch (error) {
-      res.status(500).json({ error: "Failed to create Stripe session" });
-    }
-  } else {
-    res.setHeader("Allow", "POST");
-    res.status(405).end("Method Not Allowed");
+  if (!token) {
+    return NextResponse.json(
+      { error: "error updating credits" },
+      { status: 401 }
+    );
+  }
+
+  // Get the Stripe customer ID from the database
+  const customerId = await getStripeCustomerId(token, userId);
+
+  if (!customerId) {
+    return NextResponse.json(
+      { error: "Failed to get Stripe customer id" },
+      { status: 400 }
+    );
+  }
+
+  // Create a session for the Stripe Customer Portal
+  try {
+    const session = await stripe.billingPortal.sessions.create({
+      customer: customerId,
+      return_url: "https://pocketpr.app/Dashboard",
+    });
+
+    return NextResponse.json({ url: session.url });
+  } catch (error) {
+    console.error("Failed to create Stripe session", error);
+    return NextResponse.json(
+      { error: "Failed to create Stripe session" },
+      { status: 500 }
+    );
   }
 }
