@@ -3,7 +3,7 @@ export default function FAQ() {
   return (
     <>
       <section className="bg-black pt-44 pb-24 min-h-screen">
-        <div className="px-12">
+        <div className="px-4 lg:px-12">
           <div className="bg-gradient-to-r rounded-3xl from-blue-400 to-yellow-500 p-4">
             <div className="bg-black rounded-2xl">
               <div className="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
