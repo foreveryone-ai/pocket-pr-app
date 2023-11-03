@@ -62,8 +62,16 @@ export async function GET() {
     playlistResponse.data.items[0].contentDetails.relatedPlaylists.uploads;
 
   // Step 3: Retrieve the videos in the "uploads" playlist
+  // Get the date of the latest video in the database
+  const latestVideoDate = await getLatestVideoDate(
+    token as string,
+    userId as string
+  );
+
+  // Step 3: Retrieve the videos in the "uploads" playlist
   const videos: any[] = [];
   let nextPageToken: string | null | undefined;
+  let shouldContinue = true;
   do {
     const playlistItemsResponse = await yt.playlistItems.list({
       part: ["snippet"],
@@ -72,18 +80,27 @@ export async function GET() {
       pageToken: nextPageToken as string | undefined,
     });
 
-    videos.push(
-      //@ts-expect-error
-      ...playlistItemsResponse.data.items.map((item) => item.snippet)
+    //@ts-expect-error
+    const newVideos = playlistItemsResponse.data.items.map(
+      (item) => item.snippet
     );
-    nextPageToken = playlistItemsResponse.data.nextPageToken;
-  } while (nextPageToken);
 
-  // Get the date of the latest video in the database
-  const latestVideoDate = await getLatestVideoDate(
-    token as string,
-    userId as string
-  );
+    for (let video of newVideos) {
+      if (
+        video &&
+        latestVideoDate &&
+        video.publishedAt &&
+        new Date(video.publishedAt) <= latestVideoDate
+      ) {
+        shouldContinue = false;
+        break;
+      }
+      videos.push(video);
+    }
+    nextPageToken = shouldContinue
+      ? playlistItemsResponse.data.nextPageToken
+      : null;
+  } while (nextPageToken);
 
   // Filter out the videos that are newer than the latest video in the database
   const newVideos = videos.filter((video) =>
