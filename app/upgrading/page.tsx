@@ -44,7 +44,7 @@ export default function Upgrading() {
                 Welcome to Pro!
               </div>
               <div className="text-white text-center pb-8 font-light text-2xl">
-                Let's analyze your comments!
+                Let&apos;s analyze your comments!
               </div>
               <div className="flex flex-col justify-center">
                 <Button

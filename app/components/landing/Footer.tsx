@@ -19,8 +19,8 @@ export default function Footer() {
           </p>
 
           <Link href="/privacy" className=" underline text-gray-500 text-large">
-            Check out our Privacy Policy and Google's Limited Use compliance
-            here
+            Check out our Privacy Policy and Google&apos;s Limited Use
+            compliance here
           </Link>
           <br />
 

@@ -32,7 +32,7 @@ export default function Agreement() {
                 {/* privacy and use terms and agreement */}
                 <article className="prose lg:prose-xl p-12">
                   <h1 className="py-8 gradient-text-dual-reverse text-5xl font-extrabold ">
-                    Google's Limited Use Policy
+                    Google&apos;s Limited Use Policy
                   </h1>
                   <div className="font-light text-3xl text-gray-300">
                     PocketPR&apos;s use and transfer to any other app of
