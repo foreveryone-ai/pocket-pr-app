@@ -69,6 +69,10 @@ export default function VideoCard({
     onOpenChange();
     setIsLoading(true);
 
+    if (!credits) {
+      throw new Error("no credits available");
+    }
+
     try {
       // get captions summary
       const summaryRes = await getOrCreateCaptionSummary(videoId);
