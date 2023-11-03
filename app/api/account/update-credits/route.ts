@@ -1,9 +1,8 @@
-import { getNextBillingStartDate } from "@/helpers/dateHelpers";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs";
 import { getUserById, decrementUserCredits } from "@/lib/supabaseClient";
 
-export async function POST() {
+export async function POST(request: NextRequest): Promise<NextResponse> {
   const { userId, getToken } = auth();
   let token = await getToken({ template: "supabase" });
   let nextStart: string;
@@ -64,7 +63,10 @@ export async function POST() {
     }
   } catch (error) {
     console.error("error getting currentUser info", error);
-    return null;
+    return NextResponse.json(
+      { error: "error gettin guser info" },
+      { status: 500 }
+    );
   }
 }
 
