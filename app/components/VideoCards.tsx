@@ -95,7 +95,7 @@ export default function VideoCard({
 
   const handleChatRedirect = async () => {
     setIsRedirecting(true);
-    router.push(`/chat/${videoId}?title=${encodeURIComponent(title)}`);
+    router.replace(`/chat/${videoId}`);
     setIsRedirecting(false);
   };
 
