@@ -14,17 +14,21 @@ export default function Agreement() {
     <>
       <div className="min-h-screen">
         <NavBar />
-        <div className="flex justify-center align-center p-24">
+        <div className="flex justify-center align-center px-8 pt-24 lg:p-24">
           <Card className="max-w-4xl bg-gray-600">
-            <CardHeader className="text-white">
+            <CardHeader className="text-white font-light text-2xl">
               User Terms, Conditions, & Privacy Agreement
             </CardHeader>
             <CardBody
               className="rounded-xl"
-              style={{ overflowY: "auto", maxHeight: "400px" }}
+              style={{
+                overflowY: "auto",
+                maxHeight: "400px",
+                borderRadius: "2rem",
+              }}
             >
               {/* privacy and use terms and agreement */}
-              <article className="prose lg:prose-xl rounded-xl p-12 bg-white">
+              <article className="prose lg:prose-xl rounded-xl p-4 lg:p-12 bg-white">
                 <h1 className="pb-4 font-black text-2xl">User Agreement</h1>
                 <ol>
                   <li>
@@ -321,7 +325,7 @@ export default function Agreement() {
                 </Checkbox>
               </div>
             </CardBody>
-            <CardFooter>
+            <CardFooter className="pb-6">
               <Button
                 color="danger"
                 variant="light"
@@ -330,11 +334,11 @@ export default function Agreement() {
                 Close
               </Button>
               <Button
-                color="primary"
+                className=" ml-auto mr-1 bg-gradient-to-tr from-blue-400 to-yellow-500 text-black shadow-lg text-lg"
                 isDisabled={!isSelected}
                 onPress={() => router.push("/onboarding/retrieval")}
               >
-                Get my YouTube content
+                Sync YouTube
               </Button>
             </CardFooter>
           </Card>
