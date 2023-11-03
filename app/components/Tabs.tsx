@@ -160,12 +160,33 @@ export default function Home({
     <>
       <div className="flex flex-col-3 items-center justify-center">
         <div className="px-4">
-          <Button
-            className="bg-gradient-to-tr from-blue-400 to-yellow-500 text-black shadow-lg text-lg"
-            onClick={handleClick}
-          >
-            {isLoading ? <Spinner size="sm" /> : "Update"}
-          </Button>
+          {credits && credits > 0 ? (
+            <Button
+              className="bg-gradient-to-tr from-blue-400 to-yellow-500 text-black shadow-lg text-lg"
+              onClick={handleClick}
+            >
+              {isLoading ? <Spinner size="sm" /> : "Update"}
+            </Button>
+          ) : (
+            <Button
+              className="bg-gradient-to-tr from-blue-400 to-yellow-500 text-black shadow-lg text-lg"
+              onPress={async () => {
+                console.log("to checkout...");
+
+                try {
+                  const res = await fetch("/api/checkout");
+
+                  const data = await res.json();
+
+                  router.replace(data.sessionUrl);
+                } catch (error) {
+                  console.error(error);
+                }
+              }}
+            >
+              Upgrade
+            </Button>
+          )}
         </div>
         <div className="px-4">
           <Chip size="sm" className="bg-red-700 text-white">

@@ -183,7 +183,7 @@ export default function VideoCard({
               </>
             ) : (
               <Button
-                variant="ghost"
+                variant="light"
                 fullWidth
                 className="text-white text-lg mx-2 mb-2"
                 isDisabled
