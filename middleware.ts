@@ -10,6 +10,7 @@ export default authMiddleware({
     "/api/webhook",
     "/privacy",
   ],
+  debug: true,
 });
 
 export const config = {
