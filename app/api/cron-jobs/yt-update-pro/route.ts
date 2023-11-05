@@ -6,7 +6,6 @@ import {
   getChannelId,
   storeOrUpdateVideo,
   getLatestVideoDate,
-  getUserSubscriptionStatus,
   getActiveSubscribers,
   getUserToken,
   getCaptionSummary,
@@ -17,7 +16,6 @@ import {
   getMostRecentCaptionSummary,
   getComments,
   updateVideoHasEmbeddings,
-  getChannelIdByVideoId,
 } from "@/lib/supabaseClient";
 import { PocketChain, ChannelChain } from "@/lib/langChain";
 import type { CreateEmbeddingsArgs } from "@/lib/langChain";
@@ -174,7 +172,6 @@ export async function GET(request: NextRequest) {
           const channelId = video.channel_id;
 
           // Call /analysis/captions
-          // Replace the fetch call with the logic from /api/analysis/captions
           let pc;
 
           //--------------- check if caption summary already exists start ------------------//
@@ -222,8 +219,6 @@ export async function GET(request: NextRequest) {
           }
 
           // Call /analysis/all-captions
-          // Call /analysis/all-captions
-          // Replace the fetch call with the logic from /api/analysis/all-captions
           let cc;
 
           //--------------- check if all caption summary already exists start ------------------//
@@ -248,7 +243,6 @@ export async function GET(request: NextRequest) {
           ) {
             console.log("Already have all caption summary");
           } else {
-            // Create an instance of AllSummaryHandler and call the summarizeSummaries method
             // Create an instance of ChannelChain and call the summarizeSummaries method
             const channelChain = new ChannelChain();
             const allCaptionsSummary = await channelChain.summarizeSummaries(
@@ -267,8 +261,6 @@ export async function GET(request: NextRequest) {
           }
 
           // Call /analysis/comments-and-replies
-          // Replace the fetch call with the logic from /api/analysis/comments-and-replies
-
           //--------- check if comments already exist start-------------//
           const { data: commentData, error: commentError } = await getComments(
             token as string,
@@ -292,8 +284,6 @@ export async function GET(request: NextRequest) {
           }
 
           // Call /analysis/embeddings
-          // Replace the fetch call with the logic from /api/analysis/embeddings
-
           // check if embeddings exist
           console.log("Retrieved channelId: ", channelId);
           const poc = new PocketChain(
@@ -334,7 +324,6 @@ export async function GET(request: NextRequest) {
             }
 
             const embeddingsCreated = await poc.createEmbeddings(comments);
-            // toriaizu...
             if (embeddingsCreated) {
               // update the video table
               const { data: embedData, error: embedError } =
