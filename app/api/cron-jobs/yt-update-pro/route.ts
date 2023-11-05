@@ -1,5 +1,5 @@
 import { auth } from "@clerk/nextjs";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { GoogleApi, getOAuthData } from "@/lib/googleApi";
 import { google } from "googleapis";
 import {
@@ -12,7 +12,16 @@ import {
   getUserToken,
 } from "@/lib/supabaseClient";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const authHeader = request.headers.get("authorization");
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return NextResponse.json(
+      { success: false },
+      {
+        status: 401,
+      }
+    );
+  }
   // get all active subscribers
   const activeSubscribers = await getActiveSubscribers();
   if (!activeSubscribers) {
