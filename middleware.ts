@@ -11,7 +11,7 @@ export default authMiddleware({
     "/privacy",
     "/api/cron-jobs/yt-update-pro",
   ],
-  debug: true,
+  // debug: true,
 });
 
 export const config = {
