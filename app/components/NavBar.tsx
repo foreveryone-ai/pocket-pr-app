@@ -35,7 +35,7 @@ export default function App() {
             />
 
             <NavbarBrand>
-              <Link href="/" className="flex">
+              <Link href="/" className="flex items-center">
                 <Image
                   src="/gunmetal-pocket-asset.svg"
                   alt="logo"
@@ -125,13 +125,14 @@ export default function App() {
               className="hidden"
             />
             <NavbarBrand>
-              <Link href="/" className="flex">
+              <Link href="/" className="flex items-center">
                 <Image
                   src="/gunmetal-pocket-asset.svg"
                   alt="logo"
                   width="125"
                   height="100"
                   className="px-1 animate__animated animate__backInLeft"
+                  style={{ animationDelay: "0.2s" }}
                 />
                 <Image
                   src="/gunmetal-panda-asset.svg"
@@ -139,7 +140,7 @@ export default function App() {
                   width="25"
                   height="30"
                   className="pb-2 animate__animated animate__backInLeft"
-                  style={{ animationDelay: "0.4s" }}
+                  style={{ animationDelay: "0.6s" }}
                 />
                 <Image
                   src="/gunmetal-pr-asset.svg"
@@ -147,7 +148,7 @@ export default function App() {
                   width="51"
                   height="48"
                   className="px-1 pb-2 animate__animated animate__backInLeft"
-                  style={{ animationDelay: "0.8s" }}
+                  style={{ animationDelay: "1.0s" }}
                 />
               </Link>
               <Chip
