@@ -9,6 +9,7 @@ export default authMiddleware({
     "/sign-up",
     "/api/webhook",
     "/privacy",
+    "/api/cron-jobs/yt-update-pro",
   ],
   debug: true,
 });

@@ -1,5 +1,4 @@
-import { auth } from "@clerk/nextjs";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { GoogleApi, getOAuthData } from "@/lib/googleApi";
 import { google } from "googleapis";
 import {
@@ -7,12 +6,30 @@ import {
   getChannelId,
   storeOrUpdateVideo,
   getLatestVideoDate,
-  getUserSubscriptionStatus,
   getActiveSubscribers,
   getUserToken,
+  getCaptionSummary,
+  getCaptions,
+  storeCaptionsSummary,
+  getAllCaptionSummary,
+  storeAllCaptionSummary,
+  getMostRecentCaptionSummary,
+  getComments,
+  updateVideoHasEmbeddings,
 } from "@/lib/supabaseClient";
+import { PocketChain, ChannelChain } from "@/lib/langChain";
+import type { CreateEmbeddingsArgs } from "@/lib/langChain";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const authHeader = request.headers.get("authorization");
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return NextResponse.json(
+      { success: false },
+      {
+        status: 401,
+      }
+    );
+  }
   // get all active subscribers
   const activeSubscribers = await getActiveSubscribers();
   if (!activeSubscribers) {
@@ -155,67 +172,171 @@ export async function GET() {
           const channelId = video.channel_id;
 
           // Call /analysis/captions
-          try {
-            const response = await fetch("/api/analysis/captions", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ videoid: videoId }),
-            });
-            if (!response.ok) {
-              throw new Error(
-                `Error in /api/analysis/captions: ${response.statusText}`
-              );
+          let pc;
+
+          //--------------- check if caption summary already exists start ------------------//
+          const {
+            data: videoCaptionSummaryData,
+            error: videoCaptionSummaryError,
+          } = await getCaptionSummary(token as string, "", videoId);
+
+          if (videoCaptionSummaryError) {
+            throw new Error("error on caption summary");
+          }
+          if (videoCaptionSummaryData && videoCaptionSummaryData.length > 0) {
+            console.log("Already have caption summary");
+          } else {
+            //--------------- check if caption summary already exists end ------------------//
+
+            const { data: videoCaptionData, error: videoCaptionError } =
+              await getCaptions(token as string, videoId);
+
+            if (videoCaptionError) {
+              console.log("Unable to retrieve captions");
             }
-          } catch (error) {
-            console.error(error);
+
+            if (videoCaptionData && videoCaptionData.length > 0) {
+              // create summary of captions
+              pc = new PocketChain(videoCaptionData[0].captions);
+            }
+
+            if (!pc) {
+              throw new Error("no video caption data");
+            }
+
+            const captions = await pc.summarizeCaptions();
+            if (captions) {
+              // Pass channel_id to storeCaptionsSummary
+              await storeCaptionsSummary(
+                token as string,
+                videoCaptionSummaryData[0].id,
+                captions,
+                videoId,
+                channelId
+              );
+              console.log("success");
+            }
           }
 
           // Call /analysis/all-captions
-          try {
-            const response = await fetch("/api/analysis/all-captions", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ channelid: channelId }),
-            });
-            if (!response.ok) {
-              throw new Error(
-                `Error in /api/analysis/all-captions: ${response.statusText}`
+          let cc;
+
+          //--------------- check if all caption summary already exists start ------------------//
+          const allCaptionSummaryData = await getAllCaptionSummary(
+            token as string,
+            channelId
+          );
+
+          // Fetch the most recent CaptionSummary for the given channel_id
+          const mostRecentCaptionSummary = await getMostRecentCaptionSummary(
+            token as string,
+            channelId
+          );
+
+          // If an AllCaptionSummary already exists and the most recent CaptionSummary is not more recent, return a message
+          if (
+            allCaptionSummaryData.data &&
+            allCaptionSummaryData.data.length > 0 &&
+            mostRecentCaptionSummary && // Check if mostRecentCaptionSummary is not null
+            mostRecentCaptionSummary.createdAt <=
+              allCaptionSummaryData.data[0].created_at
+          ) {
+            console.log("Already have all caption summary");
+          } else {
+            // Create an instance of ChannelChain and call the summarizeSummaries method
+            const channelChain = new ChannelChain();
+            const allCaptionsSummary = await channelChain.summarizeSummaries(
+              channelId
+            );
+
+            if (allCaptionsSummary) {
+              // Store allCaptionsSummary
+              await storeAllCaptionSummary(
+                token as string,
+                allCaptionsSummary,
+                channelId
               );
+              console.log("success");
             }
-          } catch (error) {
-            console.error(error);
           }
 
           // Call /analysis/comments-and-replies
-          try {
-            const response = await fetch("/api/analysis/comments-and-replies", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ videoid: videoId }),
-            });
-            if (!response.ok) {
-              throw new Error(
-                `Error in /api/analysis/comments-and-replies: ${response.statusText}`
-              );
+          //--------- check if comments already exist start-------------//
+          const { data: commentData, error: commentError } = await getComments(
+            token as string,
+            videoId
+          );
+
+          if (commentError) {
+            console.log("Unable to get comments");
+          }
+          if (commentData && commentData.length > 0) {
+            console.log("Already have comments");
+          } else {
+            //--------- check if comments already exist end-------------//
+
+            try {
+              await GoogleApi.getCommentsAndReplies(token as string, videoId);
+              console.log("success");
+            } catch (error) {
+              console.error("Unable to get Comments and Replies");
             }
-          } catch (error) {
-            console.error(error);
           }
 
           // Call /analysis/embeddings
-          try {
-            const response = await fetch("/api/analysis/embeddings", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ videoid: videoId }),
-            });
-            if (!response.ok) {
-              throw new Error(
-                `Error in /api/analysis/embeddings: ${response.statusText}`
-              );
+          // check if embeddings exist
+          console.log("Retrieved channelId: ", channelId);
+          const poc = new PocketChain(
+            videoCaptionSummaryData[0].summaryText,
+            channelId
+          );
+          const hasEmbeddings = await poc.hasEmbeddings(videoId);
+          console.log("We have embeddings? ", hasEmbeddings);
+
+          if (hasEmbeddings) {
+            // update bool on Video
+            const { data: embedData, error: embedError } =
+              await updateVideoHasEmbeddings(token as string, videoId, true);
+            if (embedError) {
+              throw new Error("error on check embeddings");
             }
-          } catch (error) {
-            console.error(error);
+            if (embedData && embedData.length > 0) {
+              console.log("already have embeddings");
+            }
+          } else {
+            // create objects for metadata
+            const comments: CreateEmbeddingsArgs[] = [];
+
+            if (commentData) {
+              for (let comment of commentData) {
+                comments.push({
+                  video_id: comment.video_id,
+                  id: comment.id,
+                  author_display_name: comment.author_display_name,
+                  author_image_url: comment.author_image_url,
+                  text_display: comment.text_display,
+                  like_count: comment.like_count,
+                  channelId: comment.channel_id,
+                });
+              }
+            } else {
+              console.log("No comment data available");
+            }
+
+            const embeddingsCreated = await poc.createEmbeddings(comments);
+            if (embeddingsCreated) {
+              // update the video table
+              const { data: embedData, error: embedError } =
+                await updateVideoHasEmbeddings(token as string, videoId, true);
+              if (embedError) {
+                throw new Error("error on check embeddings");
+              }
+              if (embedData && embedData.length > 0) {
+                console.log("already have embeddings");
+              }
+            } else {
+              console.log("fail");
+            }
           }
         } catch (error) {
           console.error(error);
