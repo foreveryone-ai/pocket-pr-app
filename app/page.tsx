@@ -1,3 +1,4 @@
+"use client";
 import NavBar from "@/app/components/NavBar";
 import Hero from "@/app/components/landing/Hero";
 import About from "@/app/components/landing/About";

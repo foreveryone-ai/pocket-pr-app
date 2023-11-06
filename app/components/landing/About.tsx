@@ -1,9 +1,17 @@
+"use client";
+import { motion } from "framer-motion";
+
 export default function About() {
   return (
     <>
       {/* -----------STEP 1------------ */}
       <div className="px-4 lg:px-0 flex flex-col justify-center align-center max-w-2xl mx-auto bg-black">
-        <div className="min-h-screen">
+        <motion.div
+          initial={{ opacity: 0, x: -1000, rotate: 45 }}
+          whileInView={{ opacity: 1, x: 0, rotate: 0 }}
+          transition={{ x: { type: "spring", duration: 1.5 }, delay: 1.5 }}
+          className="min-h-screen"
+        >
           <div className="pt-32">
             <div className="bg-gradient-to-r rounded-3xl from-blue-400 to-yellow-500 p-4">
               <div className="bg-black rounded-2xl">
@@ -18,8 +26,13 @@ export default function About() {
               </div>
             </div>
           </div>
-        </div>
-        <div className="min-h-screen">
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, x: 1000, rotate: 45 }}
+          whileInView={{ opacity: 1, x: 0, rotate: 0 }}
+          transition={{ x: { type: "spring", duration: 1.5 }, delay: 1.5 }}
+          className="min-h-screen"
+        >
           <div className="lg:pt-40">
             <div className="bg-gradient-to-r rounded-3xl from-blue-400 to-yellow-500 p-4">
               <div className="bg-black rounded-2xl">
@@ -35,8 +48,13 @@ export default function About() {
               </div>
             </div>
           </div>
-        </div>
-        <div className="min-h-screen">
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, x: -1000, rotate: 45 }}
+          whileInView={{ opacity: 1, x: 0, rotate: 0 }}
+          transition={{ x: { type: "spring", duration: 1.5 }, delay: 1.5 }}
+          className="min-h-screen"
+        >
           <div className="lg:pt-40">
             <div className="bg-gradient-to-r rounded-3xl from-blue-400 to-yellow-500 p-4">
               <div className="bg-black rounded-2xl">
@@ -52,7 +70,7 @@ export default function About() {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </>
   );
