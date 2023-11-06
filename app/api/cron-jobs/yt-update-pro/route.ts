@@ -7,7 +7,6 @@ import {
   storeOrUpdateVideo,
   getLatestVideoDate,
   getActiveSubscribers,
-  getUserToken,
   getCaptionSummary,
   getCaptions,
   storeCaptionsSummary,
@@ -19,6 +18,32 @@ import {
 } from "@/lib/supabaseClient";
 import { PocketChain, ChannelChain } from "@/lib/langChain";
 import type { CreateEmbeddingsArgs } from "@/lib/langChain";
+
+async function getFreshOAuthToken(userId: string) {
+  const response = await fetch(
+    `https://api.clerk.dev/v1/users/${userId}/access-tokens`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const data = await response.json();
+
+  // The response will contain an array of access tokens. We can choose the one we need based on the provider.
+  const tokens = data.accessTokens;
+  const googleToken = tokens.find(
+    (token: { provider: string }) => token.provider === "google"
+  );
+
+  return googleToken;
+}
 
 export async function GET(request: NextRequest) {
   const authHeader = request.headers.get("authorization");
@@ -37,7 +62,8 @@ export async function GET(request: NextRequest) {
   }
 
   for (const userId of activeSubscribers) {
-    const token = await getUserToken(userId as string);
+    // Replace getUserToken with getFreshOAuthToken
+    const token = await getFreshOAuthToken(userId as string);
     let userOAuth, yt;
 
     // get oauth data if userId and token are available

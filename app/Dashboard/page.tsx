@@ -2,7 +2,6 @@
 import {
   getChannelId,
   getVideos,
-  storeUserToken,
   getUserSubscriptionStatus,
 } from "@/lib/supabaseClient";
 import VideoCard from "@/app/components/VideoCards";
@@ -16,10 +15,6 @@ import DesktopTrends from "@/app/components/DesktopTrends";
 export default async function Home() {
   const { userId, getToken } = auth();
   const token = await getToken({ template: "supabase" });
-
-  if (token && userId) {
-    await storeUserToken(token, userId);
-  }
 
   // create placeholders and update after recieving google token
   let videos, youtube_channel_id, nextCreditsDate;

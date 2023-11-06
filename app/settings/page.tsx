@@ -4,7 +4,6 @@ import { auth } from "@clerk/nextjs";
 import { Button } from "@nextui-org/button";
 import {
   getUserSubscriptionStatus,
-  storeUserToken,
   getStripeCustomerId,
 } from "@/lib/supabaseClient";
 import ProSettingsTabs from "@/app/components/ProSettingsTabs";
@@ -12,10 +11,6 @@ import ProSettingsTabs from "@/app/components/ProSettingsTabs";
 export default async function App() {
   const { userId, getToken } = auth();
   const token = await getToken({ template: "supabase" });
-
-  if (token && userId) {
-    await storeUserToken(token, userId);
-  }
 
   // Get the user's subscription status
   const subscriptionStatus = await getUserSubscriptionStatus(userId as string);
