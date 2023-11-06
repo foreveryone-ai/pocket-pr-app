@@ -1,5 +1,5 @@
 import { auth, currentUser } from "@clerk/nextjs";
-import { createUser, storeUserToken } from "@/lib/supabaseClient";
+import { createUser } from "@/lib/supabaseClient";
 import NavBar from "@/app/components/NavBar";
 import { Playfair_Display } from "next/font/google";
 import { Button } from "@nextui-org/button";
@@ -23,10 +23,6 @@ export default async function Onboarding() {
   console.log("first name: ", user?.firstName);
   console.log(userId);
   console.log("token ", token);
-
-  if (token && userId) {
-    await storeUserToken(token, userId);
-  }
 
   if (token && userId && user?.firstName) {
     console.log("try and create new user...");

@@ -798,44 +798,6 @@ export async function getInactiveSubscribers() {
   }
 }
 
-//------------------------------- AUTH TOKEN METHODS ---------------------------//
-// store user's token
-export async function storeUserToken(authToken: string, userId: string) {
-  const db = createServerDbClient(authToken);
-
-  const { data, error } = await db
-    .from("User")
-    .update({ authToken })
-    .eq("id", userId);
-
-  if (error) {
-    console.error("Error storing user token:", error);
-    return null;
-  }
-
-  return data;
-}
-// get user's token
-export async function getUserToken(userId: string) {
-  const db = createServerDbClient();
-
-  const { data, error } = await db
-    .from("User")
-    .select("authToken")
-    .eq("id", userId);
-
-  if (error) {
-    console.error("error fetching user token:", error);
-    return null;
-  }
-
-  if (data && data.length > 0) {
-    return data[0].authToken;
-  } else {
-    return null;
-  }
-}
-
 //------------------------ get all captions from a channel_id ------------------//
 export async function getCaptions(authToken: string, videoId: string) {
   const db = createServerDbClient(authToken);
