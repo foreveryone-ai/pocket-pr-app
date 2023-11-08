@@ -97,9 +97,9 @@ export default async function ChatPage({
       // create a new conversation
       const newConversation = await createConversation(
         token,
-        params.videoid,
         userId,
-        captionsData[0].channel_id
+        captionsData[0].channel_id,
+        params.videoid
       );
       console.log(newConversation);
       if (

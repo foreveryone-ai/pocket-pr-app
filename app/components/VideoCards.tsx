@@ -181,6 +181,15 @@ export default function VideoCard({
                   </Button>
                 )}
               </>
+            ) : showChat ? (
+              <Button
+                fullWidth
+                className="bg-gradient-to-tr from-blue-400 to-yellow-500 text-black shadow-lg text-lg mx-2 mb-2"
+                onPress={handleChatRedirect}
+                isLoading={isRedirecting}
+              >
+                Chat
+              </Button>
             ) : (
               <Button
                 variant="light"
