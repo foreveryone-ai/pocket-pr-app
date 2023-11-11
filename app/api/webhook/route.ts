@@ -36,6 +36,7 @@ export async function POST(req: Request) {
     console.log("have sig and webhhook secret....");
     event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
   } catch (err: any) {
+    console.error("sig", sig);
     console.log(`❌ Error message: ${err.message}`);
     return new Response(`Webhook Error: ${err.message}`, { status: 400 });
   }
