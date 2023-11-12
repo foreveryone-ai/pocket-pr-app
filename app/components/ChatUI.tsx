@@ -5,7 +5,6 @@ import { Spinner } from "@nextui-org/spinner";
 import { BaseSyntheticEvent, useState, useEffect } from "react";
 import { GrSend } from "react-icons/gr";
 import { BiSolidCopy } from "react-icons/bi";
-import NavBar from "./NavBar";
 import { updateChatHistory } from "@/lib/api";
 
 export const runtime = "edge";
@@ -22,16 +21,14 @@ type ChatUIProps = {
 export default function ChatUI({
   videoid,
   captionsSummary,
-  userName = "User",
+  userName,
   chatHistory,
   conversationId,
   channelId,
 }: ChatUIProps) {
   const [inputValue, setInputValue] = useState("");
-  const [output, setOutput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
   const [messages, setMessages] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
   const [isUpdating, setIsUpdating] = useState(true);
   const [archivedChat, setArchivedChat] = useState<string[]>(
     chatHistory ? chatHistory : []
