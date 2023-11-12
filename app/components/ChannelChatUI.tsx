@@ -5,7 +5,6 @@ import { Spinner } from "@nextui-org/spinner";
 import { BaseSyntheticEvent, useEffect, useState } from "react";
 import { GrSend } from "react-icons/gr";
 import { BiSolidCopy } from "react-icons/bi";
-import NavBar from "./NavBar";
 import { updateChatHistory } from "@/lib/api";
 
 export const runtime = "edge";
@@ -19,14 +18,13 @@ type ChannelChatUIProps = {
 
 export default function ChatUI({
   channelid,
-  userName = "User",
+  userName,
   chatHistory,
   conversationId,
 }: ChannelChatUIProps) {
   const [inputValue, setInputValue] = useState("");
-  const [output, setOutput] = useState("");
+  const [isStreaming, setIsStreaming] = useState(false);
   const [messages, setMessages] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
   const [isUpdating, setIsUpdating] = useState(true);
   const [archivedChat, setArchivedChat] = useState<string[]>(
     chatHistory ? chatHistory : []
@@ -50,6 +48,9 @@ export default function ChatUI({
 
   const handleSubmit = (event: BaseSyntheticEvent) => {
     event.preventDefault();
+    if (isStreaming) {
+      return;
+    }
     setMessages([...messages, inputValue, "loading"]); // Add a temporary message with "loading"
     setInputValue(""); // Clear the text input immediately
     handleResponse(inputValue);
@@ -67,6 +68,8 @@ export default function ChatUI({
 
   const getGPTResponse = async (userMessage: string) => {
     setIsUpdating(true);
+
+    setIsStreaming(true);
     try {
       console.log(messages[messages.length - 1]);
       await fetchEventSource(`/api/channel-chat/${channelid}`, {
@@ -88,7 +91,7 @@ export default function ChatUI({
         },
       });
       setIsUpdating(false);
-      console.log(output);
+      setIsStreaming(false);
     } catch (error) {
       console.error(error);
     }
@@ -97,8 +100,8 @@ export default function ChatUI({
   return (
     <div className="flex pt-12 justify-center bg-black">
       <div className="px-4 sm:px-6 lg:px-8 w-full sm:max-w-2xl lg:max-w-3xl mx-auto">
-        <div className="bg-white rounded-lg shadow-lg">
-          <div className="p-4 text-center border-b border-gray-200 text-black font-semibold">
+        <div className="bg-black rounded-lg shadow-lg">
+          <div className="p-4 text-center  text-black font-semibold">
             Channel Chat
           </div>
 
@@ -111,7 +114,7 @@ export default function ChatUI({
               archivedChat.map((mes, idx) =>
                 idx % 2 === 0 ? (
                   <div className="flex justify-end py-4" key={idx}>
-                    <div className="bg-black text-white rounded-xl p-2 pl-3">
+                    <div className="bg-gray-800 text-white rounded-xl p-2 pl-3">
                       {mes.split("||").map((paragraph, i) => (
                         <p key={i}>
                           {paragraph}
@@ -123,7 +126,7 @@ export default function ChatUI({
                 ) : (
                   <div className="chat chat-start" key={idx}>
                     <div className="flex items-center">
-                      <div className="rounded-xl p-2 pl-3 bg-gray-200 text-black">
+                      <div className="rounded-xl p-2 pl-3 bg-gray-400 text-black">
                         <>
                           {mes.split("||").map((paragraph, i) => (
                             <p key={i}>{paragraph}</p>
@@ -134,7 +137,7 @@ export default function ChatUI({
                         isIconOnly
                         size="lg"
                         variant="light"
-                        className="flex-none rounded-md ml-2"
+                        className="flex-none text-white rounded-md ml-2"
                         onClick={() => navigator.clipboard.writeText(mes)}
                       >
                         <BiSolidCopy />
@@ -147,7 +150,7 @@ export default function ChatUI({
               messages.map((message, index) =>
                 index % 2 === 0 ? (
                   <div className="flex justify-end py-4" key={index}>
-                    <div className="bg-black text-white rounded-xl p-2 pl-3">
+                    <div className="bg-gray-800 text-white rounded-xl p-2 pl-3">
                       {message.split("||").map((paragraph, i) => (
                         <p key={i}>
                           {paragraph}
@@ -159,7 +162,7 @@ export default function ChatUI({
                 ) : (
                   <div className="chat chat-start" key={index}>
                     <div className="flex items-center">
-                      <div className="rounded-xl p-2 pl-3 bg-gray-200 text-black">
+                      <div className="rounded-xl p-2 pl-3 bg-gray-400 text-black">
                         {message === "loading" ? (
                           <Spinner />
                         ) : (
@@ -174,7 +177,7 @@ export default function ChatUI({
                         isIconOnly
                         size="lg"
                         variant="light"
-                        className="flex-none rounded-md ml-2"
+                        className="flex-none text-white rounded-md ml-2"
                         onClick={() => navigator.clipboard.writeText(message)}
                       >
                         <BiSolidCopy />
@@ -184,10 +187,7 @@ export default function ChatUI({
                 )
               )}
           </div>
-          <form
-            className="p-4 border-t border-gray-200 flex"
-            onSubmit={handleSubmit}
-          >
+          <form className="p-4  flex" onSubmit={handleSubmit}>
             <div className="relative flex-grow">
               <input
                 type="text"
@@ -203,10 +203,11 @@ export default function ChatUI({
             </div>
             <div className="px-1">
               <Button
+                isDisabled={isStreaming}
                 isIconOnly
                 size="md"
                 variant="light"
-                className="flex-none rounded-md p-1"
+                className="flex-none bg-gray-400 text-white rounded-md p-1"
                 type="submit"
               >
                 <GrSend />
