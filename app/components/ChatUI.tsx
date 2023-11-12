@@ -29,6 +29,7 @@ export default function ChatUI({
 }: ChatUIProps) {
   const [inputValue, setInputValue] = useState("");
   const [output, setOutput] = useState("");
+  const [isStreaming, setIsStreaming] = useState(false);
   const [messages, setMessages] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [isUpdating, setIsUpdating] = useState(true);
@@ -54,6 +55,9 @@ export default function ChatUI({
 
   const handleSubmit = (event: BaseSyntheticEvent) => {
     event.preventDefault();
+    if (isStreaming) {
+      return;
+    }
     setMessages([...messages, inputValue, "loading"]); // Add a temporary message with "loading"
     setInputValue(""); // Clear the text input immediately
     handleResponse(inputValue);
@@ -71,6 +75,7 @@ export default function ChatUI({
 
   const getGPTResponse = async (userMessage: string) => {
     setIsUpdating(true);
+    setIsStreaming(true);
     try {
       console.log(messages[messages.length - 1]);
       await fetchEventSource(`/api/chat/${videoid}`, {
@@ -94,6 +99,7 @@ export default function ChatUI({
       });
 
       setIsUpdating(false);
+      setIsStreaming(false);
     } catch (error) {
       console.error(error);
     }
@@ -205,6 +211,7 @@ export default function ChatUI({
             </div>
             <div className="px-1">
               <Button
+                isDisabled={isStreaming}
                 isIconOnly
                 size="md"
                 variant="light"
