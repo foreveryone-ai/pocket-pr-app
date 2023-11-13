@@ -18,7 +18,7 @@ export async function GET() {
       billing_address_collection: "required",
       line_items: [
         {
-          price: "price_1Nu7GBHlKxOqEafNNmvsy6d8",
+          price: "price_1OBrdoHlKxOqEafNOMXCqm0E",
           quantity: 1,
         },
       ],
@@ -33,7 +33,7 @@ export async function GET() {
         }, //  store userId on subscription object
       },
       success_url: `https://www.pocketpr.app/onboarding/agreement`,
-      cancel_url: `https://www.pocketpr.app/Dashboard`,
+      cancel_url: `https://www.pocketpr.app/onboarding/agreement`,
     });
     console.log(`Session: ${session}  SessionId: ${session?.id}`);
     console.log(`Session: url??: ${session.url}`);
