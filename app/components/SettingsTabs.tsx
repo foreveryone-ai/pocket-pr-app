@@ -7,6 +7,19 @@ import { useRouter } from "next/navigation";
 
 export default function App() {
   const router = useRouter();
+  const handleCheckout = async () => {
+    console.log("to checkout...");
+
+    try {
+      const res = await fetch("/api/checkout");
+
+      const data = await res.json();
+
+      router.replace(data.sessionUrl);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <div className="flex w-full flex-col items-center pt-10">
       <Tabs aria-label="Options" size="lg">
@@ -15,19 +28,7 @@ export default function App() {
             <CardBody>
               <Button
                 className="bg-gradient-to-tr from-blue-400 to-yellow-500 text-black shadow-lg text-lg"
-                onPress={async () => {
-                  console.log("to checkout...");
-
-                  try {
-                    const res = await fetch("/api/checkout");
-
-                    const data = await res.json();
-
-                    router.replace(data.sessionUrl);
-                  } catch (error) {
-                    console.error(error);
-                  }
-                }}
+                onPress={handleCheckout}
               >
                 Upgrade to Pro
               </Button>
