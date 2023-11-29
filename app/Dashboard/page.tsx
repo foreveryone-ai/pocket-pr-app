@@ -22,6 +22,8 @@ export default async function Home() {
 
   try {
     const user = await getChannelId(token as string, userId as string);
+    console.log("user: ", user);
+    console.log("user data: ", user.data);
     youtube_channel_id = user?.data && user.data[0].youtube_channel_id;
     credits = user?.data && user.data[0].credits;
     nextCreditsDate = new Date(
