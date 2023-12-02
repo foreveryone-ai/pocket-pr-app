@@ -26,15 +26,33 @@ export default function HomeModal({ children }: HomeModalProps) {
       >
         {children}
       </Button>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal
+        className="bg-gray-800"
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+      >
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader>Connect YouTube Account</ModalHeader>
-              <ModalBody></ModalBody>
-              <ModalFooter>
-                <Button onPress={onClose}>Close</Button>
-                <Button onPress={onClose}>Action</Button>
+              <ModalHeader>Sign Up with YouTube</ModalHeader>
+              <ModalBody>
+                Connect your YouTube account to PocketPR in order to analyze
+                your audience's reactions.
+              </ModalBody>
+              <ModalFooter className="flex justify-center">
+                <Button
+                  as={Link}
+                  href="/sign-up"
+                  className="bg-gradient-to-tr from-blue-400 to-yellow-500 shadow-lg text-white text-lg"
+                >
+                  Connect to{" "}
+                  <Image
+                    src="/yt_logo_rgb_dark.png"
+                    width="100"
+                    height="100"
+                    alt="youtube logo"
+                  />
+                </Button>
               </ModalFooter>
             </>
           )}

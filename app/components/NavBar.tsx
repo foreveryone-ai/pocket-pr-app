@@ -178,14 +178,6 @@ export default function App() {
             </NavbarItem>
             <NavbarItem>
               <Modal>Sign Up</Modal>
-              {/* <Button
-                as={Link}
-                className="bg-gradient-to-tr from-blue-400 to-yellow-500 text-black shadow-lg text-lg"
-                href="/sign-up"
-                variant="flat"
-              >
-                Sign Up
-              </Button> */}
             </NavbarItem>
           </NavbarContent>
           {/* <NavbarMenu className="bg-black">
