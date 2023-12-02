@@ -37,7 +37,7 @@ export default function HomeModal({ children }: HomeModalProps) {
               <ModalHeader>Sign Up with YouTube</ModalHeader>
               <ModalBody>
                 Connect your YouTube account to PocketPR in order to analyze
-                your audience's reactions.
+                your audience&apos;s reactions.
               </ModalBody>
               <ModalFooter className="flex justify-center">
                 <Button
