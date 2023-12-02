@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { Button } from "@nextui-org/button";
+import Modal from "@/app/components/landing/Modal";
+
 export default function Pricing() {
   return (
     <section className="bg-black min-h-screen pb-40">
@@ -39,13 +41,7 @@ export default function Pricing() {
                     </ul>
                   </div>
                   <div className="flex flex-col pt-5 pb-3">
-                    <Button
-                      as={Link}
-                      href="/sign-up"
-                      className="bg-gradient-to-tr from-blue-400 to-yellow-500 text-black shadow-lg text-lg"
-                    >
-                      Get Hobbyist
-                    </Button>
+                    <Modal>Get Hobbyist</Modal>
                   </div>
                 </div>
               </div>
@@ -77,13 +73,7 @@ export default function Pricing() {
                     </ul>
                   </div>
                   <div className="flex flex-col pt-5 pb-3">
-                    <Button
-                      as={Link}
-                      href="/sign-up"
-                      className="bg-gradient-to-tr from-yellow-500 to-blue-400 text-black shadow-lg text-lg"
-                    >
-                      Get Pro
-                    </Button>
+                    <Modal>Get Pro</Modal>
                   </div>
                 </div>
               </div>

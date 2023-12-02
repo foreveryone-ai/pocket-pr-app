@@ -1,8 +1,8 @@
 "use client";
 import Image from "next/image";
-import Link from "next/link";
 import { Button } from "@nextui-org/react";
 import { useRef } from "react";
+import Modal from "@/app/components/landing/Modal";
 
 export default function Hero() {
   const learnMoreRef = useRef<HTMLHeadingElement | null>(null);
@@ -24,14 +24,7 @@ export default function Hero() {
               businesses.
             </p>
             <div className="space-x-4">
-              <Button
-                as={Link}
-                variant="flat"
-                className="bg-gradient-to-tr from-blue-400 to-yellow-500 text-black shadow-lg text-lg"
-                href="/sign-up"
-              >
-                Join Beta
-              </Button>
+              <Modal>Sign Up</Modal>
 
               <Button
                 onPress={scrollToLearnMore}

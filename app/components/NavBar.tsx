@@ -15,6 +15,7 @@ import {
 import { useState } from "react";
 import Image from "next/image";
 import "animate.css";
+import Modal from "@/app/components/landing/Modal";
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -176,14 +177,7 @@ export default function App() {
               </Button>
             </NavbarItem>
             <NavbarItem>
-              <Button
-                as={Link}
-                className="bg-gradient-to-tr from-blue-400 to-yellow-500 text-black shadow-lg text-lg"
-                href="/sign-up"
-                variant="flat"
-              >
-                Sign Up
-              </Button>
+              <Modal>Sign Up</Modal>
             </NavbarItem>
           </NavbarContent>
           {/* <NavbarMenu className="bg-black">
